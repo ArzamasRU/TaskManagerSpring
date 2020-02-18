@@ -8,11 +8,16 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Application {
-    static private Scanner input = new Scanner(System.in);
-    static private List<Project> projectList = new ArrayList<>();
-    static private List<Task> taskList = new ArrayList<>();
+    private Scanner input = new Scanner(System.in);
+    private List<Project> projectList = new ArrayList<>();
+    private List<Task> taskList = new ArrayList<>();
 
     public static void main(String[] args) {
+        Application app = new Application();
+        app.start();
+    }
+
+    public void start(){
         boolean exit = false;
         String command;
 
@@ -37,6 +42,9 @@ public class Application {
                 case "project-remove":
                     removeProject();
                     break;
+                case "project-rename":
+                    renameProject();
+                    break;
                 case "task-clear":
                     clearTask();
                     break;
@@ -48,6 +56,9 @@ public class Application {
                     break;
                 case "task-remove":
                     removeTask();
+                    break;
+                case "task-rename":
+                    renameTask();
                     break;
                 case "exit":
                     exit = true;
@@ -62,7 +73,7 @@ public class Application {
         System.out.print("you left this wonderful program");
     }
 
-    private static void removeTask(){
+    private void removeTask(){
         String command;
         boolean objectFound = false;
         System.out.println("[task remove]");
@@ -82,7 +93,7 @@ public class Application {
             System.out.println("task does not exist");
     }
 
-    private static void removeProject(){
+    private void removeProject(){
         String command;
         boolean objectFound = false;
         System.out.println("[project remove]");
@@ -102,7 +113,7 @@ public class Application {
             System.out.println("project does not exist");
     }
 
-    private static void displayHelp(){
+    private void displayHelp(){
         System.out.println("project-create");
         System.out.println("project-clear");
         System.out.println("project-list");
@@ -115,7 +126,7 @@ public class Application {
         System.out.println("help");
     }
 
-    private static void createProject() {
+    private void createProject() {
         String command;
         System.out.println("[Project create]");
         System.out.println("enter name:");
@@ -124,7 +135,7 @@ public class Application {
         System.out.println("ok");
     }
 
-    private static void createTask() {
+    private void createTask() {
         String command;
         System.out.println("[Task create]");
         System.out.println("enter name:");
@@ -133,17 +144,17 @@ public class Application {
         System.out.println("ok");
     }
 
-    private static void clearProject() {
+    private void clearProject() {
         projectList.clear();
         System.out.println("[All projects removed]");
     }
 
-    private static void clearTask() {
+    private void clearTask() {
         taskList.clear();
         System.out.println("[All tasks removed]");
     }
 
-    private static void displayProjects(){
+    private void displayProjects(){
         int i = 0;
         System.out.println("[Project list]");
         for (Project project : projectList) {
@@ -152,12 +163,62 @@ public class Application {
         }
     }
 
-    private static void displayTasks(){
+    private void displayTasks(){
         int i = 0;
         System.out.println("[Task list]");
         for (Task task : taskList) {
             i++;
             System.out.println(i + ". " + task.getName());
         }
+    }
+
+    private void renameTask(){
+        String command;
+        boolean objectFound = false;
+        Task currentTask = null;
+        System.out.println("[Task rename]");
+        System.out.println("Enter the name of the task that needs a new name:");
+        command = input.nextLine();
+        objectFound = false;
+        for (Task task : taskList) {
+            if (task.getName().equals(command)) {
+                objectFound = true;
+                currentTask = task;
+                break;
+            }
+        }
+        if (objectFound) {
+            System.out.println("enter new name:");
+            command = input.nextLine();
+            currentTask.setName(command);
+            System.out.println("ok");
+        }
+        else
+            System.out.println("project does not exist");
+    }
+
+    private void renameProject(){
+        String command;
+        boolean objectFound = false;
+        Project currentProject = null;
+        System.out.println("[Project rename]");
+        System.out.println("Enter the name of the project that needs a new name:");
+        command = input.nextLine();
+        objectFound = false;
+        for (Project project : projectList) {
+            if (project.getName().equals(command)) {
+                objectFound = true;
+                currentProject = project;
+                break;
+            }
+        }
+        if (objectFound) {
+            System.out.println("enter new name:");
+            command = input.nextLine();
+            currentProject.setName(command);
+            System.out.println("ok");
+        }
+        else
+            System.out.println("project does not exist");
     }
 }
