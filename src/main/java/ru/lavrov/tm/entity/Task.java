@@ -1,9 +1,9 @@
-package ru.lavrov.tm;
+package ru.lavrov.tm.entity;
 
-public class Project {
-    String name;
+public class Task {
+    private String name;
 
-    public Project(String name) {
+    public Task(String name) {
         this.name = name;
     }
 
