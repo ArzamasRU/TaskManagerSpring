@@ -21,4 +21,4 @@ organizationUrl: http://www.i-teco.ru
 ```mvn install```
 
 ### Run ###
-```java -jar Example.jar```
+```java -jar target\TaskManager-1.0-SNAPSHOT.jar```
