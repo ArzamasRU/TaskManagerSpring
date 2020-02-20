@@ -18,7 +18,11 @@ organization: i-teco
 organizationUrl: http://www.i-teco.ru
 
 ### Install ###
-```mvn install```
+```
+mvn install
+```
 
 ### Run ###
-```java -jar target\TaskManager-1.0-SNAPSHOT.jar```
+```
+java -jar target\TaskManager-1.0-SNAPSHOT.jar
+```

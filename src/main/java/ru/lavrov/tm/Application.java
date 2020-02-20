@@ -2,13 +2,12 @@ package ru.lavrov.tm;
 
 import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Task;
+import ru.lavrov.tm.service.ProjectService;
+import ru.lavrov.tm.service.TaskService;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Application {
     private static final String HELP = "help";
@@ -31,19 +30,19 @@ public class Application {
     private static final String DISPLAY_PROJECT_TASKS = "tasks-of-project";
     private static final String EXIT = "exit";
 
-
-
-    private Scanner input = new Scanner(System.in);
     private List<Project> projectList = new ArrayList<>();
     private List<Task> taskList = new ArrayList<>();
+    private final Scanner input = new Scanner(System.in);
     private final SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+    private final ProjectService projectService = new ProjectService();
+    private final TaskService taskService = new TaskService();
 
     public static void main(String[] args) {
         Application app = new Application();
         app.start();
     }
 
-    public void start(){
+    public void start() {
         boolean exitFlag = false;
         String command;
 
@@ -52,24 +51,24 @@ public class Application {
         while (!exitFlag) {
             command = input.nextLine();
 
-            switch (command){
+            switch (command) {
                 case HELP:
-                    displayHelp();
+                    Utils.displayHelp();
                     break;
                 case CREATE_PROJECT:
-                    createProject();
+                    projectService.createProject();
                     break;
                 case CLEAR_PROJECT:
-                    clearProject();
+                    projectService.clearProject();
                     break;
                 case DISPLAY_PROJECTS:
-                    displayProjects();
+                    projectService.displayProjects();
                     break;
                 case REMOVE_PROJECT:
-                    removeProject();
+                    projectService.removeProject();
                     break;
                 case RENAME_PROJECT:
-                    renameProject();
+                    projectService.renameProject();
                     break;
                 case UPDATE_PROJECT_START_DATE:
                     updateProjectStartDate();
@@ -111,7 +110,7 @@ public class Application {
         System.out.print("you left this wonderful program");
     }
 
-    private Project findProjectByName(String name){
+    private Project findProjectByName(String name) {
         boolean objectFound = false;
         Project currentProject = null;
         for (Project project : projectList) {
@@ -124,9 +123,11 @@ public class Application {
         if (!objectFound)
             System.out.println("project does not exist");
         return currentProject;
+
+        projectService.
     }
 
-    private Task findTaskByName(String name){
+    private Task findTaskByName(String name) {
         boolean objectFound = false;
         Task currentTask = null;
         for (Task task : taskList) {
@@ -141,23 +142,7 @@ public class Application {
         return currentTask;
     }
 
-    private void updateProjectStartDate() {
-        System.out.println("[project start date update]");
-        System.out.println("enter project name:");
-        String command = input.nextLine();
 
-        Project project = findProjectByName(command);
-        if (project != null) {
-            System.out.println("enter start date like 'dd.MM.yyyy':");
-            command = input.nextLine();
-            try {
-                project.setStartDate(formatter.parse(command));
-            } catch (ParseException e) {
-                System.out.println("Incorrect date format entered!");
-            }
-            System.out.println("ok");
-        }
-    }
 
     private void displayProjectStartDate() {
         System.out.println("[project start date]");
@@ -166,14 +151,14 @@ public class Application {
         System.out.println(findProjectByName(command).getStartDate());
     }
 
-    private void displayProjectTasks(){
+    private void displayProjectTasks() {
         System.out.println("[tasks of project]");
         System.out.println("enter project name:");
         String command = input.nextLine();
         Project project = findProjectByName(command);
 
         int i = 0;
-        for (Task task: taskList) {
+        for (Task task : taskList) {
             if (task.getProjectId().equals(project.getId())) {
                 i++;
                 System.out.println(i + ". " + task.getName());
@@ -181,10 +166,11 @@ public class Application {
         }
     }
 
-    private void attachTask(){
+    private void attachTask() {
         System.out.println("[task attach]");
         System.out.println("enter task name:");
-        String command = input.nextLine();;
+        String command = input.nextLine();
+        ;
 
         Task task = findTaskByName(command);
         if (task != null) {
@@ -198,10 +184,11 @@ public class Application {
         }
     }
 
-    private void removeTask(){
+    private void removeTask() {
         System.out.println("[task remove]");
         System.out.println("enter name:");
-        String command = input.nextLine();;
+        String command = input.nextLine();
+        ;
 
         Task task = findTaskByName(command);
         if (task != null) {
@@ -211,37 +198,6 @@ public class Application {
         }
     }
 
-    private void removeProject() {
-        System.out.println("[project remove]");
-        System.out.println("enter name:");
-        String command = input.nextLine();
-
-        Project project = findProjectByName(command);
-        if (project != null){
-            projectList.remove(project);
-            for (Iterator<Task> taskIterator = taskList.iterator(); taskIterator.hasNext(); ) {
-                if (taskIterator.next().getProjectId().equals(project.getId()))
-                    taskIterator.remove();
-            }
-            project = null;
-            System.out.println("ok");
-        }
-    }
-
-    private void displayHelp() {
-        System.out.println("help: Show all commands");
-        System.out.println("project-create: Create new project");
-        System.out.println("project-clear: Remove all projects");
-        System.out.println("project-list: Show all projects");
-        System.out.println("project-remove: Remove selected project");
-        System.out.println("task-clear: Remove all tasks");
-        System.out.println("task-create: Create new task");
-        System.out.println("task-list: Show all tasks");
-        System.out.println("task-remove: Remove selected task");
-        System.out.println("task-attach: attach task to project");
-        System.out.println("tasks-of-project: display all tasks of project");
-        System.out.println("exit: Exit");
-    }
 
     private void createProject() {
         System.out.println("[Project create]");
@@ -259,26 +215,12 @@ public class Application {
         System.out.println("ok");
     }
 
-    private void clearProject() {
-        projectList.clear();
-        System.out.println("[All projects removed]");
-    }
-
     private void clearTask() {
         taskList.clear();
         System.out.println("[All tasks removed]");
     }
 
-    private void displayProjects(){
-        int i = 0;
-        System.out.println("[Project list]");
-        for (Project project : projectList) {
-            i++;
-            System.out.println(i + ". " + project.getName());
-        }
-    }
-
-    private void displayTasks(){
+    private void displayTasks() {
         int i = 0;
         System.out.println("[Task list]");
         for (Task task : taskList) {
@@ -287,7 +229,7 @@ public class Application {
         }
     }
 
-    private void renameTask(){
+    private void renameTask() {
         System.out.println("[Task rename]");
         System.out.println("Enter the name of the task that needs a new name:");
         String command = input.nextLine();
@@ -297,20 +239,6 @@ public class Application {
             System.out.println("enter new name:");
             command = input.nextLine();
             task.setName(command);
-            System.out.println("ok");
-        }
-    }
-
-    private void renameProject(){
-        System.out.println("[Project rename]");
-        System.out.println("Enter the name of the project that needs a new name:");
-        String command = input.nextLine();
-        Project project = findProjectByName(command);
-
-        if (project != null) {
-            System.out.println("enter new name:");
-            command = input.nextLine();
-            project.setName(command);
             System.out.println("ok");
         }
     }
