@@ -5,14 +5,16 @@ import java.util.UUID;
 
 public class Task {
     private String name;
-    private String id;
+    private String id = UUID.randomUUID().toString();;
     private int description;
     private Date startDate;
     private Date finishDate;
     private String projectId;
 
+    public Task() {
+    }
+
     public Task(String name) {
-        this.id = UUID.randomUUID().toString();
         this.name = name;
     }
 

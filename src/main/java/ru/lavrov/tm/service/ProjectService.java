@@ -1,77 +1,114 @@
 package ru.lavrov.tm.service;
 
+import ru.lavrov.tm.Utils;
 import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Task;
 import ru.lavrov.tm.repository.ProjectRepository;
+import ru.lavrov.tm.repository.TaskRepository;
 
 import java.text.ParseException;
-import java.util.Iterator;
-import java.util.Scanner;
+import java.util.*;
 
 public class ProjectService {
-    ProjectRepository projectRepository = new ProjectRepository();
+    private final ProjectRepository projectRepository = new ProjectRepository();
+    private final TaskRepository taskRepository = new TaskRepository();
     private final Scanner input = new Scanner(System.in);
 
-    public void createProject() {
-        System.out.println("[Project create]");
-        System.out.println("enter name:");
-        String command = input.nextLine();
+    public void createProject(String command) {
         projectRepository.merge(new Project(command));
-        System.out.println("ok");
     }
 
     public void clearProject() {
         projectRepository.removeAll();
-        System.out.println("[All projects removed]");
     }
 
-    public void displayProjects(){
-        System.out.println("[Project list]");
-        System.out.println(projectRepository.findAll());
+    public Map<String, Project> displayProjects(){
+        return projectRepository.findAll();
     }
 
-    public void removeProject() {
-        System.out.println("[project remove]");
-        System.out.println("enter name:");
-        String command = input.nextLine();
-
-        for (String key: projectRepository.findAll().keySet()){
-            if (command.equals(projectRepository.FindOne(key).getName()))
-                projectRepository.remove(key);
+    public void removeProject(String projectName) throws Exception {
+        Project project = findProjectByName(projectName);
+        projectRepository.remove(project.getId());
+        for (Map.Entry<String, Task> entry: taskRepository.findAll().entrySet()){
+            Task task = entry.getValue();
+            if (task.getProjectId().equals(project.getId()))
+                taskRepository.remove(task.getId());
         }
     }
 
-    public void renameProject(){
-        System.out.println("[Project rename]");
-        System.out.println("Enter the name of the project that needs a new name:");
-        String command = input.nextLine();
-
-        for (String key: projectRepository.findAll().keySet()){
-            if (command.equals(projectRepository.FindOne(key).getName()))
-                projectRepository.FindOne(key).setName(command);
-        }
+    public void updateProjectStartDate(String date, String projectName) throws Exception {
+        updateProjectDate("start", date, projectName);
     }
 
-    public void updateProjectStartDate() {
-        System.out.println("[project start date update]");
+    public void updateProjectFinishDate(String date, String projectName) throws Exception {
+        updateProjectDate("finish", date, projectName);
+    }
+
+    public void updateProjectDate(String typeOfDate, String date, String projectName) throws Exception {
+        Project project = findProjectByName(projectName);
+        if (project == null)
+            throw new Exception("project does not exist");
+        Date newDate;
+        try {
+            newDate = Utils.formatter.parse(date);
+        } catch (ParseException e) {
+            throw new Exception("Incorrect date format entered!");
+        }
+        if (typeOfDate.equals("start"))
+            project.setStartDate(newDate);
+        else
+            project.setFinishDate(newDate);
+    }
+
+    public void displayProjectStartDate() throws Exception {
+        displayProjectDate("start");
+    }
+
+    public void displayProjectFinishDate() throws Exception {
+        displayProjectDate("finish");
+    }
+
+    private void displayProjectDate(String typeOfDate) throws Exception {
+        System.out.println("[project " + typeOfDate + " date]");
         System.out.println("enter project name:");
         String command = input.nextLine();
+        if (typeOfDate.equals("start"))
+            findProjectByName(command).getStartDate();
+        else
+            findProjectByName(command).getFinishDate();
+    }
+
+    public Project findProjectByName(String name) throws Exception {
+        Project project = null;
 
         for (String key: projectRepository.findAll().keySet()){
-            if (command.equals(projectRepository.FindOne(key).getName()))
-                projectRepository.FindOne(key).setName(command);
+            project = projectRepository.FindOne(key);
+            if (name.equals(project.getName()))
+                break;
         }
 
-        Project project = findProjectByName(command);
-        if (project != null) {
-            System.out.println("enter start date like 'dd.MM.yyyy':");
-            command = input.nextLine();
-            try {
-                project.setStartDate(formatter.parse(command));
-            } catch (ParseException e) {
-                System.out.println("Incorrect date format entered!");
+        if (project == null)
+            throw new Exception("project does not exist");
+
+//        for (Map.Entry<String, Project> entry: projectRepository.findAll().entrySet()){
+//            project = entry.getValue();
+//            if (name.equals(project.getName()))
+//                break;
+//        }
+
+        return project;
+    }
+
+    public List<Task> displayProjectTasks(String projectName) throws Exception {
+        List<Task> list = new ArrayList();
+        Project project = findProjectByName(projectName);
+
+        for (String key: taskRepository.findAll().keySet()){
+            Task task = taskRepository.FindOne(key);
+            if (task.getProjectId().equals(project.getId())) {
+                list.add(task);
             }
-            System.out.println("ok");
         }
+        return list;
     }
 }
