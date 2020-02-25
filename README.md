@@ -1,4 +1,4 @@
-# Task Manager 4
+# Task Manager
 
 ### Software requirements ###
 java 1.8
