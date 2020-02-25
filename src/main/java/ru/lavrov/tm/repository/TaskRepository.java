@@ -2,24 +2,26 @@ package ru.lavrov.tm.repository;
 
 import ru.lavrov.tm.entity.Task;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class TaskRepository {
     Map<String, Task> tasks = new HashMap();
 
-    public Map<String, Task> findAll(){
-        return tasks;
+    public List<Task> findAll(){
+        return new ArrayList(tasks.values());
     }
 
     public Task FindOne(String id){
         return tasks.get(id);
     }
 
-    public void persist(Task task){
+    public void persist(Task task) throws Exception {
         String id = task.getId();
         if (tasks.containsKey(id))
-            System.out.println("project already exists!");
+            throw new Exception("project already exists!");
         else
             tasks.put(id, task);
     }
