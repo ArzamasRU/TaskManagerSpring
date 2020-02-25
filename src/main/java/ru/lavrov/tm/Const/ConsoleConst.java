@@ -1,6 +1,6 @@
-package ru.lavrov.tm;
+package ru.lavrov.tm.Const;
 
-public final class Consts {
+public final class ConsoleConst {
     public static final String HELP = "help";
     public static final String CREATE_PROJECT = "project-create";
     public static final String CLEAR_PROJECT = "project-clear";

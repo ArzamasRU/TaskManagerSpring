@@ -1,6 +1,6 @@
 package ru.lavrov.tm.service;
 
-import ru.lavrov.tm.Utils;
+import ru.lavrov.tm.Util.DateUtil;
 import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Task;
 import ru.lavrov.tm.repository.ProjectRepository;
@@ -60,7 +60,7 @@ public class ProjectService {
             throw new Exception("project does not exist");
         Date newDate;
         try {
-            newDate = Utils.formatter.parse(date);
+            newDate = DateUtil.formatter.parse(date);
         } catch (ParseException e) {
             throw new Exception("Incorrect date format entered!");
         }

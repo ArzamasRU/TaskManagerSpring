@@ -1,5 +1,6 @@
-package ru.lavrov.tm;
+package ru.lavrov.tm.Bootstrap;
 
+import ru.lavrov.tm.Const.ConsoleConst;
 import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Task;
 import ru.lavrov.tm.repository.ProjectRepository;
@@ -7,7 +8,6 @@ import ru.lavrov.tm.repository.TaskRepository;
 import ru.lavrov.tm.service.ProjectService;
 import ru.lavrov.tm.service.TaskService;
 
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -28,52 +28,52 @@ public class Bootstrap {
             command = input.nextLine();
 
             switch (command) {
-                case Consts.HELP:
+                case ConsoleConst.HELP:
                     displayHelp();
                     break;
-                case Consts.CREATE_PROJECT:
+                case ConsoleConst.CREATE_PROJECT:
                     createProject();
                     break;
-                case Consts.CLEAR_PROJECT:
+                case ConsoleConst.CLEAR_PROJECT:
                     clearProject();
                     break;
-                case Consts.DISPLAY_PROJECTS:
+                case ConsoleConst.DISPLAY_PROJECTS:
                     displayProjects();
                     break;
-                case Consts.REMOVE_PROJECT:
+                case ConsoleConst.REMOVE_PROJECT:
                     removeProject();
                     break;
-                case Consts.UPDATE_PROJECT_START_DATE:
+                case ConsoleConst.UPDATE_PROJECT_START_DATE:
                     updateProjectStartDate();
                     break;
-                case Consts.UPDATE_PROJECT_FINISH_DATE:
+                case ConsoleConst.UPDATE_PROJECT_FINISH_DATE:
                     updateProjectFinishDate();
                     break;
-                case Consts.UPDATE_TASK_START_DATE:
+                case ConsoleConst.UPDATE_TASK_START_DATE:
                     updateProjectStartDate();
                     break;
-                case Consts.UPDATE_TASK_FINISH_DATE:
+                case ConsoleConst.UPDATE_TASK_FINISH_DATE:
                     updateProjectFinishDate();
                     break;
-                case Consts.CLEAR_TASK:
+                case ConsoleConst.CLEAR_TASK:
                     clearTask();
                     break;
-                case Consts.CREATE_TASK:
+                case ConsoleConst.CREATE_TASK:
                     createTask();
                     break;
-                case Consts.DISPLAY_TASK:
+                case ConsoleConst.DISPLAY_TASK:
                     displayTasks();
                     break;
-                case Consts.REMOVE_TASK:
+                case ConsoleConst.REMOVE_TASK:
                     removeTask();
                     break;
-                case Consts.ATTACH_TASK:
+                case ConsoleConst.ATTACH_TASK:
                     attachTask();
                     break;
-                case Consts.DISPLAY_PROJECT_TASKS:
+                case ConsoleConst.DISPLAY_PROJECT_TASKS:
                     displayProjectTasks();
                     break;
-                case Consts.EXIT:
+                case ConsoleConst.EXIT:
                     exitFlag = true;
                     break;
                 default:

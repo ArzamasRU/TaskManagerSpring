@@ -1,7 +1,5 @@
 package ru.lavrov.tm.entity;
 
-import ru.lavrov.tm.Utils;
-
 import java.util.Date;
 import java.util.UUID;
 
