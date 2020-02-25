@@ -8,16 +8,17 @@ import ru.lavrov.tm.service.ProjectService;
 import ru.lavrov.tm.service.TaskService;
 
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Bootstrap {
-    private final ProjectService projectService = new ProjectService();
-    private final TaskService taskService = new TaskService();
     private final ProjectRepository projectRepository = new ProjectRepository();
     private final TaskRepository taskRepository = new TaskRepository();
+    private final ProjectService projectService = new ProjectService(projectRepository, taskRepository);
+    private final TaskService taskService = new TaskService(taskRepository, projectService);
     private final Scanner input = new Scanner(System.in);
 
-    public void run() throws Exception {
+    public void init() throws Exception {
         boolean exitFlag = false;
         String command;
 
@@ -79,9 +80,9 @@ public class Bootstrap {
                     System.out.println("incorrect args");
                     break;
             }
-            input.close();
-            System.out.print("you left this wonderful program");
         }
+        input.close();
+        System.out.print("you left this wonderful program");
     }
 
     private void updateProjectStartDate() throws Exception {
@@ -138,7 +139,7 @@ public class Bootstrap {
         System.out.println("[ok]");
     }
 
-    private void createProject() {
+    private void createProject() throws Exception {
         System.out.println("[Project create]");
         System.out.println("enter name:");
         String command = input.nextLine();
@@ -146,7 +147,7 @@ public class Bootstrap {
         System.out.println("[ok]");
     }
 
-    private void createTask() {
+    private void createTask() throws Exception {
         System.out.println("[Task create]");
         System.out.println("enter name:");
         String command = input.nextLine();
@@ -166,12 +167,18 @@ public class Bootstrap {
 
     private void displayProjects(){
         System.out.println("[Project list]");
-        System.out.println(projectService.displayProjects());
+        for (Map.Entry<String, Project> entry: projectService.displayProjects().entrySet()){
+            Project project = entry.getValue();
+            System.out.println(project);
+        }
     }
 
     private void displayTasks(){
-        System.out.println("[Project list]");
-        System.out.println(projectService.displayProjects());
+        System.out.println("[Task list]");
+        for (Map.Entry<String, Task> entry: taskService.displayTasks().entrySet()){
+            Task task = entry.getValue();
+            System.out.println(task);
+        }
     }
 
     public void attachTask() throws Exception {
@@ -188,7 +195,9 @@ public class Bootstrap {
         System.out.println("[tasks of project]");
         System.out.println("enter project name:");
         String command = input.nextLine();
-        System.out.println(projectService.displayProjectTasks(command));
+        for (Task task: projectService.displayProjectTasks(command)) {
+            System.out.println(task);
+        }
     }
 
     private void displayHelp() {
@@ -202,7 +211,7 @@ public class Bootstrap {
         System.out.println("task-list: Show all tasks");
         System.out.println("task-remove: Remove selected task");
         System.out.println("task-attach: attach task to project");
-        System.out.println("tasks-of-project: display all tasks of project");
+        System.out.println("project-tasks: display all tasks of project");
         System.out.println("exit: Exit");
     }
 }

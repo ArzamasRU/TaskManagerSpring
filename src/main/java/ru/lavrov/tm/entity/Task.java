@@ -65,4 +65,14 @@ public class Task {
     public void setProjectId(String projectId) {
         this.projectId = projectId;
     }
+
+    @Override
+    public String toString() {
+        return "name='" + name + '\'' +
+                ", description=" + description +
+                ", startDate=" + startDate +
+                ", finishDate=" + finishDate +
+                ", projectId='" + projectId + '\'' +
+                '}';
+    }
 }

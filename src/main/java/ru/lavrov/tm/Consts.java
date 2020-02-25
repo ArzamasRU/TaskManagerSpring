@@ -15,6 +15,6 @@ public final class Consts {
     public static final String UPDATE_TASK_START_DATE = "task-sd-update";
     public static final String UPDATE_TASK_FINISH_DATE = "task-fd-update";
     public static final String ATTACH_TASK = "task-attach";
-    public static final String DISPLAY_PROJECT_TASKS = "tasks-of-project";
+    public static final String DISPLAY_PROJECT_TASKS = "project-tasks";
     public static final String EXIT = "exit";
 }

@@ -10,11 +10,21 @@ import java.text.ParseException;
 import java.util.*;
 
 public class ProjectService {
-    private final ProjectRepository projectRepository = new ProjectRepository();
-    private final TaskRepository taskRepository = new TaskRepository();
-    private final Scanner input = new Scanner(System.in);
+    private ProjectRepository projectRepository;
+    private TaskRepository taskRepository;
 
-    public void createProject(String command) {
+    public ProjectService(ProjectRepository projectRepository) {
+        this.projectRepository = projectRepository;
+    }
+
+    public ProjectService(ProjectRepository projectRepository, TaskRepository taskRepository) {
+        this.projectRepository = projectRepository;
+        this.taskRepository = taskRepository;
+    }
+
+    public void createProject(String command) throws Exception {
+        if (command == null || command.isEmpty())
+            throw new Exception("project name is empty or null");
         projectRepository.merge(new Project(command));
     }
 
@@ -60,25 +70,9 @@ public class ProjectService {
             project.setFinishDate(newDate);
     }
 
-    public void displayProjectStartDate() throws Exception {
-        displayProjectDate("start");
-    }
-
-    public void displayProjectFinishDate() throws Exception {
-        displayProjectDate("finish");
-    }
-
-    private void displayProjectDate(String typeOfDate) throws Exception {
-        System.out.println("[project " + typeOfDate + " date]");
-        System.out.println("enter project name:");
-        String command = input.nextLine();
-        if (typeOfDate.equals("start"))
-            findProjectByName(command).getStartDate();
-        else
-            findProjectByName(command).getFinishDate();
-    }
-
     public Project findProjectByName(String name) throws Exception {
+        if (name == null || name.isEmpty())
+            throw new Exception("project name is empty or null");
         Project project = null;
 
         for (String key: projectRepository.findAll().keySet()){

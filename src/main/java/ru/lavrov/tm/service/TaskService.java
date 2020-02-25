@@ -11,15 +11,23 @@ import ru.lavrov.tm.repository.TaskRepository;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.Map;
-import java.util.Scanner;
 
 public class TaskService {
-    private final ProjectRepository projectRepository = new ProjectRepository();
-    private final TaskRepository taskRepository = new TaskRepository();
-    private final ProjectService projectService = new ProjectService();
-    private final Scanner input = new Scanner(System.in);
+    private TaskRepository taskRepository;
+    private ProjectService projectService;
 
-    public void createTask(String command) {
+    public TaskService(TaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
+    }
+
+    public TaskService(TaskRepository taskRepository, ProjectService projectService) {
+        this.taskRepository = taskRepository;
+        this.projectService = projectService;
+    }
+
+    public void createTask(String command) throws Exception {
+        if (command == null || command.isEmpty())
+            throw new Exception("task name is empty or null");
         taskRepository.merge(new Task(command));
     }
 
@@ -60,25 +68,10 @@ public class TaskService {
             task.setFinishDate(newDate);
     }
 
-    public void displayTaskStartDate() throws Exception {
-        displayTaskDate("start");
-    }
-
-    public void displayTaskFinishDate() throws Exception {
-        displayTaskDate("finish");
-    }
-
-    private void displayTaskDate(String typeOfDate) throws Exception {
-        System.out.println("[task " + typeOfDate + " date]");
-        System.out.println("enter task name:");
-        String command = input.nextLine();
-        if (typeOfDate.equals("start"))
-            findTaskByName(command).getStartDate();
-        else
-            findTaskByName(command).getFinishDate();
-    }
-
     public Task findTaskByName(String name) throws Exception {
+        if (name == null || name.isEmpty())
+            throw new Exception("task name is empty or null");
+
         Task task = null;
 
         for (String key: taskRepository.findAll().keySet()){

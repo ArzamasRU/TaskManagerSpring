@@ -1,5 +1,7 @@
 package ru.lavrov.tm.entity;
 
+import ru.lavrov.tm.Utils;
+
 import java.util.Date;
 import java.util.UUID;
 
@@ -7,8 +9,8 @@ public class Project {
     private String name;
     private String id;
     private int description;
-    private Date startDate;
-    private Date finishDate;
+    private Date startDate = new Date();
+    private Date finishDate = new Date();
 
     public Project(String name) {
         this.id = UUID.randomUUID().toString();
@@ -53,5 +55,14 @@ public class Project {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "name='" + name + '\'' +
+                ", description=" + description +
+                ", startDate=" + startDate +
+                ", finishDate=" + finishDate +
+                '}';
     }
 }
