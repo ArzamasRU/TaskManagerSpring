@@ -1,4 +1,4 @@
-package ru.lavrov.tm.Util;
+package ru.lavrov.tm.util;
 
 import java.text.SimpleDateFormat;
 

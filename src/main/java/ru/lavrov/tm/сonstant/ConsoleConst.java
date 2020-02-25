@@ -1,4 +1,4 @@
-package ru.lavrov.tm.Const;
+package ru.lavrov.tm.сonstant;
 
 public final class ConsoleConst {
     public static final String HELP = "help";

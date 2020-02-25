@@ -1,6 +1,6 @@
-package ru.lavrov.tm.Bootstrap;
+package ru.lavrov.tm.bootstrap;
 
-import ru.lavrov.tm.Const.ConsoleConst;
+import ru.lavrov.tm.сonstant.ConsoleConst;
 import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Task;
 import ru.lavrov.tm.repository.ProjectRepository;

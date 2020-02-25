@@ -1,6 +1,6 @@
 package ru.lavrov.tm.service;
 
-import ru.lavrov.tm.Util.DateUtil;
+import ru.lavrov.tm.util.DateUtil;
 import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Task;
 import ru.lavrov.tm.repository.ProjectRepository;
