@@ -1,7 +1,6 @@
 package ru.lavrov.tm.bootstrap;
 
 import ru.lavrov.tm.command.*;
-import ru.lavrov.tm.exception.CommandCorruptException;
 import ru.lavrov.tm.repository.ProjectRepository;
 import ru.lavrov.tm.repository.TaskRepository;
 import ru.lavrov.tm.service.ProjectService;
@@ -35,7 +34,7 @@ public class Bootstrap {
         }
     }
 
-    private void init() throws CommandCorruptException {
+    private void init() throws Exception {
         registry(new ExitCommand(this));
         registry(new HelpCommand(this));
         registry(new ProjectClearCommand(this));
@@ -52,13 +51,13 @@ public class Bootstrap {
         registry(new TaskRenameCommand(this));
     }
 
-    private void registry(AbstractCommand command) throws CommandCorruptException {
+    private void registry(AbstractCommand command) throws Exception {
         final String cliCommand = command.command();
         final String cliDescription = command.description();
         if (cliCommand == null || cliCommand.isEmpty())
-            throw new CommandCorruptException();
+            throw new Exception("command is empty or null");
         if (cliDescription == null || cliDescription.isEmpty())
-            throw new CommandCorruptException();
+            throw new Exception("command description is empty or null");
 //        command.setServiceLocator(this);
 //        command.setBootstrap(this);
         commands.put(cliCommand, command);
