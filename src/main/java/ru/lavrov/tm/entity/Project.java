@@ -5,13 +5,12 @@ import java.util.UUID;
 
 public class Project {
     private String name;
-    private String id;
+    private String id = UUID.randomUUID().toString();;
     private int description;
     private Date startDate = new Date();
-    private Date finishDate = new Date();
+    private Date finishDate = null;
 
     public Project(String name) {
-        this.id = UUID.randomUUID().toString();
         this.name = name;
     }
 

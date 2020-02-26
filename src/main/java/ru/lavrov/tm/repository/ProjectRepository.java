@@ -22,8 +22,7 @@ public class ProjectRepository {
         String id = project.getId();
         if (projects.containsKey(id))
             throw new ProjectExistsException();
-        else
-            projects.put(id, project);
+        projects.put(id, project);
     }
 
     public void merge(Project project){

@@ -8,8 +8,8 @@ public class Task {
     private String id = UUID.randomUUID().toString();;
     private int description;
     private Date startDate;
-    private Date finishDate;
-    private String projectId;
+    private Date finishDate = new Date();
+    private String projectId = null;
 
     public Task() {
     }

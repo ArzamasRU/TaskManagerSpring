@@ -21,8 +21,7 @@ public class TaskRepository {
         String id = task.getId();
         if (tasks.containsKey(id))
             throw new TaskExistsException();
-        else
-            tasks.put(id, task);
+        tasks.put(id, task);
     }
 
     public void merge(Task task){
