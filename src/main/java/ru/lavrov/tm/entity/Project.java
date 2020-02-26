@@ -10,6 +10,9 @@ public class Project {
     private Date startDate = new Date();
     private Date finishDate = null;
 
+    public Project() {
+    }
+
     public Project(String name) {
         this.name = name;
     }
