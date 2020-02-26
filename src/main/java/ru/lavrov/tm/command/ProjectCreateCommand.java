@@ -21,13 +21,13 @@ public final class ProjectCreateCommand extends AbstractCommand{
     }
 
     @Override
-    public void execute() throws Exception {
+    public void execute() throws RuntimeException {
         Scanner input = new Scanner(System.in);
         System.out.println("[Project create]");
         System.out.println("enter name:");
         String command = input.nextLine();
         ProjectService projectService = bootstrap.getProjectService();
-        projectService.createProject(command);
+        projectService.persist(command);
         System.out.println("[ok]");
         System.out.println();
     }

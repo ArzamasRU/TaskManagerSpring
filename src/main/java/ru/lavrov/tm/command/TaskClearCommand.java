@@ -21,7 +21,7 @@ public final class TaskClearCommand extends AbstractCommand {
     @Override
     public void execute() {
         TaskService taskService = bootstrap.getTaskService();
-        taskService.clearTask();
+        taskService.removeAll();
         System.out.println("[All projects removed]");
         System.out.println();
     }

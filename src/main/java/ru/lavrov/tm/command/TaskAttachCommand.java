@@ -21,7 +21,7 @@ public final class TaskAttachCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws Exception {
+    public void execute() throws RuntimeException {
         Scanner input = new Scanner(System.in);
         System.out.println("[task attach]");
         System.out.println("enter task name:");

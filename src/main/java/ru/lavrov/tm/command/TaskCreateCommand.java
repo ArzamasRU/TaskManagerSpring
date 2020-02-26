@@ -21,13 +21,13 @@ public final class TaskCreateCommand extends AbstractCommand{
     }
 
     @Override
-    public void execute() throws Exception {
+    public void execute() throws RuntimeException {
         Scanner input = new Scanner(System.in);
         System.out.println("[Task create]");
         System.out.println("enter name:");
         String command = input.nextLine();
         TaskService taskService = bootstrap.getTaskService();
-        taskService.createTask(command);
+        taskService.persist(command);
         System.out.println("[ok]");
         System.out.println();
     }

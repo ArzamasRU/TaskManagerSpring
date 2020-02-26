@@ -24,7 +24,7 @@ public final class TaskListCommand extends AbstractCommand {
         System.out.println("[TASK LIST]");
         TaskService taskService = bootstrap.getTaskService();
         int index = 0;
-        for (Task task: taskService.getListTask()) {
+        for (Task task: taskService.findAll()) {
             System.out.println(++index + ". " + task);
         }
         System.out.println();

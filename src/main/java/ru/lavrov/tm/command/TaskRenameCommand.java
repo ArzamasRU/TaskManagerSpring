@@ -21,7 +21,7 @@ public class TaskRenameCommand extends AbstractCommand{
     }
 
     @Override
-    public void execute() throws Exception {
+    public void execute() throws RuntimeException {
         Scanner input = new Scanner(System.in);
         System.out.println("[task remove]");
         System.out.println("enter name:");

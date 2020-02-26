@@ -22,13 +22,13 @@ public final class ProjectTasksListCommand extends AbstractCommand{
     }
 
     @Override
-    public void execute() throws Exception {
+    public void execute() throws RuntimeException {
         Scanner input = new Scanner(System.in);
         System.out.println("[tasks of project]");
         System.out.println("enter project name:");
         String command = input.nextLine();
         ProjectService projectService = bootstrap.getProjectService();
-        for (Task task: projectService.displayProjectTasks(command)) {
+        for (Task task: projectService.getProjectTasks(command)) {
             System.out.println(task);
         }
     }

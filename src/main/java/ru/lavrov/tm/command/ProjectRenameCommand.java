@@ -22,7 +22,7 @@ public class ProjectRenameCommand extends AbstractCommand{
     }
 
     @Override
-    public void execute() throws Exception {
+    public void execute() throws RuntimeException {
         Scanner input = new Scanner(System.in);
         System.out.println("[project remove]");
         System.out.println("enter name:");

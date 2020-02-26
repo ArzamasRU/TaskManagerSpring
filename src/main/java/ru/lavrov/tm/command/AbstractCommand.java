@@ -14,6 +14,6 @@ public abstract class AbstractCommand {
     }
     public abstract String command();
     public abstract String description();
-    public abstract void execute() throws Exception;
+    public abstract void execute() throws RuntimeException;
 }
 

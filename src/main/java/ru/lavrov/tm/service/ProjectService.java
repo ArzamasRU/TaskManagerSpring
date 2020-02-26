@@ -2,11 +2,13 @@ package ru.lavrov.tm.service;
 
 import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Task;
+import ru.lavrov.tm.exception.ProjectNameIsInvalidException;
+import ru.lavrov.tm.exception.ProjectNameExistsException;
+import ru.lavrov.tm.exception.ProjectNotExistsException;
 import ru.lavrov.tm.repository.ProjectRepository;
 import ru.lavrov.tm.repository.TaskRepository;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 public class ProjectService {
     private ProjectRepository projectRepository;
@@ -21,66 +23,53 @@ public class ProjectService {
         this.taskRepository = taskRepository;
     }
 
-    public void createProject(String command) throws Exception {
-        if (command == null || command.isEmpty())
-            throw new Exception("project name is empty or null");
-        projectRepository.persist(new Project(command));
+    public void persist(String projectName) throws RuntimeException {
+        if (projectName == null || projectName.isEmpty())
+            throw new ProjectNameIsInvalidException();
+        if (projectRepository.findProjectByName(projectName) != null)
+            throw new ProjectNameExistsException();
+        projectRepository.persist(new Project(projectName));
+
     }
 
-    public void renameProject(String oldName, String newName) throws Exception {
-        if (newName == null || newName.isEmpty())
-            throw new Exception("project name is empty or null");
-        if (oldName == null || oldName.isEmpty())
-            throw new Exception("new project name is empty or null");
-        Project project = findProjectByName(oldName);
-        project.setName(newName);
+    public void merge(String projectName) throws RuntimeException {
+        if (projectName == null || projectName.isEmpty())
+            throw new ProjectNameIsInvalidException();
+        projectRepository.merge(new Project(projectName));
     }
 
-    public void clearProject() {
+    public void removeAll() {
         projectRepository.removeAll();
     }
 
-    public void removeProject(String projectName) throws Exception {
-        Project project = findProjectByName(projectName);
-        projectRepository.remove(project.getId());
-        for (Task task: taskRepository.findAll()) {
-            if (project.getId().equals(task.getProjectId()))
-                taskRepository.remove(task.getId());
-        }
-    }
-
-    public Project findProjectByName(String name) throws Exception {
-        if (name == null || name.isEmpty())
-            throw new Exception("project name is empty or null");
-
-        Project currentProject = null;
-        for (Project project: projectRepository.findAll()) {
-            if (name.equals(project.getName())) {
-                currentProject = project;
-                break;
-            }
-        }
-
-        if (currentProject == null)
-            throw new Exception("project does not exist");
-
-        return currentProject;
-    }
-
-    public List<Task> displayProjectTasks(String projectName) throws Exception {
-        List<Task> list = new ArrayList();
-        Project project = findProjectByName(projectName);
-
-        for (Task task: taskRepository.findAll()) {
-            if (task.getProjectId().equals(project.getId())) {
-                list.add(task);
-            }
-        }
-
-        return list;
-    }
-
-    public List<Project> getListProject() {
+    public Collection<Project> findAll(){
         return projectRepository.findAll();
     }
+
+    public void removeProject(String projectName) throws RuntimeException {
+        if (projectName == null || projectName.isEmpty())
+            throw new ProjectNameIsInvalidException();
+        Project project = projectRepository.findProjectByName(projectName);
+        if (project == null)
+            throw new ProjectNotExistsException();
+        projectRepository.remove(project.getId());
+        taskRepository.removeProjectTasks(project);
+    }
+
+    public Collection<Task> getProjectTasks(String projectName) {
+        if (projectName == null || projectName.isEmpty())
+            throw new ProjectNameIsInvalidException();
+        Project project = projectRepository.findProjectByName(projectName);
+        if (project == null)
+            throw new ProjectNotExistsException();
+        Collection<Task> collection = taskRepository.getProjectTasks(project);
+        return collection;
+    }
+
+    public void renameProject(String oldName, String newName) throws RuntimeException {
+        if (newName == null || newName.isEmpty() || oldName == null || oldName.isEmpty())
+            throw new ProjectNameIsInvalidException();
+        projectRepository.renameProject(oldName, newName);
+    }
 }
+

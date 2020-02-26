@@ -21,7 +21,7 @@ public final class ProjectClearCommand extends AbstractCommand {
     @Override
     public void execute() {
         ProjectService projectService = bootstrap.getProjectService();
-        projectService.clearProject();
+        projectService.removeAll();
         System.out.println("[All projects removed]");
         System.out.println();
     }
