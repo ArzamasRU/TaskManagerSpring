@@ -1,6 +1,7 @@
-package ru.lavrov.tm.command;
+package ru.lavrov.tm.command.ExitCommand;
 
 import ru.lavrov.tm.bootstrap.Bootstrap;
+import ru.lavrov.tm.command.AbstractCommand;
 
 public final class ExitCommand extends AbstractCommand {
     public ExitCommand(Bootstrap bootstrap) {

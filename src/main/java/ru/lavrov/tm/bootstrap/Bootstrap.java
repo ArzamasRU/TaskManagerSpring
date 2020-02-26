@@ -1,6 +1,10 @@
 package ru.lavrov.tm.bootstrap;
 
 import ru.lavrov.tm.command.*;
+import ru.lavrov.tm.command.ExitCommand.ExitCommand;
+import ru.lavrov.tm.command.helpCommand.HelpCommand;
+import ru.lavrov.tm.command.projectCommand.*;
+import ru.lavrov.tm.command.taskCommand.*;
 import ru.lavrov.tm.exception.CommandDescNotExistsException;
 import ru.lavrov.tm.exception.CommandNotExistsException;
 import ru.lavrov.tm.repository.ProjectRepository;

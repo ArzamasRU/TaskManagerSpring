@@ -1,23 +1,25 @@
-package ru.lavrov.tm.command;
+package ru.lavrov.tm.command.projectCommand;
 
 import ru.lavrov.tm.bootstrap.Bootstrap;
+import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.service.ProjectService;
 
 import java.util.Scanner;
 
-public final class ProjectRemoveCommand extends AbstractCommand {
-    public ProjectRemoveCommand(Bootstrap bootstrap) {
+public class ProjectRenameCommand extends AbstractCommand {
+
+    public ProjectRenameCommand(Bootstrap bootstrap) {
         super(bootstrap);
     }
 
     @Override
     public String command() {
-        return "project-remove";
+        return "project-rename";
     }
 
     @Override
     public String description() {
-        return "Remove selected project.";
+        return "Rename project";
     }
 
     @Override
@@ -25,10 +27,12 @@ public final class ProjectRemoveCommand extends AbstractCommand {
         Scanner input = new Scanner(System.in);
         System.out.println("[project remove]");
         System.out.println("enter name:");
-        String command = input.nextLine();
+        String oldName = input.nextLine();
+        System.out.println("enter new name:");
+        String newName = input.nextLine();
         ProjectService projectService = bootstrap.getProjectService();
-        projectService.removeProject(command);
-        System.out.println("[Project removed]");
+        projectService.renameProject(oldName, newName);
+        System.out.println("[Project renamed]");
         System.out.println();
     }
 }

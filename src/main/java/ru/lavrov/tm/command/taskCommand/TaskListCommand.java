@@ -1,6 +1,7 @@
-package ru.lavrov.tm.command;
+package ru.lavrov.tm.command.taskCommand;
 
 import ru.lavrov.tm.bootstrap.Bootstrap;
+import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.entity.Task;
 import ru.lavrov.tm.service.TaskService;
 

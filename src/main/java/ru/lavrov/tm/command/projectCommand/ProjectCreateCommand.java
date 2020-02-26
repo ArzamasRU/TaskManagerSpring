@@ -1,11 +1,12 @@
-package ru.lavrov.tm.command;
+package ru.lavrov.tm.command.projectCommand;
 
 import ru.lavrov.tm.bootstrap.Bootstrap;
+import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.service.ProjectService;
 
 import java.util.Scanner;
 
-public final class ProjectCreateCommand extends AbstractCommand{
+public final class ProjectCreateCommand extends AbstractCommand {
     public ProjectCreateCommand(Bootstrap bootstrap) {
         super(bootstrap);
     }

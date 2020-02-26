@@ -1,8 +1,9 @@
-package ru.lavrov.tm.command;
+package ru.lavrov.tm.command.helpCommand;
 
 import ru.lavrov.tm.bootstrap.Bootstrap;
+import ru.lavrov.tm.command.AbstractCommand;
 
-public final class HelpCommand extends AbstractCommand{
+public final class HelpCommand extends AbstractCommand {
     public HelpCommand(Bootstrap bootstrap) {
         super(bootstrap);
     }

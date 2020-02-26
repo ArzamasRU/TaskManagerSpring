@@ -1,36 +1,35 @@
-package ru.lavrov.tm.command;
+package ru.lavrov.tm.command.taskCommand;
 
 import ru.lavrov.tm.bootstrap.Bootstrap;
+import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.service.TaskService;
 
 import java.util.Scanner;
 
-public class TaskRenameCommand extends AbstractCommand{
-    public TaskRenameCommand(Bootstrap bootstrap) {
+public final class TaskCreateCommand extends AbstractCommand {
+    public TaskCreateCommand(Bootstrap bootstrap) {
         super(bootstrap);
     }
 
     @Override
     public String command() {
-        return "task-rename";
+        return "task-create";
     }
 
     @Override
     public String description() {
-        return "Rename task";
+        return "Create new task.";
     }
 
     @Override
     public void execute() throws RuntimeException {
         Scanner input = new Scanner(System.in);
-        System.out.println("[task remove]");
+        System.out.println("[Task create]");
         System.out.println("enter name:");
-        String oldName = input.nextLine();
-        System.out.println("enter new name:");
-        String newName = input.nextLine();
+        String command = input.nextLine();
         TaskService taskService = bootstrap.getTaskService();
-        taskService.renameTask(oldName, newName);
-        System.out.println("[Task renamed]");
+        taskService.persist(command);
+        System.out.println("[ok]");
         System.out.println();
     }
 }

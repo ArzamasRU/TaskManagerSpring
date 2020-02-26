@@ -1,12 +1,13 @@
-package ru.lavrov.tm.command;
+package ru.lavrov.tm.command.projectCommand;
 
 import ru.lavrov.tm.bootstrap.Bootstrap;
+import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.entity.Task;
 import ru.lavrov.tm.service.ProjectService;
 
 import java.util.Scanner;
 
-public final class ProjectTasksListCommand extends AbstractCommand{
+public final class ProjectTasksListCommand extends AbstractCommand {
     public ProjectTasksListCommand(Bootstrap bootstrap) {
         super(bootstrap);
     }
