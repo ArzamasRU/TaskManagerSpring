@@ -1,4 +1,4 @@
-package ru.lavrov.tm.exception;
+package ru.lavrov.tm.exception.commandException;
 
 public class CommandNotExistsException extends RuntimeException{
     private static final String message = "command does not exist";

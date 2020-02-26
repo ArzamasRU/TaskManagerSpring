@@ -1,4 +1,4 @@
-package ru.lavrov.tm.exception;
+package ru.lavrov.tm.exception.projectException;
 
 public class ProjectExistsException extends RuntimeException{
     private static final String message = "project already exists!";

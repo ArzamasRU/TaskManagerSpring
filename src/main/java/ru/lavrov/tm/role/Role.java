@@ -2,5 +2,9 @@ package ru.lavrov.tm.role;
 
 public enum Role {
     User,
-    Admin,
+    Admin;
+
+    public String displayName(){
+        return name();
+    }
 }

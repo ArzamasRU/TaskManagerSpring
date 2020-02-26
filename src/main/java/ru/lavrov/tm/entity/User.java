@@ -2,7 +2,7 @@ package ru.lavrov.tm.entity;
 
 import ru.lavrov.tm.role.Role;
 
-public class Client {
+public class User {
     String login;
     String password;
     Role role;

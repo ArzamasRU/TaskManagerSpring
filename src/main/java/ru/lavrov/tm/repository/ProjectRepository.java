@@ -1,7 +1,7 @@
 package ru.lavrov.tm.repository;
 
 import ru.lavrov.tm.entity.Project;
-import ru.lavrov.tm.exception.ProjectExistsException;
+import ru.lavrov.tm.exception.projectException.ProjectExistsException;
 
 import java.util.Collection;
 import java.util.HashMap;

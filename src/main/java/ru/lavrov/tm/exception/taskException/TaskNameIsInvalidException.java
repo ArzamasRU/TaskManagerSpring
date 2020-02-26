@@ -1,4 +1,4 @@
-package ru.lavrov.tm.exception;
+package ru.lavrov.tm.exception.taskException;
 
 public class TaskNameIsInvalidException extends RuntimeException{
     private static final String message = "task name is empty or null!";

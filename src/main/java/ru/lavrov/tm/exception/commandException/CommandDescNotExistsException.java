@@ -1,4 +1,4 @@
-package ru.lavrov.tm.exception;
+package ru.lavrov.tm.exception.commandException;
 
 public class CommandDescNotExistsException extends RuntimeException{
     private static final String message = "command description does not exist";

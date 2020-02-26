@@ -5,8 +5,8 @@ import ru.lavrov.tm.command.ExitCommand.ExitCommand;
 import ru.lavrov.tm.command.helpCommand.HelpCommand;
 import ru.lavrov.tm.command.projectCommand.*;
 import ru.lavrov.tm.command.taskCommand.*;
-import ru.lavrov.tm.exception.CommandDescNotExistsException;
-import ru.lavrov.tm.exception.CommandNotExistsException;
+import ru.lavrov.tm.exception.commandException.CommandDescNotExistsException;
+import ru.lavrov.tm.exception.commandException.CommandNotExistsException;
 import ru.lavrov.tm.repository.ProjectRepository;
 import ru.lavrov.tm.repository.TaskRepository;
 import ru.lavrov.tm.service.ProjectService;
@@ -34,6 +34,7 @@ public class Bootstrap {
         init();
         System.out.println("*** WELCOME TO TASK MANAGER ***");
         String command = null;
+
         while (!"exit".equals(command)) {
             command = input.nextLine();
             try{

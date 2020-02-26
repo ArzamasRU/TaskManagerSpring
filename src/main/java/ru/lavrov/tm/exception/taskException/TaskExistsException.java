@@ -1,4 +1,4 @@
-package ru.lavrov.tm.exception;
+package ru.lavrov.tm.exception.taskException;
 
 public class TaskExistsException extends RuntimeException{
     private static final String message = "task already exists!";

@@ -2,7 +2,11 @@ package ru.lavrov.tm.service;
 
 import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Task;
-import ru.lavrov.tm.exception.*;
+import ru.lavrov.tm.exception.projectException.ProjectNameIsInvalidException;
+import ru.lavrov.tm.exception.projectException.ProjectNotExistsException;
+import ru.lavrov.tm.exception.taskException.TaskNameExistsException;
+import ru.lavrov.tm.exception.taskException.TaskNameIsInvalidException;
+import ru.lavrov.tm.exception.taskException.TaskNotExistsException;
 import ru.lavrov.tm.repository.ProjectRepository;
 import ru.lavrov.tm.repository.TaskRepository;
 
