@@ -5,13 +5,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class DateUtil {
-    private final SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+    private static final SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
 
-    public Date convertStrToDate(String source) throws ParseException {
+    public static Date convertStrToDate(String source) throws ParseException {
         return formatter.parse(source);
     }
 
-    public String convertDateToStr(Date date) {
+    public static String convertDateToStr(Date date) {
         return formatter.format(date);
     }
 }

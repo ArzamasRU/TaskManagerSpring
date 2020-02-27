@@ -2,9 +2,12 @@ package ru.lavrov.tm.service;
 
 import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Task;
-import ru.lavrov.tm.exception.projectException.ProjectNameIsInvalidException;
+import ru.lavrov.tm.entity.User;
 import ru.lavrov.tm.exception.projectException.ProjectNameExistsException;
+import ru.lavrov.tm.exception.projectException.ProjectNameIsInvalidException;
 import ru.lavrov.tm.exception.projectException.ProjectNotExistsException;
+import ru.lavrov.tm.exception.taskException.TaskNameIsInvalidException;
+import ru.lavrov.tm.exception.userException.UserIsNotAuthorizedException;
 import ru.lavrov.tm.repository.ProjectRepository;
 import ru.lavrov.tm.repository.TaskRepository;
 
@@ -29,7 +32,6 @@ public class ProjectService {
         if (projectRepository.findProjectByName(projectName) != null)
             throw new ProjectNameExistsException();
         projectRepository.persist(new Project(projectName));
-
     }
 
     public void merge(String projectName) throws RuntimeException {
@@ -44,6 +46,12 @@ public class ProjectService {
 
     public Collection<Project> findAll(){
         return projectRepository.findAll();
+    }
+
+    public Collection<Project> findAllByUser(User sessionUser){
+        if (sessionUser == null)
+            throw new UserIsNotAuthorizedException();
+        return projectRepository.findAllByUser(sessionUser);
     }
 
     public void removeProject(String projectName) throws RuntimeException {
@@ -64,6 +72,29 @@ public class ProjectService {
             throw new ProjectNotExistsException();
         Collection<Task> collection = taskRepository.getProjectTasks(project);
         return collection;
+    }
+
+    public Collection<Task> getProjectTasksByUser(String projectName, User sessionUser) {
+        if (sessionUser == null)
+            throw new UserIsNotAuthorizedException();
+        if (projectName == null || projectName.isEmpty())
+            throw new ProjectNameIsInvalidException();
+        Project project = projectRepository.findProjectByName(projectName);
+        if (project == null)
+            throw new ProjectNotExistsException();
+        Collection<Task> collection = taskRepository.getProjectTasksByUser(project, sessionUser);
+        return collection;
+    }
+
+    public void attachProjectToUser(String projectName, User sessionUser) throws RuntimeException {
+        if (projectName == null || projectName.isEmpty())
+            throw new TaskNameIsInvalidException();
+        if (sessionUser == null)
+            throw new UserIsNotAuthorizedException();
+        Project project = projectRepository.findProjectByName(projectName);
+        if (project == null)
+            throw new ProjectNotExistsException();
+        projectRepository.attachProjectToUser(project, sessionUser);
     }
 
     public void renameProject(String oldName, String newName) throws RuntimeException {

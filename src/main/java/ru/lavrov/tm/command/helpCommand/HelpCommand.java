@@ -4,6 +4,9 @@ import ru.lavrov.tm.bootstrap.Bootstrap;
 import ru.lavrov.tm.command.AbstractCommand;
 
 public final class HelpCommand extends AbstractCommand {
+    public HelpCommand() {
+    }
+
     public HelpCommand(Bootstrap bootstrap) {
         super(bootstrap);
     }

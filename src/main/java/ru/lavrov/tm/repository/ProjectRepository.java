@@ -1,8 +1,10 @@
 package ru.lavrov.tm.repository;
 
 import ru.lavrov.tm.entity.Project;
+import ru.lavrov.tm.entity.User;
 import ru.lavrov.tm.exception.projectException.ProjectExistsException;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +14,15 @@ public class ProjectRepository {
 
     public Collection<Project> findAll(){
         return projects.values();
+    }
+
+    public Collection<Project> findAllByUser(User sessionUser) {
+        Collection<Project> list = new ArrayList<>();
+        for (Project project : findAll()) {
+            if (sessionUser.equals(project.getUserId()))
+                list.add(project);
+        }
+        return list;
     }
 
     public Project FindOne(String id){
@@ -49,5 +60,9 @@ public class ProjectRepository {
 
     public void renameProject(String oldName, String newName) throws RuntimeException {
         findProjectByName(oldName).setName(newName);
+    }
+
+    public void attachProjectToUser(Project project, User user){
+        project.setUserId(user.getId());
     }
 }

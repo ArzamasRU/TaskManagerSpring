@@ -9,6 +9,7 @@ public class Project {
     private int description;
     private Date startDate = new Date();
     private Date finishDate = null;
+    private String userId;
 
     public Project() {
     }
@@ -57,12 +58,20 @@ public class Project {
         this.id = id;
     }
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     @Override
     public String toString() {
         return "name='" + name + '\'' +
                 ", description=" + description +
                 ", startDate=" + startDate +
                 ", finishDate=" + finishDate +
-                '}';
+                ", userId='" + userId + '\'';
     }
 }

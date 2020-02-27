@@ -9,6 +9,10 @@ public final class ProjectClearCommand extends AbstractCommand {
         super(bootstrap);
     }
 
+    public ProjectClearCommand() {
+        super();
+    }
+
     @Override
     public String command() {
         return "project-clear";

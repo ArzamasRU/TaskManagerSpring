@@ -11,6 +11,10 @@ public final class ProjectRemoveCommand extends AbstractCommand {
         super(bootstrap);
     }
 
+    public ProjectRemoveCommand() {
+        super();
+    }
+
     @Override
     public String command() {
         return "project-remove";

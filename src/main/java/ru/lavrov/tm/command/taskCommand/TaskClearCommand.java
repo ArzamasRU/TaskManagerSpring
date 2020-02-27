@@ -9,6 +9,10 @@ public final class TaskClearCommand extends AbstractCommand {
         super(bootstrap);
     }
 
+    public TaskClearCommand() {
+        super();
+    }
+
     @Override
     public String command() {
         return "task-clear";

@@ -11,6 +11,10 @@ public class TaskRenameCommand extends AbstractCommand {
         super(bootstrap);
     }
 
+    public TaskRenameCommand() {
+        super();
+    }
+
     @Override
     public String command() {
         return "task-rename";

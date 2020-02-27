@@ -6,34 +6,35 @@ import ru.lavrov.tm.service.TaskService;
 
 import java.util.Scanner;
 
-public final class TaskCreateCommand extends AbstractCommand {
-    public TaskCreateCommand(Bootstrap bootstrap) {
+public final class TaskAttachToProjectCommand extends AbstractCommand {
+    public TaskAttachToProjectCommand(Bootstrap bootstrap) {
         super(bootstrap);
     }
 
-    public TaskCreateCommand() {
+    public TaskAttachToProjectCommand() {
         super();
     }
 
     @Override
     public String command() {
-        return "task-create";
+        return "task-attach-to-project";
     }
 
     @Override
     public String description() {
-        return "Create new task.";
+        return "Attach task to project.";
     }
 
     @Override
     public void execute() throws RuntimeException {
         Scanner input = new Scanner(System.in);
-        System.out.println("[Task create]");
-        System.out.println("enter name:");
-        String command = input.nextLine();
+        System.out.println("[Attach task to project]");
+        System.out.println("enter task name:");
+        String taskName = input.nextLine();
+        System.out.println("enter project name:");
+        String projectName = input.nextLine();
         TaskService taskService = bootstrap.getTaskService();
-        taskService.persist(command);
-        System.out.println("[ok]");
+        taskService.attachTaskToProject(taskName, projectName);
         System.out.println();
     }
 }

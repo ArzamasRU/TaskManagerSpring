@@ -12,6 +12,10 @@ public class ProjectRenameCommand extends AbstractCommand {
         super(bootstrap);
     }
 
+    public ProjectRenameCommand() {
+        super();
+    }
+
     @Override
     public String command() {
         return "project-rename";

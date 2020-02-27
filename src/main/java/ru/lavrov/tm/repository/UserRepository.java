@@ -1,7 +1,7 @@
 package ru.lavrov.tm.repository;
 
 import ru.lavrov.tm.entity.User;
-import ru.lavrov.tm.exception.userException.UserLoginExistsException;
+import ru.lavrov.tm.exception.userException.UserExistsException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,32 +9,60 @@ import java.util.List;
 import java.util.Map;
 
 public class UserRepository {
-    Map<String, User> clients = new HashMap();
+    Map<String, User> users = new HashMap();
 
     public List<User> findAll(){
-        return new ArrayList(clients.values());
+        return new ArrayList(users.values());
     }
 
-    public User FindOne(String login){
-        return clients.get(login);
+    public User FindOne(String id){
+        return users.get(id);
     }
 
-    public void persist(User user) throws Exception {
-        String login = user.getLogin();
-        if (clients.containsKey(login))
-            throw new UserLoginExistsException();
-        clients.put(login, user);
+    public void persist(User user) {
+        String id = user.getId();
+        if (users.containsKey(id))
+            throw new UserExistsException();
+        users.put(id, user);
     }
 
     public void merge(User user){
-        clients.put(user.getLogin(), user);
+        users.put(user.getLogin(), user);
     }
 
     public void remove(String login){
-        clients.remove(login);
+        users.remove(login);
     }
 
     public void removeAll(){
-        clients.clear();
+        users.clear();
     }
+
+//    public void login(User user){
+//        user.setAuthorized(true);
+//    }
+
+//    public void logout(User user){
+//        user.setAuthorized(false);
+//    }
+
+    public User findUserByLogin(String login){
+        User currentUser = null;
+        for (User user: findAll()) {
+            currentUser = user;
+            if (login.equals(user.getLogin()))
+                break;
+        }
+        return currentUser;
+    }
+
+//    public User findAuthorizedUser(){
+//        User currentUser = null;
+//        for (User user: findAll()) {
+//            currentUser = user;
+//            if (user.isAuthorized())
+//                break;
+//        }
+//        return currentUser;
+//    }
 }

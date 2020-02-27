@@ -11,6 +11,10 @@ public final class TaskRemoveCommand extends AbstractCommand {
         super(bootstrap);
     }
 
+    public TaskRemoveCommand() {
+        super();
+    }
+
     @Override
     public String command() {
         return "task-remove";

@@ -10,6 +10,7 @@ public class Task {
     private Date startDate;
     private Date finishDate = new Date();
     private String projectId = null;
+    private String userId;
 
     public Task() {
     }
@@ -66,6 +67,14 @@ public class Task {
         this.projectId = projectId;
     }
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     @Override
     public String toString() {
         return "name='" + name + '\'' +
@@ -73,6 +82,6 @@ public class Task {
                 ", startDate=" + startDate +
                 ", finishDate=" + finishDate +
                 ", projectId='" + projectId + '\'' +
-                '}';
+                ", userId='" + userId + '\'';
     }
 }

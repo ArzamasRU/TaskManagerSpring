@@ -2,11 +2,13 @@ package ru.lavrov.tm.service;
 
 import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Task;
+import ru.lavrov.tm.entity.User;
 import ru.lavrov.tm.exception.projectException.ProjectNameIsInvalidException;
 import ru.lavrov.tm.exception.projectException.ProjectNotExistsException;
 import ru.lavrov.tm.exception.taskException.TaskNameExistsException;
 import ru.lavrov.tm.exception.taskException.TaskNameIsInvalidException;
 import ru.lavrov.tm.exception.taskException.TaskNotExistsException;
+import ru.lavrov.tm.exception.userException.UserIsNotAuthorizedException;
 import ru.lavrov.tm.repository.ProjectRepository;
 import ru.lavrov.tm.repository.TaskRepository;
 
@@ -47,6 +49,12 @@ public class TaskService {
         return taskRepository.findAll();
     }
 
+    public Collection<Task> findAllByUser(User sessionUser){
+        if (sessionUser == null)
+            throw new UserIsNotAuthorizedException();
+        return taskRepository.findAllByUser(sessionUser);
+    }
+
     public void removeTask(String taskName) throws RuntimeException {
         if (taskName == null || taskName.isEmpty())
             throw new TaskNameIsInvalidException();
@@ -57,16 +65,29 @@ public class TaskService {
 
     }
 
-    public void attachTask(String taskName, String projectName) throws RuntimeException {
+    public void attachTaskToProject(String taskName, String projectName) throws RuntimeException {
         if (taskName == null || taskName.isEmpty())
             throw new TaskNameIsInvalidException();
-        Task task = taskRepository.findTaskByName(taskName);
         if (projectName == null || projectName.isEmpty())
             throw new ProjectNameIsInvalidException();
+        Task task = taskRepository.findTaskByName(taskName);
+        if (task == null)
+            throw new TaskNotExistsException();
         Project project = projectRepository.findProjectByName(projectName);
         if (project == null)
             throw new ProjectNotExistsException();
-        taskRepository.attachTask(task, project);
+        taskRepository.attachTaskToProject(task, project);
+    }
+
+    public void attachTaskToUser(String taskName, User sessionUser) throws RuntimeException {
+        if (taskName == null || taskName.isEmpty())
+            throw new TaskNameIsInvalidException();
+        if (sessionUser == null)
+            throw new UserIsNotAuthorizedException();
+        Task task = taskRepository.findTaskByName(taskName);
+        if (task == null)
+            throw new TaskNotExistsException();
+        taskRepository.attachTaskToUser(task, sessionUser);
     }
 
     public void renameTask(String oldName, String newName) throws RuntimeException {
