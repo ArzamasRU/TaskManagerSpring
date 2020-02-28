@@ -41,8 +41,8 @@ public final class TaskAttachToProjectCommand extends AbstractCommand {
         String projectName = input.nextLine();
         TaskService taskService = bootstrap.getTaskService();
         taskService.attachTaskToProject(taskName, projectName);
-        System.out.println();
         System.out.println("[ok]");
+        System.out.println();
     }
 
     @Override

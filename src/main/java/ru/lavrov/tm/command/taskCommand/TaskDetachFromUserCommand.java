@@ -43,6 +43,7 @@ public final class TaskDetachFromUserCommand extends AbstractCommand {
 //        User sessionUser = bootstrap.getSessionUser();
 //        taskService.detachTaskfromUser(sessionUser, taskName);
         taskService.detachTaskfromUser(login, taskName);
+        System.out.println("[ok]");
         System.out.println();
     }
 

@@ -43,6 +43,7 @@ public class ProjectAttachToUserCommand extends AbstractCommand {
 //        User sessionUser = bootstrap.getSessionUser();
 //        projectService.attachProjectToUser(projectName, sessionUser);
         projectService.attachProjectToUser(projectName, userLogin);
+        System.out.println("[ok]");
         System.out.println();
     }
 

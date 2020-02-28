@@ -43,6 +43,7 @@ public class TaskAttachToUserCommand extends AbstractCommand {
         //        User sessionUser = bootstrap.getSessionUser();
 //        taskService.attachTaskToUser(sessionUser, login);
         taskService.attachTaskToUser(taskName, login);
+        System.out.println("[ok]");
         System.out.println();
     }
 

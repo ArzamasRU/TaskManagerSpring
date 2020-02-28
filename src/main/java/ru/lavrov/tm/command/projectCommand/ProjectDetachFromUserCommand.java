@@ -43,6 +43,7 @@ public final class ProjectDetachFromUserCommand extends AbstractCommand {
 //        User sessionUser = bootstrap.getSessionUser();
 //        projectService.detachProjectfromUser(sessionUser, projectName);
         projectService.detachProjectfromUser(userLogin, projectName);
+        System.out.println("[ok]");
         System.out.println();
     }
 
