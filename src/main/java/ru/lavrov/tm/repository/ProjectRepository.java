@@ -51,9 +51,10 @@ public class ProjectRepository {
     public Project findProjectByName(String name){
         Project currentProject = null;
         for (Project project: findAll()) {
-            currentProject = project;
-            if (name.equals(project.getName()))
+            if (name.equals(project.getName())) {
+                currentProject = project;
                 break;
+            }
         }
         return currentProject;
     }

@@ -9,36 +9,37 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Scanner;
 
-public final class TaskCreateCommand extends AbstractCommand {
+public final class TaskDetachFromProjectCommand extends AbstractCommand {
     private final boolean isSafe = false;
     private final Collection<Role> roles = Arrays.asList(Role.Admin);
 
-    public TaskCreateCommand(Bootstrap bootstrap) {
+    public TaskDetachFromProjectCommand(Bootstrap bootstrap) {
         super(bootstrap);
     }
 
-    public TaskCreateCommand() {
+    public TaskDetachFromProjectCommand() {
         super();
     }
 
     @Override
     public String command() {
-        return "task-create";
+        return "task-detach-from-project";
     }
 
     @Override
     public String description() {
-        return "Create new task.";
+        return "detach task from project";
     }
 
     @Override
-    public void execute() throws RuntimeException {
+    public void execute() {
         Scanner input = new Scanner(System.in);
-        System.out.println("[Task create]");
-        System.out.println("enter name:");
-        String command = input.nextLine();
+        System.out.println("[Detach task from project]");
+        System.out.println("enter task:");
+        String taskName = input.nextLine();
         TaskService taskService = bootstrap.getTaskService();
-        taskService.persist(command);
+        taskService.detachTaskfromProject(taskName);
+        //        taskService.detachTaskfromUser(taskName);
         System.out.println("[ok]");
         System.out.println();
     }

@@ -13,26 +13,6 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-//    public void login(String login, String password){
-//        if (login == null || login.isEmpty())
-//            throw new UserLoginIsInvalidException();
-//        if (password == null || password.isEmpty())
-//            throw new UserPasswordIsInvalidException();
-//        User user = userRepository.findUserByLogin(login);
-//        if (user == null)
-//            throw new UserLoginNotExistsException();
-//        if (password.equals(user.getPassword()))
-//            throw new UserLoginOrPasswordIsIncorrectException();
-//        userRepository.login(user);
-//    }
-
-//    public void logout(){
-//        User user = userRepository.findAuthorizedUser();
-////        if (user == null)
-////            throw new UserIsNotAuthorizedException();
-//        userRepository.logout(user);
-//    }
-
     public void persist(String login, String password, String role) {
         if (login == null || login.isEmpty())
             throw new UserLoginIsInvalidException();
@@ -47,7 +27,7 @@ public class UserService {
         userRepository.persist(new User(login, password, currentRole));
     }
 
-    public void changePassword(User sessionUser,String newPassword) {
+    public void changePassword(User sessionUser, String newPassword) {
         if (sessionUser == null)
             throw new UserIsNotAuthorizedException();
         if (newPassword == null || newPassword.isEmpty())
@@ -65,8 +45,4 @@ public class UserService {
             throw new UserLoginExistsException();
         sessionUser.setLogin(newLogin);
     }
-
-//    public User findAuthorizedUser(){
-//        return userRepository.findAuthorizedUser();
-//    }
 }

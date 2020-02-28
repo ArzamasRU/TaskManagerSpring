@@ -2,11 +2,17 @@ package ru.lavrov.tm.command.taskCommand;
 
 import ru.lavrov.tm.bootstrap.Bootstrap;
 import ru.lavrov.tm.command.AbstractCommand;
+import ru.lavrov.tm.role.Role;
 import ru.lavrov.tm.service.TaskService;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Scanner;
 
 public final class TaskAttachToProjectCommand extends AbstractCommand {
+    private final boolean isSafe = false;
+    private final Collection<Role> roles = Arrays.asList(Role.Admin);
+
     public TaskAttachToProjectCommand(Bootstrap bootstrap) {
         super(bootstrap);
     }
@@ -36,5 +42,16 @@ public final class TaskAttachToProjectCommand extends AbstractCommand {
         TaskService taskService = bootstrap.getTaskService();
         taskService.attachTaskToProject(taskName, projectName);
         System.out.println();
+        System.out.println("[ok]");
+    }
+
+    @Override
+    public boolean isSafe() {
+        return isSafe;
+    }
+
+    @Override
+    public Collection<Role> getRoles() {
+        return roles;
     }
 }

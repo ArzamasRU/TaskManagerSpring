@@ -2,12 +2,17 @@ package ru.lavrov.tm.command.projectCommand;
 
 import ru.lavrov.tm.bootstrap.Bootstrap;
 import ru.lavrov.tm.command.AbstractCommand;
-import ru.lavrov.tm.entity.User;
+import ru.lavrov.tm.role.Role;
 import ru.lavrov.tm.service.ProjectService;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Scanner;
 
 public class ProjectAttachToUserCommand extends AbstractCommand {
+    private final boolean isSafe = false;
+    private final Collection<Role> roles = Arrays.asList(Role.Admin);
+
     public ProjectAttachToUserCommand(Bootstrap bootstrap) {
         super(bootstrap);
     }
@@ -32,9 +37,22 @@ public class ProjectAttachToUserCommand extends AbstractCommand {
         System.out.println("[Attach project to user]");
         System.out.println("enter project name:");
         String projectName = input.nextLine();
-        User sessionUser = bootstrap.getSessionUser();
+        System.out.println("enter user login:");
+        String userLogin = input.nextLine();
         ProjectService projectService = bootstrap.getProjectService();
-        projectService.attachProjectToUser(projectName, sessionUser);
+//        User sessionUser = bootstrap.getSessionUser();
+//        projectService.attachProjectToUser(projectName, sessionUser);
+        projectService.attachProjectToUser(projectName, userLogin);
         System.out.println();
+    }
+
+    @Override
+    public boolean isSafe() {
+        return isSafe;
+    }
+
+    @Override
+    public Collection<Role> getRoles() {
+        return roles;
     }
 }

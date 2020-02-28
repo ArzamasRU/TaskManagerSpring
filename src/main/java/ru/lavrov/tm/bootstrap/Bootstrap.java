@@ -7,28 +7,31 @@ import ru.lavrov.tm.command.projectCommand.*;
 import ru.lavrov.tm.command.taskCommand.*;
 import ru.lavrov.tm.command.userCommand.*;
 import ru.lavrov.tm.entity.User;
-import ru.lavrov.tm.exception.commandException.CommandDescNotExistsException;
+import ru.lavrov.tm.exception.commandException.CommandDescriptionIsInvalidException;
+import ru.lavrov.tm.exception.commandException.CommandIsInvalidException;
 import ru.lavrov.tm.exception.commandException.CommandNotExistsException;
 import ru.lavrov.tm.exception.userException.*;
+import ru.lavrov.tm.exception.utilException.UtilAlgorithmNotExistsException;
 import ru.lavrov.tm.repository.ProjectRepository;
 import ru.lavrov.tm.repository.TaskRepository;
 import ru.lavrov.tm.repository.UserRepository;
+import ru.lavrov.tm.role.Role;
 import ru.lavrov.tm.service.ProjectService;
 import ru.lavrov.tm.service.TaskService;
 import ru.lavrov.tm.service.UserService;
+import ru.lavrov.tm.util.HashUtil;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 public class Bootstrap {
     private final ProjectRepository projectRepository = new ProjectRepository();
     private final TaskRepository taskRepository = new TaskRepository();
     private final UserRepository userRepository = new UserRepository();
-    private final ProjectService projectService = new ProjectService(projectRepository, taskRepository);
-    private final TaskService taskService = new TaskService(taskRepository, projectRepository);
+    private final ProjectService projectService = new ProjectService(projectRepository, taskRepository, userRepository);
+    private final TaskService taskService = new TaskService(taskRepository, projectRepository, userRepository);
     private final UserService userService = new UserService(userRepository);
     private final Scanner input = new Scanner(System.in);
-    private final boolean safeCommand = true;
-    private final boolean notSafeCommand = false;
     private Map<String, AbstractCommand> commands = new LinkedHashMap();
     private User sessionUser;
 
@@ -54,6 +57,7 @@ public class Bootstrap {
 
     public void start() {
         init();
+        initUsers();
         System.out.println("*** WELCOME TO TASK MANAGER ***");
         String command = null;
 
@@ -68,39 +72,88 @@ public class Bootstrap {
     }
 
     private void init() throws RuntimeException {
-        registry(new ExitCommand(), notSafeCommand);
-        registry(new HelpCommand(), safeCommand);
-        registry(new ProjectClearCommand(), notSafeCommand);
-        registry(new ProjectCreateCommand(), notSafeCommand);
-        registry(new ProjectListCommand(), notSafeCommand);
-        registry(new ProjectRemoveCommand(), notSafeCommand);
-        registry(new ProjectTasksListCommand(), notSafeCommand);
-        registry(new ProjectRenameCommand(), notSafeCommand);
-        registry(new ProjectAttachToUserCommand(), notSafeCommand);
-        registry(new TaskClearCommand(), notSafeCommand);
-        registry(new TaskCreateCommand(), notSafeCommand);
-        registry(new TaskAttachToProjectCommand(), notSafeCommand);
-        registry(new TaskListCommand(), notSafeCommand);
-        registry(new TaskRemoveCommand(), notSafeCommand);
-        registry(new TaskRenameCommand(), notSafeCommand);
-        registry(new TaskAttachToUserCommand(), notSafeCommand);
-        registry(new UserLoginCommand(), safeCommand);
-        registry(new UserLogoutCommand(), notSafeCommand);
-        registry(new UserRegisterCommand(), safeCommand);
-        registry(new UserUpdateCommand(), notSafeCommand);
-        registry(new UserDisplayCommand(), notSafeCommand);
+        registry(new ExitCommand());
+        registry(new HelpCommand());
+        registry(new ProjectClearCommand());
+        registry(new ProjectCreateCommand());
+        registry(new ProjectListCommand());
+        registry(new ProjectRemoveCommand());
+        registry(new ProjectTasksListCommand());
+        registry(new ProjectRenameCommand());
+        registry(new ProjectAttachToUserCommand());
+        registry(new ProjectDetachFromUserCommand());
+        registry(new TaskClearCommand());
+        registry(new TaskCreateCommand());
+        registry(new TaskAttachToProjectCommand());
+        registry(new TaskListCommand());
+        registry(new TaskRemoveCommand());
+        registry(new TaskRenameCommand());
+        registry(new TaskAttachToUserCommand());
+        registry(new TaskDetachFromUserCommand());
+        registry(new TaskDetachFromProjectCommand());
+        registry(new UserLoginCommand());
+        registry(new UserLogoutCommand());
+        registry(new UserRegisterCommand());
+        registry(new UserUpdateCommand());
+        registry(new UserDisplayCommand());
+        registry(new UserProjectListCommand());
+        registry(new UserTaskListCommand());
     }
 
-    private void registry(AbstractCommand command, boolean isSafe) throws RuntimeException {
+    private void init2() throws RuntimeException {
+        List<AbstractCommand> commandList = new ArrayList();
+        commandList.add(new ExitCommand());
+        commandList.add(new ExitCommand());
+        commandList.add(new HelpCommand());
+        commandList.add(new ProjectClearCommand());
+        commandList.add(new ProjectCreateCommand());
+        commandList.add(new ProjectListCommand());
+        commandList.add(new ProjectRemoveCommand());
+        commandList.add(new ProjectTasksListCommand());
+        commandList.add(new ProjectRenameCommand());
+        commandList.add(new ProjectAttachToUserCommand());
+        commandList.add(new ProjectDetachFromUserCommand());
+        commandList.add(new TaskClearCommand());
+        commandList.add(new TaskCreateCommand());
+        commandList.add(new TaskAttachToProjectCommand());
+        commandList.add(new TaskListCommand());
+        commandList.add(new TaskRemoveCommand());
+        commandList.add(new TaskRenameCommand());
+        commandList.add(new TaskAttachToUserCommand());
+        commandList.add(new TaskDetachFromUserCommand());
+        commandList.add(new TaskDetachFromProjectCommand());
+        commandList.add(new UserLoginCommand());
+        commandList.add(new UserLogoutCommand());
+        commandList.add(new UserRegisterCommand());
+        commandList.add(new UserUpdateCommand());
+        commandList.add(new UserDisplayCommand());
+        commandList.add(new UserProjectListCommand());
+        commandList.add(new UserTaskListCommand());
+        for (AbstractCommand command : commandList) {
+            registry(command);
+        }
+    }
+
+    private void initUsers(){
+        try {
+            userService.persist("user", HashUtil.getHash("user"), String.valueOf(Role.User));
+            userService.persist("admin", HashUtil.getHash("admin"), String.valueOf(Role.Admin));
+        } catch (NoSuchAlgorithmException e) {
+            System.out.println(new UtilAlgorithmNotExistsException().getMessage());
+        }
+    }
+
+    private void registry(AbstractCommand command) throws RuntimeException {
         final String cliCommand = command.command();
         final String cliDescription = command.description();
         if (cliCommand == null || cliCommand.isEmpty())
-            throw new CommandNotExistsException();
+            throw new CommandIsInvalidException();
         if (cliDescription == null || cliDescription.isEmpty())
-            throw new CommandDescNotExistsException();
+            throw new CommandDescriptionIsInvalidException();
 //        command.setServiceLocator(this);
         command.setBootstrap(this);
-        command.setSafe(isSafe);
+//        command.setSafe(isSafe);
+//        command.setRoles(roles);
         commands.put(cliCommand, command);
     }
 
@@ -109,10 +162,31 @@ public class Bootstrap {
             return;
         final AbstractCommand abstractCommand = commands.get(command);
         if (abstractCommand == null)
-            return;
+            throw new CommandNotExistsException();
         if (sessionUser == null && !abstractCommand.isSafe())
             throw new UserIsNotAuthorizedException();
+        Role role;
+        if (sessionUser == null)
+            role = null;
+        else {
+            role = sessionUser.getRole();
+        }
+        if (!hasPermission(abstractCommand.getRoles(), role))
+            throw new UserDoNotHavePermissionException();
         abstractCommand.execute();
+    }
+
+    private boolean hasPermission(Collection<Role> listRoles, Role role){
+        if (listRoles == null) {
+            return true;
+        }
+        String currentUserRoleName = role.displayName();
+        for (Role currentRole : listRoles) {
+            if (currentRole.displayName().equals(currentUserRoleName))
+                return true;
+                //            if (currentRole.displayName().equals(role.displayName()));
+        }
+        return false;
     }
 
     public List<AbstractCommand> getCommands() {
@@ -127,7 +201,7 @@ public class Bootstrap {
         User user = userRepository.findUserByLogin(login);
         if (user == null)
             throw new UserLoginNotExistsException();
-        if (password.equals(user.getPassword()))
+        if (!password.equals(user.getPassword()))
             throw new UserLoginOrPasswordIsIncorrectException();
         setSessionUser(user);
     }

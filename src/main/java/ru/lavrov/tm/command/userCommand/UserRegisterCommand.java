@@ -3,13 +3,18 @@ package ru.lavrov.tm.command.userCommand;
 import ru.lavrov.tm.bootstrap.Bootstrap;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.exception.utilException.UtilAlgorithmNotExistsException;
+import ru.lavrov.tm.role.Role;
 import ru.lavrov.tm.service.UserService;
 import ru.lavrov.tm.util.HashUtil;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.Collection;
 import java.util.Scanner;
 
 public final class UserRegisterCommand extends AbstractCommand {
+    private final boolean isSafe = true;
+    private final Collection<Role> roles = null;
+
     public UserRegisterCommand(Bootstrap bootstrap) {
         super(bootstrap);
     }
@@ -45,6 +50,17 @@ public final class UserRegisterCommand extends AbstractCommand {
         }
         UserService userService = bootstrap.getUserService();
         userService.persist(login, password, role);
+        System.out.println("[User successfully registered]");
         System.out.println();
+    }
+
+    @Override
+    public boolean isSafe() {
+        return isSafe;
+    }
+
+    @Override
+    public Collection<Role> getRoles() {
+        return roles;
     }
 }

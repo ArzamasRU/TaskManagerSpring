@@ -38,31 +38,14 @@ public class UserRepository {
         users.clear();
     }
 
-//    public void login(User user){
-//        user.setAuthorized(true);
-//    }
-
-//    public void logout(User user){
-//        user.setAuthorized(false);
-//    }
-
     public User findUserByLogin(String login){
         User currentUser = null;
         for (User user: findAll()) {
-            currentUser = user;
-            if (login.equals(user.getLogin()))
+            if (login.equals(user.getLogin())) {
+                currentUser = user;
                 break;
+            }
         }
         return currentUser;
     }
-
-//    public User findAuthorizedUser(){
-//        User currentUser = null;
-//        for (User user: findAll()) {
-//            currentUser = user;
-//            if (user.isAuthorized())
-//                break;
-//        }
-//        return currentUser;
-//    }
 }

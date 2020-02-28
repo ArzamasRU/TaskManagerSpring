@@ -77,9 +77,10 @@ public class TaskRepository {
     public Task findTaskByName(String name){
         Task currentTask = null;
         for (Task task: findAll()) {
-            currentTask = task;
-            if (name.equals(task.getName()))
+            if (name.equals(task.getName())) {
+                currentTask = task;
                 break;
+            }
         }
         return currentTask;
     }

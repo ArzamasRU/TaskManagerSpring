@@ -3,12 +3,17 @@ package ru.lavrov.tm.command.userCommand;
 import ru.lavrov.tm.bootstrap.Bootstrap;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.exception.utilException.UtilAlgorithmNotExistsException;
+import ru.lavrov.tm.role.Role;
 import ru.lavrov.tm.util.HashUtil;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.Collection;
 import java.util.Scanner;
 
 public final class UserLoginCommand extends AbstractCommand {
+    private final boolean isSafe = true;
+    private final Collection<Role> roles = null;
+
     public UserLoginCommand(Bootstrap bootstrap) {
         super(bootstrap);
     }
@@ -41,6 +46,17 @@ public final class UserLoginCommand extends AbstractCommand {
             throw new UtilAlgorithmNotExistsException();
         }
         bootstrap.login(login, password);
+        System.out.println("[You are logged in]");
         System.out.println();
+    }
+
+    @Override
+    public boolean isSafe() {
+        return isSafe;
+    }
+
+    @Override
+    public Collection<Role> getRoles() {
+        return roles;
     }
 }

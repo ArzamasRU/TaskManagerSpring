@@ -10,20 +10,23 @@ import ru.lavrov.tm.exception.taskException.TaskNameIsInvalidException;
 import ru.lavrov.tm.exception.userException.UserIsNotAuthorizedException;
 import ru.lavrov.tm.repository.ProjectRepository;
 import ru.lavrov.tm.repository.TaskRepository;
+import ru.lavrov.tm.repository.UserRepository;
 
 import java.util.Collection;
 
 public class ProjectService {
     private ProjectRepository projectRepository;
     private TaskRepository taskRepository;
+    private UserRepository userRepository;
 
     public ProjectService(ProjectRepository projectRepository) {
         this.projectRepository = projectRepository;
     }
 
-    public ProjectService(ProjectRepository projectRepository, TaskRepository taskRepository) {
+    public ProjectService(ProjectRepository projectRepository, TaskRepository taskRepository, UserRepository userRepository) {
         this.projectRepository = projectRepository;
         this.taskRepository = taskRepository;
+        this.userRepository = userRepository;
     }
 
     public void persist(String projectName) throws RuntimeException {
@@ -95,6 +98,25 @@ public class ProjectService {
         if (project == null)
             throw new ProjectNotExistsException();
         projectRepository.attachProjectToUser(project, sessionUser);
+    }
+
+    public void attachProjectToUser(String projectName, String login) throws RuntimeException {
+        attachProjectToUser(projectName, userRepository.findUserByLogin(login));
+    }
+
+    public void detachProjectfromUser(User sessionUser, String projectName){
+        if (sessionUser == null)
+            throw new UserIsNotAuthorizedException();
+        if (projectName == null || projectName.isEmpty())
+            throw new ProjectNameIsInvalidException();
+        Project project = projectRepository.findProjectByName(projectName);
+        if (project == null)
+            throw new ProjectNotExistsException();
+        project.setUserId(null);
+    }
+
+    public void detachProjectfromUser(String login, String projectName){
+        detachProjectfromUser(userRepository.findUserByLogin(login), projectName);
     }
 
     public void renameProject(String oldName, String newName) throws RuntimeException {

@@ -2,8 +2,14 @@ package ru.lavrov.tm.command.userCommand;
 
 import ru.lavrov.tm.bootstrap.Bootstrap;
 import ru.lavrov.tm.command.AbstractCommand;
+import ru.lavrov.tm.role.Role;
+
+import java.util.Collection;
 
 public final class UserLogoutCommand extends AbstractCommand {
+    private final boolean isSafe = false;
+    private final Collection<Role> roles = null;
+
     public UserLogoutCommand(){
         super();
     }
@@ -27,5 +33,15 @@ public final class UserLogoutCommand extends AbstractCommand {
         bootstrap.logout();
         System.out.println("you left the session");
         System.out.println();
+    }
+
+    @Override
+    public boolean isSafe() {
+        return isSafe;
+    }
+
+    @Override
+    public Collection<Role> getRoles() {
+        return roles;
     }
 }

@@ -9,37 +9,40 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Scanner;
 
-public final class ProjectRemoveCommand extends AbstractCommand {
+public final class ProjectDetachFromUserCommand extends AbstractCommand {
     private final boolean isSafe = false;
     private final Collection<Role> roles = Arrays.asList(Role.Admin);
 
-    public ProjectRemoveCommand(Bootstrap bootstrap) {
+    public ProjectDetachFromUserCommand(Bootstrap bootstrap) {
         super(bootstrap);
     }
 
-    public ProjectRemoveCommand() {
+    public ProjectDetachFromUserCommand() {
         super();
     }
 
     @Override
     public String command() {
-        return "project-remove";
+        return "project-detach-from-user";
     }
 
     @Override
     public String description() {
-        return "Remove selected project.";
+        return "detach project from user";
     }
 
     @Override
-    public void execute() throws RuntimeException {
+    public void execute() {
         Scanner input = new Scanner(System.in);
-        System.out.println("[project remove]");
-        System.out.println("enter name:");
-        String command = input.nextLine();
+        System.out.println("[Detach project from user]");
+        System.out.println("enter project:");
+        String projectName = input.nextLine();
+        System.out.println("enter user login:");
+        String userLogin = input.nextLine();
         ProjectService projectService = bootstrap.getProjectService();
-        projectService.removeProject(command);
-        System.out.println("[Project removed]");
+//        User sessionUser = bootstrap.getSessionUser();
+//        projectService.detachProjectfromUser(sessionUser, projectName);
+        projectService.detachProjectfromUser(userLogin, projectName);
         System.out.println();
     }
 
