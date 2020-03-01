@@ -2,7 +2,7 @@ package ru.lavrov.tm.repository;
 
 import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.User;
-import ru.lavrov.tm.exception.projectException.ProjectExistsException;
+import ru.lavrov.tm.exception.project.ProjectExistsException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,7 +25,7 @@ public class ProjectRepository {
         return list;
     }
 
-    public Project FindOne(String id){
+    public Project findOne(String id){
         return projects.get(id);
     }
 
@@ -63,7 +63,7 @@ public class ProjectRepository {
         findProjectByName(oldName).setName(newName);
     }
 
-    public void attachProjectToUser(Project project, User user){
-        project.setUserId(user.getId());
+    public void attachProjectToUser(String projectId, String userId){
+        findOne(projectId).setUserId(userId);
     }
 }

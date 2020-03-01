@@ -1,7 +1,7 @@
 package ru.lavrov.tm.repository;
 
 import ru.lavrov.tm.entity.User;
-import ru.lavrov.tm.exception.userException.UserExistsException;
+import ru.lavrov.tm.exception.user.UserExistsException;
 
 import java.util.ArrayList;
 import java.util.HashMap;

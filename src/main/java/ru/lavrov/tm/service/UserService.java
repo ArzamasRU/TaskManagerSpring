@@ -2,7 +2,7 @@ package ru.lavrov.tm.service;
 
 
 import ru.lavrov.tm.entity.User;
-import ru.lavrov.tm.exception.userException.*;
+import ru.lavrov.tm.exception.user.*;
 import ru.lavrov.tm.repository.UserRepository;
 import ru.lavrov.tm.role.Role;
 

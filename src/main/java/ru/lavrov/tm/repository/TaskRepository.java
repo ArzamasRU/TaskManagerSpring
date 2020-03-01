@@ -3,7 +3,7 @@ package ru.lavrov.tm.repository;
 import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Task;
 import ru.lavrov.tm.entity.User;
-import ru.lavrov.tm.exception.taskException.TaskExistsException;
+import ru.lavrov.tm.exception.task.TaskExistsException;
 
 import java.util.*;
 

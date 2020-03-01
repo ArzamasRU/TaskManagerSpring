@@ -7,8 +7,6 @@ import java.util.Collection;
 
 public abstract class AbstractCommand {
     protected Bootstrap bootstrap;
-    protected boolean isSafe;
-    protected Collection<Role> roles;
 
     public AbstractCommand(){
     }
@@ -21,9 +19,9 @@ public abstract class AbstractCommand {
         return bootstrap;
     }
 
-    public abstract String command();
+    public abstract String getCommand();
 
-    public abstract String description();
+    public abstract String getDescription();
 
     public abstract void execute() throws RuntimeException;
 

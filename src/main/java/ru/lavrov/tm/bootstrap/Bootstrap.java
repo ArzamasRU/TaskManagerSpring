@@ -1,17 +1,17 @@
 package ru.lavrov.tm.bootstrap;
 
 import ru.lavrov.tm.command.AbstractCommand;
-import ru.lavrov.tm.command.ExitCommand.ExitCommand;
-import ru.lavrov.tm.command.helpCommand.HelpCommand;
-import ru.lavrov.tm.command.projectCommand.*;
-import ru.lavrov.tm.command.taskCommand.*;
-import ru.lavrov.tm.command.userCommand.*;
+import ru.lavrov.tm.command.Exit.ExitCommand;
+import ru.lavrov.tm.command.help.HelpCommand;
+import ru.lavrov.tm.command.project.*;
+import ru.lavrov.tm.command.task.*;
+import ru.lavrov.tm.command.user.*;
 import ru.lavrov.tm.entity.User;
-import ru.lavrov.tm.exception.commandException.CommandDescriptionIsInvalidException;
-import ru.lavrov.tm.exception.commandException.CommandIsInvalidException;
-import ru.lavrov.tm.exception.commandException.CommandNotExistsException;
-import ru.lavrov.tm.exception.userException.*;
-import ru.lavrov.tm.exception.utilException.UtilAlgorithmNotExistsException;
+import ru.lavrov.tm.exception.command.CommandDescriptionIsInvalidException;
+import ru.lavrov.tm.exception.command.CommandIsInvalidException;
+import ru.lavrov.tm.exception.command.CommandNotExistsException;
+import ru.lavrov.tm.exception.user.*;
+import ru.lavrov.tm.exception.util.UtilAlgorithmNotExistsException;
 import ru.lavrov.tm.repository.ProjectRepository;
 import ru.lavrov.tm.repository.TaskRepository;
 import ru.lavrov.tm.repository.UserRepository;
@@ -33,14 +33,14 @@ public class Bootstrap {
     private final UserService userService = new UserService(userRepository);
     private final Scanner input = new Scanner(System.in);
     private Map<String, AbstractCommand> commands = new LinkedHashMap();
-    private User sessionUser;
+    private User currentUser;
 
-    public User getSessionUser() {
-        return sessionUser;
+    public User getCurrentUser() {
+        return currentUser;
     }
 
-    public void setSessionUser(User sessionUser) {
-        this.sessionUser = sessionUser;
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
     }
 
     public ProjectService getProjectService() {
@@ -144,8 +144,8 @@ public class Bootstrap {
     }
 
     private void registry(AbstractCommand command) throws RuntimeException {
-        final String cliCommand = command.command();
-        final String cliDescription = command.description();
+        final String cliCommand = command.getCommand();
+        final String cliDescription = command.getDescription();
         if (cliCommand == null || cliCommand.isEmpty())
             throw new CommandIsInvalidException();
         if (cliDescription == null || cliDescription.isEmpty())
@@ -163,13 +163,13 @@ public class Bootstrap {
         final AbstractCommand abstractCommand = commands.get(command);
         if (abstractCommand == null)
             throw new CommandNotExistsException();
-        if (sessionUser == null && !abstractCommand.isSafe())
+        if (currentUser == null && !abstractCommand.isSafe())
             throw new UserIsNotAuthorizedException();
         Role role;
-        if (sessionUser == null)
+        if (currentUser == null)
             role = null;
         else {
-            role = sessionUser.getRole();
+            role = currentUser.getRole();
         }
         if (!hasPermission(abstractCommand.getRoles(), role))
             throw new UserDoNotHavePermissionException();
@@ -203,10 +203,10 @@ public class Bootstrap {
             throw new UserLoginNotExistsException();
         if (!password.equals(user.getPassword()))
             throw new UserLoginOrPasswordIsIncorrectException();
-        setSessionUser(user);
+        setCurrentUser(user);
     }
 
     public void logout(){
-        setSessionUser(null);
+        setCurrentUser(null);
     }
 }
