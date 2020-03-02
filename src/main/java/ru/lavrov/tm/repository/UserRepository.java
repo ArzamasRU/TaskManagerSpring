@@ -15,7 +15,7 @@ public class UserRepository {
         return new ArrayList(users.values());
     }
 
-    public User FindOne(String id){
+    public User findOne(String id){
         return users.get(id);
     }
 
@@ -47,5 +47,13 @@ public class UserRepository {
             }
         }
         return currentUser;
+    }
+
+    public void updatePassword(String userId, String newPassword) {
+        findOne(userId).setPassword(newPassword);
+    }
+
+    public void updateLogin(String userId, String login) {
+        findOne(userId).setLogin(login);
     }
 }

@@ -1,8 +1,6 @@
 package ru.lavrov.tm.repository;
 
-import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Task;
-import ru.lavrov.tm.entity.User;
 import ru.lavrov.tm.exception.task.TaskExistsException;
 
 import java.util.*;
@@ -14,16 +12,16 @@ public class TaskRepository {
         return tasks.values();
     }
 
-    public Collection<Task> findAllByUser(User sessionUser) {
+    public Collection<Task> findAllByUser(String userId) {
         Collection<Task> list = new ArrayList<>();
         for (Task task : findAll()) {
-            if (sessionUser.equals(task.getUserId()))
+            if (task.getUserId().equals(userId))
                 list.add(task);
         }
         return list;
     }
 
-    public Task FindOne(String id){
+    public Task findOne(String id){
         return tasks.get(id);
     }
 
@@ -46,29 +44,29 @@ public class TaskRepository {
         tasks.clear();
     }
 
-    public Collection<Task> getProjectTasks(Project project){
+    public Collection<Task> getProjectTasks(String projectId){
         List<Task> list = new ArrayList();
         for (Task task : findAll()) {
-            if (task.getProjectId().equals(project.getId())) {
+            if (task.getProjectId().equals(projectId)) {
                 list.add(task);
             }
         }
         return list;
     }
 
-    public Collection<Task> getProjectTasksByUser(Project project, User sessionUser){
-        List<Task> list = new ArrayList();
-        for (Task task : findAll()) {
-            if (task.getUserId().equals(sessionUser) && task.getProjectId().equals(project.getId())) {
-                list.add(task);
-            }
-        }
-        return list;
-    }
+//    public Collection<Task> getProjectTasksByUser(Project project, User sessionUser){
+//        List<Task> list = new ArrayList();
+//        for (Task task : findAll()) {
+//            if (task.getUserId().equals(sessionUser) && task.getProjectId().equals(project.getId())) {
+//                list.add(task);
+//            }
+//        }
+//        return list;
+//    }
 
-    public void removeProjectTasks(Project project){
+    public void removeProjectTasks(String projectId){
         for (Task task : findAll()) {
-            if (task.getProjectId().equals(project.getId())) {
+            if (task.getProjectId().equals(projectId)) {
                 tasks.remove(task.getId());
             }
         }
@@ -77,7 +75,7 @@ public class TaskRepository {
     public Task findTaskByName(String name){
         Task currentTask = null;
         for (Task task: findAll()) {
-            if (name.equals(task.getName())) {
+            if (task.getName().equals(name)) {
                 currentTask = task;
                 break;
             }
@@ -85,17 +83,18 @@ public class TaskRepository {
         return currentTask;
     }
 
-    public void attachTaskToProject(Task task, Project project){
-//        tasks.get(task.getId()).setProjectId(project.getId());
-        task.setProjectId(project.getId());
+    public Task findProjectTaskByName(String name, String projectId, String userId){
+        Task currentTask = null;
+        for (Task task: findAll()) {
+            if (task.getName().equals(name) && task.getProjectId().equals(projectId) && task.getUserId().equals(userId)) {
+                currentTask = task;
+                break;
+            }
+        }
+        return currentTask;
     }
 
-    public void attachTaskToUser(Task task, User user){
-//        tasks.get(task.getId()).setProjectId(project.getId());
-        task.setUserId(user.getId());
-    }
-
-    public void renameTask(String oldName, String newName) throws RuntimeException {
-        findTaskByName(oldName).setName(newName);
+    public void renameTask(String taskId, String newName) throws RuntimeException {
+        findOne(taskId).setName(newName);
     }
 }

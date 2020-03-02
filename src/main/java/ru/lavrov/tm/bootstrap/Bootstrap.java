@@ -55,7 +55,7 @@ public class Bootstrap {
         return userService;
     }
 
-    public void start() {
+    public void start() throws InstantiationException, IllegalAccessException {
         init();
         initUsers();
         System.out.println("*** WELCOME TO TASK MANAGER ***");
@@ -71,66 +71,27 @@ public class Bootstrap {
         }
     }
 
-    private void init() throws RuntimeException {
-        registry(new ExitCommand());
-        registry(new HelpCommand());
-        registry(new ProjectClearCommand());
-        registry(new ProjectCreateCommand());
-        registry(new ProjectListCommand());
-        registry(new ProjectRemoveCommand());
-        registry(new ProjectTasksListCommand());
-        registry(new ProjectRenameCommand());
-        registry(new ProjectAttachToUserCommand());
-        registry(new ProjectDetachFromUserCommand());
-        registry(new TaskClearCommand());
-        registry(new TaskCreateCommand());
-        registry(new TaskAttachToProjectCommand());
-        registry(new TaskListCommand());
-        registry(new TaskRemoveCommand());
-        registry(new TaskRenameCommand());
-        registry(new TaskAttachToUserCommand());
-        registry(new TaskDetachFromUserCommand());
-        registry(new TaskDetachFromProjectCommand());
-        registry(new UserLoginCommand());
-        registry(new UserLogoutCommand());
-        registry(new UserRegisterCommand());
-        registry(new UserUpdateCommand());
-        registry(new UserDisplayCommand());
-        registry(new UserProjectListCommand());
-        registry(new UserTaskListCommand());
-    }
-
-    private void init2() throws RuntimeException {
-        List<AbstractCommand> commandList = new ArrayList();
-        commandList.add(new ExitCommand());
-        commandList.add(new ExitCommand());
-        commandList.add(new HelpCommand());
-        commandList.add(new ProjectClearCommand());
-        commandList.add(new ProjectCreateCommand());
-        commandList.add(new ProjectListCommand());
-        commandList.add(new ProjectRemoveCommand());
-        commandList.add(new ProjectTasksListCommand());
-        commandList.add(new ProjectRenameCommand());
-        commandList.add(new ProjectAttachToUserCommand());
-        commandList.add(new ProjectDetachFromUserCommand());
-        commandList.add(new TaskClearCommand());
-        commandList.add(new TaskCreateCommand());
-        commandList.add(new TaskAttachToProjectCommand());
-        commandList.add(new TaskListCommand());
-        commandList.add(new TaskRemoveCommand());
-        commandList.add(new TaskRenameCommand());
-        commandList.add(new TaskAttachToUserCommand());
-        commandList.add(new TaskDetachFromUserCommand());
-        commandList.add(new TaskDetachFromProjectCommand());
-        commandList.add(new UserLoginCommand());
-        commandList.add(new UserLogoutCommand());
-        commandList.add(new UserRegisterCommand());
-        commandList.add(new UserUpdateCommand());
-        commandList.add(new UserDisplayCommand());
-        commandList.add(new UserProjectListCommand());
-        commandList.add(new UserTaskListCommand());
-        for (AbstractCommand command : commandList) {
-            registry(command);
+    private void init() throws RuntimeException, IllegalAccessException, InstantiationException {
+        List<Class> commandList = Arrays.asList(ExitCommand.class,
+            HelpCommand.class,
+            ProjectClearCommand.class,
+            ProjectCreateCommand.class,
+            ProjectListCommand.class,
+            ProjectRemoveCommand.class,
+            ProjectTasksListCommand.class,
+            ProjectRenameCommand.class,
+            TaskClearCommand.class,
+            TaskCreateCommand.class,
+            TaskListCommand.class,
+            TaskRemoveCommand.class,
+            TaskRenameCommand.class,
+            UserLoginCommand.class,
+            UserLogoutCommand.class,
+            UserRegisterCommand.class,
+            UserUpdateCommand.class,
+            UserDisplayCommand.class);
+        for (Class command : commandList) {
+            registry((AbstractCommand) command.newInstance());
         }
     }
 

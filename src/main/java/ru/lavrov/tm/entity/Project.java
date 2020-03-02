@@ -18,6 +18,11 @@ public class Project {
         this.name = name;
     }
 
+    public Project(String name, String userId) {
+        this.name = name;
+        this.userId = userId;
+    }
+
     public String getName() {
         return name;
     }

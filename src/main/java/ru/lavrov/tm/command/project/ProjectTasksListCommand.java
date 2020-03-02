@@ -3,6 +3,8 @@ package ru.lavrov.tm.command.project;
 import ru.lavrov.tm.bootstrap.Bootstrap;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.entity.Task;
+import ru.lavrov.tm.entity.User;
+import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 import ru.lavrov.tm.role.Role;
 import ru.lavrov.tm.service.ProjectService;
 
@@ -12,7 +14,7 @@ import java.util.Scanner;
 
 public final class ProjectTasksListCommand extends AbstractCommand {
     private static final boolean SAFE = false;
-    private static final Collection<Role> ROLES = Arrays.asList(Role.Admin);
+    private static final Collection<Role> ROLES = Arrays.asList(Role.Admin, Role.User);
     private static final String COMMAND = "project-tasks";
     private static final String DESCRIPTION = "Tasks of project.";
 
@@ -44,8 +46,11 @@ public final class ProjectTasksListCommand extends AbstractCommand {
 //        for (Task task: projectService.getProjectTasksByUser(projectName, sessionUser)) {
 //            System.out.println(task);
 //        }
+        User currentUser = bootstrap.getCurrentUser();
+        if (currentUser == null)
+            throw new UserIsNotAuthorizedException();
         ProjectService projectService = bootstrap.getProjectService();
-        for (Task task: projectService.getProjectTasks(projectName)) {
+        for (Task task: projectService.getProjectTasks(projectName, currentUser.getId())) {
             System.out.println(task);
         }
     }

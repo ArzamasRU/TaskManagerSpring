@@ -9,17 +9,17 @@ import ru.lavrov.tm.service.UserService;
 import java.util.Collection;
 import java.util.Scanner;
 
-public final class UserPasswordChangeCommand extends AbstractCommand {
+public final class UserPasswordUpdateCommand extends AbstractCommand {
     private static final boolean SAFE = false;
     private static final Collection<Role> ROLES = null;
     private static final String COMMAND = "user-password-change";
     private static final String DESCRIPTION = "Change user password.";
 
-    public UserPasswordChangeCommand(Bootstrap bootstrap) {
+    public UserPasswordUpdateCommand(Bootstrap bootstrap) {
         super(bootstrap);
     }
 
-    public UserPasswordChangeCommand() {
+    public UserPasswordUpdateCommand() {
         super();
     }
 
@@ -41,7 +41,8 @@ public final class UserPasswordChangeCommand extends AbstractCommand {
         String newPassword = input.nextLine();
         UserService userService = bootstrap.getUserService();
         User sessionUser = bootstrap.getCurrentUser();
-        userService.changePassword(sessionUser, newPassword);
+        userService.updatePassword(sessionUser.getId(), newPassword);
+        System.out.println("[ok]");
         System.out.println();
     }
 

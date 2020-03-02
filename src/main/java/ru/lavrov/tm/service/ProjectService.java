@@ -5,7 +5,6 @@ import ru.lavrov.tm.entity.Task;
 import ru.lavrov.tm.exception.project.ProjectNameExistsException;
 import ru.lavrov.tm.exception.project.ProjectNameIsInvalidException;
 import ru.lavrov.tm.exception.project.ProjectNotExistsException;
-import ru.lavrov.tm.exception.task.TaskNameIsInvalidException;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 import ru.lavrov.tm.repository.ProjectRepository;
 import ru.lavrov.tm.repository.TaskRepository;
@@ -28,24 +27,20 @@ public class ProjectService {
         this.userRepository = userRepository;
     }
 
-    public void createByName(String projectName) throws RuntimeException {
+    public void createByName(String projectName, String userId) throws RuntimeException {
         if (projectName == null || projectName.isEmpty())
             throw new ProjectNameIsInvalidException();
+        if (userId == null)
+            throw new UserIsNotAuthorizedException();
         if (projectRepository.findProjectByName(projectName) != null)
             throw new ProjectNameExistsException();
-        persist(new Project(projectName));
+        persist(new Project(projectName, userId));
     }
 
     public void persist(Project project) throws RuntimeException {
         if (project == null)
             throw new ProjectNotExistsException();
         projectRepository.persist(project);
-    }
-
-    public void merge(String projectName) throws RuntimeException {
-        if (projectName == null || projectName.isEmpty())
-            throw new ProjectNameIsInvalidException();
-        projectRepository.merge(new Project(projectName));
     }
 
     public void removeAll() {
@@ -62,72 +57,45 @@ public class ProjectService {
         return projectRepository.findAllByUser(userId);
     }
 
-    public void removeProject(String projectName) throws RuntimeException {
+    public void removeProjectByName(String projectName, String userId) throws RuntimeException {
         if (projectName == null || projectName.isEmpty())
             throw new ProjectNameIsInvalidException();
+        if (userId == null)
+            throw new UserIsNotAuthorizedException();
         Project project = projectRepository.findProjectByName(projectName);
         if (project == null)
+            throw new ProjectNotExistsException();
+        if (!project.getUserId().equals(userId))
             throw new ProjectNotExistsException();
         projectRepository.remove(project.getId());
-        taskRepository.removeProjectTasks(project);
+        taskRepository.removeProjectTasks(project.getId());
     }
 
-    public Collection<Task> getProjectTasks(String projectName) {
+    public Collection<Task> getProjectTasks(String projectName, String userId) {
         if (projectName == null || projectName.isEmpty())
             throw new ProjectNameIsInvalidException();
         Project project = projectRepository.findProjectByName(projectName);
         if (project == null)
             throw new ProjectNotExistsException();
-        Collection<Task> collection = taskRepository.getProjectTasks(project);
+        if (!project.getUserId().equals(userId))
+            throw new ProjectNotExistsException();
+        Collection<Task> collection = taskRepository.getProjectTasks(project.getId());
         return collection;
     }
 
-    public Collection<Task> getProjectTasksByUserId(String projectName, String userId) {
-        if (userId == null)
-            throw new UserIsNotAuthorizedException();
-        if (projectName == null || projectName.isEmpty())
-            throw new ProjectNameIsInvalidException();
-        Project project = projectRepository.findProjectByName(projectName);
-        if (project == null)
-            throw new ProjectNotExistsException();
-        Collection<Task> collection = taskRepository.getProjectTasksByUser(project, userId);
-        return collection;
-    }
 
-    public void attachProjectToUser(String projectName, String userId) throws RuntimeException {
-        if (projectName == null || projectName.isEmpty())
-            throw new TaskNameIsInvalidException();
-        if (userId == null)
-            throw new UserIsNotAuthorizedException();
-        Project project = projectRepository.findProjectByName(projectName);
-        if (project == null)
-            throw new ProjectNotExistsException();
-        projectRepository.attachProjectToUser(project.getId(), userId);
-    }
-
-    public void attachProjectToUserLogin(String projectName, String login) throws RuntimeException {
-        attachProjectToUser(projectName, userRepository.findUserByLogin(login));
-    }
-
-    public void detachProjectFromUser(String projectName, String userId){
-        if (userId == null)
-            throw new UserIsNotAuthorizedException();
-        if (projectName == null || projectName.isEmpty())
-            throw new ProjectNameIsInvalidException();
-        Project project = projectRepository.findProjectByName(projectName);
-        if (project == null)
-            throw new ProjectNotExistsException();
-        project.setUserId(null);
-    }
-
-    public void detachProjectFromUserByLogin(String projectName, String login){
-        detachProjectFromUser(projectName, userRepository.findUserByLogin(login));
-    }
-
-    public void renameProject(String oldName, String newName) throws RuntimeException {
+    public void renameProject(String oldName, String newName, String userId) throws RuntimeException {
         if (newName == null || newName.isEmpty() || oldName == null || oldName.isEmpty())
             throw new ProjectNameIsInvalidException();
-        projectRepository.renameProject(oldName, newName);
+        if (userId == null)
+            throw new UserIsNotAuthorizedException();
+        Project project = projectRepository.findProjectByName(newName);
+        if (project != null)
+            throw new ProjectNameExistsException();
+        project = projectRepository.findProjectByName(oldName);
+        if (!project.getUserId().equals(userId))
+            throw new ProjectNotExistsException();
+        projectRepository.renameProject(project.getId(), newName);
     }
 }
 

@@ -3,6 +3,7 @@ package ru.lavrov.tm.command.user;
 import ru.lavrov.tm.bootstrap.Bootstrap;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.entity.User;
+import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 import ru.lavrov.tm.role.Role;
 import ru.lavrov.tm.service.UserService;
 
@@ -39,9 +40,11 @@ public final class UserUpdateCommand extends AbstractCommand {
         System.out.println("[Update user profile]");
         System.out.println("enter new login:");
         String newLogin = input.nextLine();
+        User currentUser = bootstrap.getCurrentUser();
+        if (currentUser == null)
+            throw new UserIsNotAuthorizedException();
         UserService userService = bootstrap.getUserService();
-        User sessionUser = bootstrap.getCurrentUser();
-        userService.changeLogin(sessionUser, newLogin);
+        userService.updateLogin(currentUser.getId(), newLogin);
         System.out.println();
     }
 

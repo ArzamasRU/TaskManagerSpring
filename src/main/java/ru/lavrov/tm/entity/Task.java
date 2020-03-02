@@ -19,6 +19,12 @@ public class Task {
         this.name = name;
     }
 
+    public Task(String name, String projectId, String userId) {
+        this.name = name;
+        this.projectId = projectId;
+        this.userId = userId;
+    }
+
     public String getName() {
         return name;
     }

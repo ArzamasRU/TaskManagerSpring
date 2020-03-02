@@ -27,22 +27,22 @@ public class UserService {
         userRepository.persist(new User(login, password, currentRole));
     }
 
-    public void changePassword(User sessionUser, String newPassword) {
-        if (sessionUser == null)
+    public void updatePassword(String userId, String newPassword) {
+        if (userId == null)
             throw new UserIsNotAuthorizedException();
         if (newPassword == null || newPassword.isEmpty())
             throw new UserPasswordIsInvalidException();
-        sessionUser.setPassword(newPassword);
+        userRepository.updatePassword(userId, newPassword);
     }
 
-    public void changeLogin(User sessionUser, String newLogin) {
-        if (sessionUser == null)
+    public void updateLogin(String userId, String newLogin) {
+        if (userId == null)
             throw new UserIsNotAuthorizedException();
         if (newLogin == null || newLogin.isEmpty())
             throw new UserLoginIsInvalidException();
         User user = userRepository.findUserByLogin(newLogin);
         if (user != null)
             throw new UserLoginExistsException();
-        sessionUser.setLogin(newLogin);
+        userRepository.updateLogin(userId, newLogin);
     }
 }
