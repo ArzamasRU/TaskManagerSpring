@@ -2,6 +2,8 @@ package ru.lavrov.tm.command.task;
 
 import ru.lavrov.tm.bootstrap.Bootstrap;
 import ru.lavrov.tm.command.AbstractCommand;
+import ru.lavrov.tm.entity.User;
+import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 import ru.lavrov.tm.role.Role;
 import ru.lavrov.tm.service.TaskService;
 
@@ -34,8 +36,11 @@ public final class TaskClearCommand extends AbstractCommand {
 
     @Override
     public void execute() {
+        User currentUser = bootstrap.getCurrentUser();
+        if (currentUser == null)
+            throw new UserIsNotAuthorizedException();
         TaskService taskService = bootstrap.getTaskService();
-        taskService.removeAll();
+        taskService.removeAll(currentUser.getId());
         System.out.println("[ok]");
         System.out.println();
     }

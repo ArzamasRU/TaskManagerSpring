@@ -40,12 +40,12 @@ public final class ProjectRemoveCommand extends AbstractCommand {
         Scanner input = new Scanner(System.in);
         System.out.println("[project remove]");
         System.out.println("enter name:");
-        String command = input.nextLine();
+        String projectName = input.nextLine();
         User currentUser = bootstrap.getCurrentUser();
         if (currentUser == null)
             throw new UserIsNotAuthorizedException();
         ProjectService projectService = bootstrap.getProjectService();
-        projectService.removeProjectByName(command, currentUser.getId());
+        projectService.removeProjectByName(projectName, currentUser.getId());
         System.out.println("[ok]");
         System.out.println();
     }

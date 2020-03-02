@@ -32,7 +32,7 @@ public class ProjectService {
             throw new ProjectNameIsInvalidException();
         if (userId == null)
             throw new UserIsNotAuthorizedException();
-        if (projectRepository.findProjectByName(projectName) != null)
+        if (projectRepository.findProjectByName(projectName, userId) != null)
             throw new ProjectNameExistsException();
         persist(new Project(projectName, userId));
     }
@@ -43,13 +43,15 @@ public class ProjectService {
         projectRepository.persist(project);
     }
 
-    public void removeAll() {
-        projectRepository.removeAll();
+    public void removeAll(String userId) {
+        if (userId == null)
+            throw new UserIsNotAuthorizedException();
+        projectRepository.removeAll(userId);
     }
 
-    public Collection<Project> findAll(){
-        return projectRepository.findAll();
-    }
+//    public Collection<Project> findAll(){
+//        return projectRepository.findAll();
+//    }
 
     public Collection<Project> findAllByUser(String userId){
         if (userId == null)
@@ -62,24 +64,22 @@ public class ProjectService {
             throw new ProjectNameIsInvalidException();
         if (userId == null)
             throw new UserIsNotAuthorizedException();
-        Project project = projectRepository.findProjectByName(projectName);
-        if (project == null)
-            throw new ProjectNotExistsException();
-        if (!project.getUserId().equals(userId))
-            throw new ProjectNotExistsException();
-        projectRepository.remove(project.getId());
-        taskRepository.removeProjectTasks(project.getId());
+        Project project = projectRepository.findProjectByName(projectName, userId);
+        if (project != null)
+            throw new ProjectNameExistsException();
+        projectRepository.remove(project.getId(), userId);
+        taskRepository.removeProjectTasks(project.getId(), userId);
     }
 
     public Collection<Task> getProjectTasks(String projectName, String userId) {
         if (projectName == null || projectName.isEmpty())
             throw new ProjectNameIsInvalidException();
-        Project project = projectRepository.findProjectByName(projectName);
+        Project project = projectRepository.findProjectByName(projectName, userId);
         if (project == null)
             throw new ProjectNotExistsException();
         if (!project.getUserId().equals(userId))
             throw new ProjectNotExistsException();
-        Collection<Task> collection = taskRepository.getProjectTasks(project.getId());
+        Collection<Task> collection = taskRepository.getProjectTasks(project.getId(), userId);
         return collection;
     }
 
@@ -89,13 +89,7 @@ public class ProjectService {
             throw new ProjectNameIsInvalidException();
         if (userId == null)
             throw new UserIsNotAuthorizedException();
-        Project project = projectRepository.findProjectByName(newName);
-        if (project != null)
-            throw new ProjectNameExistsException();
-        project = projectRepository.findProjectByName(oldName);
-        if (!project.getUserId().equals(userId))
-            throw new ProjectNotExistsException();
-        projectRepository.renameProject(project.getId(), newName);
+        projectRepository.renameProject(oldName, newName, userId);
     }
 }
 

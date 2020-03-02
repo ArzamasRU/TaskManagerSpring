@@ -3,6 +3,8 @@ package ru.lavrov.tm.command.task;
 import ru.lavrov.tm.bootstrap.Bootstrap;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.entity.Task;
+import ru.lavrov.tm.entity.User;
+import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 import ru.lavrov.tm.role.Role;
 import ru.lavrov.tm.service.TaskService;
 
@@ -37,8 +39,11 @@ public final class TaskListCommand extends AbstractCommand {
     public void execute() {
         System.out.println("[TASK LIST]");
         TaskService taskService = bootstrap.getTaskService();
+        User currentUser = bootstrap.getCurrentUser();
+        if (currentUser == null)
+            throw new UserIsNotAuthorizedException();
         int index = 0;
-        for (Task task: taskService.findAll()) {
+        for (Task task: taskService.findAllByUser(currentUser.getId())) {
             System.out.println(++index + ". " + task);
         }
         System.out.println();

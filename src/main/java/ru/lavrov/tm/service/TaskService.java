@@ -36,7 +36,7 @@ public class TaskService {
             throw new ProjectNameIsInvalidException();
         if (userId == null)
             throw new UserIsNotAuthorizedException();
-        Project project = projectRepository.findProjectByName(projectName);
+        Project project = projectRepository.findProjectByName(projectName, userId);
         if (project == null)
             throw new ProjectNotExistsException();
         if (!project.getUserId().equals(userId))
@@ -58,13 +58,15 @@ public class TaskService {
         taskRepository.merge(new Task(taskName));
     }
 
-    public void removeAll() {
-        taskRepository.removeAll();
+    public void removeAll(String userId) {
+        if (userId == null)
+            throw new UserIsNotAuthorizedException();
+        taskRepository.removeAll(userId);
     }
 
-    public Collection<Task> findAll(){
-        return taskRepository.findAll();
-    }
+//    public Collection<Task> findAll(){
+//        return taskRepository.findAll();
+//    }
 
     public Collection<Task> findAllByUser(String userId){
         if (userId == null)
@@ -77,12 +79,7 @@ public class TaskService {
             throw new TaskNameIsInvalidException();
         if (userId == null)
             throw new UserIsNotAuthorizedException();
-        Task task = taskRepository.findTaskByName(taskName);
-        if (task == null)
-            throw new TaskNotExistsException();
-        if (!task.getUserId().equals(userId))
-            throw new TaskNotExistsException();
-        taskRepository.remove(task.getId());
+        taskRepository.removeTaskByName(taskName, userId);
     }
 
     public void renameTask(String projectName, String oldName, String newName, String userId) throws RuntimeException {
@@ -92,14 +89,9 @@ public class TaskService {
             throw new TaskNameIsInvalidException();
         if (userId == null)
             throw new UserIsNotAuthorizedException();
-        Project project = projectRepository.findProjectByName(newName);
+        Project project = projectRepository.findProjectByName(newName, userId);
         if (project == null)
             throw new ProjectNotExistsException();
-        Task task = taskRepository.findTaskByName(oldName);
-        if (task == null)
-            throw new TaskNotExistsException();
-        if (taskRepository.findProjectTaskByName(newName, project.getId(), userId) != null)
-            throw new TaskNotExistsException();
-        taskRepository.renameTask(task.getId(), newName);
+        taskRepository.renameTask(project.getId(), oldName, newName, userId);
     }
 }

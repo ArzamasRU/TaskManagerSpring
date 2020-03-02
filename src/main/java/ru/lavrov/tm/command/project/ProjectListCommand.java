@@ -3,6 +3,8 @@ package ru.lavrov.tm.command.project;
 import ru.lavrov.tm.bootstrap.Bootstrap;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.entity.Project;
+import ru.lavrov.tm.entity.User;
+import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 import ru.lavrov.tm.role.Role;
 import ru.lavrov.tm.service.ProjectService;
 
@@ -37,8 +39,11 @@ public final class ProjectListCommand extends AbstractCommand {
     public void execute() {
         System.out.println("[PROJECT LIST]");
         ProjectService projectService = bootstrap.getProjectService();
+        User currentUser = bootstrap.getCurrentUser();
+        if (currentUser == null)
+            throw new UserIsNotAuthorizedException();
         int index = 0;
-        for (Project project: projectService.findAll()) {
+        for (Project project: projectService.findAllByUser(currentUser.getId())) {
             System.out.println(++index + ". " + project);
         }
         System.out.println();

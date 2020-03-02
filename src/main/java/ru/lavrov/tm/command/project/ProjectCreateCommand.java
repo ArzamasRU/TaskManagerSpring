@@ -40,12 +40,12 @@ public final class ProjectCreateCommand extends AbstractCommand {
         Scanner input = new Scanner(System.in);
         System.out.println("[Project create]");
         System.out.println("enter name:");
-        String command = input.nextLine();
+        String projectName = input.nextLine();
         User currentUser = bootstrap.getCurrentUser();
         if (currentUser == null)
             throw new UserIsNotAuthorizedException();
         ProjectService projectService = bootstrap.getProjectService();
-        projectService.createByName(command, currentUser.getId());
+        projectService.createByName(projectName, currentUser.getId());
         System.out.println("[ok]");
         System.out.println();
     }

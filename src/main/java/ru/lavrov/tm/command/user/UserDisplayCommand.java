@@ -16,7 +16,7 @@ import java.util.Scanner;
 
 public final class UserDisplayCommand extends AbstractCommand {
     private static final boolean SAFE = false;
-    private static final Collection<Role> ROLES = Arrays.asList(Role.Admin);
+    private static final Collection<Role> ROLES = Arrays.asList(Role.Admin, Role.User);
     private static final String COMMAND = "user-display";
     private static final String DESCRIPTION = "Display user profile.";
 
