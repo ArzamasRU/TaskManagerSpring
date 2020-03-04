@@ -30,10 +30,10 @@ public final class UserDeleteCommand extends AbstractCommand {
 
     @Override
     public void execute() {
-        User currentUser = bootstrap.getCurrentUser();
+        final User currentUser = bootstrap.getCurrentUser();
         if (currentUser == null)
             throw new UserIsNotAuthorizedException();
-        UserService userService = bootstrap.getUserService();
+        final UserService userService = bootstrap.getUserService();
         userService.remove(currentUser.getId(), null);
         System.out.println("[ok]");
         System.out.println();

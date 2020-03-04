@@ -32,6 +32,8 @@ public abstract class AbstractUserService<User> implements UserService<User> {
     public void remove(final String entityId, final String userId) {
         if (entityId == null || entityId.isEmpty())
             throw new UserIsNotAuthorizedException();
+        if (userId == null || userId.isEmpty())
+            throw new UserIsNotAuthorizedException();
         userRepository.remove(entityId, userId);
     }
 

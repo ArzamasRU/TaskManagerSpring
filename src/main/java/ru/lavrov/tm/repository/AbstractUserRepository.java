@@ -16,7 +16,9 @@ public abstract class AbstractUserRepository implements UserRepository<User> {
 
     @Override
     public void persist(final User user) {
-        String id = user.getId();
+        if (user == null)
+            throw new UserIsNotAuthorizedException();
+        final String id = user.getId();
         if (users.containsKey(id))
             throw new UserExistsException();
         users.put(id, user);
@@ -24,12 +26,16 @@ public abstract class AbstractUserRepository implements UserRepository<User> {
 
     @Override
     public void merge(final User user){
+        if (user == null)
+            throw new UserIsNotAuthorizedException();
         users.put(user.getLogin(), user);
     }
 
     @Override
     public void remove(final String entityId, final String userId) {
         if (entityId == null || entityId.isEmpty())
+            throw new UserIsNotAuthorizedException();
+        if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         users.remove(entityId);
     }
@@ -45,7 +51,7 @@ public abstract class AbstractUserRepository implements UserRepository<User> {
     public Collection<User> findAllByUser(final String userId) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        Collection<User> list = new ArrayList<>();
+        final Collection<User> list = new ArrayList<>();
         list.add(users.get(userId));
         return list;
     }
@@ -54,8 +60,12 @@ public abstract class AbstractUserRepository implements UserRepository<User> {
     public User findEntityByName(final String login, final String userId){
         if (login == null || login.isEmpty())
             throw new UserLoginIsInvalidException();
+        if (userId == null || userId.isEmpty())
+            throw new UserIsNotAuthorizedException();
         User currentUser = null;
         for (User user: users.values()) {
+            if (user == null)
+                continue;
             if (login.equals(user.getLogin())) {
                 currentUser = user;
                 break;

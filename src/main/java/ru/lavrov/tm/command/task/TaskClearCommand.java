@@ -31,10 +31,10 @@ public final class TaskClearCommand extends AbstractCommand {
 
     @Override
     public void execute() {
-        User currentUser = bootstrap.getCurrentUser();
+        final User currentUser = bootstrap.getCurrentUser();
         if (currentUser == null)
             throw new UserIsNotAuthorizedException();
-        TaskService taskService = bootstrap.getTaskService();
+        final TaskService taskService = bootstrap.getTaskService();
         taskService.removeAll(currentUser.getId());
         System.out.println("[ok]");
         System.out.println();

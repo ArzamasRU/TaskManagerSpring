@@ -33,14 +33,18 @@ public final class ProjectListCommand extends AbstractCommand {
     @Override
     public void execute() {
         System.out.println("[PROJECT LIST]");
-        ProjectService projectService = bootstrap.getProjectService();
-        User currentUser = bootstrap.getCurrentUser();
+        final ProjectService projectService = bootstrap.getProjectService();
+        final User currentUser = bootstrap.getCurrentUser();
         if (currentUser == null)
             throw new UserIsNotAuthorizedException();
-        int index = 0;
-        Collection<Project> projectList = projectService.findAllByUser(currentUser.getId());
+        int index = 1;
+        final Collection<Project> projectList = projectService.findAllByUser(currentUser.getId());
+        if (projectList == null)
+            return;
         for (Project project: projectList) {
-            System.out.println(++index + ". " + project);
+            if (project == null)
+                continue;
+            System.out.println(index++ + ". " + project);
         }
         System.out.println();
     }

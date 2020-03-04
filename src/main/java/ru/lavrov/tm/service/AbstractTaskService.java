@@ -14,7 +14,8 @@ public abstract class AbstractTaskService<Task> implements TaskService<Task> {
     protected final TaskRepository taskRepository;
     protected final UserRepository userRepository;
 
-    public AbstractTaskService(final ProjectRepository projectRepository, final TaskRepository taskRepository, final UserRepository userRepository) {
+    public AbstractTaskService(final ProjectRepository projectRepository, final TaskRepository taskRepository,
+                               final UserRepository userRepository) {
         this.projectRepository = projectRepository;
         this.taskRepository = taskRepository;
         this.userRepository = userRepository;
@@ -45,14 +46,14 @@ public abstract class AbstractTaskService<Task> implements TaskService<Task> {
 
     @Override
     public void removeAll(final String userId) {
-        if (userId == null)
+        if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         taskRepository.removeAll(userId);
     }
 
     @Override
     public Collection<Task> findAllByUser(final String userId){
-        if (userId == null)
+        if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         return taskRepository.findAllByUser(userId);
     }

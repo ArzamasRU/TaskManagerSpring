@@ -30,12 +30,12 @@ public final class UserPasswordUpdateCommand extends AbstractCommand {
 
     @Override
     public void execute() {
-        Scanner input = new Scanner(System.in);
+        final Scanner input = new Scanner(System.in);
         System.out.println("[Change user password]");
         System.out.println("enter new password:");
-        String newPassword = input.nextLine();
-        UserService userService = bootstrap.getUserService();
-        User sessionUser = bootstrap.getCurrentUser();
+        final String newPassword = input.nextLine();
+        final UserService userService = bootstrap.getUserService();
+        final User sessionUser = bootstrap.getCurrentUser();
         userService.updatePassword(sessionUser.getId(), newPassword);
         System.out.println("[ok]");
         System.out.println();

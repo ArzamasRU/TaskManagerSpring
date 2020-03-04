@@ -32,14 +32,14 @@ public final class TaskRemoveCommand extends AbstractCommand {
 
     @Override
     public void execute() throws RuntimeException {
-        Scanner input = new Scanner(System.in);
+        final Scanner input = new Scanner(System.in);
         System.out.println("[task remove]");
         System.out.println("enter name:");
-        String taskName = input.nextLine();
-        User currentUser = bootstrap.getCurrentUser();
+        final String taskName = input.nextLine();
+        final User currentUser = bootstrap.getCurrentUser();
         if (currentUser == null)
             throw new UserIsNotAuthorizedException();
-        TaskService taskService = bootstrap.getTaskService();
+        final TaskService taskService = bootstrap.getTaskService();
         taskService.removeTaskByName(taskName, currentUser.getId());
         System.out.println("[ok]");
         System.out.println();

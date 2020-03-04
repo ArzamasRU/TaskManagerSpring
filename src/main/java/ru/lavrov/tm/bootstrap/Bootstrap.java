@@ -2,8 +2,8 @@ package ru.lavrov.tm.bootstrap;
 
 import ru.lavrov.tm.api.*;
 import ru.lavrov.tm.command.AbstractCommand;
-import ru.lavrov.tm.command.Exit.ExitCommand;
 import ru.lavrov.tm.command.about.AboutCommand;
+import ru.lavrov.tm.command.exit.ExitCommand;
 import ru.lavrov.tm.command.help.HelpCommand;
 import ru.lavrov.tm.command.project.*;
 import ru.lavrov.tm.command.task.*;
@@ -69,7 +69,7 @@ public final class Bootstrap implements ServiceLocator{
     }
 
     private void init() throws RuntimeException, IllegalAccessException, InstantiationException {
-        List<Class> commandList = Arrays.asList(ExitCommand.class,
+        final List<Class> commandList = Arrays.asList(ExitCommand.class,
             HelpCommand.class,
             AboutCommand.class,
             ProjectClearCommand.class,
@@ -89,7 +89,11 @@ public final class Bootstrap implements ServiceLocator{
             UserUpdateCommand.class,
             UserDisplayCommand.class,
             UserDeleteCommand.class);
+        if (commandList == null)
+            return;
         for (Class command : commandList) {
+            if (command == null)
+                continue;
             registry((AbstractCommand) command.newInstance());
         }
     }
@@ -99,7 +103,7 @@ public final class Bootstrap implements ServiceLocator{
             userService.createByLogin("user", HashUtil.getHash("user"), String.valueOf(Role.User));
             userService.createByLogin("admin", HashUtil.getHash("admin"), String.valueOf(Role.Admin));
         } catch (NoSuchAlgorithmException e) {
-            System.out.println(new UtilAlgorithmNotExistsException().getMessage());
+            new UtilAlgorithmNotExistsException();
         }
     }
 
@@ -127,23 +131,24 @@ public final class Bootstrap implements ServiceLocator{
         Role role;
         if (currentUser == null)
             role = null;
-        else {
+        else
             role = currentUser.getRole();
-        }
         if (!hasPermission(abstractCommand.getRoles(), role))
             throw new UserDoNotHavePermissionException();
         abstractCommand.execute();
     }
 
     private boolean hasPermission(final Collection<Role> listRoles, Role role){
-        if (listRoles == null) {
+        if (listRoles == null)
             return true;
-        }
-        String currentUserRoleName = role.displayName();
+        if (role == null)
+            throw new UserRoleIsInvalidException();
+        final String currentUserRoleName = role.displayName();
         for (Role currentRole : listRoles) {
+            if (currentRole == null)
+                continue;
             if (currentRole.displayName().equals(currentUserRoleName))
                 return true;
-                //            if (currentRole.displayName().equals(role.displayName()));
         }
         return false;
     }
@@ -158,7 +163,7 @@ public final class Bootstrap implements ServiceLocator{
             throw new UserLoginIsInvalidException();
         if (password == null || password.isEmpty())
             throw new UserPasswordIsInvalidException();
-        User user = (User) userRepository.findEntityByName(login, null);
+        final User user = (User) userRepository.findEntityByName(login, null);
         if (user == null)
             throw new UserLoginNotExistsException();
         if (!password.equals(user.getPassword()))

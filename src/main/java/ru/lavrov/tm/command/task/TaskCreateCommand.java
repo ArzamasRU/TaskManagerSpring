@@ -32,16 +32,16 @@ public final class TaskCreateCommand extends AbstractCommand {
 
     @Override
     public void execute() throws RuntimeException {
-        Scanner input = new Scanner(System.in);
+        final Scanner input = new Scanner(System.in);
         System.out.println("[Task create]");
         System.out.println("enter name:");
-        String taskName = input.nextLine();
+        final String taskName = input.nextLine();
         System.out.println("enter project name:");
-        String projectName = input.nextLine();
-        User currentUser = bootstrap.getCurrentUser();
+        final String projectName = input.nextLine();
+        final User currentUser = bootstrap.getCurrentUser();
         if (currentUser == null)
             throw new UserIsNotAuthorizedException();
-        TaskService taskService = bootstrap.getTaskService();
+        final TaskService taskService = bootstrap.getTaskService();
         taskService.createByName(taskName, projectName, currentUser.getId());
         System.out.println("[ok]");
         System.out.println();

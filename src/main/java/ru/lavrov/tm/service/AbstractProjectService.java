@@ -14,7 +14,8 @@ public abstract class AbstractProjectService<Project> implements ProjectService<
     protected final TaskRepository taskRepository;
     protected final UserRepository userRepository;
 
-    public AbstractProjectService(final ProjectRepository projectRepository, final TaskRepository taskRepository, final UserRepository userRepository) {
+    public AbstractProjectService(final ProjectRepository projectRepository, final TaskRepository taskRepository,
+                                  final UserRepository userRepository) {
         this.projectRepository = projectRepository;
         this.taskRepository = taskRepository;
         this.userRepository = userRepository;
@@ -36,7 +37,7 @@ public abstract class AbstractProjectService<Project> implements ProjectService<
 
     @Override
     public void remove(final String projectId, final String userId) {
-        if (userId == null)
+        if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         if (projectId == null)
             throw new ProjectNotExistsException();
@@ -45,14 +46,14 @@ public abstract class AbstractProjectService<Project> implements ProjectService<
 
     @Override
     public void removeAll(final String userId) {
-        if (userId == null)
+        if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         projectRepository.removeAll(userId);
     }
 
     @Override
     public Collection<Project> findAllByUser(final String userId){
-        if (userId == null)
+        if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         return projectRepository.findAllByUser(userId);
     }

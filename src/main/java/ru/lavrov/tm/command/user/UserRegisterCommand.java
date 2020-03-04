@@ -32,20 +32,20 @@ public final class UserRegisterCommand extends AbstractCommand {
 
     @Override
     public void execute() {
-        Scanner input = new Scanner(System.in);
+        final Scanner input = new Scanner(System.in);
         System.out.println("[Registration]");
         System.out.println("enter login:");
-        String login = input.nextLine();
+        final String login = input.nextLine();
         System.out.println("enter password:");
         String password = input.nextLine();
         System.out.println("enter your role ('admin', 'user'):");
-        String role = input.nextLine();
+        final String role = input.nextLine();
         try {
             password = HashUtil.getHash(password);
         } catch (NoSuchAlgorithmException e) {
             throw new UtilAlgorithmNotExistsException();
         }
-        UserService userService = bootstrap.getUserService();
+        final UserService userService = bootstrap.getUserService();
         userService.createByLogin(login, password, role);
         System.out.println("[User successfully registered]");
         System.out.println();

@@ -18,7 +18,7 @@ public final class TaskRepositoryImpl extends AbstractTaskRepository {
             throw new TaskNameIsInvalidException();
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        Task task = findEntityByName(taskName, userId);
+        final Task task = findEntityByName(taskName, userId);
         if (task == null)
             throw new TaskNotExistsException();
         if (!task.getUserId().equals(userId))
@@ -31,9 +31,13 @@ public final class TaskRepositoryImpl extends AbstractTaskRepository {
             throw new UserIsNotAuthorizedException();
         if (projectId == null || projectId.isEmpty())
             throw new ProjectNotExistsException();
-        List<Task> list = new ArrayList();
+        final List<Task> list = new ArrayList();
         for (Task task : tasks.values()) {
-            if (task.getProjectId().equals(projectId) && task.getUserId().equals(userId)) {
+            if (task == null)
+                continue;
+            boolean isProjectIdEquals = task.getProjectId().equals(projectId);
+            boolean isTaskUserIdEquals = task.getUserId().equals(userId);
+            if (isProjectIdEquals && isTaskUserIdEquals) {
                 list.add(task);
             }
         }
@@ -46,7 +50,11 @@ public final class TaskRepositoryImpl extends AbstractTaskRepository {
         if (projectId == null || projectId.isEmpty())
             throw new ProjectNotExistsException();
         for (Task task : tasks.values()) {
-            if (task.getProjectId().equals(projectId) && task.getUserId().equals(userId)) {
+            if (task == null)
+                continue;
+            boolean isProjectIdEquals = task.getProjectId().equals(projectId);
+            boolean isTaskUserIdEquals = task.getUserId().equals(userId);
+            if (isProjectIdEquals && isTaskUserIdEquals) {
                 tasks.remove(task.getId());
             }
         }
@@ -57,9 +65,16 @@ public final class TaskRepositoryImpl extends AbstractTaskRepository {
             throw new TaskNameIsInvalidException();
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
+        if (projectId == null)
+            throw new ProjectNotExistsException();
         Task currentTask = null;
         for (Task task: tasks.values()) {
-            if (task.getName().equals(taskName) && task.getProjectId().equals(projectId) && task.getUserId().equals(userId)) {
+            if (task == null)
+                continue;
+            boolean isProjectIdEquals = task.getProjectId().equals(projectId);
+            boolean isTaskUserIdEquals = task.getUserId().equals(userId);
+            boolean isTaskNameEquals = task.getName().equals(taskName);
+            if (isTaskNameEquals && isProjectIdEquals && isTaskUserIdEquals) {
                 currentTask = task;
                 break;
             }
@@ -67,14 +82,15 @@ public final class TaskRepositoryImpl extends AbstractTaskRepository {
         return currentTask;
     }
 
-    public void renameTask(final String projectId, final String oldName, final String newName, final String userId) throws RuntimeException {
+    public void renameTask(final String projectId, final String oldName, final String newName, final String userId)
+            throws RuntimeException {
         if (projectId == null || projectId.isEmpty())
             throw new ProjectNameIsInvalidException();
         if (newName == null || newName.isEmpty() || oldName == null || oldName.isEmpty())
             throw new TaskNameIsInvalidException();
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        Task task = findEntityByName(oldName, userId);
+        final Task task = findEntityByName(oldName, userId);
         if (task == null)
             throw new TaskNotExistsException();
         if (task.getUserId().equals(userId))

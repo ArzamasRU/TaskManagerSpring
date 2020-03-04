@@ -31,10 +31,10 @@ public final class UserLoginCommand extends AbstractCommand {
 
     @Override
     public void execute() {
-        Scanner input = new Scanner(System.in);
+        final Scanner input = new Scanner(System.in);
         System.out.println("[Please Log in]");
         System.out.println("enter login:");
-        String login = input.nextLine();
+        final String login = input.nextLine();
         System.out.println("enter password:");
         String password = input.nextLine();
         try {

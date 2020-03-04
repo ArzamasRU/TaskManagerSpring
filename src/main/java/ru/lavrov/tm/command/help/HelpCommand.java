@@ -26,7 +26,12 @@ public final class HelpCommand extends AbstractCommand {
 
     @Override
     public void execute() {
-        for (AbstractCommand command: bootstrap.getCommands()) {
+        final Collection<AbstractCommand> list = bootstrap.getCommands();
+        if (list == null)
+            return;
+        for (AbstractCommand command: list) {
+            if (command == null)
+                continue;
             System.out.println(command.getCommand() + ": " + command.getDescription());
         }
         System.out.println();

@@ -16,10 +16,12 @@ public final class UserServiceImpl extends AbstractUserService {
             throw new UserLoginIsInvalidException();
         if (password == null || password.isEmpty())
             throw new UserPasswordIsInvalidException();
-        Role currentRole = Role.valueOf(role);
+        if (role == null || role.isEmpty())
+            throw new UserRoleIsInvalidException();
+        final Role currentRole = Role.valueOf(role);
         if (currentRole == null)
             throw new UserRoleIsInvalidException();
-        User user = (User) userRepository.findEntityByName(login, null);
+        final User user = (User) userRepository.findEntityByName(login, null);
         if (user != null)
             throw new UserLoginExistsException();
         persist(new User(login, password, currentRole));
@@ -38,7 +40,7 @@ public final class UserServiceImpl extends AbstractUserService {
             throw new UserIsNotAuthorizedException();
         if (newLogin == null || newLogin.isEmpty())
             throw new UserLoginIsInvalidException();
-        User user = (User) userRepository.findEntityByName(newLogin, null);
+        final User user = (User) userRepository.findEntityByName(newLogin, null);
         if (user != null)
             throw new UserLoginExistsException();
         userRepository.updateLogin(userId, newLogin);

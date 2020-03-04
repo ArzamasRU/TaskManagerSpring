@@ -33,14 +33,18 @@ public final class TaskListCommand extends AbstractCommand {
     @Override
     public void execute() {
         System.out.println("[TASK LIST]");
-        TaskService taskService = bootstrap.getTaskService();
-        User currentUser = bootstrap.getCurrentUser();
+        final TaskService taskService = bootstrap.getTaskService();
+        final User currentUser = bootstrap.getCurrentUser();
         if (currentUser == null)
             throw new UserIsNotAuthorizedException();
-        int index = 0;
-        Collection<Task> taskList = taskService.findAllByUser(currentUser.getId());
+        int index = 1;
+        final Collection<Task> taskList = taskService.findAllByUser(currentUser.getId());
+        if (taskList == null)
+            return;
         for (Task task: taskList) {
-            System.out.println(++index + ". " + task);
+            if (task == null)
+                continue;
+            System.out.println(index++ + ". " + task);
         }
         System.out.println();
     }

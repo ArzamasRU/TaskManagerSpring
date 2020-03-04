@@ -33,20 +33,20 @@ public final class ProjectTasksListCommand extends AbstractCommand {
 
     @Override
     public void execute() throws RuntimeException {
-        Scanner input = new Scanner(System.in);
+        final Scanner input = new Scanner(System.in);
         System.out.println("[Tasks of project]");
         System.out.println("enter project name:");
-        String projectName = input.nextLine();
-//        User sessionUser = bootstrap.getSessionUser();
-//        for (Task task: projectService.getProjectTasksByUser(projectName, sessionUser)) {
-//            System.out.println(task);
-//        }
-        User currentUser = bootstrap.getCurrentUser();
+        final String projectName = input.nextLine();
+        final User currentUser = bootstrap.getCurrentUser();
         if (currentUser == null)
             throw new UserIsNotAuthorizedException();
-        ProjectService projectService = bootstrap.getProjectService();
-        Collection<Task> taskList = projectService.getProjectTasks(projectName, currentUser.getId());
+        final ProjectService projectService = bootstrap.getProjectService();
+        final Collection<Task> taskList = projectService.getProjectTasks(projectName, currentUser.getId());
+        if (taskList == null)
+            return;
         for (Task task: taskList) {
+            if (task == null)
+                continue;
             System.out.println(task);
         }
     }

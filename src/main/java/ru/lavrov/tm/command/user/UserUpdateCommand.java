@@ -31,14 +31,14 @@ public final class UserUpdateCommand extends AbstractCommand {
 
     @Override
     public void execute() {
-        Scanner input = new Scanner(System.in);
+        final Scanner input = new Scanner(System.in);
         System.out.println("[Update user profile]");
         System.out.println("enter new login:");
-        String newLogin = input.nextLine();
-        User currentUser = bootstrap.getCurrentUser();
+        final String newLogin = input.nextLine();
+        final User currentUser = bootstrap.getCurrentUser();
         if (currentUser == null)
             throw new UserIsNotAuthorizedException();
-        UserService userService = bootstrap.getUserService();
+        final UserService userService = bootstrap.getUserService();
         userService.updateLogin(currentUser.getId(), newLogin);
         System.out.println();
     }

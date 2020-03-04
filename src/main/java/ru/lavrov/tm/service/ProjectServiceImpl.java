@@ -13,7 +13,8 @@ import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 import java.util.Collection;
 
 public final class ProjectServiceImpl extends AbstractProjectService {
-    public ProjectServiceImpl(final ProjectRepository projectRepository, final TaskRepository taskRepository, final UserRepository userRepository) {
+    public ProjectServiceImpl(final ProjectRepository projectRepository, final TaskRepository taskRepository,
+                              final UserRepository userRepository) {
         super(projectRepository, taskRepository, userRepository);
     }
 
@@ -32,7 +33,7 @@ public final class ProjectServiceImpl extends AbstractProjectService {
             throw new ProjectNameIsInvalidException();
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        Project project = (Project) projectRepository.findEntityByName(projectName, userId);
+        final Project project = (Project) projectRepository.findEntityByName(projectName, userId);
         if (project != null)
             throw new ProjectNameExistsException();
         remove(project.getId(), userId);
@@ -42,12 +43,14 @@ public final class ProjectServiceImpl extends AbstractProjectService {
     public Collection<Task> getProjectTasks(final String projectName, final String userId) {
         if (projectName == null || projectName.isEmpty())
             throw new ProjectNameIsInvalidException();
-        Project project = (Project) projectRepository.findEntityByName(projectName, userId);
+        if (userId == null || userId.isEmpty())
+            throw new UserIsNotAuthorizedException();
+        final Project project = (Project) projectRepository.findEntityByName(projectName, userId);
         if (project == null)
             throw new ProjectNotExistsException();
         if (!project.getUserId().equals(userId))
             throw new ProjectNotExistsException();
-        Collection<Task> collection = taskRepository.getProjectTasks(project.getId(), userId);
+        final Collection<Task> collection = taskRepository.getProjectTasks(project.getId(), userId);
         return collection;
     }
 

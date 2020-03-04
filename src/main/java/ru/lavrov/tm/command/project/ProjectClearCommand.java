@@ -31,10 +31,10 @@ public final class ProjectClearCommand extends AbstractCommand {
 
     @Override
     public void execute() {
-        User currentUser = bootstrap.getCurrentUser();
+        final User currentUser = bootstrap.getCurrentUser();
         if (currentUser == null)
             throw new UserIsNotAuthorizedException();
-        ProjectService projectService = bootstrap.getProjectService();
+        final ProjectService projectService = bootstrap.getProjectService();
         projectService.removeAll(currentUser.getId());
         System.out.println("[ok]");
         System.out.println();

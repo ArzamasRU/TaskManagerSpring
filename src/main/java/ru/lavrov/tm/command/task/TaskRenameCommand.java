@@ -32,18 +32,18 @@ public class TaskRenameCommand extends AbstractCommand {
 
     @Override
     public void execute() throws RuntimeException {
-        Scanner input = new Scanner(System.in);
+        final Scanner input = new Scanner(System.in);
         System.out.println("[task rename]");
         System.out.println("enter project name:");
-        String projectName = input.nextLine();
+        final String projectName = input.nextLine();
         System.out.println("enter task name:");
-        String oldName = input.nextLine();
+        final String oldName = input.nextLine();
         System.out.println("enter new task name:");
-        String newName = input.nextLine();
-        User currentUser = bootstrap.getCurrentUser();
+        final String newName = input.nextLine();
+        final User currentUser = bootstrap.getCurrentUser();
         if (currentUser == null)
             throw new UserIsNotAuthorizedException();
-        TaskService taskService = bootstrap.getTaskService();
+        final TaskService taskService = bootstrap.getTaskService();
         taskService.renameTask(projectName ,oldName, newName, currentUser.getId());
         System.out.println("[ok]");
         System.out.println();

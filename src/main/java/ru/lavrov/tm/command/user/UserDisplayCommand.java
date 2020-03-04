@@ -35,26 +35,34 @@ public final class UserDisplayCommand extends AbstractCommand {
 
     @Override
     public void execute() {
-        Scanner input = new Scanner(System.in);
-        ProjectService projectService = bootstrap.getProjectService();
-        TaskService taskService = bootstrap.getTaskService();
-        User currentUser = bootstrap.getCurrentUser();
+        final Scanner input = new Scanner(System.in);
+        final ProjectService projectService = bootstrap.getProjectService();
+        final TaskService taskService = bootstrap.getTaskService();
+        final User currentUser = bootstrap.getCurrentUser();
         if (currentUser == null)
             throw new UserIsNotAuthorizedException();
         System.out.println("[Display user profile]");
         System.out.println("user data:");
         System.out.println(currentUser.getLogin());
         System.out.println("attached projects:");
-        int index = 0;
-        Collection<Project> projectList = projectService.findAllByUser(currentUser.getId());
+        int index = 1;
+        final Collection<Project> projectList = projectService.findAllByUser(currentUser.getId());
+        if (projectList == null)
+            return;
         for (Project project: projectList) {
-            System.out.println(++index + ". " + project);
+            if (project == null)
+                continue;
+            System.out.println(index++ + ". " + project);
         }
         System.out.println("attached tasks:");
-        index = 0;
-        Collection<Task> taskList = taskService.findAllByUser(currentUser.getId());
+        index = 1;
+        final Collection<Task> taskList = taskService.findAllByUser(currentUser.getId());
+        if (taskList == null)
+            return;
         for (Task task: taskList) {
-            System.out.println(++index + ". " + task);
+            if (task == null)
+                continue;
+            System.out.println(index++ + ". " + task);
         }
         System.out.println();
     }
