@@ -36,9 +36,9 @@ public abstract class AbstractTaskService<Task> implements TaskService<Task> {
 
     @Override
     public void remove(final String taskId, final String userId) {
-        if (userId == null)
+        if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        if (taskId == null)
+        if (taskId == null || taskId.isEmpty())
             throw new TaskNotExistsException();
         taskRepository.remove(taskId, userId);
     }

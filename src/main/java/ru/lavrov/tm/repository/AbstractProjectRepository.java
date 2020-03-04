@@ -32,9 +32,9 @@ public abstract class AbstractProjectRepository implements ProjectRepository<Pro
 
     @Override
     public void remove(final String projectId, final String userId){
-        if (projectId == null)
+        if (projectId == null || projectId.isEmpty())
             throw new ProjectNotExistsException();
-        if (userId == null)
+        if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         Project project = projects.get(projectId);
         if (!project.getUserId().equals(userId))
@@ -44,7 +44,7 @@ public abstract class AbstractProjectRepository implements ProjectRepository<Pro
 
     @Override
     public void removeAll(final String userId){
-        if (userId == null)
+        if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         for (Project project : findAllByUser(userId)) {
             remove(project.getId(), userId);
@@ -55,7 +55,7 @@ public abstract class AbstractProjectRepository implements ProjectRepository<Pro
     public Project findEntityByName(final String projectName, final String userId){
         if (projectName == null || projectName.isEmpty())
             throw new ProjectNameIsInvalidException();
-        if (userId == null)
+        if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         Project currentProject = null;
         for (Project project: projects.values()) {
@@ -69,7 +69,7 @@ public abstract class AbstractProjectRepository implements ProjectRepository<Pro
 
     @Override
     public Collection<Project> findAllByUser(final String userId) {
-        if (userId == null)
+        if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         Collection<Project> list = new ArrayList<>();
         for (Project project : projects.values()) {

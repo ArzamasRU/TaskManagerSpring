@@ -20,7 +20,7 @@ public final class ProjectServiceImpl extends AbstractProjectService {
     public void createByName(final String projectName, final String userId) throws RuntimeException {
         if (projectName == null || projectName.isEmpty())
             throw new ProjectNameIsInvalidException();
-        if (userId == null)
+        if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         if (projectRepository.findEntityByName(projectName, userId) != null)
             throw new ProjectNameExistsException();
@@ -30,7 +30,7 @@ public final class ProjectServiceImpl extends AbstractProjectService {
     public void removeProjectByName(final String projectName, final String userId) throws RuntimeException {
         if (projectName == null || projectName.isEmpty())
             throw new ProjectNameIsInvalidException();
-        if (userId == null)
+        if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         Project project = (Project) projectRepository.findEntityByName(projectName, userId);
         if (project != null)
@@ -54,7 +54,7 @@ public final class ProjectServiceImpl extends AbstractProjectService {
     public void renameProject(final String oldName, final String newName, final String userId) throws RuntimeException {
         if (newName == null || newName.isEmpty() || oldName == null || oldName.isEmpty())
             throw new ProjectNameIsInvalidException();
-        if (userId == null)
+        if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         projectRepository.renameProject(oldName, newName, userId);
     }

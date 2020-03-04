@@ -26,7 +26,7 @@ public final class UserServiceImpl extends AbstractUserService {
     }
 
     public void updatePassword(final String userId, final String newPassword) {
-        if (userId == null)
+        if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         if (newPassword == null || newPassword.isEmpty())
             throw new UserPasswordIsInvalidException();
@@ -34,7 +34,7 @@ public final class UserServiceImpl extends AbstractUserService {
     }
 
     public void updateLogin(final String userId, final String newLogin) {
-        if (userId == null)
+        if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         if (newLogin == null || newLogin.isEmpty())
             throw new UserLoginIsInvalidException();

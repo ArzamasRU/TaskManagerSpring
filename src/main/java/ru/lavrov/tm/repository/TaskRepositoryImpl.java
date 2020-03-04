@@ -16,7 +16,7 @@ public final class TaskRepositoryImpl extends AbstractTaskRepository {
     public void removeTaskByName(final String taskName, final String userId){
         if (taskName == null || taskName.isEmpty())
             throw new TaskNameIsInvalidException();
-        if (userId == null)
+        if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         Task task = findEntityByName(taskName, userId);
         if (task == null)
@@ -27,9 +27,9 @@ public final class TaskRepositoryImpl extends AbstractTaskRepository {
     }
 
     public Collection<Task> getProjectTasks(final String projectId, final String userId){
-        if (userId == null)
+        if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        if (projectId == null)
+        if (projectId == null || projectId.isEmpty())
             throw new ProjectNotExistsException();
         List<Task> list = new ArrayList();
         for (Task task : tasks.values()) {
@@ -41,9 +41,9 @@ public final class TaskRepositoryImpl extends AbstractTaskRepository {
     }
 
     public void removeProjectTasks(final String projectId, final String userId){
-        if (userId == null)
+        if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        if (projectId == null)
+        if (projectId == null || projectId.isEmpty())
             throw new ProjectNotExistsException();
         for (Task task : tasks.values()) {
             if (task.getProjectId().equals(projectId) && task.getUserId().equals(userId)) {
@@ -55,7 +55,7 @@ public final class TaskRepositoryImpl extends AbstractTaskRepository {
     public Task findProjectTaskByName(final String taskName, final String projectId, final String userId){
         if (taskName == null || taskName.isEmpty())
             throw new TaskNameIsInvalidException();
-        if (userId == null)
+        if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         Task currentTask = null;
         for (Task task: tasks.values()) {
@@ -72,7 +72,7 @@ public final class TaskRepositoryImpl extends AbstractTaskRepository {
             throw new ProjectNameIsInvalidException();
         if (newName == null || newName.isEmpty() || oldName == null || oldName.isEmpty())
             throw new TaskNameIsInvalidException();
-        if (userId == null)
+        if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         Task task = findEntityByName(oldName, userId);
         if (task == null)

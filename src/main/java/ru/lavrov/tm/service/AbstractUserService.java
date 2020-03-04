@@ -30,21 +30,21 @@ public abstract class AbstractUserService<User> implements UserService<User> {
 
     @Override
     public void remove(final String entityId, final String userId) {
-        if (entityId == null)
+        if (entityId == null || entityId.isEmpty())
             throw new UserIsNotAuthorizedException();
         userRepository.remove(entityId, userId);
     }
 
     @Override
     public void removeAll(final String userId) {
-        if (userId == null)
+        if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         userRepository.removeAll(userId);
     }
 
     @Override
     public Collection<User> findAllByUser(final String userId) {
-        if (userId == null)
+        if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         return userRepository.findAllByUser(userId);
     }

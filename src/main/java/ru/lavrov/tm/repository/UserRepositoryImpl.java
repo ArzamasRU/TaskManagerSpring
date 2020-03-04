@@ -6,7 +6,7 @@ import ru.lavrov.tm.exception.user.UserPasswordIsInvalidException;
 
 public final class UserRepositoryImpl extends AbstractUserRepository {
     public void updatePassword(final String userId, final String newPassword) {
-        if (userId == null)
+        if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         if (newPassword == null || newPassword.isEmpty())
             throw new UserPasswordIsInvalidException();
@@ -14,7 +14,7 @@ public final class UserRepositoryImpl extends AbstractUserRepository {
     }
 
     public void updateLogin(final String userId, final String login) {
-        if (userId == null)
+        if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         if (login == null || login.isEmpty())
             throw new UserLoginIsInvalidException();

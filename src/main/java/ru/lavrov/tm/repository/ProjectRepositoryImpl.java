@@ -10,7 +10,7 @@ public final class ProjectRepositoryImpl extends AbstractProjectRepository {
     public void renameProject(final String oldName, final String newName, final String userId) throws RuntimeException {
         if (newName == null || newName.isEmpty() || oldName == null || oldName.isEmpty())
             throw new ProjectNameIsInvalidException();
-        if (userId == null)
+        if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         Project project = findEntityByName(newName, userId);
         if (project != null)

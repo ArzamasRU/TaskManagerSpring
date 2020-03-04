@@ -29,21 +29,21 @@ public abstract class AbstractUserRepository implements UserRepository<User> {
 
     @Override
     public void remove(final String entityId, final String userId) {
-        if (entityId == null)
+        if (entityId == null || entityId.isEmpty())
             throw new UserIsNotAuthorizedException();
         users.remove(entityId);
     }
 
     @Override
     public void removeAll(final String userId){
-        if (userId == null)
+        if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         users.remove(userId);
     }
 
     @Override
     public Collection<User> findAllByUser(final String userId) {
-        if (userId == null)
+        if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         Collection<User> list = new ArrayList<>();
         list.add(users.get(userId));

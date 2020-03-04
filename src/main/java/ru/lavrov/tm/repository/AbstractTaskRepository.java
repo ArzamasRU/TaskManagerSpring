@@ -16,7 +16,7 @@ public abstract class AbstractTaskRepository implements TaskRepository<Task> {
 
     @Override
     public Collection<Task> findAllByUser(final String userId) {
-        if (userId == null)
+        if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         Collection<Task> list = new ArrayList<>();
         for (Task task : tasks.values()) {
@@ -41,9 +41,9 @@ public abstract class AbstractTaskRepository implements TaskRepository<Task> {
 
     @Override
     public void remove(final String taskId, final String userId){
-        if (taskId == null)
+        if (taskId == null || taskId.isEmpty())
             throw new TaskNotExistsException();
-        if (userId == null)
+        if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         Task task = tasks.get(taskId);
         if (!task.getUserId().equals(userId))
@@ -53,7 +53,7 @@ public abstract class AbstractTaskRepository implements TaskRepository<Task> {
 
     @Override
     public void removeAll(final String userId){
-        if (userId == null)
+        if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         for (Task task : findAllByUser(userId)) {
             remove(task.getId(), userId);
@@ -62,7 +62,7 @@ public abstract class AbstractTaskRepository implements TaskRepository<Task> {
 
     @Override
     public Task findEntityByName(final String name, final String userId){
-        if (userId == null)
+        if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         Task currentTask = null;
         for (Task task: tasks.values()) {

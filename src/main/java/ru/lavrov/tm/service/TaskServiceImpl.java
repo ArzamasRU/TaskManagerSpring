@@ -21,7 +21,7 @@ public final class TaskServiceImpl extends AbstractTaskService {
             throw new TaskNameIsInvalidException();
         if (projectName == null || projectName.isEmpty())
             throw new ProjectNameIsInvalidException();
-        if (userId == null)
+        if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         Project project = (Project) projectRepository.findEntityByName(projectName, userId);
         if (project == null)
@@ -36,7 +36,7 @@ public final class TaskServiceImpl extends AbstractTaskService {
     public void removeTaskByName(final String taskName, final String userId) throws RuntimeException {
         if (taskName == null || taskName.isEmpty())
             throw new TaskNameIsInvalidException();
-        if (userId == null)
+        if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         taskRepository.removeTaskByName(taskName, userId);
     }
@@ -46,7 +46,7 @@ public final class TaskServiceImpl extends AbstractTaskService {
             throw new ProjectNameIsInvalidException();
         if (newName == null || newName.isEmpty() || oldName == null || oldName.isEmpty())
             throw new TaskNameIsInvalidException();
-        if (userId == null)
+        if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         Project project = (Project) projectRepository.findEntityByName(newName, userId);
         if (project == null)
