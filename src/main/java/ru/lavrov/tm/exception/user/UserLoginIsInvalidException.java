@@ -1,11 +1,11 @@
 package ru.lavrov.tm.exception.user;
 
-public class UserLoginIsInvalidException extends RuntimeException{
+public final class UserLoginIsInvalidException extends RuntimeException{
     private static final String message = "login is empty or null!";
     public UserLoginIsInvalidException() {
         super(message);
     }
-    public UserLoginIsInvalidException(String message) {
+    public UserLoginIsInvalidException(final String message) {
         super(message);
     }
 }

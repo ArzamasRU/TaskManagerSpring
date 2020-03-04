@@ -3,9 +3,9 @@ package ru.lavrov.tm.entity;
 import java.util.Date;
 import java.util.UUID;
 
-public class Project {
+public final class Project {
     private String name;
-    private String id = UUID.randomUUID().toString();;
+    private String id = UUID.randomUUID().toString();
     private int description;
     private Date startDate = new Date();
     private Date finishDate = null;
@@ -14,11 +14,7 @@ public class Project {
     public Project() {
     }
 
-    public Project(String name) {
-        this.name = name;
-    }
-
-    public Project(String name, String userId) {
+    public Project(final String name, final String userId) {
         this.name = name;
         this.userId = userId;
     }
@@ -27,7 +23,7 @@ public class Project {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -35,7 +31,7 @@ public class Project {
         return description;
     }
 
-    public void setDescription(int description) {
+    public void setDescription(final int description) {
         this.description = description;
     }
 
@@ -43,7 +39,7 @@ public class Project {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(final Date startDate) {
         this.startDate = startDate;
     }
 
@@ -51,7 +47,7 @@ public class Project {
         return finishDate;
     }
 
-    public void setFinishDate(Date finishDate) {
+    public void setFinishDate(final Date finishDate) {
         this.finishDate = finishDate;
     }
 
@@ -59,7 +55,7 @@ public class Project {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
@@ -67,7 +63,7 @@ public class Project {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(final String userId) {
         this.userId = userId;
     }
 

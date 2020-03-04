@@ -1,6 +1,5 @@
 package ru.lavrov.tm.command.Exit;
 
-import ru.lavrov.tm.bootstrap.Bootstrap;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.role.Role;
 
@@ -14,10 +13,6 @@ public final class ExitCommand extends AbstractCommand {
 
     public ExitCommand() {
         super();
-    }
-
-    public ExitCommand(Bootstrap bootstrap) {
-        super(bootstrap);
     }
 
     @Override

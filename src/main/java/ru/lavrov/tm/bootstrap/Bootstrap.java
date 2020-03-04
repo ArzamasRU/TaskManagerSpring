@@ -1,7 +1,9 @@
 package ru.lavrov.tm.bootstrap;
 
+import ru.lavrov.tm.api.*;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.command.Exit.ExitCommand;
+import ru.lavrov.tm.command.about.AboutCommand;
 import ru.lavrov.tm.command.help.HelpCommand;
 import ru.lavrov.tm.command.project.*;
 import ru.lavrov.tm.command.task.*;
@@ -12,45 +14,40 @@ import ru.lavrov.tm.exception.command.CommandIsInvalidException;
 import ru.lavrov.tm.exception.command.CommandNotExistsException;
 import ru.lavrov.tm.exception.user.*;
 import ru.lavrov.tm.exception.util.UtilAlgorithmNotExistsException;
-import ru.lavrov.tm.repository.ProjectRepository;
-import ru.lavrov.tm.repository.TaskRepository;
-import ru.lavrov.tm.repository.UserRepository;
+import ru.lavrov.tm.repository.ProjectRepositoryImpl;
+import ru.lavrov.tm.repository.TaskRepositoryImpl;
+import ru.lavrov.tm.repository.UserRepositoryImpl;
 import ru.lavrov.tm.role.Role;
-import ru.lavrov.tm.service.ProjectService;
-import ru.lavrov.tm.service.TaskService;
-import ru.lavrov.tm.service.UserService;
+import ru.lavrov.tm.service.ProjectServiceImpl;
+import ru.lavrov.tm.service.TaskServiceImpl;
+import ru.lavrov.tm.service.UserServiceImpl;
 import ru.lavrov.tm.util.HashUtil;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
-public class Bootstrap {
-    private final ProjectRepository projectRepository = new ProjectRepository();
-    private final TaskRepository taskRepository = new TaskRepository();
-    private final UserRepository userRepository = new UserRepository();
-    private final ProjectService projectService = new ProjectService(projectRepository, taskRepository, userRepository);
-    private final TaskService taskService = new TaskService(taskRepository, projectRepository, userRepository);
-    private final UserService userService = new UserService(userRepository);
+public final class Bootstrap implements ServiceLocator{
+    private final ProjectRepository projectRepository = new ProjectRepositoryImpl();
+    private final TaskRepository taskRepository = new TaskRepositoryImpl();
+    private final UserRepository userRepository = new UserRepositoryImpl();
+    private final ProjectService projectService = new ProjectServiceImpl(projectRepository, taskRepository, userRepository);
+    private final TaskService taskService = new TaskServiceImpl(taskRepository, projectRepository, userRepository);
+    private final UserService userService = new UserServiceImpl(userRepository);
     private final Scanner input = new Scanner(System.in);
-    private Map<String, AbstractCommand> commands = new LinkedHashMap();
+    private final Map<String, AbstractCommand> commands = new LinkedHashMap();
     private User currentUser;
 
-    public User getCurrentUser() {
-        return currentUser;
-    }
-
-    public void setCurrentUser(User currentUser) {
-        this.currentUser = currentUser;
-    }
-
+    @Override
     public ProjectService getProjectService() {
         return projectService;
     }
 
+    @Override
     public TaskService getTaskService() {
         return taskService;
     }
 
+    @Override
     public UserService getUserService() {
         return userService;
     }
@@ -74,6 +71,7 @@ public class Bootstrap {
     private void init() throws RuntimeException, IllegalAccessException, InstantiationException {
         List<Class> commandList = Arrays.asList(ExitCommand.class,
             HelpCommand.class,
+            AboutCommand.class,
             ProjectClearCommand.class,
             ProjectCreateCommand.class,
             ProjectListCommand.class,
@@ -89,7 +87,8 @@ public class Bootstrap {
             UserLogoutCommand.class,
             UserRegisterCommand.class,
             UserUpdateCommand.class,
-            UserDisplayCommand.class);
+            UserDisplayCommand.class,
+            UserDeleteCommand.class);
         for (Class command : commandList) {
             registry((AbstractCommand) command.newInstance());
         }
@@ -97,30 +96,29 @@ public class Bootstrap {
 
     private void initUsers(){
         try {
-            userService.persist("user", HashUtil.getHash("user"), String.valueOf(Role.User));
-            userService.persist("admin", HashUtil.getHash("admin"), String.valueOf(Role.Admin));
+            userService.createByLogin("user", HashUtil.getHash("user"), String.valueOf(Role.User));
+            userService.createByLogin("admin", HashUtil.getHash("admin"), String.valueOf(Role.Admin));
         } catch (NoSuchAlgorithmException e) {
             System.out.println(new UtilAlgorithmNotExistsException().getMessage());
         }
     }
 
-    private void registry(AbstractCommand command) throws RuntimeException {
+    private void registry(final AbstractCommand command) throws RuntimeException {
+        if (command == null)
+            throw new CommandNotExistsException();
         final String cliCommand = command.getCommand();
         final String cliDescription = command.getDescription();
         if (cliCommand == null || cliCommand.isEmpty())
             throw new CommandIsInvalidException();
         if (cliDescription == null || cliDescription.isEmpty())
             throw new CommandDescriptionIsInvalidException();
-//        command.setServiceLocator(this);
         command.setBootstrap(this);
-//        command.setSafe(isSafe);
-//        command.setRoles(roles);
         commands.put(cliCommand, command);
     }
 
-    private void execute(String command) throws RuntimeException {
+    private void execute(final String command) throws RuntimeException {
         if (command == null || command.isEmpty())
-            return;
+            throw new CommandIsInvalidException();
         final AbstractCommand abstractCommand = commands.get(command);
         if (abstractCommand == null)
             throw new CommandNotExistsException();
@@ -137,7 +135,7 @@ public class Bootstrap {
         abstractCommand.execute();
     }
 
-    private boolean hasPermission(Collection<Role> listRoles, Role role){
+    private boolean hasPermission(final Collection<Role> listRoles, Role role){
         if (listRoles == null) {
             return true;
         }
@@ -150,16 +148,17 @@ public class Bootstrap {
         return false;
     }
 
+    @Override
     public List<AbstractCommand> getCommands() {
         return new ArrayList(commands.values());
     }
 
-    public void login(String login, String password){
+    public void login(final String login, final String password){
         if (login == null || login.isEmpty())
             throw new UserLoginIsInvalidException();
         if (password == null || password.isEmpty())
             throw new UserPasswordIsInvalidException();
-        User user = userRepository.findUserByLogin(login);
+        User user = (User) userRepository.findEntityByName(login, null);
         if (user == null)
             throw new UserLoginNotExistsException();
         if (!password.equals(user.getPassword()))
@@ -169,5 +168,13 @@ public class Bootstrap {
 
     public void logout(){
         setCurrentUser(null);
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(final User currentUser) {
+        this.currentUser = currentUser;
     }
 }

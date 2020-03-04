@@ -4,7 +4,7 @@ import ru.lavrov.tm.role.Role;
 
 import java.util.UUID;
 
-public class User {
+public final class User {
     private String id = UUID.randomUUID().toString();;
     private String login;
     private String password;
@@ -13,7 +13,7 @@ public class User {
     public User() {
     }
 
-    public User(String login, String password, Role role) {
+    public User(final String login, final String password, final Role role) {
         this.login = login;
         this.password = password;
         this.role = role;
@@ -23,7 +23,7 @@ public class User {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
@@ -31,7 +31,7 @@ public class User {
         return role;
     }
 
-    public void setRole(Role role) {
+    public void setRole(final Role role) {
         this.role = role;
     }
 
@@ -39,7 +39,7 @@ public class User {
         return login;
     }
 
-    public void setLogin(String login) {
+    public void setLogin(final String login) {
         this.login = login;
     }
 
@@ -47,7 +47,7 @@ public class User {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(final String password) {
         this.password = password;
     }
 

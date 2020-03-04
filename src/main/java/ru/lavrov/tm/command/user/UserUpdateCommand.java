@@ -1,11 +1,10 @@
 package ru.lavrov.tm.command.user;
 
-import ru.lavrov.tm.bootstrap.Bootstrap;
+import ru.lavrov.tm.api.UserService;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.entity.User;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 import ru.lavrov.tm.role.Role;
-import ru.lavrov.tm.service.UserService;
 
 import java.util.Collection;
 import java.util.Scanner;
@@ -15,10 +14,6 @@ public final class UserUpdateCommand extends AbstractCommand {
     private static final Collection<Role> ROLES = null;
     private static final String COMMAND = "user-update";
     private static final String DESCRIPTION = "Update user profile.";
-
-    public UserUpdateCommand(Bootstrap bootstrap) {
-        super(bootstrap);
-    }
 
     public UserUpdateCommand() {
         super();

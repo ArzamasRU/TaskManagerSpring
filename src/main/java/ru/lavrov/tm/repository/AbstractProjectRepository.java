@@ -1,8 +1,8 @@
 package ru.lavrov.tm.repository;
 
+import ru.lavrov.tm.api.ProjectRepository;
 import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.exception.project.ProjectExistsException;
-import ru.lavrov.tm.exception.project.ProjectNameExistsException;
 import ru.lavrov.tm.exception.project.ProjectNameIsInvalidException;
 import ru.lavrov.tm.exception.project.ProjectNotExistsException;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
@@ -12,31 +12,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ProjectRepository {
-    private Map<String, Project> projects = new HashMap();
+public abstract class AbstractProjectRepository implements ProjectRepository<Project> {
+    protected final Map<String, Project> projects = new HashMap();
 
-//    public Collection<Project> findAll(){
-//        return projects.values();
-//    }
-
-    public Collection<Project> findAllByUser(String userId) {
-        if (userId == null)
-            throw new UserIsNotAuthorizedException();
-        Collection<Project> list = new ArrayList<>();
-        for (Project project : projects.values()) {
-            if (project.getUserId().equals(userId))
-                list.add(project);
-        }
-        return list;
-    }
-
-//    public Project findOne(String projectId){
-//        if (projectId == null)
-//            throw new UserIsNotAuthorizedException();
-//        return projects.get(projectId);
-//    }
-
-    public void persist(Project project) throws RuntimeException{
+    @Override
+    public void persist(final Project project) throws RuntimeException{
         if (project == null)
             throw new ProjectNotExistsException();
         String id = project.getId();
@@ -45,11 +25,13 @@ public class ProjectRepository {
         projects.put(id, project);
     }
 
-    public void merge(Project project){
+    @Override
+    public void merge(final Project project){
         projects.put(project.getId(), project);
     }
 
-    public void remove(String projectId, String userId){
+    @Override
+    public void remove(final String projectId, final String userId){
         if (projectId == null)
             throw new ProjectNotExistsException();
         if (userId == null)
@@ -60,7 +42,8 @@ public class ProjectRepository {
         projects.remove(projectId);
     }
 
-    public void removeAll(String userId){
+    @Override
+    public void removeAll(final String userId){
         if (userId == null)
             throw new UserIsNotAuthorizedException();
         for (Project project : findAllByUser(userId)) {
@@ -68,7 +51,8 @@ public class ProjectRepository {
         }
     }
 
-    public Project findProjectByName(String projectName, String userId){
+    @Override
+    public Project findEntityByName(final String projectName, final String userId){
         if (projectName == null || projectName.isEmpty())
             throw new ProjectNameIsInvalidException();
         if (userId == null)
@@ -83,17 +67,15 @@ public class ProjectRepository {
         return currentProject;
     }
 
-    public void renameProject(String oldName, String newName, String userId) throws RuntimeException {
-        if (newName == null || newName.isEmpty() || oldName == null || oldName.isEmpty())
-            throw new ProjectNameIsInvalidException();
+    @Override
+    public Collection<Project> findAllByUser(final String userId) {
         if (userId == null)
             throw new UserIsNotAuthorizedException();
-        Project project = findProjectByName(newName, userId);
-        if (project != null)
-            throw new ProjectNameExistsException();
-        project = findProjectByName(oldName, userId);
-        if (!project.getUserId().equals(userId))
-            throw new ProjectNotExistsException();
-        project.setName(newName);
+        Collection<Project> list = new ArrayList<>();
+        for (Project project : projects.values()) {
+            if (project.getUserId().equals(userId))
+                list.add(project);
+        }
+        return list;
     }
 }

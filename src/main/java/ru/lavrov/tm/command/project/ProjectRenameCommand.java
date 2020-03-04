@@ -1,11 +1,10 @@
 package ru.lavrov.tm.command.project;
 
-import ru.lavrov.tm.bootstrap.Bootstrap;
+import ru.lavrov.tm.api.ProjectService;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.entity.User;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 import ru.lavrov.tm.role.Role;
-import ru.lavrov.tm.service.ProjectService;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -16,10 +15,6 @@ public class ProjectRenameCommand extends AbstractCommand {
     private static final Collection<Role> ROLES = Arrays.asList(Role.Admin, Role.User);
     private static final String COMMAND = "project-rename";
     private static final String DESCRIPTION = "Rename project.";
-
-    public ProjectRenameCommand(Bootstrap bootstrap) {
-        super(bootstrap);
-    }
 
     public ProjectRenameCommand() {
         super();

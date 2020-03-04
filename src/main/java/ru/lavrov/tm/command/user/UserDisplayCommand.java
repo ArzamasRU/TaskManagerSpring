@@ -1,14 +1,13 @@
 package ru.lavrov.tm.command.user;
 
-import ru.lavrov.tm.bootstrap.Bootstrap;
+import ru.lavrov.tm.api.ProjectService;
+import ru.lavrov.tm.api.TaskService;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Task;
 import ru.lavrov.tm.entity.User;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 import ru.lavrov.tm.role.Role;
-import ru.lavrov.tm.service.ProjectService;
-import ru.lavrov.tm.service.TaskService;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -19,10 +18,6 @@ public final class UserDisplayCommand extends AbstractCommand {
     private static final Collection<Role> ROLES = Arrays.asList(Role.Admin, Role.User);
     private static final String COMMAND = "user-display";
     private static final String DESCRIPTION = "Display user profile.";
-
-    public UserDisplayCommand(Bootstrap bootstrap) {
-        super(bootstrap);
-    }
 
     public UserDisplayCommand() {
         super();
@@ -51,12 +46,14 @@ public final class UserDisplayCommand extends AbstractCommand {
         System.out.println(currentUser.getLogin());
         System.out.println("attached projects:");
         int index = 0;
-        for (Project project: projectService.findAllByUser(currentUser.getId())) {
+        Collection<Project> projectList = projectService.findAllByUser(currentUser.getId());
+        for (Project project: projectList) {
             System.out.println(++index + ". " + project);
         }
         System.out.println("attached tasks:");
         index = 0;
-        for (Task task: taskService.findAllByUser(currentUser.getId())) {
+        Collection<Task> taskList = taskService.findAllByUser(currentUser.getId());
+        for (Task task: taskList) {
             System.out.println(++index + ". " + task);
         }
         System.out.println();

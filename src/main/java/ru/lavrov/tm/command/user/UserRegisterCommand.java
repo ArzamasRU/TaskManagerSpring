@@ -1,10 +1,9 @@
 package ru.lavrov.tm.command.user;
 
-import ru.lavrov.tm.bootstrap.Bootstrap;
+import ru.lavrov.tm.api.UserService;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.exception.util.UtilAlgorithmNotExistsException;
 import ru.lavrov.tm.role.Role;
-import ru.lavrov.tm.service.UserService;
 import ru.lavrov.tm.util.HashUtil;
 
 import java.security.NoSuchAlgorithmException;
@@ -16,10 +15,6 @@ public final class UserRegisterCommand extends AbstractCommand {
     private static final Collection<Role> ROLES = null;
     private static final String COMMAND = "register";
     private static final String DESCRIPTION = "Registration of new user.";
-
-    public UserRegisterCommand(Bootstrap bootstrap) {
-        super(bootstrap);
-    }
 
     public UserRegisterCommand() {
         super();
@@ -51,7 +46,7 @@ public final class UserRegisterCommand extends AbstractCommand {
             throw new UtilAlgorithmNotExistsException();
         }
         UserService userService = bootstrap.getUserService();
-        userService.persist(login, password, role);
+        userService.createByLogin(login, password, role);
         System.out.println("[User successfully registered]");
         System.out.println();
     }

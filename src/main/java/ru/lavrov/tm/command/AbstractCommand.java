@@ -1,21 +1,17 @@
 package ru.lavrov.tm.command;
 
-import ru.lavrov.tm.bootstrap.Bootstrap;
+import ru.lavrov.tm.api.ServiceLocator;
 import ru.lavrov.tm.role.Role;
 
 import java.util.Collection;
 
 public abstract class AbstractCommand {
-    protected Bootstrap bootstrap;
+    protected ServiceLocator bootstrap;
 
     public AbstractCommand(){
     }
 
-    public AbstractCommand(Bootstrap bootstrap) {
-        this.bootstrap = bootstrap;
-    }
-
-    public Bootstrap getBootstrap() {
+    public ServiceLocator getBootstrap() {
         return bootstrap;
     }
 
@@ -25,7 +21,7 @@ public abstract class AbstractCommand {
 
     public abstract void execute() throws RuntimeException;
 
-    public void setBootstrap(Bootstrap bootstrap) {
+    public void setBootstrap(final ServiceLocator bootstrap) {
         this.bootstrap = bootstrap;
     }
 

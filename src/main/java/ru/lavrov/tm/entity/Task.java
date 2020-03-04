@@ -3,7 +3,7 @@ package ru.lavrov.tm.entity;
 import java.util.Date;
 import java.util.UUID;
 
-public class Task {
+public final class Task {
     private String name;
     private String id = UUID.randomUUID().toString();;
     private int description;
@@ -15,11 +15,7 @@ public class Task {
     public Task() {
     }
 
-    public Task(String name) {
-        this.name = name;
-    }
-
-    public Task(String name, String projectId, String userId) {
+    public Task(final String name, final String projectId, final String userId) {
         this.name = name;
         this.projectId = projectId;
         this.userId = userId;
@@ -29,7 +25,7 @@ public class Task {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -37,7 +33,7 @@ public class Task {
         return description;
     }
 
-    public void setDescription(int description) {
+    public void setDescription(final int description) {
         this.description = description;
     }
 
@@ -45,7 +41,7 @@ public class Task {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(final Date startDate) {
         this.startDate = startDate;
     }
 
@@ -53,7 +49,7 @@ public class Task {
         return finishDate;
     }
 
-    public void setFinishDate(Date finishDate) {
+    public void setFinishDate(final Date finishDate) {
         this.finishDate = finishDate;
     }
 
@@ -61,7 +57,7 @@ public class Task {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
@@ -69,7 +65,7 @@ public class Task {
         return projectId;
     }
 
-    public void setProjectId(String projectId) {
+    public void setProjectId(final String projectId) {
         this.projectId = projectId;
     }
 
@@ -77,7 +73,7 @@ public class Task {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(final String userId) {
         this.userId = userId;
     }
 

@@ -1,12 +1,11 @@
 package ru.lavrov.tm.command.project;
 
-import ru.lavrov.tm.bootstrap.Bootstrap;
+import ru.lavrov.tm.api.ProjectService;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.User;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 import ru.lavrov.tm.role.Role;
-import ru.lavrov.tm.service.ProjectService;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -16,10 +15,6 @@ public final class ProjectListCommand extends AbstractCommand {
     private static final Collection<Role> ROLES = Arrays.asList(Role.Admin);
     private static final String COMMAND = "project-list";
     private static final String DESCRIPTION = "Show all projects.";
-
-    public ProjectListCommand(Bootstrap bootstrap) {
-        super(bootstrap);
-    }
 
     public ProjectListCommand() {
         super();
@@ -43,7 +38,8 @@ public final class ProjectListCommand extends AbstractCommand {
         if (currentUser == null)
             throw new UserIsNotAuthorizedException();
         int index = 0;
-        for (Project project: projectService.findAllByUser(currentUser.getId())) {
+        Collection<Project> projectList = projectService.findAllByUser(currentUser.getId());
+        for (Project project: projectList) {
             System.out.println(++index + ". " + project);
         }
         System.out.println();

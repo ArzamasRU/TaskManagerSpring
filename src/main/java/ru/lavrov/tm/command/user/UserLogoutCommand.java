@@ -1,6 +1,5 @@
 package ru.lavrov.tm.command.user;
 
-import ru.lavrov.tm.bootstrap.Bootstrap;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.role.Role;
 
@@ -14,10 +13,6 @@ public final class UserLogoutCommand extends AbstractCommand {
 
     public UserLogoutCommand(){
         super();
-    }
-
-    public UserLogoutCommand(Bootstrap bootstrap) {
-        super(bootstrap);
     }
 
     @Override

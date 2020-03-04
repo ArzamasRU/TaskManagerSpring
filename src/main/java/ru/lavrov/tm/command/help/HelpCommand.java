@@ -1,6 +1,5 @@
 package ru.lavrov.tm.command.help;
 
-import ru.lavrov.tm.bootstrap.Bootstrap;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.role.Role;
 
@@ -13,10 +12,6 @@ public final class HelpCommand extends AbstractCommand {
     private static final String DESCRIPTION = "Show all commands.";
 
     public HelpCommand() {
-    }
-
-    public HelpCommand(Bootstrap bootstrap) {
-        super(bootstrap);
     }
 
     @Override

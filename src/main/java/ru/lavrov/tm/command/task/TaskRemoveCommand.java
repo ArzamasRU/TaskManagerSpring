@@ -1,11 +1,10 @@
 package ru.lavrov.tm.command.task;
 
-import ru.lavrov.tm.bootstrap.Bootstrap;
+import ru.lavrov.tm.api.TaskService;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.entity.User;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 import ru.lavrov.tm.role.Role;
-import ru.lavrov.tm.service.TaskService;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -16,10 +15,6 @@ public final class TaskRemoveCommand extends AbstractCommand {
     private static final Collection<Role> ROLES = Arrays.asList(Role.Admin, Role.User);
     private static final String COMMAND = "task-remove";
     private static final String DESCRIPTION = "Remove selected task.";
-
-    public TaskRemoveCommand(Bootstrap bootstrap) {
-        super(bootstrap);
-    }
 
     public TaskRemoveCommand() {
         super();

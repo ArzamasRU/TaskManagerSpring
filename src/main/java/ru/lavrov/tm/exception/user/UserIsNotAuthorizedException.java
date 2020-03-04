@@ -1,11 +1,11 @@
 package ru.lavrov.tm.exception.user;
 
-public class UserIsNotAuthorizedException extends RuntimeException{
+public final class UserIsNotAuthorizedException extends RuntimeException{
     private static final String message = "user is not authorized!";
     public UserIsNotAuthorizedException() {
         super(message);
     }
-    public UserIsNotAuthorizedException(String message) {
+    public UserIsNotAuthorizedException(final String message) {
         super(message);
     }
 }

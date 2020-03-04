@@ -1,6 +1,5 @@
 package ru.lavrov.tm.command.user;
 
-import ru.lavrov.tm.bootstrap.Bootstrap;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.exception.util.UtilAlgorithmNotExistsException;
 import ru.lavrov.tm.role.Role;
@@ -15,10 +14,6 @@ public final class UserLoginCommand extends AbstractCommand {
     private static final Collection<Role> ROLES = null;
     private static final String COMMAND = "login";
     private static final String DESCRIPTION = "Authorization.";
-
-    public UserLoginCommand(Bootstrap bootstrap) {
-        super(bootstrap);
-    }
 
     public UserLoginCommand() {
         super();

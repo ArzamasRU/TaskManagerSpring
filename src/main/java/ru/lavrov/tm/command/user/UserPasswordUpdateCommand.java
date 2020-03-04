@@ -1,10 +1,9 @@
 package ru.lavrov.tm.command.user;
 
-import ru.lavrov.tm.bootstrap.Bootstrap;
+import ru.lavrov.tm.api.UserService;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.entity.User;
 import ru.lavrov.tm.role.Role;
-import ru.lavrov.tm.service.UserService;
 
 import java.util.Collection;
 import java.util.Scanner;
@@ -14,10 +13,6 @@ public final class UserPasswordUpdateCommand extends AbstractCommand {
     private static final Collection<Role> ROLES = null;
     private static final String COMMAND = "user-password-change";
     private static final String DESCRIPTION = "Change user password.";
-
-    public UserPasswordUpdateCommand(Bootstrap bootstrap) {
-        super(bootstrap);
-    }
 
     public UserPasswordUpdateCommand() {
         super();
