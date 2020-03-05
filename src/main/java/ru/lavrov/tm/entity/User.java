@@ -1,10 +1,11 @@
 package ru.lavrov.tm.entity;
 
+import ru.lavrov.tm.api.IEntity;
 import ru.lavrov.tm.role.Role;
 
 import java.util.UUID;
 
-public final class User {
+public final class User implements IEntity {
     private String id = UUID.randomUUID().toString();;
     private String login;
     private String password;
@@ -27,6 +28,14 @@ public final class User {
         this.id = id;
     }
 
+    public String getUserId() {
+        return getId();
+    }
+
+    public void setUserId(final String id) {
+        setId(id);
+    }
+
     public Role getRole() {
         return role;
     }
@@ -41,6 +50,14 @@ public final class User {
 
     public void setLogin(final String login) {
         this.login = login;
+    }
+
+    public String getName() {
+        return getLogin();
+    }
+
+    public void setName(final String login) {
+        setLogin(login);
     }
 
     public String getPassword() {

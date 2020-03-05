@@ -1,6 +1,6 @@
 package ru.lavrov.tm.command.project;
 
-import ru.lavrov.tm.api.ProjectService;
+import ru.lavrov.tm.api.IProjectService;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.entity.Task;
 import ru.lavrov.tm.entity.User;
@@ -40,7 +40,7 @@ public final class ProjectTasksListCommand extends AbstractCommand {
         final User currentUser = bootstrap.getCurrentUser();
         if (currentUser == null)
             throw new UserIsNotAuthorizedException();
-        final ProjectService projectService = bootstrap.getProjectService();
+        final IProjectService projectService = bootstrap.getProjectService();
         final Collection<Task> taskList = projectService.getProjectTasks(projectName, currentUser.getId());
         if (taskList == null)
             return;

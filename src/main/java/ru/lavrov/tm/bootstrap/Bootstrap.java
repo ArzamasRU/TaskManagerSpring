@@ -14,7 +14,6 @@ import ru.lavrov.tm.exception.command.CommandIsInvalidException;
 import ru.lavrov.tm.exception.command.CommandNotExistsException;
 import ru.lavrov.tm.exception.user.*;
 import ru.lavrov.tm.exception.util.UtilAlgorithmNotExistsException;
-import ru.lavrov.tm.repository.AbstractProjectRepository;
 import ru.lavrov.tm.repository.ProjectRepositoryImpl;
 import ru.lavrov.tm.repository.TaskRepositoryImpl;
 import ru.lavrov.tm.repository.UserRepositoryImpl;
@@ -27,29 +26,29 @@ import ru.lavrov.tm.util.HashUtil;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
-public final class Bootstrap implements ServiceLocator{
-    private final AbstractProjectRepository projectRepository = new ProjectRepositoryImpl();
-    private final TaskRepository taskRepository = new TaskRepositoryImpl();
-    private final UserRepository userRepository = new UserRepositoryImpl();
-    private final ProjectService projectService = new ProjectServiceImpl(projectRepository, taskRepository, userRepository);
-    private final TaskService taskService = new TaskServiceImpl(taskRepository, projectRepository, userRepository);
-    private final UserService userService = new UserServiceImpl(userRepository);
+public final class Bootstrap implements IServiceLocator {
+    private final IProjectRepository projectRepository = new ProjectRepositoryImpl();
+    private final ITaskRepository taskRepository = new TaskRepositoryImpl();
+    private final IUserRepository userRepository = new UserRepositoryImpl();
+    private final IProjectService projectService = new ProjectServiceImpl(projectRepository, taskRepository, userRepository);
+    private final ITaskService taskService = new TaskServiceImpl(taskRepository, projectRepository, userRepository);
+    private final IUserService userService = new UserServiceImpl(userRepository, projectRepository, taskRepository);
     private final Scanner input = new Scanner(System.in);
     private final Map<String, AbstractCommand> commands = new LinkedHashMap();
     private User currentUser;
 
     @Override
-    public ProjectService getProjectService() {
+    public IProjectService getProjectService() {
         return projectService;
     }
 
     @Override
-    public TaskService getTaskService() {
+    public ITaskService getTaskService() {
         return taskService;
     }
 
     @Override
-    public UserService getUserService() {
+    public IUserService getUserService() {
         return userService;
     }
 
@@ -90,8 +89,6 @@ public final class Bootstrap implements ServiceLocator{
             UserUpdateCommand.class,
             UserDisplayCommand.class,
             UserDeleteCommand.class);
-        if (commandList == null)
-            return;
         for (final Class command : commandList) {
             if (command == null)
                 continue;

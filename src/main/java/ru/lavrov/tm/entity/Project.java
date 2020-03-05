@@ -1,9 +1,11 @@
 package ru.lavrov.tm.entity;
 
+import ru.lavrov.tm.api.IEntity;
+
 import java.util.Date;
 import java.util.UUID;
 
-public final class Project {
+public final class Project implements IEntity {
     private String name;
     private String id = UUID.randomUUID().toString();
     private int description;

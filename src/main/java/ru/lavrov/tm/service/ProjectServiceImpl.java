@@ -1,21 +1,27 @@
 package ru.lavrov.tm.service;
 
-import ru.lavrov.tm.api.TaskRepository;
-import ru.lavrov.tm.api.UserRepository;
+import ru.lavrov.tm.api.*;
 import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Task;
 import ru.lavrov.tm.exception.project.ProjectNameExistsException;
 import ru.lavrov.tm.exception.project.ProjectNameIsInvalidException;
 import ru.lavrov.tm.exception.project.ProjectNotExistsException;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
-import ru.lavrov.tm.repository.AbstractProjectRepository;
+import ru.lavrov.tm.repository.AbstractRepository;
 
 import java.util.Collection;
 
-public final class ProjectServiceImpl extends AbstractProjectService {
-    public ProjectServiceImpl(final AbstractProjectRepository projectRepository, final TaskRepository taskRepository,
-                              final UserRepository userRepository) {
-        super(projectRepository, taskRepository, userRepository);
+public final class ProjectServiceImpl extends AbstractService<Project> implements IProjectService {
+    protected final IProjectRepository projectRepository;
+    protected final ITaskRepository taskRepository;
+    protected final IUserRepository userRepository;
+
+    public ProjectServiceImpl(final IProjectRepository projectRepository, final ITaskRepository taskRepository,
+                              final IUserRepository userRepository) {
+        super(projectRepository);
+        this.projectRepository = projectRepository;
+        this.taskRepository = taskRepository;
+        this.userRepository = userRepository;
     }
 
     public void createByName(final String projectName, final String userId) throws RuntimeException {

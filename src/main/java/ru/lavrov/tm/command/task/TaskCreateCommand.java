@@ -1,6 +1,6 @@
 package ru.lavrov.tm.command.task;
 
-import ru.lavrov.tm.api.TaskService;
+import ru.lavrov.tm.api.ITaskService;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.entity.User;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
@@ -41,7 +41,7 @@ public final class TaskCreateCommand extends AbstractCommand {
         final User currentUser = bootstrap.getCurrentUser();
         if (currentUser == null)
             throw new UserIsNotAuthorizedException();
-        final TaskService taskService = bootstrap.getTaskService();
+        final ITaskService taskService = bootstrap.getTaskService();
         taskService.createByName(taskName, projectName, currentUser.getId());
         System.out.println("[ok]");
         System.out.println();

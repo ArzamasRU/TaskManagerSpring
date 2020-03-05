@@ -1,6 +1,10 @@
 package ru.lavrov.tm.repository;
 
+import ru.lavrov.tm.api.IRepository;
+import ru.lavrov.tm.api.ITaskRepository;
+import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Task;
+import ru.lavrov.tm.exception.entity.EntityNotExistsException;
 import ru.lavrov.tm.exception.project.ProjectNameIsInvalidException;
 import ru.lavrov.tm.exception.project.ProjectNotExistsException;
 import ru.lavrov.tm.exception.task.TaskExistsException;
@@ -12,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public final class TaskRepositoryImpl extends AbstractTaskRepository {
+public final class TaskRepositoryImpl extends AbstractRepository<Task> implements ITaskRepository {
     public void removeTaskByName(final String taskName, final String userId){
         if (taskName == null || taskName.isEmpty())
             throw new TaskNameIsInvalidException();
@@ -23,7 +27,7 @@ public final class TaskRepositoryImpl extends AbstractTaskRepository {
             throw new TaskNotExistsException();
         if (!task.getUserId().equals(userId))
             throw new TaskNotExistsException();
-        tasks.remove(task.getId());
+        entities.remove(task.getId());
     }
 
     public Collection<Task> getProjectTasks(final String projectId, final String userId){
@@ -32,7 +36,7 @@ public final class TaskRepositoryImpl extends AbstractTaskRepository {
         if (projectId == null || projectId.isEmpty())
             throw new ProjectNotExistsException();
         final List<Task> list = new ArrayList();
-        for (final Task task : tasks.values()) {
+        for (final Task task : entities.values()) {
             if (task == null)
                 continue;
             boolean isProjectIdEquals = task.getProjectId().equals(projectId);
@@ -49,13 +53,13 @@ public final class TaskRepositoryImpl extends AbstractTaskRepository {
             throw new UserIsNotAuthorizedException();
         if (projectId == null || projectId.isEmpty())
             throw new ProjectNotExistsException();
-        for (final Task task : tasks.values()) {
+        for (final Task task : entities.values()) {
             if (task == null)
                 continue;
             boolean isProjectIdEquals = task.getProjectId().equals(projectId);
             boolean isTaskUserIdEquals = task.getUserId().equals(userId);
             if (isProjectIdEquals && isTaskUserIdEquals) {
-                tasks.remove(task.getId());
+                entities.remove(task.getId());
             }
         }
     }
@@ -68,7 +72,7 @@ public final class TaskRepositoryImpl extends AbstractTaskRepository {
         if (projectId == null)
             throw new ProjectNotExistsException();
         Task currentTask = null;
-        for (final Task task: tasks.values()) {
+        for (final Task task: entities.values()) {
             if (task == null)
                 continue;
             boolean isProjectIdEquals = task.getProjectId().equals(projectId);

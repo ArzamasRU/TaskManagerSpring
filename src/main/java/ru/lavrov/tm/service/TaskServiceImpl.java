@@ -1,7 +1,6 @@
 package ru.lavrov.tm.service;
 
-import ru.lavrov.tm.api.TaskRepository;
-import ru.lavrov.tm.api.UserRepository;
+import ru.lavrov.tm.api.*;
 import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Task;
 import ru.lavrov.tm.exception.project.ProjectNameIsInvalidException;
@@ -9,12 +8,19 @@ import ru.lavrov.tm.exception.project.ProjectNotExistsException;
 import ru.lavrov.tm.exception.task.TaskNameExistsException;
 import ru.lavrov.tm.exception.task.TaskNameIsInvalidException;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
-import ru.lavrov.tm.repository.AbstractProjectRepository;
+import ru.lavrov.tm.repository.AbstractRepository;
 
-public final class TaskServiceImpl extends AbstractTaskService {
-    public TaskServiceImpl(final TaskRepository taskRepository, final AbstractProjectRepository projectRepository,
-                           final UserRepository userRepository) {
-        super(projectRepository, taskRepository, userRepository);
+public final class TaskServiceImpl extends AbstractService<Task> implements ITaskService {
+    protected final IProjectRepository projectRepository;
+    protected final ITaskRepository taskRepository;
+    protected final IUserRepository userRepository;
+
+    public TaskServiceImpl(final ITaskRepository taskRepository, final IProjectRepository projectRepository,
+                              final IUserRepository userRepository) {
+        super(taskRepository);
+        this.projectRepository = projectRepository;
+        this.taskRepository = taskRepository;
+        this.userRepository = userRepository;
     }
 
     public void createByName(final String taskName, final String projectName, final String userId)

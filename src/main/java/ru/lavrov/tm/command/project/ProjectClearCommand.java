@@ -1,6 +1,6 @@
 package ru.lavrov.tm.command.project;
 
-import ru.lavrov.tm.api.ProjectService;
+import ru.lavrov.tm.api.IProjectService;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.entity.User;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
@@ -13,7 +13,7 @@ public final class ProjectClearCommand extends AbstractCommand {
     private static final boolean SAFE = false;
     private static final Collection<Role> ROLES = Arrays.asList(Role.Admin);
     private static final String COMMAND = "project-clear";
-    private static final String DESCRIPTION = "Remove all projects.";
+    private static final String DESCRIPTION = "Remove all entities.";
 
     public ProjectClearCommand() {
         super();
@@ -34,7 +34,7 @@ public final class ProjectClearCommand extends AbstractCommand {
         final User currentUser = bootstrap.getCurrentUser();
         if (currentUser == null)
             throw new UserIsNotAuthorizedException();
-        final ProjectService projectService = bootstrap.getProjectService();
+        final IProjectService projectService = bootstrap.getProjectService();
         projectService.removeAll(currentUser.getId());
         System.out.println("[ok]");
         System.out.println();

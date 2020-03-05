@@ -1,6 +1,6 @@
 package ru.lavrov.tm.command.user;
 
-import ru.lavrov.tm.api.UserService;
+import ru.lavrov.tm.api.IUserService;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.entity.User;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
@@ -33,7 +33,7 @@ public final class UserDeleteCommand extends AbstractCommand {
         final User currentUser = bootstrap.getCurrentUser();
         if (currentUser == null)
             throw new UserIsNotAuthorizedException();
-        final UserService userService = bootstrap.getUserService();
+        final IUserService userService = bootstrap.getUserService();
         userService.remove(currentUser.getId(), null);
         System.out.println("[ok]");
         System.out.println();

@@ -5,11 +5,11 @@ import ru.lavrov.tm.entity.User;
 
 import java.util.List;
 
-public interface ServiceLocator {
+public interface IServiceLocator {
     List<AbstractCommand> getCommands();
-    ProjectService getProjectService();
-    TaskService getTaskService();
-    UserService getUserService();
+    IProjectService getProjectService();
+    ITaskService getTaskService();
+    IUserService getUserService();
     User getCurrentUser();
     void login(String login, String password);
     void logout();
