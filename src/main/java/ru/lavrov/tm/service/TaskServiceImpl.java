@@ -1,6 +1,5 @@
 package ru.lavrov.tm.service;
 
-import ru.lavrov.tm.api.ProjectRepository;
 import ru.lavrov.tm.api.TaskRepository;
 import ru.lavrov.tm.api.UserRepository;
 import ru.lavrov.tm.entity.Project;
@@ -10,9 +9,10 @@ import ru.lavrov.tm.exception.project.ProjectNotExistsException;
 import ru.lavrov.tm.exception.task.TaskNameExistsException;
 import ru.lavrov.tm.exception.task.TaskNameIsInvalidException;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
+import ru.lavrov.tm.repository.AbstractProjectRepository;
 
 public final class TaskServiceImpl extends AbstractTaskService {
-    public TaskServiceImpl(final TaskRepository taskRepository, final ProjectRepository projectRepository,
+    public TaskServiceImpl(final TaskRepository taskRepository, final AbstractProjectRepository projectRepository,
                            final UserRepository userRepository) {
         super(projectRepository, taskRepository, userRepository);
     }
@@ -25,7 +25,7 @@ public final class TaskServiceImpl extends AbstractTaskService {
             throw new ProjectNameIsInvalidException();
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        final Project project = (Project) projectRepository.findEntityByName(projectName, userId);
+        final Project project = projectRepository.findEntityByName(projectName, userId);
         if (project == null)
             throw new ProjectNotExistsException();
         if (!project.getUserId().equals(userId))
@@ -51,7 +51,7 @@ public final class TaskServiceImpl extends AbstractTaskService {
             throw new TaskNameIsInvalidException();
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        final Project project = (Project) projectRepository.findEntityByName(newName, userId);
+        final Project project = projectRepository.findEntityByName(newName, userId);
         if (project == null)
             throw new ProjectNotExistsException();
         taskRepository.renameTask(project.getId(), oldName, newName, userId);

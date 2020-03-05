@@ -45,7 +45,7 @@ public final class ProjectServiceImpl extends AbstractProjectService {
             throw new ProjectNameIsInvalidException();
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        final Project project = (Project) projectRepository.findEntityByName(projectName, userId);
+        final Project project = projectRepository.findEntityByName(projectName, userId);
         if (project == null)
             throw new ProjectNotExistsException();
         if (!project.getUserId().equals(userId))
