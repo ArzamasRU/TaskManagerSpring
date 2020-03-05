@@ -51,7 +51,7 @@ public abstract class AbstractProjectRepository implements ProjectRepository<Pro
         final Collection<Project> list = findAllByUser(userId);
         if (list == null)
             return;
-        for (Project project : list) {
+        for (final Project project : list) {
             if (project == null)
                 continue;
             remove(project.getId(), userId);
@@ -65,7 +65,7 @@ public abstract class AbstractProjectRepository implements ProjectRepository<Pro
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         Project currentProject = null;
-        for (Project project: projects.values()) {
+        for (final Project project: projects.values()) {
             if (project == null)
                 continue;
             boolean isProjectNameEquals = projectName.equals(project.getName());
@@ -83,7 +83,7 @@ public abstract class AbstractProjectRepository implements ProjectRepository<Pro
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         final Collection<Project> list = new ArrayList<>();
-        for (Project project : projects.values()) {
+        for (final Project project : projects.values()) {
             if (project == null)
                 continue;
             if (project.getUserId().equals(userId))

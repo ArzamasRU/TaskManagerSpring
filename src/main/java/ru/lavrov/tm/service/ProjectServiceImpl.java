@@ -1,6 +1,5 @@
 package ru.lavrov.tm.service;
 
-import ru.lavrov.tm.api.ProjectRepository;
 import ru.lavrov.tm.api.TaskRepository;
 import ru.lavrov.tm.api.UserRepository;
 import ru.lavrov.tm.entity.Project;
@@ -9,11 +8,12 @@ import ru.lavrov.tm.exception.project.ProjectNameExistsException;
 import ru.lavrov.tm.exception.project.ProjectNameIsInvalidException;
 import ru.lavrov.tm.exception.project.ProjectNotExistsException;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
+import ru.lavrov.tm.repository.AbstractProjectRepository;
 
 import java.util.Collection;
 
 public final class ProjectServiceImpl extends AbstractProjectService {
-    public ProjectServiceImpl(final ProjectRepository projectRepository, final TaskRepository taskRepository,
+    public ProjectServiceImpl(final AbstractProjectRepository projectRepository, final TaskRepository taskRepository,
                               final UserRepository userRepository) {
         super(projectRepository, taskRepository, userRepository);
     }
@@ -33,7 +33,7 @@ public final class ProjectServiceImpl extends AbstractProjectService {
             throw new ProjectNameIsInvalidException();
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        final Project project = (Project) projectRepository.findEntityByName(projectName, userId);
+        final Project project = projectRepository.findEntityByName(projectName, userId);
         if (project != null)
             throw new ProjectNameExistsException();
         remove(project.getId(), userId);

@@ -63,7 +63,7 @@ public abstract class AbstractUserRepository implements UserRepository<User> {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         User currentUser = null;
-        for (User user: users.values()) {
+        for (final User user: users.values()) {
             if (user == null)
                 continue;
             if (login.equals(user.getLogin())) {

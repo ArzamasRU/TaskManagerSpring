@@ -49,7 +49,7 @@ public final class UserDisplayCommand extends AbstractCommand {
         final Collection<Project> projectList = projectService.findAllByUser(currentUser.getId());
         if (projectList == null)
             return;
-        for (Project project: projectList) {
+        for (final Project project: projectList) {
             if (project == null)
                 continue;
             System.out.println(index++ + ". " + project);
@@ -59,7 +59,7 @@ public final class UserDisplayCommand extends AbstractCommand {
         final Collection<Task> taskList = taskService.findAllByUser(currentUser.getId());
         if (taskList == null)
             return;
-        for (Task task: taskList) {
+        for (final Task task: taskList) {
             if (task == null)
                 continue;
             System.out.println(index++ + ". " + task);

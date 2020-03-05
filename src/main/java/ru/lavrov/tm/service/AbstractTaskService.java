@@ -4,12 +4,13 @@ import ru.lavrov.tm.api.ProjectRepository;
 import ru.lavrov.tm.api.TaskRepository;
 import ru.lavrov.tm.api.TaskService;
 import ru.lavrov.tm.api.UserRepository;
+import ru.lavrov.tm.entity.Task;
 import ru.lavrov.tm.exception.task.TaskNotExistsException;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 
 import java.util.Collection;
 
-public abstract class AbstractTaskService<Task> implements TaskService<Task> {
+public abstract class AbstractTaskService implements TaskService<Task> {
     protected final ProjectRepository projectRepository;
     protected final TaskRepository taskRepository;
     protected final UserRepository userRepository;

@@ -41,7 +41,7 @@ public final class TaskListCommand extends AbstractCommand {
         final Collection<Task> taskList = taskService.findAllByUser(currentUser.getId());
         if (taskList == null)
             return;
-        for (Task task: taskList) {
+        for (final Task task: taskList) {
             if (task == null)
                 continue;
             System.out.println(index++ + ". " + task);

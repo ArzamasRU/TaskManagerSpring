@@ -2,12 +2,13 @@ package ru.lavrov.tm.service;
 
 import ru.lavrov.tm.api.UserRepository;
 import ru.lavrov.tm.api.UserService;
+import ru.lavrov.tm.entity.User;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 import ru.lavrov.tm.exception.user.UserNotExistsException;
 
 import java.util.Collection;
 
-public abstract class AbstractUserService<User> implements UserService<User> {
+public abstract class AbstractUserService implements UserService<User> {
     protected final UserRepository userRepository;
 
     protected AbstractUserService(final UserRepository userRepository) {

@@ -19,7 +19,7 @@ public abstract class AbstractTaskRepository implements TaskRepository<Task> {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         final Collection<Task> list = new ArrayList<>();
-        for (Task task : tasks.values()) {
+        for (final Task task : tasks.values()) {
             if (task == null)
                 continue;
             if (task.getUserId().equals(userId))
@@ -64,7 +64,7 @@ public abstract class AbstractTaskRepository implements TaskRepository<Task> {
         final Collection<Task> list = findAllByUser(userId);
         if (list == null)
             return;
-        for (Task task : list) {
+        for (final Task task : list) {
             if (task == null)
                 continue;
             remove(task.getId(), userId);
@@ -78,7 +78,7 @@ public abstract class AbstractTaskRepository implements TaskRepository<Task> {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         Task currentTask = null;
-        for (Task task: tasks.values()) {
+        for (final Task task: tasks.values()) {
             if (task == null)
                 continue;
             boolean isTaskNameEquals = task.getName().equals(name);

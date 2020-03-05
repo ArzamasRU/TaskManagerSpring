@@ -41,7 +41,7 @@ public final class ProjectListCommand extends AbstractCommand {
         final Collection<Project> projectList = projectService.findAllByUser(currentUser.getId());
         if (projectList == null)
             return;
-        for (Project project: projectList) {
+        for (final Project project: projectList) {
             if (project == null)
                 continue;
             System.out.println(index++ + ". " + project);

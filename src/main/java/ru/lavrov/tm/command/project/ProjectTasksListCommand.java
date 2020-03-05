@@ -44,7 +44,7 @@ public final class ProjectTasksListCommand extends AbstractCommand {
         final Collection<Task> taskList = projectService.getProjectTasks(projectName, currentUser.getId());
         if (taskList == null)
             return;
-        for (Task task: taskList) {
+        for (final Task task: taskList) {
             if (task == null)
                 continue;
             System.out.println(task);

@@ -14,6 +14,7 @@ import ru.lavrov.tm.exception.command.CommandIsInvalidException;
 import ru.lavrov.tm.exception.command.CommandNotExistsException;
 import ru.lavrov.tm.exception.user.*;
 import ru.lavrov.tm.exception.util.UtilAlgorithmNotExistsException;
+import ru.lavrov.tm.repository.AbstractProjectRepository;
 import ru.lavrov.tm.repository.ProjectRepositoryImpl;
 import ru.lavrov.tm.repository.TaskRepositoryImpl;
 import ru.lavrov.tm.repository.UserRepositoryImpl;
@@ -27,7 +28,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 public final class Bootstrap implements ServiceLocator{
-    private final ProjectRepository projectRepository = new ProjectRepositoryImpl();
+    private final AbstractProjectRepository projectRepository = new ProjectRepositoryImpl();
     private final TaskRepository taskRepository = new TaskRepositoryImpl();
     private final UserRepository userRepository = new UserRepositoryImpl();
     private final ProjectService projectService = new ProjectServiceImpl(projectRepository, taskRepository, userRepository);
@@ -91,7 +92,7 @@ public final class Bootstrap implements ServiceLocator{
             UserDeleteCommand.class);
         if (commandList == null)
             return;
-        for (Class command : commandList) {
+        for (final Class command : commandList) {
             if (command == null)
                 continue;
             registry((AbstractCommand) command.newInstance());
@@ -144,7 +145,7 @@ public final class Bootstrap implements ServiceLocator{
         if (role == null)
             throw new UserRoleIsInvalidException();
         final String currentUserRoleName = role.displayName();
-        for (Role currentRole : listRoles) {
+        for (final Role currentRole : listRoles) {
             if (currentRole == null)
                 continue;
             if (currentRole.displayName().equals(currentUserRoleName))

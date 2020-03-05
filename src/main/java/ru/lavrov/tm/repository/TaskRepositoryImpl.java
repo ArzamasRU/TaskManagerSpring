@@ -32,7 +32,7 @@ public final class TaskRepositoryImpl extends AbstractTaskRepository {
         if (projectId == null || projectId.isEmpty())
             throw new ProjectNotExistsException();
         final List<Task> list = new ArrayList();
-        for (Task task : tasks.values()) {
+        for (final Task task : tasks.values()) {
             if (task == null)
                 continue;
             boolean isProjectIdEquals = task.getProjectId().equals(projectId);
@@ -49,7 +49,7 @@ public final class TaskRepositoryImpl extends AbstractTaskRepository {
             throw new UserIsNotAuthorizedException();
         if (projectId == null || projectId.isEmpty())
             throw new ProjectNotExistsException();
-        for (Task task : tasks.values()) {
+        for (final Task task : tasks.values()) {
             if (task == null)
                 continue;
             boolean isProjectIdEquals = task.getProjectId().equals(projectId);
@@ -68,7 +68,7 @@ public final class TaskRepositoryImpl extends AbstractTaskRepository {
         if (projectId == null)
             throw new ProjectNotExistsException();
         Task currentTask = null;
-        for (Task task: tasks.values()) {
+        for (final Task task: tasks.values()) {
             if (task == null)
                 continue;
             boolean isProjectIdEquals = task.getProjectId().equals(projectId);

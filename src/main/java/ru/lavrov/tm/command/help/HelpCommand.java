@@ -29,7 +29,7 @@ public final class HelpCommand extends AbstractCommand {
         final Collection<AbstractCommand> list = bootstrap.getCommands();
         if (list == null)
             return;
-        for (AbstractCommand command: list) {
+        for (final AbstractCommand command: list) {
             if (command == null)
                 continue;
             System.out.println(command.getCommand() + ": " + command.getDescription());
