@@ -40,7 +40,7 @@ public abstract class AbstractProjectService implements ProjectService<Project> 
     public void remove(final String projectId, final String userId) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        if (projectId == null)
+        if (projectId == null || projectId.isEmpty())
             throw new ProjectNotExistsException();
         projectRepository.remove(projectId, userId);
     }
