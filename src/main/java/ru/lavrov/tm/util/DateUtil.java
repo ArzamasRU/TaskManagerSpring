@@ -7,7 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class DateUtil {
+public final class DateUtil {
     @NotNull private static final SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
 
     @Nullable

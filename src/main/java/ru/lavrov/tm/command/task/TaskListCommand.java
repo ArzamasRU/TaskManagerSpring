@@ -9,7 +9,7 @@ import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.entity.Task;
 import ru.lavrov.tm.entity.User;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
-import ru.lavrov.tm.role.Role;
+import ru.lavrov.tm.enumerate.Role;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -18,7 +18,7 @@ import java.util.Collection;
 public final class TaskListCommand extends AbstractCommand {
     private static final boolean SAFE = false;
     @Nullable
-    private static final Collection<Role> ROLES = Arrays.asList(Role.Admin);
+    private static final Collection<Role> ROLES = Arrays.asList(Role.ADMIN);
     @NotNull
     private static final String COMMAND = "task-list";
     @NotNull
@@ -39,12 +39,12 @@ public final class TaskListCommand extends AbstractCommand {
     @Override
     public void execute() {
         System.out.println("[TASK LIST]");
-        final ITaskService taskService = bootstrap.getTaskService();
-        final User currentUser = bootstrap.getCurrentUser();
+        @Nullable final ITaskService taskService = bootstrap.getTaskService();
+        @Nullable final User currentUser = bootstrap.getCurrentUser();
         if (currentUser == null)
             throw new UserIsNotAuthorizedException();
         int index = 1;
-        final Collection<Task> taskList = taskService.findAll(currentUser.getId());
+        @Nullable final Collection<Task> taskList = taskService.findAll(currentUser.getId());
         if (taskList == null)
             return;
         for (@Nullable final IEntity task: taskList) {

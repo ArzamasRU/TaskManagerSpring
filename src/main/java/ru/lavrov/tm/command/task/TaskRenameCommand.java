@@ -7,17 +7,17 @@ import ru.lavrov.tm.api.ITaskService;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.entity.User;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
-import ru.lavrov.tm.role.Role;
+import ru.lavrov.tm.enumerate.Role;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Scanner;
 
 @NoArgsConstructor
-public class TaskRenameCommand extends AbstractCommand {
+public final class TaskRenameCommand extends AbstractCommand {
     private static final boolean SAFE = false;
     @Nullable
-    private static final Collection<Role> ROLES = Arrays.asList(Role.Admin, Role.User);
+    private static final Collection<Role> ROLES = Arrays.asList(Role.ADMIN, Role.USER);
     @NotNull
     private static final String COMMAND = "task-rename";
     @NotNull
@@ -37,18 +37,18 @@ public class TaskRenameCommand extends AbstractCommand {
 
     @Override
     public void execute() {
-        final Scanner input = new Scanner(System.in);
+        @Nullable final Scanner input = new Scanner(System.in);
         System.out.println("[task rename]");
         System.out.println("enter project name:");
-        final String projectName = input.nextLine();
+        @Nullable final String projectName = input.nextLine();
         System.out.println("enter task name:");
-        final String oldName = input.nextLine();
+        @Nullable final String oldName = input.nextLine();
         System.out.println("enter new task name:");
-        final String newName = input.nextLine();
-        final User currentUser = bootstrap.getCurrentUser();
+        @Nullable final String newName = input.nextLine();
+        @Nullable final User currentUser = bootstrap.getCurrentUser();
         if (currentUser == null)
             throw new UserIsNotAuthorizedException();
-        final ITaskService taskService = bootstrap.getTaskService();
+        @Nullable final ITaskService taskService = bootstrap.getTaskService();
         taskService.renameTask(projectName ,oldName, newName, currentUser.getId());
         System.out.println("[ok]");
         System.out.println();

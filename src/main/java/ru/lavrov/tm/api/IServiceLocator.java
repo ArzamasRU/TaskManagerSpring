@@ -8,7 +8,7 @@ import ru.lavrov.tm.entity.User;
 import java.util.List;
 
 public interface IServiceLocator {
-    @NotNull IProjectService getProjectService();
-    @NotNull ITaskService getTaskService();
-    @NotNull IUserService getUserService();
+    IProjectService getProjectService();
+    ITaskService getTaskService();
+    IUserService getUserService();
 }

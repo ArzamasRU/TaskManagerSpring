@@ -9,7 +9,7 @@ public interface IRepository<T extends IEntity> {
     void merge(@Nullable T entity);
     void remove(@Nullable String entityId, @Nullable String userId);
     void removeAll(@Nullable String userId);
-    @Nullable Collection<T> findAll(@Nullable String userId);
-    @Nullable T findEntityByName(@Nullable String entityName, @Nullable String userId);
+    Collection<T> findAll(@Nullable String userId);
+    T findEntityByName(@Nullable String entityName, @Nullable String userId);
 }
 

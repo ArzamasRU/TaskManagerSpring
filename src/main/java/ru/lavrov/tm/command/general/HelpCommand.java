@@ -4,7 +4,7 @@ import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.command.AbstractCommand;
-import ru.lavrov.tm.role.Role;
+import ru.lavrov.tm.enumerate.Role;
 
 import java.util.Collection;
 
@@ -32,7 +32,7 @@ public final class HelpCommand extends AbstractCommand {
 
     @Override
     public void execute() {
-        final Collection<AbstractCommand> list = bootstrap.getCommands();
+        @Nullable final Collection<AbstractCommand> list = bootstrap.getCommands();
         if (list == null)
             return;
         for (@Nullable final AbstractCommand command: list) {

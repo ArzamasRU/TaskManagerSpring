@@ -43,7 +43,7 @@ public final class ProjectServiceImpl extends AbstractService<Project> implement
             throw new ProjectNameIsInvalidException();
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        final Project project = projectRepository.findEntityByName(projectName, userId);
+        @Nullable final Project project = projectRepository.findEntityByName(projectName, userId);
         if (project != null)
             throw new ProjectNameExistsException();
         remove(project.getId(), userId);
@@ -57,12 +57,12 @@ public final class ProjectServiceImpl extends AbstractService<Project> implement
             throw new ProjectNameIsInvalidException();
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        final Project project = projectRepository.findEntityByName(projectName, userId);
+        @Nullable final Project project = projectRepository.findEntityByName(projectName, userId);
         if (project == null)
             throw new ProjectNotExistsException();
         if (!project.getUserId().equals(userId))
             throw new ProjectNotExistsException();
-        final Collection<Task> collection = taskRepository.getProjectTasks(project.getId(), userId);
+        @Nullable final Collection<Task> collection = taskRepository.getProjectTasks(project.getId(), userId);
         return collection;
     }
 

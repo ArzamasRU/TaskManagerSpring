@@ -32,7 +32,7 @@ public final class TaskServiceImpl extends AbstractService<Task> implements ITas
             throw new ProjectNameIsInvalidException();
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        final Project project = projectRepository.findEntityByName(projectName, userId);
+        @Nullable final Project project = projectRepository.findEntityByName(projectName, userId);
         if (project == null)
             throw new ProjectNotExistsException();
         if (!project.getUserId().equals(userId))
@@ -58,7 +58,7 @@ public final class TaskServiceImpl extends AbstractService<Task> implements ITas
             throw new TaskNameIsInvalidException();
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        final Project project = projectRepository.findEntityByName(newName, userId);
+        @Nullable final Project project = projectRepository.findEntityByName(newName, userId);
         if (project == null)
             throw new ProjectNotExistsException();
         taskRepository.renameTask(project.getId(), oldName, newName, userId);

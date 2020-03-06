@@ -6,7 +6,11 @@ import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.*;
 import ru.lavrov.tm.entity.User;
 import ru.lavrov.tm.exception.user.*;
-import ru.lavrov.tm.role.Role;
+import ru.lavrov.tm.enumerate.Role;
+import ru.lavrov.tm.exception.util.UtilAlgorithmNotExistsException;
+import ru.lavrov.tm.util.HashUtil;
+
+import java.security.NoSuchAlgorithmException;
 
 public final class UserServiceImpl extends AbstractService<User> implements IUserService {
     @NotNull protected final IProjectRepository projectRepository;
@@ -29,13 +33,26 @@ public final class UserServiceImpl extends AbstractService<User> implements IUse
             throw new UserPasswordIsInvalidException();
         if (role == null || role.isEmpty())
             throw new UserRoleIsInvalidException();
-        final Role currentRole = Role.valueOf(role);
-        if (currentRole == null)
+        @Nullable final Role currentRole = Role.valueOf(role);
+        boolean roleExists = false;
+        for (Role curRole : Role.values()) {
+            if (role.equals(curRole.getRole())) {
+                roleExists = true;
+                break;
+            }
+        }
+        if (!roleExists)
             throw new UserRoleIsInvalidException();
-        final User user = userRepository.findEntityByName(login, null);
+        @Nullable final User user = userRepository.findEntityByName(login, null);
         if (user != null)
             throw new UserLoginExistsException();
-        persist(new User(login, password, currentRole));
+        @NotNull String hashedPassword;
+        try {
+            hashedPassword = HashUtil.getHash(password);
+        } catch (NoSuchAlgorithmException e) {
+            throw new UtilAlgorithmNotExistsException();
+        }
+        persist(new User(login, hashedPassword, currentRole));
     }
 
     public void updatePassword(@Nullable final String userId, @Nullable final String newPassword) {
@@ -51,7 +68,7 @@ public final class UserServiceImpl extends AbstractService<User> implements IUse
             throw new UserIsNotAuthorizedException();
         if (newLogin == null || newLogin.isEmpty())
             throw new UserLoginIsInvalidException();
-        final User user =  userRepository.findEntityByName(newLogin, null);
+        @Nullable final User user = userRepository.findEntityByName(newLogin, null);
         if (user != null)
             throw new UserLoginExistsException();
         userRepository.updateLogin(userId, newLogin);

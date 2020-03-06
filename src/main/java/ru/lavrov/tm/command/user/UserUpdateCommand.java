@@ -7,7 +7,7 @@ import ru.lavrov.tm.api.IUserService;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.entity.User;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
-import ru.lavrov.tm.role.Role;
+import ru.lavrov.tm.enumerate.Role;
 
 import java.util.Collection;
 import java.util.Scanner;
@@ -36,14 +36,14 @@ public final class UserUpdateCommand extends AbstractCommand {
 
     @Override
     public void execute() {
-        final Scanner input = new Scanner(System.in);
+        @Nullable final Scanner input = new Scanner(System.in);
         System.out.println("[Update user profile]");
         System.out.println("enter new login:");
-        final String newLogin = input.nextLine();
-        final User currentUser = bootstrap.getCurrentUser();
+        @Nullable final String newLogin = input.nextLine();
+        @Nullable final User currentUser = bootstrap.getCurrentUser();
         if (currentUser == null)
             throw new UserIsNotAuthorizedException();
-        final IUserService userService = bootstrap.getUserService();
+        @Nullable final IUserService userService = bootstrap.getUserService();
         userService.updateLogin(currentUser.getId(), newLogin);
         System.out.println();
     }

@@ -19,10 +19,12 @@ public final class ProjectRepositoryImpl extends AbstractRepository<Project> imp
             throw new ProjectNameIsInvalidException();
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        Project project = findEntityByName(newName, userId);
+        @Nullable Project project = findEntityByName(newName, userId);
         if (project != null)
             throw new ProjectNameExistsException();
         project = findEntityByName(oldName, userId);
+        if (project != null)
+            throw new ProjectNameExistsException();
         if (!project.getUserId().equals(userId))
             throw new ProjectNotExistsException();
         project.setName(newName);

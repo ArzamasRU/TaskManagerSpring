@@ -11,7 +11,7 @@ import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Task;
 import ru.lavrov.tm.entity.User;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
-import ru.lavrov.tm.role.Role;
+import ru.lavrov.tm.enumerate.Role;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -21,7 +21,7 @@ import java.util.Scanner;
 public final class UserDisplayCommand extends AbstractCommand {
     private static final boolean SAFE = false;
     @Nullable
-    private static final Collection<Role> ROLES = Arrays.asList(Role.Admin, Role.User);
+    private static final Collection<Role> ROLES = Arrays.asList(Role.ADMIN, Role.USER);
     @NotNull
     private static final String COMMAND = "user-display";
     @NotNull
@@ -41,10 +41,10 @@ public final class UserDisplayCommand extends AbstractCommand {
 
     @Override
     public void execute() {
-        final Scanner input = new Scanner(System.in);
-        final IProjectService projectService = bootstrap.getProjectService();
-        final ITaskService taskService = bootstrap.getTaskService();
-        final User currentUser = bootstrap.getCurrentUser();
+        @Nullable final Scanner input = new Scanner(System.in);
+        @Nullable final IProjectService projectService = bootstrap.getProjectService();
+        @Nullable final ITaskService taskService = bootstrap.getTaskService();
+        @Nullable final User currentUser = bootstrap.getCurrentUser();
         if (currentUser == null)
             throw new UserIsNotAuthorizedException();
         System.out.println("[Display user profile]");
@@ -52,7 +52,7 @@ public final class UserDisplayCommand extends AbstractCommand {
         System.out.println(currentUser.getLogin());
         System.out.println("attached entities:");
         int index = 1;
-        final Collection<Project> projectList = projectService.findAll(currentUser.getId());
+        @Nullable final Collection<Project> projectList = projectService.findAll(currentUser.getId());
         if (projectList == null)
             return;
         for (@Nullable final IEntity project: projectList) {
@@ -62,7 +62,7 @@ public final class UserDisplayCommand extends AbstractCommand {
         }
         System.out.println("attached tasks:");
         index = 1;
-        final Collection<Task> taskList = taskService.findAll(currentUser.getId());
+        @Nullable final Collection<Task> taskList = taskService.findAll(currentUser.getId());
         if (taskList == null)
             return;
         for (@Nullable final IEntity task: taskList) {

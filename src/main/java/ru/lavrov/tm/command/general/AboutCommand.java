@@ -6,12 +6,12 @@ import org.apache.log4j.BasicConfigurator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.command.AbstractCommand;
-import ru.lavrov.tm.role.Role;
+import ru.lavrov.tm.enumerate.Role;
 
 import java.util.Collection;
 
 @NoArgsConstructor
-public class AboutCommand extends AbstractCommand {
+public final class AboutCommand extends AbstractCommand {
     private static final boolean SAFE = true;
     @Nullable
     private static final Collection<Role> ROLES = null;

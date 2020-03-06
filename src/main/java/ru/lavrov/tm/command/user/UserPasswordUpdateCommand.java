@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.IUserService;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.entity.User;
-import ru.lavrov.tm.role.Role;
+import ru.lavrov.tm.enumerate.Role;
 
 import java.util.Collection;
 import java.util.Scanner;
@@ -35,12 +35,12 @@ public final class UserPasswordUpdateCommand extends AbstractCommand {
 
     @Override
     public void execute() {
-        final Scanner input = new Scanner(System.in);
+        @Nullable final Scanner input = new Scanner(System.in);
         System.out.println("[Change user password]");
         System.out.println("enter new password:");
-        final String newPassword = input.nextLine();
-        final IUserService userService = bootstrap.getUserService();
-        final User sessionUser = bootstrap.getCurrentUser();
+        @Nullable final String newPassword = input.nextLine();
+        @Nullable final IUserService userService = bootstrap.getUserService();
+        @Nullable final User sessionUser = bootstrap.getCurrentUser();
         userService.updatePassword(sessionUser.getId(), newPassword);
         System.out.println("[ok]");
         System.out.println();

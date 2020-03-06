@@ -23,7 +23,7 @@ public abstract class AbstractRepository<T extends IEntity> implements IReposito
     public void persist(@Nullable final T entity) {
         if (entity == null)
             throw new EntityNotExistsException();
-        final String id = entity.getId();
+        @Nullable final String id = entity.getId();
         if (entities.containsKey(id))
             throw new EntityExistsException();
         entities.put(id, entity);
@@ -42,7 +42,7 @@ public abstract class AbstractRepository<T extends IEntity> implements IReposito
             throw new EntityNotExistsException();
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        final T entity = entities.get(entityId);
+        @Nullable final T entity = entities.get(entityId);
         if (!entity.getUserId().equals(userId))
             throw new EntityNotExistsException();
         entities.remove(entityId);
@@ -52,7 +52,7 @@ public abstract class AbstractRepository<T extends IEntity> implements IReposito
     public void removeAll(@Nullable final String userId){
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        final Collection<T> list = findAll(userId);
+        @Nullable final Collection<T> list = findAll(userId);
         if (list == null)
             return;
         for (@Nullable final T entity : list) {
@@ -69,7 +69,7 @@ public abstract class AbstractRepository<T extends IEntity> implements IReposito
             throw new EntityNameIsInvalidException();
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        T currentEntity = null;
+        @Nullable T currentEntity = null;
         for (@Nullable final T entity : entities.values()) {
             if (entity == null)
                 continue;
@@ -88,7 +88,7 @@ public abstract class AbstractRepository<T extends IEntity> implements IReposito
     public Collection<T> findAll(@Nullable final String userId) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        final Collection<T> list = new ArrayList<>();
+        @Nullable final Collection<T> list = new ArrayList<>();
         for (@Nullable final T entity : entities.values()) {
             if (entity == null)
                 continue;

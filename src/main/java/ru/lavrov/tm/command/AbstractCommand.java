@@ -3,9 +3,8 @@ package ru.lavrov.tm.command;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.api.IServiceLocator;
 import ru.lavrov.tm.bootstrap.Bootstrap;
-import ru.lavrov.tm.role.Role;
+import ru.lavrov.tm.enumerate.Role;
 
 import java.util.Collection;
 

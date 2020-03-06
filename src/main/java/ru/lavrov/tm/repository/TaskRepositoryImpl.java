@@ -25,7 +25,7 @@ public final class TaskRepositoryImpl extends AbstractRepository<Task> implement
             throw new TaskNameIsInvalidException();
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        final Task task = findEntityByName(taskName, userId);
+        @Nullable final Task task = findEntityByName(taskName, userId);
         if (task == null)
             throw new TaskNotExistsException();
         if (!task.getUserId().equals(userId))
@@ -40,7 +40,7 @@ public final class TaskRepositoryImpl extends AbstractRepository<Task> implement
             throw new UserIsNotAuthorizedException();
         if (projectId == null || projectId.isEmpty())
             throw new ProjectNotExistsException();
-        final List<Task> list = new ArrayList();
+        @Nullable final List<Task> list = new ArrayList();
         for (@Nullable final Task task : entities.values()) {
             if (task == null)
                 continue;
@@ -80,7 +80,7 @@ public final class TaskRepositoryImpl extends AbstractRepository<Task> implement
             throw new UserIsNotAuthorizedException();
         if (projectId == null)
             throw new ProjectNotExistsException();
-        Task currentTask = null;
+        @Nullable Task currentTask = null;
         for (@Nullable final Task task: entities.values()) {
             if (task == null)
                 continue;
@@ -105,7 +105,7 @@ public final class TaskRepositoryImpl extends AbstractRepository<Task> implement
             throw new TaskNameIsInvalidException();
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        final Task task = findEntityByName(oldName, userId);
+        @Nullable final Task task = findEntityByName(oldName, userId);
         if (task == null)
             throw new TaskNotExistsException();
         if (task.getUserId().equals(userId))

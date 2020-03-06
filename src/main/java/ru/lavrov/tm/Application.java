@@ -1,6 +1,8 @@
 package ru.lavrov.tm;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.lavrov.tm.api.IServiceLocator;
 import ru.lavrov.tm.bootstrap.Bootstrap;
 import ru.lavrov.tm.command.general.AboutCommand;
 import ru.lavrov.tm.command.general.ExitCommand;
@@ -12,7 +14,7 @@ import ru.lavrov.tm.command.user.*;
 import java.util.Arrays;
 import java.util.Collection;
 
-public class Application {
+public final class Application {
     @Nullable
     private static final Collection<Class> CLASSES = Arrays.asList(ExitCommand.class,
             HelpCommand.class,
@@ -36,6 +38,7 @@ public class Application {
             UserDeleteCommand.class);
 
     public static void main(@Nullable String[] args) throws IllegalAccessException, InstantiationException {
-        new Bootstrap().init(CLASSES);
+        @NotNull Bootstrap serviceLocator = new Bootstrap();
+        serviceLocator.init(CLASSES);
     }
 }

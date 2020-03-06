@@ -16,7 +16,7 @@ import ru.lavrov.tm.exception.util.UtilAlgorithmNotExistsException;
 import ru.lavrov.tm.repository.ProjectRepositoryImpl;
 import ru.lavrov.tm.repository.TaskRepositoryImpl;
 import ru.lavrov.tm.repository.UserRepositoryImpl;
-import ru.lavrov.tm.role.Role;
+import ru.lavrov.tm.enumerate.Role;
 import ru.lavrov.tm.service.ProjectServiceImpl;
 import ru.lavrov.tm.service.TaskServiceImpl;
 import ru.lavrov.tm.service.UserServiceImpl;
@@ -52,7 +52,7 @@ public final class Bootstrap implements IServiceLocator {
         initClasses(classes);
         initUsers();
         System.out.println("*** WELCOME TO TASK MANAGER ***");
-        String command = null;
+        @Nullable String command = null;
 
         while (!"exit".equals(command)) {
             command = input.nextLine();
@@ -77,36 +77,32 @@ public final class Bootstrap implements IServiceLocator {
     }
 
     private void initUsers(){
-        try {
-            userService.createByLogin("user", HashUtil.getHash("user"), String.valueOf(Role.User));
-            userService.createByLogin("admin", HashUtil.getHash("admin"), String.valueOf(Role.Admin));
-        } catch (NoSuchAlgorithmException e) {
-            new UtilAlgorithmNotExistsException();
-        }
+        userService.createByLogin("user", "user", Role.USER.getRole());
+        userService.createByLogin("admin", "admin", Role.ADMIN.getRole());
     }
 
     private void registry(@Nullable final AbstractCommand command) {
         if (command == null)
             throw new CommandNotExistsException();
-        final String cliCommand = command.getCommand();
-        final String cliDescription = command.getDescription();
+        @Nullable final String cliCommand = command.getCommand();
+        @Nullable final String cliDescription = command.getDescription();
         if (cliCommand == null || cliCommand.isEmpty())
             throw new CommandIsInvalidException();
         if (cliDescription == null || cliDescription.isEmpty())
             throw new CommandDescriptionIsInvalidException();
-        command.setBootstrap((Bootstrap) this);
+        command.setBootstrap(this);
         commands.put(cliCommand, command);
     }
 
     private void execute(@Nullable final String command) {
         if (command == null || command.isEmpty())
             throw new CommandIsInvalidException();
-        final AbstractCommand abstractCommand = commands.get(command);
+        @Nullable final AbstractCommand abstractCommand = commands.get(command);
         if (abstractCommand == null)
             throw new CommandNotExistsException();
         if (currentUser == null && !abstractCommand.isSafe())
             throw new UserIsNotAuthorizedException();
-        Role role;
+        @Nullable Role role;
         if (currentUser == null)
             role = null;
         else
@@ -121,14 +117,7 @@ public final class Bootstrap implements IServiceLocator {
             return true;
         if (role == null)
             throw new UserRoleIsInvalidException();
-        final String currentUserRoleName = role.displayName();
-        for (@Nullable final Role currentRole : listRoles) {
-            if (currentRole == null)
-                continue;
-            if (currentRole.displayName().equals(currentUserRoleName))
-                return true;
-        }
-        return false;
+        return listRoles.contains(role);
     }
 
     @Nullable
@@ -141,7 +130,7 @@ public final class Bootstrap implements IServiceLocator {
             throw new UserLoginIsInvalidException();
         if (password == null || password.isEmpty())
             throw new UserPasswordIsInvalidException();
-        final User user = userRepository.findEntityByName(login, null);
+        @Nullable final User user = userRepository.findEntityByName(login, null);
         if (user == null)
             throw new UserLoginNotExistsException();
         if (!password.equals(user.getPassword()))
