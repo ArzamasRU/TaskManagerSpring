@@ -1,27 +1,32 @@
-package ru.lavrov.tm.command.about;
+package ru.lavrov.tm.command.general;
 
 import com.jcabi.manifests.Manifests;
+import lombok.NoArgsConstructor;
 import org.apache.log4j.BasicConfigurator;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.role.Role;
 
 import java.util.Collection;
 
+@NoArgsConstructor
 public class AboutCommand extends AbstractCommand {
     private static final boolean SAFE = true;
+    @Nullable
     private static final Collection<Role> ROLES = null;
+    @NotNull
     private static final String COMMAND = "about";
+    @NotNull
     private static final String DESCRIPTION = "About the program.";
 
-    public AboutCommand() {
-        super();
-    }
-
+    @NotNull
     @Override
     public String getCommand() {
         return COMMAND;
     }
 
+    @NotNull
     @Override
     public String getDescription() {
         return DESCRIPTION;
@@ -44,6 +49,7 @@ public class AboutCommand extends AbstractCommand {
         return SAFE;
     }
 
+    @Nullable
     @Override
     public Collection<Role> getRoles() {
         return ROLES;

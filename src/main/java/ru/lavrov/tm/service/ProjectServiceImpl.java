@@ -1,5 +1,7 @@
 package ru.lavrov.tm.service;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.*;
 import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Task;
@@ -12,9 +14,9 @@ import ru.lavrov.tm.repository.AbstractRepository;
 import java.util.Collection;
 
 public final class ProjectServiceImpl extends AbstractService<Project> implements IProjectService {
-    protected final IProjectRepository projectRepository;
-    protected final ITaskRepository taskRepository;
-    protected final IUserRepository userRepository;
+    @NotNull protected final IProjectRepository projectRepository;
+    @NotNull protected final ITaskRepository taskRepository;
+    @NotNull protected final IUserRepository userRepository;
 
     public ProjectServiceImpl(final IProjectRepository projectRepository, final ITaskRepository taskRepository,
                               final IUserRepository userRepository) {
@@ -24,7 +26,8 @@ public final class ProjectServiceImpl extends AbstractService<Project> implement
         this.userRepository = userRepository;
     }
 
-    public void createByName(final String projectName, final String userId) throws RuntimeException {
+    @Override
+    public void createByName(@Nullable final String projectName, @Nullable final String userId) {
         if (projectName == null || projectName.isEmpty())
             throw new ProjectNameIsInvalidException();
         if (userId == null || userId.isEmpty())
@@ -34,7 +37,8 @@ public final class ProjectServiceImpl extends AbstractService<Project> implement
         persist(new Project(projectName, userId));
     }
 
-    public void removeProjectByName(final String projectName, final String userId) throws RuntimeException {
+    @Override
+    public void removeProjectByName(@Nullable final String projectName, @Nullable final String userId) {
         if (projectName == null || projectName.isEmpty())
             throw new ProjectNameIsInvalidException();
         if (userId == null || userId.isEmpty())
@@ -46,7 +50,9 @@ public final class ProjectServiceImpl extends AbstractService<Project> implement
         taskRepository.removeProjectTasks(project.getId(), userId);
     }
 
-    public Collection<Task> getProjectTasks(final String projectName, final String userId) {
+    @Nullable
+    @Override
+    public Collection<Task> getProjectTasks(@Nullable final String projectName, @Nullable final String userId) {
         if (projectName == null || projectName.isEmpty())
             throw new ProjectNameIsInvalidException();
         if (userId == null || userId.isEmpty())
@@ -60,7 +66,10 @@ public final class ProjectServiceImpl extends AbstractService<Project> implement
         return collection;
     }
 
-    public void renameProject(final String oldName, final String newName, final String userId) throws RuntimeException {
+    @Nullable
+    @Override
+    public void renameProject(@Nullable final String oldName, @Nullable final String newName,
+                              @Nullable final String userId) {
         if (newName == null || newName.isEmpty() || oldName == null || oldName.isEmpty())
             throw new ProjectNameIsInvalidException();
         if (userId == null || userId.isEmpty())

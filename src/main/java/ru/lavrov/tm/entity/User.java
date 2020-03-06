@@ -1,73 +1,56 @@
 package ru.lavrov.tm.entity;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.IEntity;
 import ru.lavrov.tm.role.Role;
 
 import java.util.UUID;
 
+@NoArgsConstructor
+@Getter
+@Setter
 public final class User implements IEntity {
+    @Nullable
     private String id = UUID.randomUUID().toString();;
+    @Nullable
     private String login;
+    @Nullable
     private String password;
+    @Nullable
     private Role role;
 
-    public User() {
-    }
-
-    public User(final String login, final String password, final Role role) {
+    public User(@Nullable final String login, @Nullable final String password, @Nullable final Role role) {
         this.login = login;
         this.password = password;
         this.role = role;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(final String id) {
-        this.id = id;
-    }
-
+    @Nullable
+    @Override
     public String getUserId() {
         return getId();
     }
 
+    @Override
     public void setUserId(final String id) {
         setId(id);
     }
 
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(final Role role) {
-        this.role = role;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(final String login) {
-        this.login = login;
-    }
-
+    @Nullable
+    @Override
     public String getName() {
         return getLogin();
     }
 
+    @Override
     public void setName(final String login) {
         setLogin(login);
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(final String password) {
-        this.password = password;
-    }
-
+    @Nullable
     @Override
     public String toString() {
         return "login='" + login + '\'' +

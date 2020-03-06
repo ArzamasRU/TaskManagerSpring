@@ -1,9 +1,9 @@
 package ru.lavrov.tm.api;
 
+import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.entity.User;
 
 public interface IUserRepository extends IRepository<User> {
-    void updatePassword(String userId, String newPassword);
-    void updateLogin(String userId, String newLogin);
-    User findEntityByName(String entityName, String userId);
+    void updatePassword(@Nullable String userId, @Nullable String newPassword);
+    void updateLogin(@Nullable String userId, @Nullable String newLogin);
 }

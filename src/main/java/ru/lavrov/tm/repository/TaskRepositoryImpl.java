@@ -1,5 +1,7 @@
 package ru.lavrov.tm.repository;
 
+import org.jetbrains.annotations.Nullable;
+import ru.lavrov.tm.api.IEntity;
 import ru.lavrov.tm.api.IRepository;
 import ru.lavrov.tm.api.ITaskRepository;
 import ru.lavrov.tm.entity.Project;
@@ -17,7 +19,8 @@ import java.util.Collection;
 import java.util.List;
 
 public final class TaskRepositoryImpl extends AbstractRepository<Task> implements ITaskRepository {
-    public void removeTaskByName(final String taskName, final String userId){
+    @Override
+    public void removeTaskByName(@Nullable final String taskName, @Nullable final String userId){
         if (taskName == null || taskName.isEmpty())
             throw new TaskNameIsInvalidException();
         if (userId == null || userId.isEmpty())
@@ -30,13 +33,15 @@ public final class TaskRepositoryImpl extends AbstractRepository<Task> implement
         entities.remove(task.getId());
     }
 
-    public Collection<Task> getProjectTasks(final String projectId, final String userId){
+    @Nullable
+    @Override
+    public Collection<Task> getProjectTasks(@Nullable final String projectId, @Nullable final String userId){
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         if (projectId == null || projectId.isEmpty())
             throw new ProjectNotExistsException();
         final List<Task> list = new ArrayList();
-        for (final Task task : entities.values()) {
+        for (@Nullable final Task task : entities.values()) {
             if (task == null)
                 continue;
             boolean isProjectIdEquals = task.getProjectId().equals(projectId);
@@ -48,12 +53,13 @@ public final class TaskRepositoryImpl extends AbstractRepository<Task> implement
         return list;
     }
 
-    public void removeProjectTasks(final String projectId, final String userId){
+    @Override
+    public void removeProjectTasks(@Nullable final String projectId, @Nullable final String userId){
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         if (projectId == null || projectId.isEmpty())
             throw new ProjectNotExistsException();
-        for (final Task task : entities.values()) {
+        for (@Nullable final Task task : entities.values()) {
             if (task == null)
                 continue;
             boolean isProjectIdEquals = task.getProjectId().equals(projectId);
@@ -64,7 +70,10 @@ public final class TaskRepositoryImpl extends AbstractRepository<Task> implement
         }
     }
 
-    public Task findProjectTaskByName(final String taskName, final String projectId, final String userId){
+    @Nullable
+    @Override
+    public Task findProjectTaskByName(@Nullable final String taskName, @Nullable final String projectId,
+                                      @Nullable final String userId){
         if (taskName == null || taskName.isEmpty())
             throw new TaskNameIsInvalidException();
         if (userId == null || userId.isEmpty())
@@ -72,7 +81,7 @@ public final class TaskRepositoryImpl extends AbstractRepository<Task> implement
         if (projectId == null)
             throw new ProjectNotExistsException();
         Task currentTask = null;
-        for (final Task task: entities.values()) {
+        for (@Nullable final Task task: entities.values()) {
             if (task == null)
                 continue;
             boolean isProjectIdEquals = task.getProjectId().equals(projectId);
@@ -86,8 +95,10 @@ public final class TaskRepositoryImpl extends AbstractRepository<Task> implement
         return currentTask;
     }
 
-    public void renameTask(final String projectId, final String oldName, final String newName, final String userId)
-            throws RuntimeException {
+    @Nullable
+    @Override
+    public void renameTask(@Nullable final String projectId, @Nullable final String oldName,
+                           @Nullable final String newName, @Nullable final String userId) {
         if (projectId == null || projectId.isEmpty())
             throw new ProjectNameIsInvalidException();
         if (newName == null || newName.isEmpty() || oldName == null || oldName.isEmpty())

@@ -1,5 +1,7 @@
 package ru.lavrov.tm.repository;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.IEntity;
 import ru.lavrov.tm.api.IRepository;
 import ru.lavrov.tm.entity.Project;
@@ -14,10 +16,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class AbstractRepository<T extends IEntity> implements IRepository<T> {
+    @NotNull
     protected final Map<String, T> entities = new HashMap();
 
     @Override
-    public void persist(final T entity) throws RuntimeException{
+    public void persist(@Nullable final T entity) {
         if (entity == null)
             throw new EntityNotExistsException();
         final String id = entity.getId();
@@ -27,14 +30,14 @@ public abstract class AbstractRepository<T extends IEntity> implements IReposito
     }
 
     @Override
-    public void merge(final T entity){
+    public void merge(@Nullable final T entity){
         if (entity == null)
             throw new EntityNotExistsException();
         entities.put(entity.getId(), entity);
     }
 
     @Override
-    public void remove(final String entityId, final String userId){
+    public void remove(@Nullable final String entityId, @Nullable final String userId){
         if (entityId == null || entityId.isEmpty())
             throw new EntityNotExistsException();
         if (userId == null || userId.isEmpty())
@@ -46,27 +49,28 @@ public abstract class AbstractRepository<T extends IEntity> implements IReposito
     }
 
     @Override
-    public void removeAll(final String userId){
+    public void removeAll(@Nullable final String userId){
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         final Collection<T> list = findAll(userId);
         if (list == null)
             return;
-        for (final T entity : list) {
+        for (@Nullable final T entity : list) {
             if (entity == null)
                 continue;
             remove(entity.getId(), userId);
         }
     }
 
+    @Nullable
     @Override
-    public T findEntityByName(final String entityName, final String userId){
+    public T findEntityByName(@Nullable final String entityName, @Nullable final String userId){
         if (entityName == null || entityName.isEmpty())
             throw new EntityNameIsInvalidException();
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         T currentEntity = null;
-        for (final T entity : entities.values()) {
+        for (@Nullable final T entity : entities.values()) {
             if (entity == null)
                 continue;
             boolean isEntityNameEquals = entityName.equals(entity.getName());
@@ -79,12 +83,13 @@ public abstract class AbstractRepository<T extends IEntity> implements IReposito
         return currentEntity;
     }
 
+    @Nullable
     @Override
-    public Collection<T> findAll(final String userId) {
+    public Collection<T> findAll(@Nullable final String userId) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         final Collection<T> list = new ArrayList<>();
-        for (final T entity : entities.values()) {
+        for (@Nullable final T entity : entities.values()) {
             if (entity == null)
                 continue;
             if (entity.getUserId().equals(userId))

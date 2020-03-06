@@ -1,5 +1,8 @@
 package ru.lavrov.tm.command.user;
 
+import lombok.NoArgsConstructor;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.IUserService;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.exception.util.UtilAlgorithmNotExistsException;
@@ -10,21 +13,23 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 import java.util.Scanner;
 
+@NoArgsConstructor
 public final class UserRegisterCommand extends AbstractCommand {
     private static final boolean SAFE = true;
+    @Nullable
     private static final Collection<Role> ROLES = null;
+    @NotNull
     private static final String COMMAND = "register";
+    @NotNull
     private static final String DESCRIPTION = "Registration of new user.";
 
-    public UserRegisterCommand() {
-        super();
-    }
-
+    @NotNull
     @Override
     public String getCommand() {
         return COMMAND;
     }
 
+    @NotNull
     @Override
     public String getDescription() {
         return DESCRIPTION;
@@ -56,6 +61,7 @@ public final class UserRegisterCommand extends AbstractCommand {
         return SAFE;
     }
 
+    @Nullable
     @Override
     public Collection<Role> getRoles() {
         return ROLES;

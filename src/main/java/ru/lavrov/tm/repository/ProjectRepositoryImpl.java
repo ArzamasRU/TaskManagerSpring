@@ -1,5 +1,6 @@
 package ru.lavrov.tm.repository;
 
+import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.IEntity;
 import ru.lavrov.tm.api.IProjectRepository;
 import ru.lavrov.tm.api.IRepository;
@@ -12,7 +13,8 @@ import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 
 public final class ProjectRepositoryImpl extends AbstractRepository<Project> implements IProjectRepository {
     @Override
-    public void renameProject(final String oldName, final String newName, final String userId) throws RuntimeException {
+    public void renameProject(@Nullable final String oldName, @Nullable final String newName,
+                              @Nullable final String userId) {
         if (newName == null || newName.isEmpty() || oldName == null || oldName.isEmpty())
             throw new ProjectNameIsInvalidException();
         if (userId == null || userId.isEmpty())

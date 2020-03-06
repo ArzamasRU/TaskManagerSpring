@@ -1,5 +1,8 @@
 package ru.lavrov.tm.command.project;
 
+import lombok.NoArgsConstructor;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.IProjectService;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.entity.User;
@@ -10,28 +13,30 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Scanner;
 
+@NoArgsConstructor
 public class ProjectRenameCommand extends AbstractCommand {
     private static final boolean SAFE = false;
+    @Nullable
     private static final Collection<Role> ROLES = Arrays.asList(Role.Admin, Role.User);
+    @NotNull
     private static final String COMMAND = "project-rename";
+    @NotNull
     private static final String DESCRIPTION = "Rename project.";
 
-    public ProjectRenameCommand() {
-        super();
-    }
-
+    @NotNull
     @Override
     public String getCommand() {
         return COMMAND;
     }
 
+    @NotNull
     @Override
     public String getDescription() {
         return DESCRIPTION;
     }
 
     @Override
-    public void execute() throws RuntimeException {
+    public void execute() {
         final Scanner input = new Scanner(System.in);
         System.out.println("[project remove]");
         System.out.println("enter name:");
@@ -52,6 +57,7 @@ public class ProjectRenameCommand extends AbstractCommand {
         return SAFE;
     }
 
+    @Nullable
     @Override
     public Collection<Role> getRoles() {
         return ROLES;

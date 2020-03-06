@@ -1,5 +1,9 @@
 package ru.lavrov.tm.command.project;
 
+import lombok.NoArgsConstructor;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import ru.lavrov.tm.api.IEntity;
 import ru.lavrov.tm.api.IProjectService;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.entity.Project;
@@ -10,21 +14,23 @@ import ru.lavrov.tm.role.Role;
 import java.util.Arrays;
 import java.util.Collection;
 
+@NoArgsConstructor
 public final class ProjectListCommand extends AbstractCommand {
     private static final boolean SAFE = false;
+    @Nullable
     private static final Collection<Role> ROLES = Arrays.asList(Role.Admin);
+    @NotNull
     private static final String COMMAND = "project-list";
+    @NotNull
     private static final String DESCRIPTION = "Show all entities.";
 
-    public ProjectListCommand() {
-        super();
-    }
-
+    @NotNull
     @Override
     public String getCommand() {
         return COMMAND;
     }
 
+    @NotNull
     @Override
     public String getDescription() {
         return DESCRIPTION;
@@ -41,7 +47,7 @@ public final class ProjectListCommand extends AbstractCommand {
         final Collection<Project> projectList = projectService.findAll(currentUser.getId());
         if (projectList == null)
             return;
-        for (final Project project: projectList) {
+        for (@Nullable final IEntity project: projectList) {
             if (project == null)
                 continue;
             System.out.println(index++ + ". " + project);
@@ -54,6 +60,7 @@ public final class ProjectListCommand extends AbstractCommand {
         return SAFE;
     }
 
+    @Nullable
     @Override
     public Collection<Role> getRoles() {
         return ROLES;

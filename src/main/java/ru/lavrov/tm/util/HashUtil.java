@@ -1,11 +1,15 @@
 package ru.lavrov.tm.util;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import javax.xml.bind.DatatypeConverter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class HashUtil {
-    public static String getHash(String string) throws NoSuchAlgorithmException {
+    @Nullable
+    public static String getHash(@NotNull String string) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("MD5");
         md.update(string.getBytes());
         byte[] digest = md.digest();

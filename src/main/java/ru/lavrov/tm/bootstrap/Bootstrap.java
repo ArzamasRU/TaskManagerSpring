@@ -1,13 +1,12 @@
 package ru.lavrov.tm.bootstrap;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.*;
 import ru.lavrov.tm.command.AbstractCommand;
-import ru.lavrov.tm.command.about.AboutCommand;
-import ru.lavrov.tm.command.exit.ExitCommand;
-import ru.lavrov.tm.command.help.HelpCommand;
-import ru.lavrov.tm.command.project.*;
-import ru.lavrov.tm.command.task.*;
-import ru.lavrov.tm.command.user.*;
 import ru.lavrov.tm.entity.User;
 import ru.lavrov.tm.exception.command.CommandDescriptionIsInvalidException;
 import ru.lavrov.tm.exception.command.CommandIsInvalidException;
@@ -26,34 +25,31 @@ import ru.lavrov.tm.util.HashUtil;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
+@Getter
+@NoArgsConstructor
 public final class Bootstrap implements IServiceLocator {
+    @NotNull
     private final IProjectRepository projectRepository = new ProjectRepositoryImpl();
+    @NotNull
     private final ITaskRepository taskRepository = new TaskRepositoryImpl();
+    @NotNull
     private final IUserRepository userRepository = new UserRepositoryImpl();
+    @NotNull
     private final IProjectService projectService = new ProjectServiceImpl(projectRepository, taskRepository, userRepository);
+    @NotNull
     private final ITaskService taskService = new TaskServiceImpl(taskRepository, projectRepository, userRepository);
+    @NotNull
     private final IUserService userService = new UserServiceImpl(userRepository, projectRepository, taskRepository);
+    @NotNull
     private final Scanner input = new Scanner(System.in);
+    @NotNull
     private final Map<String, AbstractCommand> commands = new LinkedHashMap();
+    @Setter
+    @Nullable
     private User currentUser;
 
-    @Override
-    public IProjectService getProjectService() {
-        return projectService;
-    }
-
-    @Override
-    public ITaskService getTaskService() {
-        return taskService;
-    }
-
-    @Override
-    public IUserService getUserService() {
-        return userService;
-    }
-
-    public void start() throws InstantiationException, IllegalAccessException {
-        init();
+    public void init(@Nullable Collection<Class> classes) throws InstantiationException, IllegalAccessException {
+        initClasses(classes);
         initUsers();
         System.out.println("*** WELCOME TO TASK MANAGER ***");
         String command = null;
@@ -68,29 +64,13 @@ public final class Bootstrap implements IServiceLocator {
         }
     }
 
-    private void init() throws RuntimeException, IllegalAccessException, InstantiationException {
-        final List<Class> commandList = Arrays.asList(ExitCommand.class,
-            HelpCommand.class,
-            AboutCommand.class,
-            ProjectClearCommand.class,
-            ProjectCreateCommand.class,
-            ProjectListCommand.class,
-            ProjectRemoveCommand.class,
-            ProjectTasksListCommand.class,
-            ProjectRenameCommand.class,
-            TaskClearCommand.class,
-            TaskCreateCommand.class,
-            TaskListCommand.class,
-            TaskRemoveCommand.class,
-            TaskRenameCommand.class,
-            UserLoginCommand.class,
-            UserLogoutCommand.class,
-            UserRegisterCommand.class,
-            UserUpdateCommand.class,
-            UserDisplayCommand.class,
-            UserDeleteCommand.class);
-        for (final Class command : commandList) {
+    private void initClasses(@Nullable Collection<Class> classes) throws IllegalAccessException, InstantiationException {
+        if (classes == null || classes.isEmpty())
+            return;
+        for (@Nullable Class command : classes) {
             if (command == null)
+                continue;
+            if (!AbstractCommand.class.isAssignableFrom(command))
                 continue;
             registry((AbstractCommand) command.newInstance());
         }
@@ -105,7 +85,7 @@ public final class Bootstrap implements IServiceLocator {
         }
     }
 
-    private void registry(final AbstractCommand command) throws RuntimeException {
+    private void registry(@Nullable final AbstractCommand command) {
         if (command == null)
             throw new CommandNotExistsException();
         final String cliCommand = command.getCommand();
@@ -114,11 +94,11 @@ public final class Bootstrap implements IServiceLocator {
             throw new CommandIsInvalidException();
         if (cliDescription == null || cliDescription.isEmpty())
             throw new CommandDescriptionIsInvalidException();
-        command.setBootstrap(this);
+        command.setBootstrap((Bootstrap) this);
         commands.put(cliCommand, command);
     }
 
-    private void execute(final String command) throws RuntimeException {
+    private void execute(@Nullable final String command) {
         if (command == null || command.isEmpty())
             throw new CommandIsInvalidException();
         final AbstractCommand abstractCommand = commands.get(command);
@@ -136,13 +116,13 @@ public final class Bootstrap implements IServiceLocator {
         abstractCommand.execute();
     }
 
-    private boolean hasPermission(final Collection<Role> listRoles, Role role){
+    private boolean hasPermission(@Nullable final Collection<Role> listRoles, @Nullable Role role){
         if (listRoles == null)
             return true;
         if (role == null)
             throw new UserRoleIsInvalidException();
         final String currentUserRoleName = role.displayName();
-        for (final Role currentRole : listRoles) {
+        for (@Nullable final Role currentRole : listRoles) {
             if (currentRole == null)
                 continue;
             if (currentRole.displayName().equals(currentUserRoleName))
@@ -151,17 +131,17 @@ public final class Bootstrap implements IServiceLocator {
         return false;
     }
 
-    @Override
+    @Nullable
     public List<AbstractCommand> getCommands() {
         return new ArrayList(commands.values());
     }
 
-    public void login(final String login, final String password){
+    public void login(@Nullable final String login, @Nullable final String password){
         if (login == null || login.isEmpty())
             throw new UserLoginIsInvalidException();
         if (password == null || password.isEmpty())
             throw new UserPasswordIsInvalidException();
-        final User user = (User) userRepository.findEntityByName(login, null);
+        final User user = userRepository.findEntityByName(login, null);
         if (user == null)
             throw new UserLoginNotExistsException();
         if (!password.equals(user.getPassword()))
@@ -171,13 +151,5 @@ public final class Bootstrap implements IServiceLocator {
 
     public void logout(){
         setCurrentUser(null);
-    }
-
-    public User getCurrentUser() {
-        return currentUser;
-    }
-
-    public void setCurrentUser(final User currentUser) {
-        this.currentUser = currentUser;
     }
 }

@@ -1,5 +1,9 @@
 package ru.lavrov.tm.command.user;
 
+import lombok.NoArgsConstructor;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import ru.lavrov.tm.api.IEntity;
 import ru.lavrov.tm.api.IProjectService;
 import ru.lavrov.tm.api.ITaskService;
 import ru.lavrov.tm.command.AbstractCommand;
@@ -13,21 +17,23 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Scanner;
 
+@NoArgsConstructor
 public final class UserDisplayCommand extends AbstractCommand {
     private static final boolean SAFE = false;
+    @Nullable
     private static final Collection<Role> ROLES = Arrays.asList(Role.Admin, Role.User);
+    @NotNull
     private static final String COMMAND = "user-display";
+    @NotNull
     private static final String DESCRIPTION = "Display user profile.";
 
-    public UserDisplayCommand() {
-        super();
-    }
-
+    @NotNull
     @Override
     public String getCommand() {
         return COMMAND;
     }
 
+    @NotNull
     @Override
     public String getDescription() {
         return DESCRIPTION;
@@ -49,7 +55,7 @@ public final class UserDisplayCommand extends AbstractCommand {
         final Collection<Project> projectList = projectService.findAll(currentUser.getId());
         if (projectList == null)
             return;
-        for (final Project project: projectList) {
+        for (@Nullable final IEntity project: projectList) {
             if (project == null)
                 continue;
             System.out.println(index++ + ". " + project);
@@ -59,7 +65,7 @@ public final class UserDisplayCommand extends AbstractCommand {
         final Collection<Task> taskList = taskService.findAll(currentUser.getId());
         if (taskList == null)
             return;
-        for (final Task task: taskList) {
+        for (@Nullable final IEntity task: taskList) {
             if (task == null)
                 continue;
             System.out.println(index++ + ". " + task);
@@ -72,6 +78,7 @@ public final class UserDisplayCommand extends AbstractCommand {
         return SAFE;
     }
 
+    @Nullable
     @Override
     public Collection<Role> getRoles() {
         return ROLES;
