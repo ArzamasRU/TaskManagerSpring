@@ -5,19 +5,17 @@ import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.IEntity;
 import ru.lavrov.tm.api.IRepository;
 import ru.lavrov.tm.entity.Project;
+import ru.lavrov.tm.entity.Task;
 import ru.lavrov.tm.exception.entity.EntityExistsException;
 import ru.lavrov.tm.exception.entity.EntityNameIsInvalidException;
 import ru.lavrov.tm.exception.entity.EntityNotExistsException;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public abstract class AbstractRepository<T extends IEntity> implements IRepository<T> {
     @NotNull
-    protected final Map<String, T> entities = new HashMap();
+    protected final Map<String, T> entities = new LinkedHashMap<>();
 
     @Override
     public void persist(@Nullable final T entity) {
@@ -64,27 +62,6 @@ public abstract class AbstractRepository<T extends IEntity> implements IReposito
 
     @Nullable
     @Override
-    public T findEntityByName(@Nullable final String entityName, @Nullable final String userId){
-        if (entityName == null || entityName.isEmpty())
-            throw new EntityNameIsInvalidException();
-        if (userId == null || userId.isEmpty())
-            throw new UserIsNotAuthorizedException();
-        @Nullable T currentEntity = null;
-        for (@Nullable final T entity : entities.values()) {
-            if (entity == null)
-                continue;
-            boolean isEntityNameEquals = entityName.equals(entity.getName());
-            boolean isEntityUserIdEquals = entity.getUserId().equals(userId);
-            if (isEntityNameEquals && isEntityUserIdEquals) {
-                currentEntity = entity;
-                break;
-            }
-        }
-        return currentEntity;
-    }
-
-    @Nullable
-    @Override
     public Collection<T> findAll(@Nullable final String userId) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
@@ -95,6 +72,24 @@ public abstract class AbstractRepository<T extends IEntity> implements IReposito
             if (entity.getUserId().equals(userId))
                 list.add(entity);
         }
+        return list;
+    }
+
+    @Nullable
+    @Override
+    public Collection<T> findAll(@Nullable final String userId, @Nullable final Comparator<T> comparator) {
+        if (userId == null || userId.isEmpty())
+            throw new UserIsNotAuthorizedException();
+        @Nullable final Collection<T> list = new ArrayList<>();
+        for (@Nullable final T entity : entities.values()) {
+            if (entity == null)
+                continue;
+            if (entity.getUserId().equals(userId))
+                list.add(entity);
+        }
+        if (comparator == null)
+            return list;
+        ((ArrayList<T>) list).sort(comparator);
         return list;
     }
 }

@@ -33,17 +33,18 @@ public final class UserServiceImpl extends AbstractService<User> implements IUse
             throw new UserPasswordIsInvalidException();
         if (role == null || role.isEmpty())
             throw new UserRoleIsInvalidException();
-        @Nullable final Role currentRole = Role.valueOf(role);
+        @Nullable Role currentRole = null;
         boolean roleExists = false;
         for (Role curRole : Role.values()) {
             if (role.equals(curRole.getRole())) {
+                currentRole = curRole;
                 roleExists = true;
                 break;
             }
         }
         if (!roleExists)
             throw new UserRoleIsInvalidException();
-        @Nullable final User user = userRepository.findEntityByName(login, null);
+        @Nullable final User user = userRepository.findUserByLogin(login);
         if (user != null)
             throw new UserLoginExistsException();
         @NotNull String hashedPassword;
@@ -68,7 +69,7 @@ public final class UserServiceImpl extends AbstractService<User> implements IUse
             throw new UserIsNotAuthorizedException();
         if (newLogin == null || newLogin.isEmpty())
             throw new UserLoginIsInvalidException();
-        @Nullable final User user = userRepository.findEntityByName(newLogin, null);
+        @Nullable final User user = userRepository.findUserByLogin(newLogin);
         if (user != null)
             throw new UserLoginExistsException();
         userRepository.updateLogin(userId, newLogin);

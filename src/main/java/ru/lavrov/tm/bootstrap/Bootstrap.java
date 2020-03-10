@@ -130,7 +130,7 @@ public final class Bootstrap implements IServiceLocator {
             throw new UserLoginIsInvalidException();
         if (password == null || password.isEmpty())
             throw new UserPasswordIsInvalidException();
-        @Nullable final User user = userRepository.findEntityByName(login, null);
+        @Nullable final User user = userRepository.findUserByLogin(login);
         if (user == null)
             throw new UserLoginNotExistsException();
         if (!password.equals(user.getPassword()))

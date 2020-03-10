@@ -6,23 +6,26 @@ import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.IEntity;
 import ru.lavrov.tm.api.IProjectService;
 import ru.lavrov.tm.command.AbstractCommand;
+import ru.lavrov.tm.comparator.FinishDateComparator;
+import ru.lavrov.tm.comparator.StatusComparator;
 import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.User;
-import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 import ru.lavrov.tm.enumerate.Role;
+import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 
 @NoArgsConstructor
-public final class ProjectListCommand extends AbstractCommand {
+public final class ProjectListByStatusCommand extends AbstractCommand {
     private static final boolean SAFE = false;
     @Nullable
     private static final Collection<Role> ROLES = Arrays.asList(Role.ADMIN, Role.USER);
     @NotNull
-    private static final String COMMAND = "project-list";
+    private static final String COMMAND = "project-list-by-status";
     @NotNull
-    private static final String DESCRIPTION = "Show all entities.";
+    private static final String DESCRIPTION = "Show all projects sorted by status.";
 
     @NotNull
     @Override
@@ -44,7 +47,8 @@ public final class ProjectListCommand extends AbstractCommand {
         if (currentUser == null)
             throw new UserIsNotAuthorizedException();
         int index = 1;
-        @Nullable final Collection<Project> projectList = projectService.findAll(currentUser.getId());
+        @Nullable final Comparator comparator = new StatusComparator();
+        @Nullable final Collection<Project> projectList = projectService.findAll(currentUser.getId(), comparator);
         if (projectList == null)
             return;
         for (@Nullable final IEntity project: projectList) {

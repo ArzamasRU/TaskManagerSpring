@@ -3,11 +3,13 @@ package ru.lavrov.tm.service;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.*;
+import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.exception.project.ProjectNotExistsException;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 import ru.lavrov.tm.repository.AbstractRepository;
 
 import java.util.Collection;
+import java.util.Comparator;
 
 public abstract class AbstractService<T extends IEntity> implements IService<T> {
     @NotNull protected final IRepository repository;
@@ -52,5 +54,13 @@ public abstract class AbstractService<T extends IEntity> implements IService<T> 
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         return repository.findAll(userId);
+    }
+
+    @Nullable
+    @Override
+    public Collection<T> findAll(@Nullable final String userId, @Nullable final Comparator<T> comparator){
+        if (userId == null || userId.isEmpty())
+            throw new UserIsNotAuthorizedException();
+        return repository.findAll(userId, comparator);
     }
 }

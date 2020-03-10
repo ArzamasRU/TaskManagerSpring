@@ -12,6 +12,9 @@ import ru.lavrov.tm.exception.task.TaskNameIsInvalidException;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 import ru.lavrov.tm.repository.AbstractRepository;
 
+import java.util.Collection;
+import java.util.Comparator;
+
 public final class TaskServiceImpl extends AbstractService<Task> implements ITaskService {
     @NotNull protected final IProjectRepository projectRepository;
     @NotNull protected final ITaskRepository taskRepository;
@@ -63,4 +66,12 @@ public final class TaskServiceImpl extends AbstractService<Task> implements ITas
             throw new ProjectNotExistsException();
         taskRepository.renameTask(project.getId(), oldName, newName, userId);
     }
+
+//    @Nullable
+//    @Override
+//    public Collection<Task> findAll(@Nullable String userId, @Nullable Comparator<Task> comparator) {
+//        if (userId == null || userId.isEmpty())
+//            throw new UserIsNotAuthorizedException();
+//        return taskRepository.findAll(userId, comparator);
+//    }
 }

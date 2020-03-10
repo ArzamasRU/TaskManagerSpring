@@ -1,28 +1,31 @@
-package ru.lavrov.tm.command.project;
+package ru.lavrov.tm.command.task;
 
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.IEntity;
-import ru.lavrov.tm.api.IProjectService;
+import ru.lavrov.tm.api.ITaskService;
 import ru.lavrov.tm.command.AbstractCommand;
-import ru.lavrov.tm.entity.Project;
+import ru.lavrov.tm.comparator.FinishDateComparator;
+import ru.lavrov.tm.entity.Task;
+import ru.lavrov.tm.entity.Task;
 import ru.lavrov.tm.entity.User;
-import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 import ru.lavrov.tm.enumerate.Role;
+import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 
 @NoArgsConstructor
-public final class ProjectListCommand extends AbstractCommand {
+public final class TaskListByFinishDateCommand extends AbstractCommand {
     private static final boolean SAFE = false;
     @Nullable
     private static final Collection<Role> ROLES = Arrays.asList(Role.ADMIN, Role.USER);
     @NotNull
-    private static final String COMMAND = "project-list";
+    private static final String COMMAND = "task-list-by-finish-date";
     @NotNull
-    private static final String DESCRIPTION = "Show all entities.";
+    private static final String DESCRIPTION = "Show all tasks sorted by finish date.";
 
     @NotNull
     @Override
@@ -38,19 +41,20 @@ public final class ProjectListCommand extends AbstractCommand {
 
     @Override
     public void execute() {
-        System.out.println("[PROJECT LIST]");
-        @Nullable final IProjectService projectService = bootstrap.getProjectService();
+        System.out.println("[TASK LIST]");
+        @Nullable final ITaskService taskService = bootstrap.getTaskService();
         @Nullable final User currentUser = bootstrap.getCurrentUser();
         if (currentUser == null)
             throw new UserIsNotAuthorizedException();
         int index = 1;
-        @Nullable final Collection<Project> projectList = projectService.findAll(currentUser.getId());
-        if (projectList == null)
+        @Nullable final Comparator comparator = new FinishDateComparator();
+        @Nullable final Collection<Task> taskList = taskService.findAll(currentUser.getId(), comparator);
+        if (taskList == null)
             return;
-        for (@Nullable final IEntity project: projectList) {
-            if (project == null)
+        for (@Nullable final IEntity task: taskList) {
+            if (task == null)
                 continue;
-            System.out.println(index++ + ". " + project);
+            System.out.println(index++ + ". " + task);
         }
         System.out.println();
     }

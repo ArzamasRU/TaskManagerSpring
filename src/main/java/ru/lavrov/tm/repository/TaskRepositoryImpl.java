@@ -6,6 +6,7 @@ import ru.lavrov.tm.api.IRepository;
 import ru.lavrov.tm.api.ITaskRepository;
 import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Task;
+import ru.lavrov.tm.exception.entity.EntityNameIsInvalidException;
 import ru.lavrov.tm.exception.entity.EntityNotExistsException;
 import ru.lavrov.tm.exception.project.ProjectNameIsInvalidException;
 import ru.lavrov.tm.exception.project.ProjectNotExistsException;
@@ -16,6 +17,7 @@ import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 
 public final class TaskRepositoryImpl extends AbstractRepository<Task> implements ITaskRepository {
@@ -113,5 +115,44 @@ public final class TaskRepositoryImpl extends AbstractRepository<Task> implement
         if (findProjectTaskByName(newName, projectId, userId) != null)
             throw new TaskExistsException();
         task.setName(newName);
+    }
+
+    @Nullable
+    @Override
+    public Collection<Task> findAll(@Nullable final String userId, @Nullable final Comparator<Task> comparator) {
+        if (userId == null || userId.isEmpty())
+            throw new UserIsNotAuthorizedException();
+        @Nullable final Collection<Task> list = new ArrayList<>();
+        for (@Nullable final Task entity : entities.values()) {
+            if (entity == null)
+                continue;
+            if (entity.getUserId().equals(userId))
+                list.add(entity);
+        }
+        if (comparator == null)
+            return list;
+        ((ArrayList<Task>) list).sort(comparator);
+        return list;
+    }
+
+    @Nullable
+    @Override
+    public Task findEntityByName(@Nullable final String entityName, @Nullable final String userId){
+        if (entityName == null || entityName.isEmpty())
+            throw new EntityNameIsInvalidException();
+        if (userId == null || userId.isEmpty())
+            throw new UserIsNotAuthorizedException();
+        @Nullable Task currentEntity = null;
+        for (@Nullable final Task entity : entities.values()) {
+            if (entity == null)
+                continue;
+            boolean isEntityNameEquals = entityName.equals(entity.getName());
+            boolean isEntityUserIdEquals = entity.getUserId().equals(userId);
+            if (isEntityNameEquals && isEntityUserIdEquals) {
+                currentEntity = entity;
+                break;
+            }
+        }
+        return currentEntity;
     }
 }

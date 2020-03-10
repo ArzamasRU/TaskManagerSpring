@@ -8,7 +8,7 @@ public enum Role {
 
     @NotNull private final String role;
 
-    Role(String role) {
+    Role(final String role) {
         this.role = role;
     }
 

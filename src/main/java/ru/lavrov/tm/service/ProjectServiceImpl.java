@@ -12,6 +12,7 @@ import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 import ru.lavrov.tm.repository.AbstractRepository;
 
 import java.util.Collection;
+import java.util.Comparator;
 
 public final class ProjectServiceImpl extends AbstractService<Project> implements IProjectService {
     @NotNull protected final IProjectRepository projectRepository;
@@ -76,5 +77,13 @@ public final class ProjectServiceImpl extends AbstractService<Project> implement
             throw new UserIsNotAuthorizedException();
         projectRepository.renameProject(oldName, newName, userId);
     }
+
+//    @Nullable
+//    @Override
+//    public Collection<Project> findAll(@Nullable final String userId, @Nullable final Comparator<Project> comparator){
+//        if (userId == null || userId.isEmpty())
+//            throw new UserIsNotAuthorizedException();
+//        return projectRepository.findAll(userId, comparator);
+//    }
 }
 
