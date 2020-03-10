@@ -12,5 +12,7 @@ public interface ITaskService extends IService<Task> {
     void removeTaskByName(@Nullable String taskName, @Nullable String userId);
     void renameTask(@Nullable String projectName, @Nullable String oldName, @Nullable String newName,
                     @Nullable String userId);
-//    Collection<Task> findAll(@Nullable String userId, @Nullable Comparator<Task> comparator);
+    Collection<Task> findAll(@Nullable String userId, @Nullable Comparator<Task> comparator);
+    Collection<Task> findAllByNamePart(@Nullable String name, @Nullable String userId);
+    Collection<Task> findAllByDescPart(@Nullable String description, @Nullable String userId);
 }

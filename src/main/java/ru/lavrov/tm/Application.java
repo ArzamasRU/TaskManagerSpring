@@ -15,36 +15,8 @@ import java.util.Arrays;
 import java.util.Collection;
 
 public final class Application {
-    @Nullable
-    private static final Collection<Class> CLASSES = Arrays.asList(ExitCommand.class,
-            HelpCommand.class,
-            AboutCommand.class,
-            ProjectClearCommand.class,
-            ProjectCreateCommand.class,
-            ProjectListCommand.class,
-            ProjectRemoveCommand.class,
-            ProjectTasksListCommand.class,
-            ProjectRenameCommand.class,
-            ProjectListByFinishDateCommand.class,
-            ProjectListByStartDateCommand.class,
-            ProjectListByStatusCommand.class,
-            TaskClearCommand.class,
-            TaskCreateCommand.class,
-            TaskListCommand.class,
-            TaskRemoveCommand.class,
-            TaskRenameCommand.class,
-            TaskListByFinishDateCommand.class,
-            TaskListByStartDateCommand.class,
-            TaskListByStatusCommand.class,
-            UserLoginCommand.class,
-            UserLogoutCommand.class,
-            UserRegisterCommand.class,
-            UserUpdateCommand.class,
-            UserDisplayCommand.class,
-            UserDeleteCommand.class);
-
     public static void main(@Nullable String[] args) throws IllegalAccessException, InstantiationException {
         @NotNull Bootstrap serviceLocator = new Bootstrap();
-        serviceLocator.init(CLASSES);
+        serviceLocator.init();
     }
 }

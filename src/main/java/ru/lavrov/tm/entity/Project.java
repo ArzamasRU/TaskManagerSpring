@@ -21,7 +21,7 @@ public final class Project implements IEntity, IComparableEntity {
     @Nullable
     private String id = UUID.randomUUID().toString();
     @Nullable
-    private int description;
+    private String description;
     @Nullable
     private Date startDate = new Date();
     @Nullable

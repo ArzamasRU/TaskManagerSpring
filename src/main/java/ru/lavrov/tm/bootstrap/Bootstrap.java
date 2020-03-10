@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.reflections.Reflections;
 import ru.lavrov.tm.api.*;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.entity.User;
@@ -47,8 +48,12 @@ public final class Bootstrap implements IServiceLocator {
     @Setter
     @Nullable
     private User currentUser;
+    @Nullable
+    private static final Set<Class<? extends AbstractCommand>> classes =
+            new Reflections("ru.lavrov.tm").getSubTypesOf(AbstractCommand.class);
 
-    public void init(@Nullable Collection<Class> classes) throws InstantiationException, IllegalAccessException {
+    public void init() throws InstantiationException, IllegalAccessException {
+        System.out.println(classes);
         initClasses(classes);
         initUsers();
         System.out.println("*** WELCOME TO TASK MANAGER ***");
@@ -56,7 +61,7 @@ public final class Bootstrap implements IServiceLocator {
 
         while (!"exit".equals(command)) {
             command = input.nextLine();
-            try{
+            try {
                 execute(command);
             } catch (RuntimeException e){
                 System.out.println(e.getMessage());
@@ -64,7 +69,7 @@ public final class Bootstrap implements IServiceLocator {
         }
     }
 
-    private void initClasses(@Nullable Collection<Class> classes) throws IllegalAccessException, InstantiationException {
+    private void initClasses(@Nullable Collection<Class<? extends AbstractCommand>> classes) throws IllegalAccessException, InstantiationException {
         if (classes == null || classes.isEmpty())
             return;
         for (@Nullable Class command : classes) {
@@ -133,7 +138,13 @@ public final class Bootstrap implements IServiceLocator {
         @Nullable final User user = userRepository.findUserByLogin(login);
         if (user == null)
             throw new UserLoginNotExistsException();
-        if (!password.equals(user.getPassword()))
+        @Nullable String hashedPassword;
+        try {
+            hashedPassword = HashUtil.getHash(password);
+        } catch (NoSuchAlgorithmException e) {
+            throw new UtilAlgorithmNotExistsException();
+        }
+        if (!hashedPassword.equals(user.getPassword()))
             throw new UserLoginOrPasswordIsIncorrectException();
         setCurrentUser(user);
     }

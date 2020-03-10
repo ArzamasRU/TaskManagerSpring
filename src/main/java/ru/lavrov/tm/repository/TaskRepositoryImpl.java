@@ -8,12 +8,15 @@ import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Task;
 import ru.lavrov.tm.exception.entity.EntityNameIsInvalidException;
 import ru.lavrov.tm.exception.entity.EntityNotExistsException;
+import ru.lavrov.tm.exception.general.DescriptionIsInvalidException;
+import ru.lavrov.tm.exception.general.NameIsInvalidException;
 import ru.lavrov.tm.exception.project.ProjectNameIsInvalidException;
 import ru.lavrov.tm.exception.project.ProjectNotExistsException;
 import ru.lavrov.tm.exception.task.TaskExistsException;
 import ru.lavrov.tm.exception.task.TaskNameIsInvalidException;
 import ru.lavrov.tm.exception.task.TaskNotExistsException;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
+import ru.lavrov.tm.exception.user.UserLoginIsInvalidException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -154,5 +157,39 @@ public final class TaskRepositoryImpl extends AbstractRepository<Task> implement
             }
         }
         return currentEntity;
+    }
+
+    @Nullable
+    @Override
+    public Collection<Task> findAllByNamePart(@Nullable final String name, @Nullable final String userId) {
+        if (userId == null || userId.isEmpty())
+            throw new UserIsNotAuthorizedException();
+        if (name == null || name.isEmpty())
+            throw new NameIsInvalidException();
+        @Nullable final Collection<Task> list = new ArrayList<>();
+        for (@Nullable final Task entity : entities.values()) {
+            if (entity == null)
+                continue;
+            if (entity.getUserId().equals(userId) && entity.getName().contains(name))
+                list.add(entity);
+        }
+        return list;
+    }
+
+    @Nullable
+    @Override
+    public Collection<Task> findAllByDescPart(@Nullable final String description, @Nullable final String userId) {
+        if (userId == null || userId.isEmpty())
+            throw new UserIsNotAuthorizedException();
+        if (description == null || description.isEmpty())
+            throw new DescriptionIsInvalidException();
+        @Nullable final Collection<Task> list = new ArrayList<>();
+        for (@Nullable final Task entity : entities.values()) {
+            if (entity == null)
+                continue;
+            if (entity.getUserId().equals(userId) && entity.getDescription().contains(description))
+                list.add(entity);
+        }
+        return list;
     }
 }

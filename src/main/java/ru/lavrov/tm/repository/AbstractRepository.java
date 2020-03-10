@@ -74,22 +74,4 @@ public abstract class AbstractRepository<T extends IEntity> implements IReposito
         }
         return list;
     }
-
-    @Nullable
-    @Override
-    public Collection<T> findAll(@Nullable final String userId, @Nullable final Comparator<T> comparator) {
-        if (userId == null || userId.isEmpty())
-            throw new UserIsNotAuthorizedException();
-        @Nullable final Collection<T> list = new ArrayList<>();
-        for (@Nullable final T entity : entities.values()) {
-            if (entity == null)
-                continue;
-            if (entity.getUserId().equals(userId))
-                list.add(entity);
-        }
-        if (comparator == null)
-            return list;
-        ((ArrayList<T>) list).sort(comparator);
-        return list;
-    }
 }

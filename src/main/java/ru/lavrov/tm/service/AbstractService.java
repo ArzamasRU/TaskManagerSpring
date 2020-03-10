@@ -55,12 +55,4 @@ public abstract class AbstractService<T extends IEntity> implements IService<T> 
             throw new UserIsNotAuthorizedException();
         return repository.findAll(userId);
     }
-
-    @Nullable
-    @Override
-    public Collection<T> findAll(@Nullable final String userId, @Nullable final Comparator<T> comparator){
-        if (userId == null || userId.isEmpty())
-            throw new UserIsNotAuthorizedException();
-        return repository.findAll(userId, comparator);
-    }
 }

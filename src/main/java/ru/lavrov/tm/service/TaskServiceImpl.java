@@ -5,12 +5,13 @@ import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.*;
 import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Task;
+import ru.lavrov.tm.exception.general.DescriptionIsInvalidException;
+import ru.lavrov.tm.exception.general.NameIsInvalidException;
 import ru.lavrov.tm.exception.project.ProjectNameIsInvalidException;
 import ru.lavrov.tm.exception.project.ProjectNotExistsException;
 import ru.lavrov.tm.exception.task.TaskNameExistsException;
 import ru.lavrov.tm.exception.task.TaskNameIsInvalidException;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
-import ru.lavrov.tm.repository.AbstractRepository;
 
 import java.util.Collection;
 import java.util.Comparator;
@@ -67,11 +68,33 @@ public final class TaskServiceImpl extends AbstractService<Task> implements ITas
         taskRepository.renameTask(project.getId(), oldName, newName, userId);
     }
 
-//    @Nullable
-//    @Override
-//    public Collection<Task> findAll(@Nullable String userId, @Nullable Comparator<Task> comparator) {
-//        if (userId == null || userId.isEmpty())
-//            throw new UserIsNotAuthorizedException();
-//        return taskRepository.findAll(userId, comparator);
-//    }
+    @Nullable
+    @Override
+    public Collection<Task> findAllByNamePart(@Nullable final String name, @Nullable final String userId) {
+        if (userId == null || userId.isEmpty())
+            throw new UserIsNotAuthorizedException();
+        if (name == null || name.isEmpty())
+            throw new NameIsInvalidException();
+        @Nullable final Collection<Task> collection = taskRepository.findAllByNamePart(name ,userId);
+        return collection;
+    }
+
+    @Nullable
+    @Override
+    public Collection<Task> findAllByDescPart(@Nullable final String description, @Nullable final String userId) {
+        if (userId == null || userId.isEmpty())
+            throw new UserIsNotAuthorizedException();
+        if (description == null || description.isEmpty())
+            throw new DescriptionIsInvalidException();
+        @Nullable final Collection<Task> collection = taskRepository.findAllByDescPart(description ,userId);
+        return collection;
+    }
+
+    @Nullable
+    @Override
+    public Collection<Task> findAll(@Nullable String userId, @Nullable Comparator<Task> comparator) {
+        if (userId == null || userId.isEmpty())
+            throw new UserIsNotAuthorizedException();
+        return taskRepository.findAll(userId, comparator);
+    }
 }

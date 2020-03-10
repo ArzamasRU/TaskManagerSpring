@@ -42,11 +42,6 @@ public final class UserLoginCommand extends AbstractCommand {
         @Nullable final String login = input.nextLine();
         System.out.println("enter password:");
         @Nullable String password = input.nextLine();
-        try {
-            password = HashUtil.getHash(password);
-        } catch (NoSuchAlgorithmException e) {
-            throw new UtilAlgorithmNotExistsException();
-        }
         bootstrap.login(login, password);
         System.out.println("[You are logged in]");
         System.out.println();

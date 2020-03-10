@@ -5,11 +5,12 @@ import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.*;
 import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Task;
+import ru.lavrov.tm.exception.general.DescriptionIsInvalidException;
+import ru.lavrov.tm.exception.general.NameIsInvalidException;
 import ru.lavrov.tm.exception.project.ProjectNameExistsException;
 import ru.lavrov.tm.exception.project.ProjectNameIsInvalidException;
 import ru.lavrov.tm.exception.project.ProjectNotExistsException;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
-import ru.lavrov.tm.repository.AbstractRepository;
 
 import java.util.Collection;
 import java.util.Comparator;
@@ -78,12 +79,34 @@ public final class ProjectServiceImpl extends AbstractService<Project> implement
         projectRepository.renameProject(oldName, newName, userId);
     }
 
-//    @Nullable
-//    @Override
-//    public Collection<Project> findAll(@Nullable final String userId, @Nullable final Comparator<Project> comparator){
-//        if (userId == null || userId.isEmpty())
-//            throw new UserIsNotAuthorizedException();
-//        return projectRepository.findAll(userId, comparator);
-//    }
+    @Nullable
+    @Override
+    public Collection<Project> findAllByNamePart(@Nullable final String name, @Nullable final String userId) {
+        if (userId == null || userId.isEmpty())
+            throw new UserIsNotAuthorizedException();
+        if (name == null || name.isEmpty())
+            throw new NameIsInvalidException();
+        @Nullable final Collection<Project> collection = projectRepository.findAllByNamePart(name ,userId);
+        return collection;
+    }
+
+    @Nullable
+    @Override
+    public Collection<Project> findAllByDescPart(@Nullable final String description, @Nullable final String userId) {
+        if (userId == null || userId.isEmpty())
+            throw new UserIsNotAuthorizedException();
+        if (description == null || description.isEmpty())
+            throw new DescriptionIsInvalidException();
+        @Nullable final Collection<Project> collection = projectRepository.findAllByDescPart(description ,userId);
+        return collection;
+    }
+
+    @Nullable
+    @Override
+    public Collection<Project> findAll(@Nullable final String userId, @Nullable final Comparator<Project> comparator){
+        if (userId == null || userId.isEmpty())
+            throw new UserIsNotAuthorizedException();
+        return projectRepository.findAll(userId, comparator);
+    }
 }
 
