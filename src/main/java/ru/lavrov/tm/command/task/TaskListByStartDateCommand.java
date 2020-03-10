@@ -41,7 +41,7 @@ public final class TaskListByStartDateCommand extends AbstractCommand {
 
     @Override
     public void execute() {
-        System.out.println("[PROJECT LIST]");
+        System.out.println("[TASK LIST]");
         @Nullable final ITaskService taskService = bootstrap.getTaskService();
         @Nullable final User currentUser = bootstrap.getCurrentUser();
         if (currentUser == null)

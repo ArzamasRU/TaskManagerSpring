@@ -38,7 +38,7 @@ public final class TaskFindByName extends AbstractCommand {
     @Override
     public void execute() {
         @Nullable final Scanner input = new Scanner(System.in);
-        System.out.println("[PROJECT LIST]");
+        System.out.println("[TASK LIST]");
         @Nullable final ITaskService taskService = bootstrap.getTaskService();
         @Nullable final User currentUser = bootstrap.getCurrentUser();
         if (currentUser == null)
