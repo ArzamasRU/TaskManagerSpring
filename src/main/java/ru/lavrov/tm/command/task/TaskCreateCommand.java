@@ -8,10 +8,10 @@ import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.entity.User;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 import ru.lavrov.tm.enumerate.Role;
+import ru.lavrov.tm.util.InputUtil;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Scanner;
 
 @NoArgsConstructor
 public final class TaskCreateCommand extends AbstractCommand {
@@ -37,12 +37,11 @@ public final class TaskCreateCommand extends AbstractCommand {
 
     @Override
     public void execute() {
-        @Nullable final Scanner input = new Scanner(System.in);
         System.out.println("[Task create]");
         System.out.println("enter name:");
-        @Nullable final String taskName = input.nextLine();
+        @Nullable final String taskName = InputUtil.INPUT.nextLine();
         System.out.println("enter project name:");
-        @Nullable final String projectName = input.nextLine();
+        @Nullable final String projectName = InputUtil.INPUT.nextLine();
         @Nullable final User currentUser = bootstrap.getCurrentUser();
         if (currentUser == null)
             throw new UserIsNotAuthorizedException();

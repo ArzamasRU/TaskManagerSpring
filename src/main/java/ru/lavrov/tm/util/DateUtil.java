@@ -8,16 +8,17 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public final class DateUtil {
-    @NotNull private static final SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+    @NotNull
+    private static final SimpleDateFormat FORMATTER = new SimpleDateFormat("dd.MM.yyyy");
 
     @Nullable
     public static Date convertStrToDate(@NotNull String source) throws ParseException {
-        return formatter.parse(source);
+        return FORMATTER.parse(source);
     }
 
     @Nullable
     public static String convertDateToStr(@NotNull Date date) {
-        return formatter.format(date);
+        return FORMATTER.format(date);
     }
 }
 

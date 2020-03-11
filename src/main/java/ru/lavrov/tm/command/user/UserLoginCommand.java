@@ -4,13 +4,10 @@ import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.command.AbstractCommand;
-import ru.lavrov.tm.exception.util.UtilAlgorithmNotExistsException;
 import ru.lavrov.tm.enumerate.Role;
-import ru.lavrov.tm.util.HashUtil;
+import ru.lavrov.tm.util.InputUtil;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
-import java.util.Scanner;
 
 @NoArgsConstructor
 public final class UserLoginCommand extends AbstractCommand {
@@ -36,12 +33,11 @@ public final class UserLoginCommand extends AbstractCommand {
 
     @Override
     public void execute() {
-        @Nullable final Scanner input = new Scanner(System.in);
         System.out.println("[Please Log in]");
         System.out.println("enter login:");
-        @Nullable final String login = input.nextLine();
+        @Nullable final String login = InputUtil.INPUT.nextLine();
         System.out.println("enter password:");
-        @Nullable String password = input.nextLine();
+        @Nullable String password = InputUtil.INPUT.nextLine();
         bootstrap.login(login, password);
         System.out.println("[You are logged in]");
         System.out.println();

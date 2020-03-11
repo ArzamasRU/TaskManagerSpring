@@ -5,13 +5,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.IUserService;
 import ru.lavrov.tm.command.AbstractCommand;
-import ru.lavrov.tm.exception.util.UtilAlgorithmNotExistsException;
 import ru.lavrov.tm.enumerate.Role;
-import ru.lavrov.tm.util.HashUtil;
+import ru.lavrov.tm.util.InputUtil;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
-import java.util.Scanner;
 
 @NoArgsConstructor
 public final class UserRegisterCommand extends AbstractCommand {
@@ -37,14 +34,13 @@ public final class UserRegisterCommand extends AbstractCommand {
 
     @Override
     public void execute() {
-        @Nullable final Scanner input = new Scanner(System.in);
         System.out.println("[Registration]");
         System.out.println("enter login:");
-        @Nullable final String login = input.nextLine();
+        @Nullable final String login = InputUtil.INPUT.nextLine();
         System.out.println("enter password:");
-        @Nullable final String password = input.nextLine();
+        @Nullable final String password = InputUtil.INPUT.nextLine();
         System.out.println("enter your role ('admin', 'user'):");
-        @Nullable final String role = input.nextLine();
+        @Nullable final String role = InputUtil.INPUT.nextLine();
         @Nullable final IUserService userService = bootstrap.getUserService();
         userService.createByLogin(login, password, role);
         System.out.println("[USER successfully registered]");

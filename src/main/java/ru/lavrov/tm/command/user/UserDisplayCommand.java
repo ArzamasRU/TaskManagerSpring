@@ -41,7 +41,6 @@ public final class UserDisplayCommand extends AbstractCommand {
 
     @Override
     public void execute() {
-        @Nullable final Scanner input = new Scanner(System.in);
         @Nullable final IProjectService projectService = bootstrap.getProjectService();
         @Nullable final ITaskService taskService = bootstrap.getTaskService();
         @Nullable final User currentUser = bootstrap.getCurrentUser();

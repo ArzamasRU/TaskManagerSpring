@@ -22,6 +22,7 @@ import ru.lavrov.tm.service.ProjectServiceImpl;
 import ru.lavrov.tm.service.TaskServiceImpl;
 import ru.lavrov.tm.service.UserServiceImpl;
 import ru.lavrov.tm.util.HashUtil;
+import ru.lavrov.tm.util.InputUtil;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
@@ -42,8 +43,6 @@ public final class Bootstrap implements IServiceLocator {
     @NotNull
     private final IUserService userService = new UserServiceImpl(userRepository, projectRepository, taskRepository);
     @NotNull
-    private final Scanner input = new Scanner(System.in);
-    @NotNull
     private final Map<String, AbstractCommand> commands = new LinkedHashMap();
     @Setter
     @Nullable
@@ -60,7 +59,7 @@ public final class Bootstrap implements IServiceLocator {
         @Nullable String command = null;
 
         while (!"exit".equals(command)) {
-            command = input.nextLine();
+            command = InputUtil.INPUT.nextLine();
             try {
                 execute(command);
             } catch (RuntimeException e){

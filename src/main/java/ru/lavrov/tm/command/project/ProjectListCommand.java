@@ -43,10 +43,10 @@ public final class ProjectListCommand extends AbstractCommand {
         @Nullable final User currentUser = bootstrap.getCurrentUser();
         if (currentUser == null)
             throw new UserIsNotAuthorizedException();
-        int index = 1;
         @Nullable final Collection<Project> projectList = projectService.findAll(currentUser.getId());
         if (projectList == null)
             return;
+        int index = 1;
         for (@Nullable final IEntity project: projectList) {
             if (project == null)
                 continue;

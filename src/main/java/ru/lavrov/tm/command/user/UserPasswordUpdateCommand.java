@@ -7,9 +7,9 @@ import ru.lavrov.tm.api.IUserService;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.entity.User;
 import ru.lavrov.tm.enumerate.Role;
+import ru.lavrov.tm.util.InputUtil;
 
 import java.util.Collection;
-import java.util.Scanner;
 
 @NoArgsConstructor
 public final class UserPasswordUpdateCommand extends AbstractCommand {
@@ -35,10 +35,9 @@ public final class UserPasswordUpdateCommand extends AbstractCommand {
 
     @Override
     public void execute() {
-        @Nullable final Scanner input = new Scanner(System.in);
         System.out.println("[Change user password]");
         System.out.println("enter new password:");
-        @Nullable final String newPassword = input.nextLine();
+        @Nullable final String newPassword = InputUtil.INPUT.nextLine();
         @Nullable final IUserService userService = bootstrap.getUserService();
         @Nullable final User sessionUser = bootstrap.getCurrentUser();
         userService.updatePassword(sessionUser.getId(), newPassword);
