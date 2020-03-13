@@ -8,17 +8,17 @@ import java.util.Collection;
 import java.util.Comparator;
 
 public interface IProjectService extends IService<Project> {
-    void createByName(@Nullable String projectName, @Nullable String userId);
+    void createByName(@Nullable String userId, @Nullable String projectName);
 
-    void removeProjectByName(@Nullable String projectName, @Nullable String userId);
+    void removeProjectByName(@Nullable String userId, @Nullable String projectName);
 
-    Collection<Task> getProjectTasks(@Nullable String projectName, @Nullable String userId);
+    Collection<Task> getProjectTasks(@Nullable String userId, @Nullable String projectName);
 
-    void renameProject(@Nullable String oldName, @Nullable String newName, @Nullable String userId);
+    void renameProject(@Nullable String userId, @Nullable String oldName, @Nullable String newName);
 
     Collection<Project> findAll(@Nullable String userId, @Nullable Comparator<Project> comparator);
 
-    Collection<Project> findAllByNamePart(@Nullable String name, @Nullable String userId);
+    Collection<Project> findAllByNamePart(@Nullable String userId, @Nullable String name);
 
-    Collection<Project> findAllByDescPart(@Nullable String description, @Nullable String userId);
+    Collection<Project> findAllByDescPart(@Nullable String userId, @Nullable String description);
 }

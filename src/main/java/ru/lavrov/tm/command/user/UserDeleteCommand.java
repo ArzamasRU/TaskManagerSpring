@@ -39,7 +39,7 @@ public final class UserDeleteCommand extends AbstractCommand {
         if (currentUser == null)
             throw new UserIsNotAuthorizedException();
         @Nullable final IUserService userService = bootstrap.getUserService();
-        userService.remove(currentUser.getId(), null);
+        userService.remove(null, currentUser.getId());
         System.out.println("[ok]");
         System.out.println();
     }

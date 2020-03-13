@@ -44,7 +44,7 @@ public final class ProjectFindByName extends AbstractCommand {
             throw new UserIsNotAuthorizedException();
         System.out.println("enter name:");
         @Nullable final String name = InputUtil.INPUT.nextLine();
-        @Nullable final Collection<Project> projectList = projectService.findAllByNamePart(name, currentUser.getId());
+        @Nullable final Collection<Project> projectList = projectService.findAllByNamePart(currentUser.getId(), name);
         if (projectList == null)
             return;
         int index = 1;

@@ -46,7 +46,7 @@ public final class ProjectTasksListCommand extends AbstractCommand {
         if (currentUser == null)
             throw new UserIsNotAuthorizedException();
         @Nullable final IProjectService projectService = bootstrap.getProjectService();
-        @Nullable final Collection<Task> taskList = projectService.getProjectTasks(projectName, currentUser.getId());
+        @Nullable final Collection<Task> taskList = projectService.getProjectTasks(currentUser.getId(), projectName);
         if (taskList == null)
             return;
         for (@Nullable final IEntity task : taskList) {

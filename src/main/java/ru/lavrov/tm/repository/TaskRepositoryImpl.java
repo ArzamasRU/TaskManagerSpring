@@ -22,12 +22,12 @@ import java.util.List;
 public final class TaskRepositoryImpl extends AbstractRepository<Task> implements ITaskRepository {
 
     @Override
-    public void removeTaskByName(@Nullable final String taskName, @Nullable final String userId) {
+    public void removeTaskByName(@Nullable final String userId, @Nullable final String taskName) {
         if (taskName == null || taskName.isEmpty())
             throw new TaskNameIsInvalidException();
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        @Nullable final Task task = findEntityByName(taskName, userId);
+        @Nullable final Task task = findEntityByName(userId, taskName);
         if (task == null)
             throw new TaskNotExistsException();
         if (!task.getUserId().equals(userId))
@@ -37,7 +37,7 @@ public final class TaskRepositoryImpl extends AbstractRepository<Task> implement
 
     @Nullable
     @Override
-    public Collection<Task> getProjectTasks(@Nullable final String projectId, @Nullable final String userId) {
+    public Collection<Task> getProjectTasks(@Nullable final String userId, @Nullable final String projectId) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         if (projectId == null || projectId.isEmpty())
@@ -56,7 +56,7 @@ public final class TaskRepositoryImpl extends AbstractRepository<Task> implement
     }
 
     @Override
-    public void removeProjectTasks(@Nullable final String projectId, @Nullable final String userId) {
+    public void removeProjectTasks(@Nullable final String userId, @Nullable final String projectId) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         if (projectId == null || projectId.isEmpty())
@@ -75,7 +75,7 @@ public final class TaskRepositoryImpl extends AbstractRepository<Task> implement
     @Nullable
     @Override
     public Task findProjectTaskByName(
-            @Nullable final String taskName, @Nullable final String projectId, @Nullable final String userId
+            @Nullable final String userId, @Nullable final String taskName, @Nullable final String projectId
     ) {
         if (taskName == null || taskName.isEmpty())
             throw new TaskNameIsInvalidException();
@@ -100,8 +100,8 @@ public final class TaskRepositoryImpl extends AbstractRepository<Task> implement
 
     @Override
     public void renameTask(
-            @Nullable final String projectId, @Nullable final String oldName,
-            @Nullable final String newName, @Nullable final String userId
+            @Nullable final String userId, @Nullable final String projectId, @Nullable final String oldName,
+            @Nullable final String newName
     ) {
         if (projectId == null || projectId.isEmpty())
             throw new ProjectNameIsInvalidException();
@@ -109,12 +109,12 @@ public final class TaskRepositoryImpl extends AbstractRepository<Task> implement
             throw new TaskNameIsInvalidException();
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        @Nullable final Task task = findEntityByName(oldName, userId);
+        @Nullable final Task task = findEntityByName(userId, oldName);
         if (task == null)
             throw new TaskNotExistsException();
         if (task.getUserId().equals(userId))
             throw new TaskNotExistsException();
-        if (findProjectTaskByName(newName, projectId, userId) != null)
+        if (findProjectTaskByName(userId, newName, projectId) != null)
             throw new TaskExistsException();
         task.setName(newName);
     }
@@ -139,7 +139,7 @@ public final class TaskRepositoryImpl extends AbstractRepository<Task> implement
 
     @Nullable
     @Override
-    public Task findEntityByName(@Nullable final String entityName, @Nullable final String userId) {
+    public Task findEntityByName(@Nullable final String userId, @Nullable final String entityName) {
         if (entityName == null || entityName.isEmpty())
             throw new EntityNameIsInvalidException();
         if (userId == null || userId.isEmpty())
@@ -160,7 +160,7 @@ public final class TaskRepositoryImpl extends AbstractRepository<Task> implement
 
     @Nullable
     @Override
-    public Collection<Task> findAllByNamePart(@Nullable final String name, @Nullable final String userId) {
+    public Collection<Task> findAllByNamePart(@Nullable final String userId, @Nullable final String name) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         if (name == null || name.isEmpty())
@@ -177,7 +177,7 @@ public final class TaskRepositoryImpl extends AbstractRepository<Task> implement
 
     @Nullable
     @Override
-    public Collection<Task> findAllByDescPart(@Nullable final String description, @Nullable final String userId) {
+    public Collection<Task> findAllByDescPart(@Nullable final String userId, @Nullable final String description) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         if (description == null || description.isEmpty())

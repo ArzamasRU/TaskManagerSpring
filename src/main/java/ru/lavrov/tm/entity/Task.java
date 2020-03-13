@@ -24,9 +24,9 @@ public final class Task implements IEntity, IComparableEntity {
     @Nullable
     private String description;
     @Nullable
-    private Date startDate;
+    private Date startDate = new Date();
     @Nullable
-    private Date finishDate = new Date();
+    private Date finishDate;
     @Nullable
     private String projectId = null;
     @Nullable

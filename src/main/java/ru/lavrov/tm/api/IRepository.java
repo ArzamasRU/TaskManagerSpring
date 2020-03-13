@@ -9,7 +9,7 @@ public interface IRepository<T extends IEntity> {
 
     void merge(@Nullable T entity);
 
-    void remove(@Nullable String entityId, @Nullable String userId);
+    void remove(@Nullable String userId, @Nullable String entityId);
 
     void removeAll(@Nullable String userId);
 

@@ -2,7 +2,7 @@ package ru.lavrov.tm.constant;
 
 import org.jetbrains.annotations.NotNull;
 
-public class Constant {
+public final class Constant {
     @NotNull
     public static final String PROJECTS_FILE_PATH = "src/main/file/projects";
     @NotNull

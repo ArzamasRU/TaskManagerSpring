@@ -7,21 +7,23 @@ import java.util.Collection;
 import java.util.Comparator;
 
 public interface ITaskRepository extends IRepository<Task> {
-    void removeTaskByName(@Nullable String taskName, @Nullable String userId);
+    void removeTaskByName(@Nullable String userId, @Nullable String taskName);
 
-    Collection<Task> getProjectTasks(@Nullable String projectId, @Nullable String userId);
+    Collection<Task> getProjectTasks(@Nullable String userId, @Nullable String projectId);
 
-    void removeProjectTasks(@Nullable String projectId, @Nullable String userId);
+    void removeProjectTasks(@Nullable String userId, @Nullable String projectId);
 
-    Task findProjectTaskByName(@Nullable String taskName, @Nullable String projectId, @Nullable String userId);
+    Task findProjectTaskByName(@Nullable String userId, @Nullable String taskName, @Nullable String projectId);
 
-    void renameTask(@Nullable String projectId, @Nullable String oldName, @Nullable String newName, @Nullable String userId);
+    void renameTask(
+            @Nullable String userId, @Nullable String projectId, @Nullable String oldName, @Nullable String newName
+    );
 
-    Task findEntityByName(@Nullable String entityName, @Nullable String userId);
+    Task findEntityByName(@Nullable String userId, @Nullable String entityName);
 
     Collection<Task> findAll(@Nullable String userId, @Nullable Comparator<Task> comparator);
 
-    Collection<Task> findAllByNamePart(@Nullable String name, @Nullable String userId);
+    Collection<Task> findAllByNamePart(@Nullable String userId, @Nullable String name);
 
-    Collection<Task> findAllByDescPart(@Nullable String description, @Nullable String userId);
+    Collection<Task> findAllByDescPart(@Nullable String userId, @Nullable String description);
 }

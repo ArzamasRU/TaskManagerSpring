@@ -17,7 +17,7 @@ import java.util.Collection;
 import static ru.lavrov.tm.constant.Constant.*;
 import static ru.lavrov.tm.util.JAXBUtil.*;
 
-public class ToXMLByJAXBСommand extends AbstractCommand {
+public final class DataToXMLByJAXBСommand extends AbstractCommand {
     private static final boolean SAFE = true;
     @Nullable
     private static final Collection<Role> ROLES = Arrays.asList(Role.ADMIN, Role.USER);
@@ -47,9 +47,13 @@ public class ToXMLByJAXBСommand extends AbstractCommand {
         writeToXMLByJAXB(Arrays.asList(currentUser), EXTERNALIZATION_DIR_PATH);
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
         @NotNull final Collection<Project> projectList = projectService.findAll(currentUser.getId());
+        if (projectList == null)
+            return;;
         writeToXMLByJAXB(projectList, EXTERNALIZATION_DIR_PATH);
         @Nullable final ITaskService taskService = bootstrap.getTaskService();
         @Nullable final Collection<Task> taskList = taskService.findAll(currentUser.getId());
+        if (taskList == null)
+            return;;
         writeToXMLByJAXB(taskList, EXTERNALIZATION_DIR_PATH);
         System.out.println("[ok]");
         System.out.println();

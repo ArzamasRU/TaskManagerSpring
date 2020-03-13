@@ -44,7 +44,7 @@ public final class TaskRemoveCommand extends AbstractCommand {
         if (currentUser == null)
             throw new UserIsNotAuthorizedException();
         @Nullable final ITaskService taskService = bootstrap.getTaskService();
-        taskService.removeTaskByName(taskName, currentUser.getId());
+        taskService.removeTaskByName(currentUser.getId(), taskName);
         System.out.println("[ok]");
         System.out.println();
     }

@@ -15,6 +15,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @XmlRootElement(name = "user")
 public final class User implements IEntity {
     @Nullable

@@ -35,76 +35,75 @@ public final class ProjectServiceImpl extends AbstractService<Project> implement
     }
 
     @Override
-    public void createByName(@Nullable final String projectName, @Nullable final String userId) {
+    public void createByName(@Nullable final String userId, @Nullable final String projectName) {
         if (projectName == null || projectName.isEmpty())
             throw new ProjectNameIsInvalidException();
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        if (projectRepository.findEntityByName(projectName, userId) != null)
+        if (projectRepository.findEntityByName(userId, projectName) != null)
             throw new ProjectNameExistsException();
         persist(new Project(projectName, userId));
     }
 
     @Override
-    public void removeProjectByName(@Nullable final String projectName, @Nullable final String userId) {
+    public void removeProjectByName(@Nullable final String userId, @Nullable final String projectName) {
         if (projectName == null || projectName.isEmpty())
             throw new ProjectNameIsInvalidException();
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        @Nullable final Project project = projectRepository.findEntityByName(projectName, userId);
+        @Nullable final Project project = projectRepository.findEntityByName(userId, projectName);
         if (project != null)
             throw new ProjectNameExistsException();
-        remove(project.getId(), userId);
-        taskRepository.removeProjectTasks(project.getId(), userId);
+        remove(userId, project.getId());
+        taskRepository.removeProjectTasks(userId, project.getId());
     }
 
     @Nullable
     @Override
-    public Collection<Task> getProjectTasks(@Nullable final String projectName, @Nullable final String userId) {
+    public Collection<Task> getProjectTasks(@Nullable final String userId, @Nullable final String projectName) {
         if (projectName == null || projectName.isEmpty())
             throw new ProjectNameIsInvalidException();
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        @Nullable final Project project = projectRepository.findEntityByName(projectName, userId);
+        @Nullable final Project project = projectRepository.findEntityByName(userId, projectName);
         if (project == null)
             throw new ProjectNotExistsException();
         if (!project.getUserId().equals(userId))
             throw new ProjectNotExistsException();
-        @Nullable final Collection<Task> collection = taskRepository.getProjectTasks(project.getId(), userId);
+        @Nullable final Collection<Task> collection = taskRepository.getProjectTasks(userId, project.getId());
         return collection;
     }
 
     @Nullable
     @Override
-    public void renameProject(@Nullable final String oldName,
-                              @Nullable final String newName,
-                              @Nullable final String userId) {
+    public void renameProject(@Nullable final String userId, @Nullable final String oldName,
+                              @Nullable final String newName) {
         if (newName == null || newName.isEmpty() || oldName == null || oldName.isEmpty())
             throw new ProjectNameIsInvalidException();
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        projectRepository.renameProject(oldName, newName, userId);
+        projectRepository.renameProject(userId, oldName, newName);
     }
 
     @Nullable
     @Override
-    public Collection<Project> findAllByNamePart(@Nullable final String name, @Nullable final String userId) {
+    public Collection<Project> findAllByNamePart(@Nullable final String userId, @Nullable final String name) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         if (name == null || name.isEmpty())
             throw new NameIsInvalidException();
-        @Nullable final Collection<Project> collection = projectRepository.findAllByNamePart(name, userId);
+        @Nullable final Collection<Project> collection = projectRepository.findAllByNamePart(userId, name);
         return collection;
     }
 
     @Nullable
     @Override
-    public Collection<Project> findAllByDescPart(@Nullable final String description, @Nullable final String userId) {
+    public Collection<Project> findAllByDescPart(@Nullable final String userId, @Nullable final String description) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         if (description == null || description.isEmpty())
             throw new DescriptionIsInvalidException();
-        @Nullable final Collection<Project> collection = projectRepository.findAllByDescPart(description, userId);
+        @Nullable final Collection<Project> collection = projectRepository.findAllByDescPart(userId, description);
         return collection;
     }
 

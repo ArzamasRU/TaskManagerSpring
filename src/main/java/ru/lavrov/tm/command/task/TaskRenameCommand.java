@@ -48,7 +48,7 @@ public final class TaskRenameCommand extends AbstractCommand {
         if (currentUser == null)
             throw new UserIsNotAuthorizedException();
         @Nullable final ITaskService taskService = bootstrap.getTaskService();
-        taskService.renameTask(projectName, oldName, newName, currentUser.getId());
+        taskService.renameTask(currentUser.getId(), projectName, oldName, newName);
         System.out.println("[ok]");
         System.out.println();
     }

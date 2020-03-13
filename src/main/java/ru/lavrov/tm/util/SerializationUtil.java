@@ -7,7 +7,7 @@ import ru.lavrov.tm.api.IEntity;
 import java.io.*;
 import java.util.Collection;
 
-public class SerializationUtil {
+public final class SerializationUtil {
 
     public static void write(@NotNull final Collection<? extends IEntity> list, @NotNull final String path) {
         try {

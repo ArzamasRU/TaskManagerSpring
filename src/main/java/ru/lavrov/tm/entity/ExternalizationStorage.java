@@ -3,6 +3,7 @@ package ru.lavrov.tm.entity;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -14,15 +15,15 @@ import java.util.Collection;
 @Setter
 @XmlRootElement(name = "ExternalizationStorage")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ExternalizationStorage {
+public final class ExternalizationStorage {
 
-    @NotNull
+    @Nullable
     @XmlElement(name = "projects")
     private Collection<Project> projectList;
-    @NotNull
+    @Nullable
     @XmlElement(name = "tasks")
     private Collection<Task> taskList;
-    @NotNull
+    @Nullable
     @XmlElement(name = "users")
     private Collection<User> userList;
 

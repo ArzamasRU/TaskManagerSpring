@@ -44,7 +44,7 @@ public final class ProjectRemoveCommand extends AbstractCommand {
         if (currentUser == null)
             throw new UserIsNotAuthorizedException();
         @Nullable final IProjectService projectService = bootstrap.getProjectService();
-        projectService.removeProjectByName(projectName, currentUser.getId());
+        projectService.removeProjectByName(currentUser.getId(), projectName);
         System.out.println("[ok]");
         System.out.println();
     }

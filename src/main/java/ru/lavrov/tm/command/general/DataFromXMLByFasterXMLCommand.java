@@ -24,8 +24,7 @@ import java.util.Collection;
 
 import static ru.lavrov.tm.constant.Constant.*;
 
-
-public class FromXMLByFasterXMLCommand extends AbstractCommand {
+public final class DataFromXMLByFasterXMLCommand extends AbstractCommand {
     private static final boolean SAFE = true;
     @Nullable
     private static final Collection<Role> ROLES = Arrays.asList(Role.ADMIN, Role.USER);
@@ -49,8 +48,6 @@ public class FromXMLByFasterXMLCommand extends AbstractCommand {
     @Override
     public void execute() {
         System.out.println("[Externalization data from XML By fasterXML]");
-//        @Nullable final JacksonXmlModule module = new JacksonXmlModule();
-//        module.setDefaultUseWrapper(false);
         @Nullable final XmlMapper xmlMapper = new XmlMapper();
         @Nullable final Collection<Project> projectList;
         @Nullable final Collection<Task> taskList;
@@ -59,12 +56,8 @@ public class FromXMLByFasterXMLCommand extends AbstractCommand {
         @Nullable final ITaskService taskService = bootstrap.getTaskService();
         @Nullable final IUserService userService = bootstrap.getUserService();
         try {
-
             projectList = Arrays.asList(xmlMapper
                     .readValue(new File(PROJECTS_FILE_PATH + ".xml"), Project[].class));
-
-            System.out.println(projectList);
-
             taskList = Arrays.asList(xmlMapper
                     .readValue(new File(TASKS_FILE_PATH + ".xml"), Task[].class));
             userList = Arrays.asList(xmlMapper
@@ -73,9 +66,6 @@ public class FromXMLByFasterXMLCommand extends AbstractCommand {
             System.out.println(e);
             return;
         }
-
-
-
         if (projectList != null)
             for (@Nullable final Project project : projectList) {
                 if (project == null)

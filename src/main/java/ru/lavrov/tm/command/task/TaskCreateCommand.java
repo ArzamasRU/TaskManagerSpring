@@ -46,7 +46,7 @@ public final class TaskCreateCommand extends AbstractCommand {
         if (currentUser == null)
             throw new UserIsNotAuthorizedException();
         @Nullable final ITaskService taskService = bootstrap.getTaskService();
-        taskService.createByName(taskName, projectName, currentUser.getId());
+        taskService.createByName(currentUser.getId(), taskName, projectName);
         System.out.println("[ok]");
         System.out.println();
     }

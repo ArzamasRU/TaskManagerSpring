@@ -1,14 +1,11 @@
 package ru.lavrov.tm.command.general;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.IProjectService;
 import ru.lavrov.tm.api.ITaskService;
 import ru.lavrov.tm.api.IUserService;
 import ru.lavrov.tm.command.AbstractCommand;
-import ru.lavrov.tm.entity.ExternalizationStorage;
 import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Task;
 import ru.lavrov.tm.entity.User;
@@ -17,24 +14,20 @@ import ru.lavrov.tm.exception.project.ProjectNotExistsException;
 import ru.lavrov.tm.exception.task.TaskNotExistsException;
 import ru.lavrov.tm.exception.user.UserNotExistsException;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
 import static ru.lavrov.tm.constant.Constant.*;
-import static ru.lavrov.tm.util.JAXBUtil.readFromJSONByJAXB;
+import static ru.lavrov.tm.util.JAXBUtil.readFromXMLByJAXB;
 
-
-public class FromJSONByFasterXMLCommand extends AbstractCommand {
+public final class DataFromXMLByJAXBСommand extends AbstractCommand {
     private static final boolean SAFE = true;
     @Nullable
     private static final Collection<Role> ROLES = Arrays.asList(Role.ADMIN, Role.USER);
     @NotNull
-    private static final String COMMAND = "from-JSON-by-fasterXML";
+    private static final String COMMAND = "from-XML-by-JAXB";
     @NotNull
-    private static final String DESCRIPTION = "Externalize data from JSON by fasterXML.";
+    private static final String DESCRIPTION = "Externalize data from XML by JAXB.";
 
     @NotNull
     @Override
@@ -50,36 +43,25 @@ public class FromJSONByFasterXMLCommand extends AbstractCommand {
 
     @Override
     public void execute() {
-        System.out.println("[Externalization data from JSON By fasterXML]");
-        @Nullable final ObjectMapper objectMapper = new ObjectMapper();
-        @Nullable final Collection<Project> projectList;
-        @Nullable final Collection<Task> taskList;
-        @Nullable final Collection<User> userList;
+        System.out.println("[Externalization data from XML By JAXB]");
+        @Nullable final Collection<Project> projectList = readFromXMLByJAXB(Project.class, EXTERNALIZATION_DIR_PATH);
         @Nullable final IProjectService projectService = bootstrap.getProjectService();
-        @Nullable final ITaskService taskService = bootstrap.getTaskService();
-        @Nullable final IUserService userService = bootstrap.getUserService();
-        try {
-            projectList = Arrays.asList(objectMapper
-                    .readValue(new File(PROJECTS_FILE_PATH + ".json"), Project[].class));
-            taskList = Arrays.asList(objectMapper
-                    .readValue(new File(TASKS_FILE_PATH + ".json"), Task[].class));
-            userList = Arrays.asList(objectMapper
-                    .readValue(new File(USERS_FILE_PATH + ".json"), User[].class));
-        } catch (IOException e) {
-            return;
-        }
         if (projectList != null)
             for (@Nullable final Project project : projectList) {
                 if (project == null)
                     throw new ProjectNotExistsException();
                 projectService.persist(project);
             }
+        @Nullable final Collection<Task> taskList = readFromXMLByJAXB(Task.class, EXTERNALIZATION_DIR_PATH);
+        @Nullable final ITaskService taskService = bootstrap.getTaskService();
         if (taskList != null)
             for (@Nullable final Task task : taskList) {
                 if (task == null)
                     throw new TaskNotExistsException();
                 taskService.persist(task);
             }
+        @Nullable final Collection<User> userList = readFromXMLByJAXB(User.class, EXTERNALIZATION_DIR_PATH);
+        @Nullable final IUserService userService = bootstrap.getUserService();
         if (userList != null)
             for (@Nullable final User user : userList) {
                 if (user == null)

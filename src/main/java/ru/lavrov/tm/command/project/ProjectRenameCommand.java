@@ -46,7 +46,7 @@ public final class ProjectRenameCommand extends AbstractCommand {
         if (currentUser == null)
             throw new UserIsNotAuthorizedException();
         @Nullable final IProjectService projectService = bootstrap.getProjectService();
-        projectService.renameProject(oldName, newName, currentUser.getId());
+        projectService.renameProject(currentUser.getId(), oldName, newName);
         System.out.println("[ok]");
         System.out.println();
     }

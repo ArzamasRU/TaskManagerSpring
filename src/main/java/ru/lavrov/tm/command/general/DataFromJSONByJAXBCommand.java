@@ -22,7 +22,7 @@ import static ru.lavrov.tm.constant.Constant.EXTERNALIZATION_DIR_PATH;
 import static ru.lavrov.tm.util.JAXBUtil.readFromJSONByJAXB;
 
 
-public class FromJSONByJAXBCommand extends AbstractCommand {
+public final class DataFromJSONByJAXBCommand extends AbstractCommand {
     private static final boolean SAFE = true;
     @Nullable
     private static final Collection<Role> ROLES = Arrays.asList(Role.ADMIN, Role.USER);
@@ -49,6 +49,8 @@ public class FromJSONByJAXBCommand extends AbstractCommand {
         @NotNull final String filePath =
                 EXTERNALIZATION_DIR_PATH + ExternalizationStorage.class.getSimpleName() + ".json";
         @Nullable final ExternalizationStorage storage = readFromJSONByJAXB(ExternalizationStorage.class , filePath);
+        if (storage == null)
+            return;
         @Nullable final IProjectService projectService = bootstrap.getProjectService();
         @Nullable final Collection<Project> projectList = storage.getProjectList();
         if (projectList != null)

@@ -18,8 +18,7 @@ import java.util.Collection;
 import static ru.lavrov.tm.constant.Constant.EXTERNALIZATION_DIR_PATH;
 import static ru.lavrov.tm.util.JAXBUtil.*;
 
-
-public class ToJSONByJAXBCommand extends AbstractCommand {
+public final class DataToJSONByJAXBCommand extends AbstractCommand {
     private static final boolean SAFE = true;
     @Nullable
     private static final Collection<Role> ROLES = Arrays.asList(Role.ADMIN, Role.USER);
@@ -49,8 +48,12 @@ public class ToJSONByJAXBCommand extends AbstractCommand {
         @NotNull final ExternalizationStorage storage = new ExternalizationStorage();
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
         @NotNull final Collection<Project> projectList = projectService.findAll(currentUser.getId());
+        if (projectList == null)
+            return;;
         @NotNull final ITaskService taskService = bootstrap.getTaskService();
         @NotNull final Collection<Task> taskList = taskService.findAll(currentUser.getId());
+        if (taskList == null)
+            return;;
         storage.setProjectList(projectList);
         storage.setTaskList(taskList);
         storage.setUserList(Arrays.asList(currentUser));

@@ -35,7 +35,7 @@ public abstract class AbstractRepository<T extends IEntity> implements IReposito
     }
 
     @Override
-    public void remove(@Nullable final String entityId, @Nullable final String userId) {
+    public void remove(@Nullable final String userId, @Nullable final String entityId) {
         if (entityId == null || entityId.isEmpty())
             throw new EntityNotExistsException();
         if (userId == null || userId.isEmpty())
@@ -56,7 +56,7 @@ public abstract class AbstractRepository<T extends IEntity> implements IReposito
         for (@Nullable final T entity : list) {
             if (entity == null)
                 continue;
-            remove(entity.getId(), userId);
+            remove(userId, entity.getId());
         }
     }
 

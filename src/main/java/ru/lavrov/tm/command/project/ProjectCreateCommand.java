@@ -44,7 +44,7 @@ public final class ProjectCreateCommand extends AbstractCommand {
         if (currentUser == null)
             throw new UserIsNotAuthorizedException();
         @Nullable final IProjectService projectService = bootstrap.getProjectService();
-        projectService.createByName(projectName, currentUser.getId());
+        projectService.createByName(currentUser.getId(), projectName);
         System.out.println("[ok]");
         System.out.println();
     }

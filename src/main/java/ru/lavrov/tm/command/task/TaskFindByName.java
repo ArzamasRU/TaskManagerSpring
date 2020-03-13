@@ -44,7 +44,7 @@ public final class TaskFindByName extends AbstractCommand {
             throw new UserIsNotAuthorizedException();
         System.out.println("enter name:");
         @Nullable final String name = InputUtil.INPUT.nextLine();
-        @Nullable final Collection<Task> taskList = taskService.findAllByNamePart(name, currentUser.getId());
+        @Nullable final Collection<Task> taskList = taskService.findAllByNamePart(currentUser.getId(), name);
         if (taskList == null)
             return;
         int index = 1;

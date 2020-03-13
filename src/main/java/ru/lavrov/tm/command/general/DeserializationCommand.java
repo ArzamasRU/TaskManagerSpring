@@ -20,7 +20,7 @@ import java.util.Collection;
 import static ru.lavrov.tm.constant.Constant.*;
 import static ru.lavrov.tm.util.SerializationUtil.*;
 
-public class DeserializationCommand extends AbstractCommand {
+public final class DeserializationCommand extends AbstractCommand {
     private static final boolean SAFE = true;
     @Nullable
     private static final Collection<Role> ROLES = Arrays.asList(Role.ADMIN);

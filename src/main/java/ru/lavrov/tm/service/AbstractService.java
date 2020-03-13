@@ -33,12 +33,12 @@ public abstract class AbstractService<T extends IEntity> implements IService<T> 
     }
 
     @Override
-    public void remove(@Nullable final String entityId, @Nullable final String userId) {
+    public void remove(@Nullable final String userId, @Nullable final String entityId) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         if (entityId == null || entityId.isEmpty())
             throw new ProjectNotExistsException();
-        repository.remove(entityId, userId);
+        repository.remove(userId, entityId);
     }
 
     @Override

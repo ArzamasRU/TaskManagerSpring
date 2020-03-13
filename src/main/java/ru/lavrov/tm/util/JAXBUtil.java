@@ -20,7 +20,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class JAXBUtil {
+public final class JAXBUtil {
 
     public static <T> void writeToXMLByJAXB(@Nullable final Collection<T> list, @Nullable final String path) {
         if (list == null || list.isEmpty())

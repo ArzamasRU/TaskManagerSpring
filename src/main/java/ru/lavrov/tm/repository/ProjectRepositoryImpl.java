@@ -19,16 +19,16 @@ public final class ProjectRepositoryImpl extends AbstractRepository<Project> imp
 
     @Override
     public void renameProject(
-            @Nullable final String oldName, @Nullable final String newName, @Nullable final String userId
+            @Nullable final String userId, @Nullable final String oldName, @Nullable final String newName
     ) {
         if (newName == null || newName.isEmpty() || oldName == null || oldName.isEmpty())
             throw new ProjectNameIsInvalidException();
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        @Nullable Project project = findEntityByName(newName, userId);
+        @Nullable Project project = findEntityByName(userId, newName);
         if (project != null)
             throw new ProjectNameExistsException();
-        project = findEntityByName(oldName, userId);
+        project = findEntityByName(userId, oldName);
         if (project != null)
             throw new ProjectNameExistsException();
         if (!project.getUserId().equals(userId))
@@ -56,7 +56,7 @@ public final class ProjectRepositoryImpl extends AbstractRepository<Project> imp
 
     @Nullable
     @Override
-    public Collection<Project> findAllByNamePart(@Nullable final String name, @Nullable final String userId) {
+    public Collection<Project> findAllByNamePart(@Nullable final String userId, @Nullable final String name) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         if (name == null || name.isEmpty())
@@ -73,7 +73,7 @@ public final class ProjectRepositoryImpl extends AbstractRepository<Project> imp
 
     @Nullable
     @Override
-    public Collection<Project> findAllByDescPart(@Nullable final String description, @Nullable final String userId) {
+    public Collection<Project> findAllByDescPart(@Nullable final String userId, @Nullable final String description) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         if (description == null || description.isEmpty())
@@ -90,7 +90,7 @@ public final class ProjectRepositoryImpl extends AbstractRepository<Project> imp
 
     @Nullable
     @Override
-    public Project findEntityByName(@Nullable final String entityName, @Nullable final String userId) {
+    public Project findEntityByName(@Nullable final String userId, @Nullable final String entityName) {
         if (entityName == null || entityName.isEmpty())
             throw new EntityNameIsInvalidException();
         if (userId == null || userId.isEmpty())
