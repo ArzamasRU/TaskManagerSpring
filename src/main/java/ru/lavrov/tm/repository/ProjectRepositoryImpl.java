@@ -1,14 +1,9 @@
 package ru.lavrov.tm.repository;
 
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.api.IEntity;
 import ru.lavrov.tm.api.IProjectRepository;
-import ru.lavrov.tm.api.IRepository;
-import ru.lavrov.tm.comparator.FinishDateComparator;
-import ru.lavrov.tm.comparator.StartDateComparator;
 import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.exception.entity.EntityNameIsInvalidException;
-import ru.lavrov.tm.exception.entity.EntityNotExistsException;
 import ru.lavrov.tm.exception.general.DescriptionIsInvalidException;
 import ru.lavrov.tm.exception.general.NameIsInvalidException;
 import ru.lavrov.tm.exception.project.ProjectNameExistsException;
@@ -23,8 +18,9 @@ import java.util.Comparator;
 public final class ProjectRepositoryImpl extends AbstractRepository<Project> implements IProjectRepository {
 
     @Override
-    public void renameProject(@Nullable final String oldName, @Nullable final String newName,
-                              @Nullable final String userId) {
+    public void renameProject(
+            @Nullable final String oldName, @Nullable final String newName, @Nullable final String userId
+    ) {
         if (newName == null || newName.isEmpty() || oldName == null || oldName.isEmpty())
             throw new ProjectNameIsInvalidException();
         if (userId == null || userId.isEmpty())
@@ -94,7 +90,7 @@ public final class ProjectRepositoryImpl extends AbstractRepository<Project> imp
 
     @Nullable
     @Override
-    public Project findEntityByName(@Nullable final String entityName, @Nullable final String userId){
+    public Project findEntityByName(@Nullable final String entityName, @Nullable final String userId) {
         if (entityName == null || entityName.isEmpty())
             throw new EntityNameIsInvalidException();
         if (userId == null || userId.isEmpty())

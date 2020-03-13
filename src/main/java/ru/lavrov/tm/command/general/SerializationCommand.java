@@ -4,7 +4,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.IProjectService;
 import ru.lavrov.tm.api.ITaskService;
-import ru.lavrov.tm.api.IUserService;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Task;
@@ -12,14 +11,13 @@ import ru.lavrov.tm.entity.User;
 import ru.lavrov.tm.enumerate.Role;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 
-import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
 
-public class SerializeCommand extends AbstractCommand {
+import static ru.lavrov.tm.constant.Constant.*;
+import static ru.lavrov.tm.util.SerializationUtil.*;
+
+public class SerializationCommand extends AbstractCommand {
     private static final boolean SAFE = true;
     @Nullable
     private static final Collection<Role> ROLES = Arrays.asList(Role.ADMIN, Role.USER);
@@ -43,30 +41,16 @@ public class SerializeCommand extends AbstractCommand {
     @Override
     public void execute() {
         System.out.println("[Serialize data]");
-        @Nullable final IProjectService projectService = bootstrap.getProjectService();
-        @Nullable final ITaskService taskService = bootstrap.getTaskService();
-        @Nullable final IUserService userService = bootstrap.getUserService();
         @Nullable final User currentUser = bootstrap.getCurrentUser();
         if (currentUser == null)
             throw new UserIsNotAuthorizedException();
-        @NotNull final FileOutputStream userOutput = new FileOutputStream("src/main/file/users");
-        @NotNull final FileOutputStream projectOutput = new FileOutputStream("src/main/file/projects");
-        @NotNull final FileOutputStream taskOutput = new FileOutputStream("src/main/file/tasks");
-        @Nullable final Collection<Project> projectList = projectService.findAll(currentUser.getId());
+        write(Arrays.asList(currentUser), USERS_FILE_PATH);
+        @NotNull final IProjectService projectService = bootstrap.getProjectService();
+        @NotNull final Collection<Project> projectList = projectService.findAll(currentUser.getId());
+        write(projectList, PROJECTS_FILE_PATH);
+        @Nullable final ITaskService taskService = bootstrap.getTaskService();
         @Nullable final Collection<Task> taskList = taskService.findAll(currentUser.getId());
-        @Nullable final Collection<User> userList = userService.findAll(currentUser.getId());
-        try {
-            final ObjectOutputStream projectOutputStream = new ObjectOutputStream(projectOutput);
-            projectOutputStream.writeObject(projectList);
-            final ObjectOutputStream taskOutputStream = new ObjectOutputStream(taskOutput);
-            taskOutputStream.writeObject(taskList);
-            final ObjectOutputStream userOutputStream = new ObjectOutputStream(userOutput);
-            userOutputStream.writeObject(userList);
-            System.out.println("[SERIALIZATION COMPLETED]");
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
-
+        write(taskList, TASKS_FILE_PATH);
         System.out.println("[ok]");
         System.out.println();
     }

@@ -3,7 +3,10 @@ package ru.lavrov.tm.command.user;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.lavrov.tm.api.IUserRepository;
+import ru.lavrov.tm.api.IUserService;
 import ru.lavrov.tm.command.AbstractCommand;
+import ru.lavrov.tm.entity.User;
 import ru.lavrov.tm.enumerate.Role;
 import ru.lavrov.tm.util.InputUtil;
 

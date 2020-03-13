@@ -2,7 +2,10 @@ package ru.lavrov.tm.service;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.api.*;
+import ru.lavrov.tm.api.IProjectRepository;
+import ru.lavrov.tm.api.ITaskRepository;
+import ru.lavrov.tm.api.ITaskService;
+import ru.lavrov.tm.api.IUserRepository;
 import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Task;
 import ru.lavrov.tm.exception.general.DescriptionIsInvalidException;
@@ -17,9 +20,12 @@ import java.util.Collection;
 import java.util.Comparator;
 
 public final class TaskServiceImpl extends AbstractService<Task> implements ITaskService {
-    @NotNull protected final IProjectRepository projectRepository;
-    @NotNull protected final ITaskRepository taskRepository;
-    @NotNull protected final IUserRepository userRepository;
+    @NotNull
+    protected final IProjectRepository projectRepository;
+    @NotNull
+    protected final ITaskRepository taskRepository;
+    @NotNull
+    protected final IUserRepository userRepository;
 
     public TaskServiceImpl(final ITaskRepository taskRepository, final IProjectRepository projectRepository,
                            final IUserRepository userRepository) {
@@ -29,7 +35,9 @@ public final class TaskServiceImpl extends AbstractService<Task> implements ITas
         this.userRepository = userRepository;
     }
 
-    public void createByName(@Nullable final String taskName, @Nullable final String projectName, @Nullable final String userId) {
+    public void createByName(
+            @Nullable final String taskName, @Nullable final String projectName, @Nullable final String userId
+    ) {
         if (taskName == null || taskName.isEmpty())
             throw new TaskNameIsInvalidException();
         if (projectName == null || projectName.isEmpty())
@@ -54,8 +62,10 @@ public final class TaskServiceImpl extends AbstractService<Task> implements ITas
         taskRepository.removeTaskByName(taskName, userId);
     }
 
-    public void renameTask(@Nullable final String projectName, @Nullable final String oldName,
-                           @Nullable final String newName, @Nullable final String userId) {
+    public void renameTask(
+            @Nullable final String projectName, @Nullable final String oldName,
+            @Nullable final String newName, @Nullable final String userId
+    ) {
         if (projectName == null || projectName.isEmpty())
             throw new ProjectNameIsInvalidException();
         if (newName == null || newName.isEmpty() || oldName == null || oldName.isEmpty())
@@ -75,7 +85,7 @@ public final class TaskServiceImpl extends AbstractService<Task> implements ITas
             throw new UserIsNotAuthorizedException();
         if (name == null || name.isEmpty())
             throw new NameIsInvalidException();
-        @Nullable final Collection<Task> collection = taskRepository.findAllByNamePart(name ,userId);
+        @Nullable final Collection<Task> collection = taskRepository.findAllByNamePart(name, userId);
         return collection;
     }
 
@@ -86,7 +96,7 @@ public final class TaskServiceImpl extends AbstractService<Task> implements ITas
             throw new UserIsNotAuthorizedException();
         if (description == null || description.isEmpty())
             throw new DescriptionIsInvalidException();
-        @Nullable final Collection<Task> collection = taskRepository.findAllByDescPart(description ,userId);
+        @Nullable final Collection<Task> collection = taskRepository.findAllByDescPart(description, userId);
         return collection;
     }
 

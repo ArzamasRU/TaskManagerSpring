@@ -48,7 +48,7 @@ public final class TaskFindByName extends AbstractCommand {
         if (taskList == null)
             return;
         int index = 1;
-        for (@Nullable final IEntity task: taskList) {
+        for (@Nullable final IEntity task : taskList) {
             if (task == null)
                 continue;
             System.out.println(index++ + ". " + task);

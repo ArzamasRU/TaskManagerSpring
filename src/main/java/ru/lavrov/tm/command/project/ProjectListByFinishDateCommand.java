@@ -50,7 +50,7 @@ public final class ProjectListByFinishDateCommand extends AbstractCommand {
         @Nullable final Collection<Project> projectList = projectService.findAll(currentUser.getId(), comparator);
         if (projectList == null)
             return;
-        for (@Nullable final IEntity project: projectList) {
+        for (@Nullable final IEntity project : projectList) {
             if (project == null)
                 continue;
             System.out.println(index++ + ". " + project);

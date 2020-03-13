@@ -3,18 +3,19 @@ package ru.lavrov.tm.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.IComparableEntity;
 import ru.lavrov.tm.api.IEntity;
 import ru.lavrov.tm.enumerate.Status;
 
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
 import java.util.UUID;
 
-@NoArgsConstructor
 @Getter
 @Setter
+@NoArgsConstructor
+@XmlRootElement(name = "project")
 public final class Project implements IEntity, IComparableEntity {
     @Nullable
     private String name;

@@ -8,8 +8,8 @@ import ru.lavrov.tm.api.IProjectService;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.entity.Task;
 import ru.lavrov.tm.entity.User;
-import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 import ru.lavrov.tm.enumerate.Role;
+import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 import ru.lavrov.tm.util.InputUtil;
 
 import java.util.Arrays;
@@ -49,7 +49,7 @@ public final class ProjectTasksListCommand extends AbstractCommand {
         @Nullable final Collection<Task> taskList = projectService.getProjectTasks(projectName, currentUser.getId());
         if (taskList == null)
             return;
-        for (@Nullable final IEntity task: taskList) {
+        for (@Nullable final IEntity task : taskList) {
             if (task == null)
                 continue;
             System.out.println(task);

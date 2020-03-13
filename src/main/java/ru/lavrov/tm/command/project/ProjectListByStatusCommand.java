@@ -6,7 +6,6 @@ import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.IEntity;
 import ru.lavrov.tm.api.IProjectService;
 import ru.lavrov.tm.command.AbstractCommand;
-import ru.lavrov.tm.comparator.FinishDateComparator;
 import ru.lavrov.tm.comparator.StatusComparator;
 import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.User;
@@ -51,7 +50,7 @@ public final class ProjectListByStatusCommand extends AbstractCommand {
         @Nullable final Collection<Project> projectList = projectService.findAll(currentUser.getId(), comparator);
         if (projectList == null)
             return;
-        for (@Nullable final IEntity project: projectList) {
+        for (@Nullable final IEntity project : projectList) {
             if (project == null)
                 continue;
             System.out.println(index++ + ". " + project);

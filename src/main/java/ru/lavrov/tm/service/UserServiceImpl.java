@@ -3,19 +3,25 @@ package ru.lavrov.tm.service;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.api.*;
+import ru.lavrov.tm.api.IProjectRepository;
+import ru.lavrov.tm.api.ITaskRepository;
+import ru.lavrov.tm.api.IUserRepository;
+import ru.lavrov.tm.api.IUserService;
 import ru.lavrov.tm.entity.User;
-import ru.lavrov.tm.exception.user.*;
 import ru.lavrov.tm.enumerate.Role;
+import ru.lavrov.tm.exception.user.*;
 import ru.lavrov.tm.exception.util.UtilAlgorithmNotExistsException;
 import ru.lavrov.tm.util.HashUtil;
 
 import java.security.NoSuchAlgorithmException;
 
 public final class UserServiceImpl extends AbstractService<User> implements IUserService {
-    @NotNull protected final IProjectRepository projectRepository;
-    @NotNull protected final ITaskRepository taskRepository;
-    @NotNull protected final IUserRepository userRepository;
+    @NotNull
+    protected final IProjectRepository projectRepository;
+    @NotNull
+    protected final ITaskRepository taskRepository;
+    @NotNull
+    protected final IUserRepository userRepository;
 
     public UserServiceImpl(final IUserRepository userRepository,
                            final IProjectRepository projectRepository,

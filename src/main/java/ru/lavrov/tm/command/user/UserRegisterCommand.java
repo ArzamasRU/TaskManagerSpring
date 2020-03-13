@@ -43,7 +43,7 @@ public final class UserRegisterCommand extends AbstractCommand {
         @Nullable final String role = InputUtil.INPUT.nextLine();
         @Nullable final IUserService userService = bootstrap.getUserService();
         userService.createByLogin(login, password, role);
-        System.out.println("[USER successfully registered]");
+        System.out.println("[You successfully registered]");
         System.out.println();
     }
 

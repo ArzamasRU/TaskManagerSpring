@@ -35,7 +35,7 @@ public final class HelpCommand extends AbstractCommand {
         @Nullable final Collection<AbstractCommand> list = bootstrap.getCommands();
         if (list == null)
             return;
-        for (@Nullable final AbstractCommand command: list) {
+        for (@Nullable final AbstractCommand command : list) {
             if (command == null)
                 continue;
             System.out.println(command.getCommand() + ": " + command.getDescription());

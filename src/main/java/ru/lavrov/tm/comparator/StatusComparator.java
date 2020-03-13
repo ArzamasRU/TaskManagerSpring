@@ -2,7 +2,6 @@ package ru.lavrov.tm.comparator;
 
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.IComparableEntity;
-import ru.lavrov.tm.api.IEntity;
 import ru.lavrov.tm.exception.entity.EntityCanNotBeComparedException;
 
 import java.util.Comparator;

@@ -9,6 +9,7 @@ import org.reflections.Reflections;
 import ru.lavrov.tm.api.*;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.entity.User;
+import ru.lavrov.tm.enumerate.Role;
 import ru.lavrov.tm.exception.command.CommandDescriptionIsInvalidException;
 import ru.lavrov.tm.exception.command.CommandIsInvalidException;
 import ru.lavrov.tm.exception.command.CommandNotExistsException;
@@ -17,7 +18,6 @@ import ru.lavrov.tm.exception.util.UtilAlgorithmNotExistsException;
 import ru.lavrov.tm.repository.ProjectRepositoryImpl;
 import ru.lavrov.tm.repository.TaskRepositoryImpl;
 import ru.lavrov.tm.repository.UserRepositoryImpl;
-import ru.lavrov.tm.enumerate.Role;
 import ru.lavrov.tm.service.ProjectServiceImpl;
 import ru.lavrov.tm.service.TaskServiceImpl;
 import ru.lavrov.tm.service.UserServiceImpl;
@@ -37,7 +37,8 @@ public final class Bootstrap implements IServiceLocator {
     @NotNull
     private final IUserRepository userRepository = new UserRepositoryImpl();
     @NotNull
-    private final IProjectService projectService = new ProjectServiceImpl(projectRepository, taskRepository, userRepository);
+    private final IProjectService projectService =
+            new ProjectServiceImpl(projectRepository, taskRepository, userRepository);
     @NotNull
     private final ITaskService taskService = new TaskServiceImpl(taskRepository, projectRepository, userRepository);
     @NotNull
@@ -48,11 +49,14 @@ public final class Bootstrap implements IServiceLocator {
     @Nullable
     private User currentUser;
     @Nullable
-    private static final Set<Class<? extends AbstractCommand>> classes =
-            new Reflections("ru.lavrov.tm").getSubTypesOf(AbstractCommand.class);
+    private static final Set<Class<? extends AbstractCommand>> classes;
+
+    static {
+        classes = new Reflections("ru.lavrov.tm").getSubTypesOf(AbstractCommand.class);
+    }
 
     public void init() throws InstantiationException, IllegalAccessException {
-        System.out.println(classes);
+        initProperties();
         initClasses(classes);
         initUsers();
         System.out.println("*** WELCOME TO TASK MANAGER ***");
@@ -62,7 +66,7 @@ public final class Bootstrap implements IServiceLocator {
             command = InputUtil.INPUT.nextLine();
             try {
                 execute(command);
-            } catch (RuntimeException e){
+            } catch (RuntimeException e) {
                 System.out.println(e.getMessage());
             }
         }
@@ -80,9 +84,13 @@ public final class Bootstrap implements IServiceLocator {
         }
     }
 
-    private void initUsers(){
+    private void initUsers() {
         userService.createByLogin("user", "user", Role.USER.getRole());
         userService.createByLogin("admin", "admin", Role.ADMIN.getRole());
+    }
+
+    private void initProperties(){
+        System.setProperty("javax.xml.bind.context.factory","org.eclipse.persistence.jaxb.JAXBContextFactory");
     }
 
     private void registry(@Nullable final AbstractCommand command) {
@@ -116,7 +124,7 @@ public final class Bootstrap implements IServiceLocator {
         abstractCommand.execute();
     }
 
-    private boolean hasPermission(@Nullable final Collection<Role> listRoles, @Nullable Role role){
+    private boolean hasPermission(@Nullable final Collection<Role> listRoles, @Nullable Role role) {
         if (listRoles == null)
             return true;
         if (role == null)
@@ -129,7 +137,7 @@ public final class Bootstrap implements IServiceLocator {
         return new ArrayList(commands.values());
     }
 
-    public void login(@Nullable final String login, @Nullable final String password){
+    public void login(@Nullable final String login, @Nullable final String password) {
         if (login == null || login.isEmpty())
             throw new UserLoginIsInvalidException();
         if (password == null || password.isEmpty())
@@ -148,7 +156,7 @@ public final class Bootstrap implements IServiceLocator {
         setCurrentUser(user);
     }
 
-    public void logout(){
+    public void logout() {
         setCurrentUser(null);
     }
 }

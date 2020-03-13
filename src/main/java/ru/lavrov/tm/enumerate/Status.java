@@ -20,7 +20,7 @@ public enum Status {
     }
 
     @NotNull
-    public String displayName(){
+    public String displayName() {
         return name();
     }
 }

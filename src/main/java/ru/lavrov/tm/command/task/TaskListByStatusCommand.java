@@ -8,7 +8,6 @@ import ru.lavrov.tm.api.ITaskService;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.comparator.FinishDateComparator;
 import ru.lavrov.tm.entity.Task;
-import ru.lavrov.tm.entity.Task;
 import ru.lavrov.tm.entity.User;
 import ru.lavrov.tm.enumerate.Role;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
@@ -51,7 +50,7 @@ public final class TaskListByStatusCommand extends AbstractCommand {
         @Nullable final Collection<Task> taskList = taskService.findAll(currentUser.getId(), comparator);
         if (taskList == null)
             return;
-        for (@Nullable final IEntity task: taskList) {
+        for (@Nullable final IEntity task : taskList) {
             if (task == null)
                 continue;
             System.out.println(index++ + ". " + task);

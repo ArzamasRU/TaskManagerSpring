@@ -48,7 +48,7 @@ public final class ProjectFindByDescription extends AbstractCommand {
         if (projectList == null)
             return;
         int index = 1;
-        for (@Nullable final IEntity project: projectList) {
+        for (@Nullable final IEntity project : projectList) {
             if (project == null)
                 continue;
             System.out.println(index++ + ". " + project);

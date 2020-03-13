@@ -6,8 +6,8 @@ import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.ITaskService;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.entity.User;
-import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 import ru.lavrov.tm.enumerate.Role;
+import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 import ru.lavrov.tm.util.InputUtil;
 
 import java.util.Arrays;
@@ -48,7 +48,7 @@ public final class TaskRenameCommand extends AbstractCommand {
         if (currentUser == null)
             throw new UserIsNotAuthorizedException();
         @Nullable final ITaskService taskService = bootstrap.getTaskService();
-        taskService.renameTask(projectName ,oldName, newName, currentUser.getId());
+        taskService.renameTask(projectName, oldName, newName, currentUser.getId());
         System.out.println("[ok]");
         System.out.println();
     }

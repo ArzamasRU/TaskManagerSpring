@@ -10,12 +10,11 @@ import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Task;
 import ru.lavrov.tm.entity.User;
-import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 import ru.lavrov.tm.enumerate.Role;
+import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Scanner;
 
 @NoArgsConstructor
 public final class UserDisplayCommand extends AbstractCommand {
@@ -54,17 +53,17 @@ public final class UserDisplayCommand extends AbstractCommand {
         @Nullable final Collection<Project> projectList = projectService.findAll(currentUser.getId());
         if (projectList == null)
             return;
-        for (@Nullable final IEntity project: projectList) {
+        for (@Nullable final IEntity project : projectList) {
             if (project == null)
                 continue;
             System.out.println(index++ + ". " + project);
         }
         System.out.println("attached tasks:");
-        index = 1;
         @Nullable final Collection<Task> taskList = taskService.findAll(currentUser.getId());
         if (taskList == null)
             return;
-        for (@Nullable final IEntity task: taskList) {
+        index = 1;
+        for (@Nullable final IEntity task : taskList) {
             if (task == null)
                 continue;
             System.out.println(index++ + ". " + task);

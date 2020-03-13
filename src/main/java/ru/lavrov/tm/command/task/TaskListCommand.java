@@ -8,8 +8,8 @@ import ru.lavrov.tm.api.ITaskService;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.entity.Task;
 import ru.lavrov.tm.entity.User;
-import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 import ru.lavrov.tm.enumerate.Role;
+import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -47,7 +47,7 @@ public final class TaskListCommand extends AbstractCommand {
         @Nullable final Collection<Task> taskList = taskService.findAll(currentUser.getId());
         if (taskList == null)
             return;
-        for (@Nullable final IEntity task: taskList) {
+        for (@Nullable final IEntity task : taskList) {
             if (task == null)
                 continue;
             System.out.println(index++ + ". " + task);

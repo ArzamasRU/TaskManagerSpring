@@ -6,7 +6,8 @@ public enum Role {
     ADMIN("admin"),
     USER("user");
 
-    @NotNull private final String role;
+    @NotNull
+    private final String role;
 
     Role(final String role) {
         this.role = role;
@@ -18,7 +19,7 @@ public enum Role {
     }
 
     @NotNull
-    public String displayName(){
+    public String displayName() {
         return name();
     }
 }

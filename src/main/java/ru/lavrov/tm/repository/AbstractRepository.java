@@ -4,14 +4,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.IEntity;
 import ru.lavrov.tm.api.IRepository;
-import ru.lavrov.tm.entity.Project;
-import ru.lavrov.tm.entity.Task;
 import ru.lavrov.tm.exception.entity.EntityExistsException;
-import ru.lavrov.tm.exception.entity.EntityNameIsInvalidException;
 import ru.lavrov.tm.exception.entity.EntityNotExistsException;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public abstract class AbstractRepository<T extends IEntity> implements IRepository<T> {
     @NotNull
@@ -28,14 +28,14 @@ public abstract class AbstractRepository<T extends IEntity> implements IReposito
     }
 
     @Override
-    public void merge(@Nullable final T entity){
+    public void merge(@Nullable final T entity) {
         if (entity == null)
             throw new EntityNotExistsException();
         entities.put(entity.getId(), entity);
     }
 
     @Override
-    public void remove(@Nullable final String entityId, @Nullable final String userId){
+    public void remove(@Nullable final String entityId, @Nullable final String userId) {
         if (entityId == null || entityId.isEmpty())
             throw new EntityNotExistsException();
         if (userId == null || userId.isEmpty())
@@ -47,7 +47,7 @@ public abstract class AbstractRepository<T extends IEntity> implements IReposito
     }
 
     @Override
-    public void removeAll(@Nullable final String userId){
+    public void removeAll(@Nullable final String userId) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         @Nullable final Collection<T> list = findAll(userId);

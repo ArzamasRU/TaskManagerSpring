@@ -2,7 +2,10 @@ package ru.lavrov.tm.service;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.api.*;
+import ru.lavrov.tm.api.IProjectRepository;
+import ru.lavrov.tm.api.IProjectService;
+import ru.lavrov.tm.api.ITaskRepository;
+import ru.lavrov.tm.api.IUserRepository;
 import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Task;
 import ru.lavrov.tm.exception.general.DescriptionIsInvalidException;
@@ -16,9 +19,12 @@ import java.util.Collection;
 import java.util.Comparator;
 
 public final class ProjectServiceImpl extends AbstractService<Project> implements IProjectService {
-    @NotNull protected final IProjectRepository projectRepository;
-    @NotNull protected final ITaskRepository taskRepository;
-    @NotNull protected final IUserRepository userRepository;
+    @NotNull
+    protected final IProjectRepository projectRepository;
+    @NotNull
+    protected final ITaskRepository taskRepository;
+    @NotNull
+    protected final IUserRepository userRepository;
 
     public ProjectServiceImpl(final IProjectRepository projectRepository, final ITaskRepository taskRepository,
                               final IUserRepository userRepository) {
@@ -70,7 +76,8 @@ public final class ProjectServiceImpl extends AbstractService<Project> implement
 
     @Nullable
     @Override
-    public void renameProject(@Nullable final String oldName, @Nullable final String newName,
+    public void renameProject(@Nullable final String oldName,
+                              @Nullable final String newName,
                               @Nullable final String userId) {
         if (newName == null || newName.isEmpty() || oldName == null || oldName.isEmpty())
             throw new ProjectNameIsInvalidException();
@@ -86,7 +93,7 @@ public final class ProjectServiceImpl extends AbstractService<Project> implement
             throw new UserIsNotAuthorizedException();
         if (name == null || name.isEmpty())
             throw new NameIsInvalidException();
-        @Nullable final Collection<Project> collection = projectRepository.findAllByNamePart(name ,userId);
+        @Nullable final Collection<Project> collection = projectRepository.findAllByNamePart(name, userId);
         return collection;
     }
 
@@ -97,13 +104,13 @@ public final class ProjectServiceImpl extends AbstractService<Project> implement
             throw new UserIsNotAuthorizedException();
         if (description == null || description.isEmpty())
             throw new DescriptionIsInvalidException();
-        @Nullable final Collection<Project> collection = projectRepository.findAllByDescPart(description ,userId);
+        @Nullable final Collection<Project> collection = projectRepository.findAllByDescPart(description, userId);
         return collection;
     }
 
     @Nullable
     @Override
-    public Collection<Project> findAll(@Nullable final String userId, @Nullable final Comparator<Project> comparator){
+    public Collection<Project> findAll(@Nullable final String userId, @Nullable final Comparator<Project> comparator) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         return projectRepository.findAll(userId, comparator);

@@ -1,13 +1,10 @@
 package ru.lavrov.tm.repository;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.api.IEntity;
-import ru.lavrov.tm.api.IRepository;
 import ru.lavrov.tm.api.ITaskRepository;
-import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Task;
 import ru.lavrov.tm.exception.entity.EntityNameIsInvalidException;
-import ru.lavrov.tm.exception.entity.EntityNotExistsException;
 import ru.lavrov.tm.exception.general.DescriptionIsInvalidException;
 import ru.lavrov.tm.exception.general.NameIsInvalidException;
 import ru.lavrov.tm.exception.project.ProjectNameIsInvalidException;
@@ -16,7 +13,6 @@ import ru.lavrov.tm.exception.task.TaskExistsException;
 import ru.lavrov.tm.exception.task.TaskNameIsInvalidException;
 import ru.lavrov.tm.exception.task.TaskNotExistsException;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
-import ru.lavrov.tm.exception.user.UserLoginIsInvalidException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,8 +20,9 @@ import java.util.Comparator;
 import java.util.List;
 
 public final class TaskRepositoryImpl extends AbstractRepository<Task> implements ITaskRepository {
+
     @Override
-    public void removeTaskByName(@Nullable final String taskName, @Nullable final String userId){
+    public void removeTaskByName(@Nullable final String taskName, @Nullable final String userId) {
         if (taskName == null || taskName.isEmpty())
             throw new TaskNameIsInvalidException();
         if (userId == null || userId.isEmpty())
@@ -40,12 +37,12 @@ public final class TaskRepositoryImpl extends AbstractRepository<Task> implement
 
     @Nullable
     @Override
-    public Collection<Task> getProjectTasks(@Nullable final String projectId, @Nullable final String userId){
+    public Collection<Task> getProjectTasks(@Nullable final String projectId, @Nullable final String userId) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         if (projectId == null || projectId.isEmpty())
             throw new ProjectNotExistsException();
-        @Nullable final List<Task> list = new ArrayList();
+        @NotNull final List<Task> list = new ArrayList<>();
         for (@Nullable final Task task : entities.values()) {
             if (task == null)
                 continue;
@@ -59,7 +56,7 @@ public final class TaskRepositoryImpl extends AbstractRepository<Task> implement
     }
 
     @Override
-    public void removeProjectTasks(@Nullable final String projectId, @Nullable final String userId){
+    public void removeProjectTasks(@Nullable final String projectId, @Nullable final String userId) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         if (projectId == null || projectId.isEmpty())
@@ -77,8 +74,9 @@ public final class TaskRepositoryImpl extends AbstractRepository<Task> implement
 
     @Nullable
     @Override
-    public Task findProjectTaskByName(@Nullable final String taskName, @Nullable final String projectId,
-                                      @Nullable final String userId){
+    public Task findProjectTaskByName(
+            @Nullable final String taskName, @Nullable final String projectId, @Nullable final String userId
+    ) {
         if (taskName == null || taskName.isEmpty())
             throw new TaskNameIsInvalidException();
         if (userId == null || userId.isEmpty())
@@ -86,7 +84,7 @@ public final class TaskRepositoryImpl extends AbstractRepository<Task> implement
         if (projectId == null)
             throw new ProjectNotExistsException();
         @Nullable Task currentTask = null;
-        for (@Nullable final Task task: entities.values()) {
+        for (@Nullable final Task task : entities.values()) {
             if (task == null)
                 continue;
             boolean isProjectIdEquals = task.getProjectId().equals(projectId);
@@ -100,10 +98,11 @@ public final class TaskRepositoryImpl extends AbstractRepository<Task> implement
         return currentTask;
     }
 
-    @Nullable
     @Override
-    public void renameTask(@Nullable final String projectId, @Nullable final String oldName,
-                           @Nullable final String newName, @Nullable final String userId) {
+    public void renameTask(
+            @Nullable final String projectId, @Nullable final String oldName,
+            @Nullable final String newName, @Nullable final String userId
+    ) {
         if (projectId == null || projectId.isEmpty())
             throw new ProjectNameIsInvalidException();
         if (newName == null || newName.isEmpty() || oldName == null || oldName.isEmpty())
@@ -140,7 +139,7 @@ public final class TaskRepositoryImpl extends AbstractRepository<Task> implement
 
     @Nullable
     @Override
-    public Task findEntityByName(@Nullable final String entityName, @Nullable final String userId){
+    public Task findEntityByName(@Nullable final String entityName, @Nullable final String userId) {
         if (entityName == null || entityName.isEmpty())
             throw new EntityNameIsInvalidException();
         if (userId == null || userId.isEmpty())
