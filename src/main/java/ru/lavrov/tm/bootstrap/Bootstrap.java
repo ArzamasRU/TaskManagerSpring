@@ -72,7 +72,9 @@ public final class Bootstrap implements IServiceLocator {
         }
     }
 
-    private void initClasses(@Nullable Collection<Class<? extends AbstractCommand>> classes) throws IllegalAccessException, InstantiationException {
+    private void initClasses(
+            @Nullable Collection<Class<? extends AbstractCommand>> classes
+    ) throws IllegalAccessException, InstantiationException {
         if (classes == null || classes.isEmpty())
             return;
         for (@Nullable Class command : classes) {

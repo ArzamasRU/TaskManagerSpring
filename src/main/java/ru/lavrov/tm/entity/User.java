@@ -14,7 +14,6 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @XmlRootElement(name = "user")
 public final class User implements IEntity {
@@ -38,12 +37,11 @@ public final class User implements IEntity {
     @Override
     public String getUserId() {
         return getId();
-//        return null;
     }
 
     @JsonIgnore
     @Override
-    public void setUserId(final String id) {
+    public void setUserId(@Nullable final String id) {
         setId(id);
     }
 
@@ -52,12 +50,11 @@ public final class User implements IEntity {
     @Override
     public String getName() {
         return getLogin();
-//        return null;
     }
 
     @JsonIgnore
     @Override
-    public void setName(final String login) {
+    public void setName(@Nullable final String login) {
         setLogin(login);
     }
 

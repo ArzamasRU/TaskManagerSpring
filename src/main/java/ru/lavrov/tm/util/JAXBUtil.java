@@ -135,19 +135,4 @@ public final class JAXBUtil {
             return null;
         }
     }
-
-//    @Nullable
-//    public static void writeToJSONByFasterXML(
-//            @Nullable final ExternalizationStorage storage, @Nullable final String filePath
-//    ) {
-//        if (storage == null)
-//            return;
-//        if (filePath == null)
-//            return;
-//        @NotNull final ObjectMapper objectMapper = new ObjectMapper();
-//
-//        objectMapper.writeValue(new File(filePath), serviceLocator.getUserService().findAll());
-//        objectMapper.writeValue((new File("src/main/file/projectsJackson.json")), serviceLocator.getProjectService().findAll());
-//        objectMapper.writeValue((new File("src/main/file/tasksJackson.json")), serviceLocator.getTaskService().findAll());
-//    }
 }

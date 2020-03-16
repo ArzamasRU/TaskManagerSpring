@@ -63,23 +63,19 @@ public final class DataFromXMLByFasterXMLCommand extends AbstractCommand {
             userList = Arrays.asList(xmlMapper
                     .readValue(new File(USERS_FILE_PATH + ".xml"), User[].class));
         } catch (IOException e) {
-            System.out.println(e);
             return;
         }
-        if (projectList != null)
-            for (@Nullable final Project project : projectList) {
+        for (@Nullable final Project project : projectList) {
                 if (project == null)
                     throw new ProjectNotExistsException();
                 projectService.persist(project);
             }
-        if (taskList != null)
-            for (@Nullable final Task task : taskList) {
+        for (@Nullable final Task task : taskList) {
                 if (task == null)
                     throw new TaskNotExistsException();
                 taskService.persist(task);
             }
-        if (userList != null)
-            for (@Nullable final User user : userList) {
+        for (@Nullable final User user : userList) {
                 if (user == null)
                     throw new UserNotExistsException();
                 userService.persist(user);

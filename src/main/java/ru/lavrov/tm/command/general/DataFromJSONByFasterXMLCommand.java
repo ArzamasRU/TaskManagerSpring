@@ -66,7 +66,6 @@ public final class DataFromJSONByFasterXMLCommand extends AbstractCommand {
             userList = Arrays.asList(objectMapper
                     .readValue(new File(USERS_FILE_PATH + ".json"), User[].class));
         } catch (IOException e) {
-            System.out.println(e);
             return;
         }
         for (@Nullable final Project project : projectList) {

@@ -51,10 +51,10 @@ public final class DataToJSONByFasterXMLCommand extends AbstractCommand {
         @NotNull final ITaskService taskService = bootstrap.getTaskService();
         @NotNull final Collection<Project> projectList = projectService.findAll(currentUser.getId());
         if (projectList == null)
-            return;;
+            return;
         @NotNull final Collection<Task> taskList = taskService.findAll(currentUser.getId());
         if (taskList == null)
-            return;;
+            return;
         try{
             objectMapper.writerWithDefaultPrettyPrinter()
                     .writeValue(new File(USERS_FILE_PATH + ".json"), currentUser);

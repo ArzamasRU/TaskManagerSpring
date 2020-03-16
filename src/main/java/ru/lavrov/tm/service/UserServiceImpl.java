@@ -32,7 +32,9 @@ public final class UserServiceImpl extends AbstractService<User> implements IUse
         this.userRepository = userRepository;
     }
 
-    public void createByLogin(@Nullable final String login, @Nullable final String password, @Nullable final String role) {
+    public void createByLogin(
+            @Nullable final String login, @Nullable final String password, @Nullable final String role
+    ) {
         if (login == null || login.isEmpty())
             throw new UserLoginIsInvalidException();
         if (password == null || password.isEmpty())

@@ -14,8 +14,8 @@ import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static ru.lavrov.tm.constant.Constant.*;
-import static ru.lavrov.tm.util.JAXBUtil.*;
+import static ru.lavrov.tm.constant.Constant.EXTERNALIZATION_DIR_PATH;
+import static ru.lavrov.tm.util.JAXBUtil.writeToXMLByJAXB;
 
 public final class DataToXMLByJAXBСommand extends AbstractCommand {
     private static final boolean SAFE = true;
@@ -48,12 +48,12 @@ public final class DataToXMLByJAXBСommand extends AbstractCommand {
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
         @NotNull final Collection<Project> projectList = projectService.findAll(currentUser.getId());
         if (projectList == null)
-            return;;
+            return;
         writeToXMLByJAXB(projectList, EXTERNALIZATION_DIR_PATH);
         @Nullable final ITaskService taskService = bootstrap.getTaskService();
         @Nullable final Collection<Task> taskList = taskService.findAll(currentUser.getId());
         if (taskList == null)
-            return;;
+            return;
         writeToXMLByJAXB(taskList, EXTERNALIZATION_DIR_PATH);
         System.out.println("[ok]");
         System.out.println();

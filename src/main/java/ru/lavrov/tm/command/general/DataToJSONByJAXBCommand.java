@@ -49,11 +49,11 @@ public final class DataToJSONByJAXBCommand extends AbstractCommand {
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
         @NotNull final Collection<Project> projectList = projectService.findAll(currentUser.getId());
         if (projectList == null)
-            return;;
+            return;
         @NotNull final ITaskService taskService = bootstrap.getTaskService();
         @NotNull final Collection<Task> taskList = taskService.findAll(currentUser.getId());
         if (taskList == null)
-            return;;
+            return;
         storage.setProjectList(projectList);
         storage.setTaskList(taskList);
         storage.setUserList(Arrays.asList(currentUser));

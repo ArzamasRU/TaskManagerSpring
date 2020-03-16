@@ -1,6 +1,10 @@
-<User>
-  <id>1556acd2-7184-4108-b6d3-d41c850ed09f</id>
-  <login>admin</login>
-  <password>21232F297A57A5A743894A0E4A801FC3</password>
-  <role>ADMIN</role>
-</User>
+<ArrayList>
+  <item>
+    <id>e3423e06-e83b-41a0-a91e-b29ba05184c0</id>
+    <login>u1</login>
+    <password>E4774CDDA0793F86414E8B9140BB6DB4</password>
+    <role>ADMIN</role>
+    <userId/>
+    <name/>
+  </item>
+</ArrayList>

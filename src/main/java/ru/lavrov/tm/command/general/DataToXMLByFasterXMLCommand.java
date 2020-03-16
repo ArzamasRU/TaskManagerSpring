@@ -52,13 +52,13 @@ public final class DataToXMLByFasterXMLCommand extends AbstractCommand {
         @NotNull final ITaskService taskService = bootstrap.getTaskService();
         @NotNull final Collection<Project> projectList = projectService.findAll(currentUser.getId());
         if (projectList == null)
-            return;;
+            return;
         @NotNull final Collection<Task> taskList = taskService.findAll(currentUser.getId());
         if (taskList == null)
-            return;;
+            return;
         try{
             mapper.writerWithDefaultPrettyPrinter()
-                    .writeValue(new File(USERS_FILE_PATH + ".xml"), currentUser);
+                    .writeValue(new File(USERS_FILE_PATH + ".xml"), Arrays.asList(currentUser));
             mapper.writerWithDefaultPrettyPrinter()
                     .writeValue(new File(PROJECTS_FILE_PATH + ".xml"), projectList);
             mapper.writerWithDefaultPrettyPrinter()
