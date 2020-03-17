@@ -9,8 +9,9 @@ import ru.lavrov.tm.api.IUserRepository;
 import ru.lavrov.tm.api.IUserService;
 import ru.lavrov.tm.entity.User;
 import ru.lavrov.tm.enumerate.Role;
-import ru.lavrov.tm.exception.user.*;
+import ru.lavrov.exception.user.*;
 import ru.lavrov.tm.exception.util.UtilAlgorithmNotExistsException;
+import ru.lavrov.tm.exception.user.*;
 import ru.lavrov.tm.util.HashUtil;
 
 import java.security.NoSuchAlgorithmException;

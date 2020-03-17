@@ -7,12 +7,11 @@ import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.IProjectService;
 import ru.lavrov.tm.api.ITaskService;
 import ru.lavrov.tm.api.IUserService;
-import ru.lavrov.tm.command.AbstractCommand;
-import ru.lavrov.tm.entity.ExternalizationStorage;
 import ru.lavrov.tm.entity.Project;
-import ru.lavrov.tm.entity.Task;
 import ru.lavrov.tm.entity.User;
 import ru.lavrov.tm.enumerate.Role;
+import ru.lavrov.tm.command.AbstractCommand;
+import ru.lavrov.tm.entity.Task;
 import ru.lavrov.tm.exception.project.ProjectNotExistsException;
 import ru.lavrov.tm.exception.task.TaskNotExistsException;
 import ru.lavrov.tm.exception.user.UserNotExistsException;
@@ -21,10 +20,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
 import static ru.lavrov.tm.constant.Constant.*;
-import static ru.lavrov.tm.util.JAXBUtil.readFromJSONByJAXB;
 
 
 public final class DataFromJSONByFasterXMLCommand extends AbstractCommand {

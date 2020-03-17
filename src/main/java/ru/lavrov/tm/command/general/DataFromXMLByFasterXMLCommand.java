@@ -8,21 +8,20 @@ import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.IProjectService;
 import ru.lavrov.tm.api.ITaskService;
 import ru.lavrov.tm.api.IUserService;
-import ru.lavrov.tm.command.AbstractCommand;
+import ru.lavrov.tm.constant.Constant;
 import ru.lavrov.tm.entity.Project;
-import ru.lavrov.tm.entity.Task;
 import ru.lavrov.tm.entity.User;
 import ru.lavrov.tm.enumerate.Role;
 import ru.lavrov.tm.exception.project.ProjectNotExistsException;
 import ru.lavrov.tm.exception.task.TaskNotExistsException;
 import ru.lavrov.tm.exception.user.UserNotExistsException;
+import ru.lavrov.tm.command.AbstractCommand;
+import ru.lavrov.tm.entity.Task;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
-
-import static ru.lavrov.tm.constant.Constant.*;
 
 public final class DataFromXMLByFasterXMLCommand extends AbstractCommand {
     private static final boolean SAFE = true;
@@ -57,11 +56,11 @@ public final class DataFromXMLByFasterXMLCommand extends AbstractCommand {
         @Nullable final IUserService userService = bootstrap.getUserService();
         try {
             projectList = Arrays.asList(xmlMapper
-                    .readValue(new File(PROJECTS_FILE_PATH + ".xml"), Project[].class));
+                    .readValue(new File(Constant.PROJECTS_FILE_PATH + ".xml"), Project[].class));
             taskList = Arrays.asList(xmlMapper
-                    .readValue(new File(TASKS_FILE_PATH + ".xml"), Task[].class));
+                    .readValue(new File(Constant.TASKS_FILE_PATH + ".xml"), Task[].class));
             userList = Arrays.asList(xmlMapper
-                    .readValue(new File(USERS_FILE_PATH + ".xml"), User[].class));
+                    .readValue(new File(Constant.USERS_FILE_PATH + ".xml"), User[].class));
         } catch (IOException e) {
             return;
         }
