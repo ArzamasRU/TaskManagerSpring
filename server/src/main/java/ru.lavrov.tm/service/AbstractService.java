@@ -8,6 +8,8 @@ import ru.lavrov.tm.api.IService;
 import ru.lavrov.tm.exception.project.ProjectNotExistsException;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 public abstract class AbstractService<T extends IEntity> implements IService<T> {
@@ -54,5 +56,13 @@ public abstract class AbstractService<T extends IEntity> implements IService<T> 
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         return repository.findAll(userId);
+    }
+
+    @Nullable
+    @Override
+    public IEntity findOne(@Nullable final String userId, @Nullable final String entityId) {
+        if (userId == null || userId.isEmpty())
+            throw new UserIsNotAuthorizedException();
+        return repository.findOne(userId, entityId);
     }
 }

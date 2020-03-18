@@ -74,4 +74,12 @@ public abstract class AbstractRepository<T extends IEntity> implements IReposito
         }
         return list;
     }
+
+    @Nullable
+    @Override
+    public T findOne(@Nullable final String userId, @Nullable final String entityId) {
+        if (userId == null || userId.isEmpty())
+            throw new UserIsNotAuthorizedException();
+        return entities.get(entityId);
+    }
 }

@@ -2,6 +2,7 @@ package ru.lavrov.tm.api;
 
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 public interface IRepository<T extends IEntity> {
@@ -14,5 +15,7 @@ public interface IRepository<T extends IEntity> {
     void removeAll(@Nullable String userId);
 
     Collection<T> findAll(@Nullable String userId);
+
+    T findOne(@Nullable String userId, @Nullable String entityId);
 }
 

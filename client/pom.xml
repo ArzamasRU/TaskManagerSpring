@@ -100,11 +100,11 @@
                                         <!--http://localhost:8090/TaskEndpoint?wsdl-->
                                     <!--</wsdl>-->
                                 <!--</wsdlOption>-->
-                                <!--<wsdlOption>-->
-                                    <!--<wsdl>-->
-                                        <!--http://localhost:8090/UserEndpoint?wsdl-->
-                                    <!--</wsdl>-->
-                                <!--</wsdlOption>-->
+                                <wsdlOption>
+                                    <wsdl>
+                                        http://localhost:8090/UserEndpoint?wsdl
+                                    </wsdl>
+                                </wsdlOption>
                             </wsdlOptions>
                         </configuration>
                         <goals><goal>wsdl2java</goal></goals>

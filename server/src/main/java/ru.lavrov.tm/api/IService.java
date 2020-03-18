@@ -14,4 +14,6 @@ public interface IService<T extends IEntity> {
     void removeAll(@Nullable String userId);
 
     Collection<T> findAll(@Nullable String userId);
+
+    IEntity findOne(@Nullable String userId, @Nullable String entityId);
 }

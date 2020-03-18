@@ -82,7 +82,7 @@ public final class Bootstrap implements IServiceLocator {
 
     private void initEndpoints(){
         Endpoint.publish(TestEndpoint.URL, testEndpoint);
-        Endpoint.publish(UserEndpoint.URL, testEndpoint);
+        Endpoint.publish(UserEndpoint.URL, userEndpoint);
     }
 
     private void initClasses(

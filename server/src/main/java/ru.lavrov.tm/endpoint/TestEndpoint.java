@@ -6,7 +6,7 @@ import javax.jws.WebMethod;
 import javax.jws.WebService;
 
 @WebService(endpointInterface = "ru.lavrov.tm.endpoint.TestEndpoint")
-public final class TestEndpoint {
+public final class TestEndpoint extends AbstractEndpoint{
 
     @NotNull public static final String URL = "http://localhost:8090/TestEndpoint?wsdl";
 
