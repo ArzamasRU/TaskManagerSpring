@@ -6,9 +6,11 @@ import ru.lavrov.tm.api.IProjectService;
 import ru.lavrov.tm.api.ITaskService;
 import ru.lavrov.tm.api.IUserService;
 import ru.lavrov.tm.entity.Project;
+import ru.lavrov.tm.entity.Session;
 import ru.lavrov.tm.entity.Task;
 import ru.lavrov.tm.entity.User;
 import ru.lavrov.tm.enumerate.Role;
+import ru.lavrov.tm.service.SessionService;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
@@ -41,37 +43,28 @@ public final class UserEndpoint extends AbstractEndpoint{
         userService.remove(userId, userId);
     }
 
-//    @WebMethod
-//    public String helloMe(String str) {
-//        return "Hello " + str + "!";
-//    }
+    @WebMethod
+    @NotNull
+    public Collection<Project> getUserProjects(@Nullable final String userId){
+        @NotNull final IProjectService projectService = bootstrap.getProjectService();
+        @Nullable final Collection<Project> projectList = projectService.findAll(userId);
+        return projectList;
+    }
 
     @WebMethod
     @NotNull
-    public Collection<Object> getUserProject(@Nullable final String userId){
-        @NotNull final IUserService userService = bootstrap.getUserService();
-        @NotNull final IProjectService projectService = bootstrap.getProjectService();
-        @NotNull final Collection<Project> projectList = projectService.findAll(currentUser.getId());
-        userService.findAll()
-        @NotNull final Collection<Task> taskList = taskService.findAll(currentUser.getId());
-        userService.findAll();
-        return objs;
+    public Collection<Task> getUserTasks(@Nullable final String userId){
+        @NotNull final ITaskService taskService = bootstrap.getTaskService();
+        @Nullable final Collection<Task> taskList = taskService.findAll(userId);
+        return taskList;
     }
 
-//    @NotNull
-//    public ArrayList<String> displayUserData(@Nullable final String userId){
-//        @NotNull final ArrayList<String> data = new ArrayList<>();
-//        return data;
-//    }
-
     @WebMethod
-    public void loginUser(@Nullable final String login, @Nullable final String password){
-        if (login == null || login.isEmpty())
-            return;
-        if (password == null || password.isEmpty())
-            return;
+    @Nullable
+    public User getUser(@Nullable final String userId){
         @NotNull final IUserService userService = bootstrap.getUserService();
-//        userService.login(login, password);
+        @Nullable final User user = userService.findOne(userId);
+        return user;
     }
 
     @WebMethod

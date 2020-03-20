@@ -4,10 +4,14 @@ import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.command.AbstractCommand;
+import ru.lavrov.tm.endpoint.Session;
+import ru.lavrov.tm.endpoint.SessionEndpointService;
 import ru.lavrov.tm.enumerate.Role;
 import ru.lavrov.tm.util.InputUtil;
 
 import java.util.Collection;
+
+import static ru.lavrov.tm.util.HashUtil.md5Hard;
 
 @NoArgsConstructor
 public final class UserLoginCommand extends AbstractCommand {
@@ -37,9 +41,16 @@ public final class UserLoginCommand extends AbstractCommand {
         System.out.println("enter login:");
         @Nullable final String login = InputUtil.INPUT.nextLine();
         System.out.println("enter password:");
-        @Nullable String password = InputUtil.INPUT.nextLine();
-        bootstrap.login(login, password);
-        System.out.println("[You are logged in]");
+        @NotNull final String password = InputUtil.INPUT.nextLine();
+        @Nullable final String hashedPassword = md5Hard(password);
+        @NotNull final SessionEndpointService sessionEndpointService = bootstrap.getSessionEndpointService();
+        @Nullable final Session session = sessionEndpointService.getSessionEndpointPort().login(login, hashedPassword);
+        if (session != null) {
+            bootstrap.setCurrentSession(session);
+            System.out.println("[You are logged in]");
+        }
+        else
+            System.out.println("[login or password is incorrect!]");
         System.out.println();
     }
 

@@ -1,5 +1,6 @@
 package ru.lavrov.tm.api;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.entity.User;
 
@@ -9,4 +10,8 @@ public interface IUserService extends IService<User> {
     void updatePassword(@Nullable String userId, @Nullable String newPassword);
 
     void updateLogin(@Nullable String userId, @Nullable String newLogin);
+
+    User findOne(@Nullable String userId);
+
+    User findUserByLogin(@Nullable String login);
 }

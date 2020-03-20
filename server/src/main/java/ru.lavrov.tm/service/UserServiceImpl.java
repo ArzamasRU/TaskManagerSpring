@@ -56,11 +56,7 @@ public final class UserServiceImpl extends AbstractService<User> implements IUse
         if (user != null)
             throw new UserLoginExistsException();
         @NotNull String hashedPassword;
-        try {
-            hashedPassword = HashUtil.getHash(password);
-        } catch (NoSuchAlgorithmException e) {
-            throw new UtilAlgorithmNotExistsException();
-        }
+            hashedPassword = HashUtil.md5Hard(password);
         persist(new User(login, hashedPassword, currentRole));
     }
 
@@ -82,4 +78,22 @@ public final class UserServiceImpl extends AbstractService<User> implements IUse
             throw new UserLoginExistsException();
         userRepository.updateLogin(userId, newLogin);
     }
+
+    @Nullable
+    @Override
+    public User findOne(@Nullable final String userId) {
+        if (userId == null || userId.isEmpty())
+            throw new UserIsNotAuthorizedException();
+        return userRepository.findOne(userId);
+    }
+
+    @Nullable
+    @Override
+    public User findUserByLogin(@NotNull final String login) {
+        if (login == null || login.isEmpty())
+            throw new UserLoginIsInvalidException();
+        return userRepository.findUserByLogin(login);
+    }
+
+
 }

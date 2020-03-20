@@ -1,6 +1,7 @@
 
 package ru.lavrov.tm.endpoint;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -9,16 +10,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for displayUserDataResponse complex type.
+ * <p>Java class for getUserTasksResponse complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="displayUserDataResponse"&gt;
+ * &lt;complexType name="getUserTasksResponse"&gt;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element name="return" type="{http://endpoint.tm.lavrov.ru/}arrayList" maxOccurs="unbounded" minOccurs="0"/&gt;
+ *         &lt;element name="return" type="{http://endpoint.tm.lavrov.ru/}task" maxOccurs="unbounded" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -28,13 +29,13 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "displayUserDataResponse", propOrder = {
+@XmlType(name = "getUserTasksResponse", propOrder = {
     "_return"
 })
-public class DisplayUserDataResponse {
+public class GetUserTasksResponse {
 
     @XmlElement(name = "return")
-    protected List<ru.lavrov.tm.endpoint.ArrayList> _return;
+    protected List<Task> _return;
 
     /**
      * Gets the value of the return property.
@@ -54,13 +55,13 @@ public class DisplayUserDataResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link ru.lavrov.tm.endpoint.ArrayList }
+     * {@link Task }
      * 
      * 
      */
-    public List<ru.lavrov.tm.endpoint.ArrayList> getReturn() {
+    public List<Task> getReturn() {
         if (_return == null) {
-            _return = new java.util.ArrayList<ru.lavrov.tm.endpoint.ArrayList>();
+            _return = new ArrayList<Task>();
         }
         return this._return;
     }

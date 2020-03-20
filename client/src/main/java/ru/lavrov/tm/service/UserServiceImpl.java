@@ -56,11 +56,7 @@ public final class UserServiceImpl extends AbstractService<User> implements IUse
         if (user != null)
             throw new UserLoginExistsException();
         @NotNull String hashedPassword;
-        try {
-            hashedPassword = HashUtil.getHash(password);
-        } catch (NoSuchAlgorithmException e) {
-            throw new UtilAlgorithmNotExistsException();
-        }
+        hashedPassword = HashUtil.md5Hard(password);
         persist(new User(login, hashedPassword, currentRole));
     }
 

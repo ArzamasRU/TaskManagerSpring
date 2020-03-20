@@ -11,4 +11,7 @@ public final class Constant {
     public static final String USERS_FILE_PATH = "src/main/file/users";
     @NotNull
     public static final String EXTERNALIZATION_DIR_PATH = "src/main/file/";
+    @NotNull
+    public static final String SALT = "ok";
+    public static final int CYCLE = 15;
 }

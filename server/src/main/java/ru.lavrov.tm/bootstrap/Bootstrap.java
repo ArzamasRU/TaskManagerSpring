@@ -3,9 +3,11 @@ package ru.lavrov.tm.bootstrap;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.eclipse.persistence.sessions.Session;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.reflections.Reflections;
+import ru.lavrov.tm.endpoint.SessionEndpoint;
 import ru.lavrov.tm.endpoint.TestEndpoint;
 import ru.lavrov.tm.endpoint.UserEndpoint;
 import ru.lavrov.tm.entity.User;
@@ -21,13 +23,13 @@ import ru.lavrov.tm.api.*;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.exception.user.*;
 import ru.lavrov.tm.service.ProjectServiceImpl;
+import ru.lavrov.tm.service.SessionService;
 import ru.lavrov.tm.service.TaskServiceImpl;
 import ru.lavrov.tm.service.UserServiceImpl;
 import ru.lavrov.tm.util.HashUtil;
 import ru.lavrov.tm.util.InputUtil;
 
 import javax.xml.ws.Endpoint;
-import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 @Getter
@@ -47,16 +49,20 @@ public final class Bootstrap implements IServiceLocator {
     @NotNull
     private final IUserService userService = new UserServiceImpl(userRepository, projectRepository, taskRepository);
     @NotNull
+    private final ISessionService sessionService = new SessionService(userRepository);
+    @NotNull
     private final Map<String, AbstractCommand> commands = new LinkedHashMap();
-    @Setter
-    @Nullable
-    private User currentUser;
     @Nullable
     private static final Set<Class<? extends AbstractCommand>> classes;
     @NotNull
     private final TestEndpoint testEndpoint = new TestEndpoint();
     @NotNull
     private final UserEndpoint userEndpoint = new UserEndpoint();
+    @NotNull
+    private final SessionEndpoint sessionEndpoint = new SessionEndpoint(this);
+    @Setter
+    @Nullable
+    private User currentUser;
 
     static {
         classes = new Reflections("ru.lavrov.tm").getSubTypesOf(AbstractCommand.class);
@@ -83,6 +89,7 @@ public final class Bootstrap implements IServiceLocator {
     private void initEndpoints(){
         Endpoint.publish(TestEndpoint.URL, testEndpoint);
         Endpoint.publish(UserEndpoint.URL, userEndpoint);
+        Endpoint.publish(SessionEndpoint.URL, sessionEndpoint);
     }
 
     private void initClasses(
@@ -152,24 +159,20 @@ public final class Bootstrap implements IServiceLocator {
         return new ArrayList(commands.values());
     }
 
-    public void login(@Nullable final String login, @Nullable final String password) {
-        if (login == null || login.isEmpty())
-            throw new UserLoginIsInvalidException();
-        if (password == null || password.isEmpty())
-            throw new UserPasswordIsInvalidException();
-        @Nullable final User user = userRepository.findUserByLogin(login);
-        if (user == null)
-            throw new UserLoginNotExistsException();
-        @Nullable String hashedPassword;
-        try {
-            hashedPassword = HashUtil.getHash(password);
-        } catch (NoSuchAlgorithmException e) {
-            throw new UtilAlgorithmNotExistsException();
-        }
-        if (!hashedPassword.equals(user.getPassword()))
-            throw new UserLoginOrPasswordIsIncorrectException();
-        setCurrentUser(user);
-    }
+//    public void login(@Nullable final String login, @Nullable final String password) {
+//        if (login == null || login.isEmpty())
+//            throw new UserLoginIsInvalidException();
+//        if (password == null || password.isEmpty())
+//            throw new UserPasswordIsInvalidException();
+//        @Nullable final User user = userRepository.findUserByLogin(login);
+//        if (user == null)
+//            throw new UserLoginNotExistsException();
+//        @Nullable String hashedPassword;
+//            hashedPassword = HashUtil.md5Hard(password);
+//        if (!hashedPassword.equals(user.getPassword()))
+//            throw new UserLoginOrPasswordIsIncorrectException();
+//        setCurrentUser(user);
+//    }
 
     public void logout() {
         setCurrentUser(null);

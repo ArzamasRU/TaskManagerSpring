@@ -9,4 +9,6 @@ public interface IUserRepository extends IRepository<User> {
     void updateLogin(@Nullable String userId, @Nullable String newLogin);
 
     User findUserByLogin(@Nullable String login);
+
+    User findOne(@Nullable String userId);
 }

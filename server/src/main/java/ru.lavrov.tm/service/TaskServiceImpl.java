@@ -35,6 +35,7 @@ public final class TaskServiceImpl extends AbstractService<Task> implements ITas
         this.userRepository = userRepository;
     }
 
+    @Override
     public void createByName(
             @Nullable final String userId, @Nullable final String taskName, @Nullable final String projectName
     ) {
@@ -54,6 +55,7 @@ public final class TaskServiceImpl extends AbstractService<Task> implements ITas
         persist(new Task(taskName, project.getId(), userId));
     }
 
+    @Override
     public void removeTaskByName(@Nullable final String userId, @Nullable final String taskName) {
         if (taskName == null || taskName.isEmpty())
             throw new TaskNameIsInvalidException();
@@ -62,6 +64,7 @@ public final class TaskServiceImpl extends AbstractService<Task> implements ITas
         taskRepository.removeTaskByName(userId, taskName);
     }
 
+    @Override
     public void renameTask(
             @Nullable final String userId, @Nullable final String projectName, @Nullable final String oldName,
             @Nullable final String newName

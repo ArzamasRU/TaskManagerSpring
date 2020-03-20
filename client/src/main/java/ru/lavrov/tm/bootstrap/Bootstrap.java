@@ -6,12 +6,14 @@ import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.reflections.Reflections;
+import ru.lavrov.tm.endpoint.Session;
+import ru.lavrov.tm.endpoint.SessionEndpointService;
+import ru.lavrov.tm.endpoint.UserEndpointService;
 import ru.lavrov.tm.entity.User;
 import ru.lavrov.tm.enumerate.Role;
 import ru.lavrov.tm.exception.command.CommandDescriptionIsInvalidException;
 import ru.lavrov.tm.exception.command.CommandIsInvalidException;
 import ru.lavrov.tm.exception.command.CommandNotExistsException;
-import ru.lavrov.tm.exception.util.UtilAlgorithmNotExistsException;
 import ru.lavrov.tm.repository.ProjectRepositoryImpl;
 import ru.lavrov.tm.repository.TaskRepositoryImpl;
 import ru.lavrov.tm.repository.UserRepositoryImpl;
@@ -24,7 +26,6 @@ import ru.lavrov.tm.service.UserServiceImpl;
 import ru.lavrov.tm.util.HashUtil;
 import ru.lavrov.tm.util.InputUtil;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 @Getter
@@ -45,6 +46,13 @@ public final class Bootstrap implements IServiceLocator {
     private final IUserService userService = new UserServiceImpl(userRepository, projectRepository, taskRepository);
     @NotNull
     private final Map<String, AbstractCommand> commands = new LinkedHashMap();
+    @NotNull
+    private final UserEndpointService userEndpointService = new UserEndpointService();
+    @NotNull
+    private final SessionEndpointService sessionEndpointService = new SessionEndpointService();
+    @Setter
+    @Nullable
+    private Session currentSession;
     @Setter
     @Nullable
     private User currentUser;
@@ -61,7 +69,6 @@ public final class Bootstrap implements IServiceLocator {
         initUsers();
         System.out.println("*** WELCOME TO TASK MANAGER ***");
         @Nullable String command = null;
-
         while (!"exit".equals(command)) {
             command = InputUtil.INPUT.nextLine();
             try {
@@ -148,11 +155,7 @@ public final class Bootstrap implements IServiceLocator {
         if (user == null)
             throw new UserLoginNotExistsException();
         @Nullable String hashedPassword;
-        try {
-            hashedPassword = HashUtil.getHash(password);
-        } catch (NoSuchAlgorithmException e) {
-            throw new UtilAlgorithmNotExistsException();
-        }
+            hashedPassword = HashUtil.md5Hard(password);
         if (!hashedPassword.equals(user.getPassword()))
             throw new UserLoginOrPasswordIsIncorrectException();
         setCurrentUser(user);

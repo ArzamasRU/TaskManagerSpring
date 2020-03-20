@@ -10,6 +10,7 @@ import ru.lavrov.tm.exception.user.UserPasswordIsInvalidException;
 
 public final class UserRepositoryImpl extends AbstractRepository<User> implements IUserRepository {
 
+    @Override
     public void updatePassword(@Nullable final String userId, @Nullable final String newPassword) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
@@ -18,6 +19,7 @@ public final class UserRepositoryImpl extends AbstractRepository<User> implement
         entities.get(userId).setPassword(newPassword);
     }
 
+    @Override
     public void updateLogin(@Nullable final String userId, @Nullable final String login) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
@@ -27,6 +29,7 @@ public final class UserRepositoryImpl extends AbstractRepository<User> implement
     }
 
     @Nullable
+    @Override
     public User findUserByLogin(@Nullable final String login) {
         if (login == null || login.isEmpty())
             throw new EntityNameIsInvalidException();
@@ -41,4 +44,13 @@ public final class UserRepositoryImpl extends AbstractRepository<User> implement
         }
         return currentUser;
     }
+
+    @Nullable
+    @Override
+    public User findOne(@Nullable final String userId) {
+        if (userId == null || userId.isEmpty())
+            throw new UserIsNotAuthorizedException();
+        return entities.get(userId);
+    }
+
 }

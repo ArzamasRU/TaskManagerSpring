@@ -15,7 +15,5 @@ public interface IRepository<T extends IEntity> {
     void removeAll(@Nullable String userId);
 
     Collection<T> findAll(@Nullable String userId);
-
-    T findOne(@Nullable String userId, @Nullable String entityId);
 }
 

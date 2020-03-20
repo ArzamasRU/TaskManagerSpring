@@ -90,11 +90,11 @@
                                         http://localhost:8090/TestEndpoint?wsdl
                                     </wsdl>
                                 </wsdlOption>
-                                <!--<wsdlOption>-->
-                                    <!--<wsdl>-->
-                                        <!--http://localhost:8090/SessionEndpoint?wsdl-->
-                                    <!--</wsdl>-->
-                                <!--</wsdlOption>-->
+                                <wsdlOption>
+                                    <wsdl>
+                                        http://localhost:8090/SessionEndpoint?wsdl
+                                    </wsdl>
+                                </wsdlOption>
                                 <!--<wsdlOption>-->
                                     <!--<wsdl>-->
                                         <!--http://localhost:8090/TaskEndpoint?wsdl-->

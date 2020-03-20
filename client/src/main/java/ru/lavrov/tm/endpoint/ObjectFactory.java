@@ -26,20 +26,23 @@ public class ObjectFactory {
 
     private final static QName _DeleteUser_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "deleteUser");
     private final static QName _DeleteUserResponse_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "deleteUserResponse");
-    private final static QName _DisplayUserData_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "displayUserData");
-    private final static QName _DisplayUserDataResponse_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "displayUserDataResponse");
-    private final static QName _HelloMe_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "helloMe");
-    private final static QName _HelloMeResponse_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "helloMeResponse");
-    private final static QName _LoginUser_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "loginUser");
-    private final static QName _LoginUserResponse_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "loginUserResponse");
+    private final static QName _GetUser_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "getUser");
+    private final static QName _GetUserProjects_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "getUserProjects");
+    private final static QName _GetUserProjectsResponse_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "getUserProjectsResponse");
+    private final static QName _GetUserResponse_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "getUserResponse");
+    private final static QName _GetUserTasks_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "getUserTasks");
+    private final static QName _GetUserTasksResponse_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "getUserTasksResponse");
     private final static QName _LogoutUser_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "logoutUser");
     private final static QName _LogoutUserResponse_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "logoutUserResponse");
+    private final static QName _Project_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "project");
     private final static QName _RegisterUser_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "registerUser");
     private final static QName _RegisterUserResponse_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "registerUserResponse");
+    private final static QName _Task_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "task");
     private final static QName _UpdateLogin_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "updateLogin");
     private final static QName _UpdateLoginResponse_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "updateLoginResponse");
     private final static QName _UpdatePassword_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "updatePassword");
     private final static QName _UpdatePasswordResponse_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "updatePasswordResponse");
+    private final static QName _User_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "user");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: ru.lavrov.tm.endpoint
@@ -65,51 +68,51 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link DisplayUserData }
+     * Create an instance of {@link GetUser }
      * 
      */
-    public DisplayUserData createDisplayUserData() {
-        return new DisplayUserData();
+    public GetUser createGetUser() {
+        return new GetUser();
     }
 
     /**
-     * Create an instance of {@link DisplayUserDataResponse }
+     * Create an instance of {@link GetUserProjects }
      * 
      */
-    public DisplayUserDataResponse createDisplayUserDataResponse() {
-        return new DisplayUserDataResponse();
+    public GetUserProjects createGetUserProjects() {
+        return new GetUserProjects();
     }
 
     /**
-     * Create an instance of {@link HelloMe }
+     * Create an instance of {@link GetUserProjectsResponse }
      * 
      */
-    public HelloMe createHelloMe() {
-        return new HelloMe();
+    public GetUserProjectsResponse createGetUserProjectsResponse() {
+        return new GetUserProjectsResponse();
     }
 
     /**
-     * Create an instance of {@link HelloMeResponse }
+     * Create an instance of {@link GetUserResponse }
      * 
      */
-    public HelloMeResponse createHelloMeResponse() {
-        return new HelloMeResponse();
+    public GetUserResponse createGetUserResponse() {
+        return new GetUserResponse();
     }
 
     /**
-     * Create an instance of {@link LoginUser }
+     * Create an instance of {@link GetUserTasks }
      * 
      */
-    public LoginUser createLoginUser() {
-        return new LoginUser();
+    public GetUserTasks createGetUserTasks() {
+        return new GetUserTasks();
     }
 
     /**
-     * Create an instance of {@link LoginUserResponse }
+     * Create an instance of {@link GetUserTasksResponse }
      * 
      */
-    public LoginUserResponse createLoginUserResponse() {
-        return new LoginUserResponse();
+    public GetUserTasksResponse createGetUserTasksResponse() {
+        return new GetUserTasksResponse();
     }
 
     /**
@@ -129,6 +132,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link Project }
+     * 
+     */
+    public Project createProject() {
+        return new Project();
+    }
+
+    /**
      * Create an instance of {@link RegisterUser }
      * 
      */
@@ -142,6 +153,14 @@ public class ObjectFactory {
      */
     public RegisterUserResponse createRegisterUserResponse() {
         return new RegisterUserResponse();
+    }
+
+    /**
+     * Create an instance of {@link Task }
+     * 
+     */
+    public Task createTask() {
+        return new Task();
     }
 
     /**
@@ -177,11 +196,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ArrayList }
+     * Create an instance of {@link User }
      * 
      */
-    public ArrayList createArrayList() {
-        return new ArrayList();
+    public User createUser() {
+        return new User();
     }
 
     /**
@@ -203,57 +222,57 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link DisplayUserData }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link GetUser }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "displayUserData")
-    public JAXBElement<DisplayUserData> createDisplayUserData(DisplayUserData value) {
-        return new JAXBElement<DisplayUserData>(_DisplayUserData_QNAME, DisplayUserData.class, null, value);
+    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "getUser")
+    public JAXBElement<GetUser> createGetUser(GetUser value) {
+        return new JAXBElement<GetUser>(_GetUser_QNAME, GetUser.class, null, value);
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link DisplayUserDataResponse }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link GetUserProjects }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "displayUserDataResponse")
-    public JAXBElement<DisplayUserDataResponse> createDisplayUserDataResponse(DisplayUserDataResponse value) {
-        return new JAXBElement<DisplayUserDataResponse>(_DisplayUserDataResponse_QNAME, DisplayUserDataResponse.class, null, value);
+    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "getUserProjects")
+    public JAXBElement<GetUserProjects> createGetUserProjects(GetUserProjects value) {
+        return new JAXBElement<GetUserProjects>(_GetUserProjects_QNAME, GetUserProjects.class, null, value);
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link HelloMe }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link GetUserProjectsResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "helloMe")
-    public JAXBElement<HelloMe> createHelloMe(HelloMe value) {
-        return new JAXBElement<HelloMe>(_HelloMe_QNAME, HelloMe.class, null, value);
+    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "getUserProjectsResponse")
+    public JAXBElement<GetUserProjectsResponse> createGetUserProjectsResponse(GetUserProjectsResponse value) {
+        return new JAXBElement<GetUserProjectsResponse>(_GetUserProjectsResponse_QNAME, GetUserProjectsResponse.class, null, value);
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link HelloMeResponse }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link GetUserResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "helloMeResponse")
-    public JAXBElement<HelloMeResponse> createHelloMeResponse(HelloMeResponse value) {
-        return new JAXBElement<HelloMeResponse>(_HelloMeResponse_QNAME, HelloMeResponse.class, null, value);
+    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "getUserResponse")
+    public JAXBElement<GetUserResponse> createGetUserResponse(GetUserResponse value) {
+        return new JAXBElement<GetUserResponse>(_GetUserResponse_QNAME, GetUserResponse.class, null, value);
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link LoginUser }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link GetUserTasks }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "loginUser")
-    public JAXBElement<LoginUser> createLoginUser(LoginUser value) {
-        return new JAXBElement<LoginUser>(_LoginUser_QNAME, LoginUser.class, null, value);
+    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "getUserTasks")
+    public JAXBElement<GetUserTasks> createGetUserTasks(GetUserTasks value) {
+        return new JAXBElement<GetUserTasks>(_GetUserTasks_QNAME, GetUserTasks.class, null, value);
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link LoginUserResponse }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link GetUserTasksResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "loginUserResponse")
-    public JAXBElement<LoginUserResponse> createLoginUserResponse(LoginUserResponse value) {
-        return new JAXBElement<LoginUserResponse>(_LoginUserResponse_QNAME, LoginUserResponse.class, null, value);
+    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "getUserTasksResponse")
+    public JAXBElement<GetUserTasksResponse> createGetUserTasksResponse(GetUserTasksResponse value) {
+        return new JAXBElement<GetUserTasksResponse>(_GetUserTasksResponse_QNAME, GetUserTasksResponse.class, null, value);
     }
 
     /**
@@ -275,6 +294,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link Project }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "project")
+    public JAXBElement<Project> createProject(Project value) {
+        return new JAXBElement<Project>(_Project_QNAME, Project.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link RegisterUser }{@code >}}
      * 
      */
@@ -290,6 +318,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "registerUserResponse")
     public JAXBElement<RegisterUserResponse> createRegisterUserResponse(RegisterUserResponse value) {
         return new JAXBElement<RegisterUserResponse>(_RegisterUserResponse_QNAME, RegisterUserResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link Task }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "task")
+    public JAXBElement<Task> createTask(Task value) {
+        return new JAXBElement<Task>(_Task_QNAME, Task.class, null, value);
     }
 
     /**
@@ -326,6 +363,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "updatePasswordResponse")
     public JAXBElement<UpdatePasswordResponse> createUpdatePasswordResponse(UpdatePasswordResponse value) {
         return new JAXBElement<UpdatePasswordResponse>(_UpdatePasswordResponse_QNAME, UpdatePasswordResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link User }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "user")
+    public JAXBElement<User> createUser(User value) {
+        return new JAXBElement<User>(_User_QNAME, User.class, null, value);
     }
 
 }
