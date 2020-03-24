@@ -2,7 +2,6 @@ package ru.lavrov.tm.command.general;
 
 import com.jcabi.manifests.Manifests;
 import lombok.NoArgsConstructor;
-import org.apache.log4j.BasicConfigurator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.command.AbstractCommand;
@@ -34,7 +33,6 @@ public final class AboutCommand extends AbstractCommand {
 
     @Override
     public void execute() {
-        BasicConfigurator.configure();
         System.out.println("Manifest-Version: " + Manifests.read("Manifest-Version"));
         System.out.println("Built-By: " + Manifests.read("Built-By"));
         System.out.println("Created-By: " + Manifests.read("Created-By"));

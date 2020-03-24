@@ -46,7 +46,7 @@ public final class Bootstrap {
     public void init() throws InstantiationException, IllegalAccessException {
         initProperties();
         initClasses(classes);
-        System.out.println("*** WELCOME TO TASK MANAGER ***");
+        System.out.println("*** WELCOME IN CLIENT APP OF TASK MANAGER ***");
         @Nullable String command = null;
         while (!"exit".equals(command)) {
             command = InputUtil.INPUT.nextLine();
@@ -90,7 +90,6 @@ public final class Bootstrap {
     }
 
     private void execute(@Nullable final String command) {
-        if (currentSession != null) System.out.println(currentSession.getSign());
         if (command == null || command.isEmpty())
             throw new CommandIsInvalidException();
         @Nullable final AbstractCommand abstractCommand = commands.get(command);
