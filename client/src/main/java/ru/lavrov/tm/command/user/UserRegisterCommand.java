@@ -3,9 +3,9 @@ package ru.lavrov.tm.command.user;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.api.IUserService;
 import ru.lavrov.tm.command.AbstractCommand;
-import ru.lavrov.tm.enumerate.Role;
+import ru.lavrov.tm.endpoint.UserEndpointService;
+import ru.lavrov.tm.endpoint.Role;
 import ru.lavrov.tm.util.InputUtil;
 
 import java.util.Collection;
@@ -41,9 +41,11 @@ public final class UserRegisterCommand extends AbstractCommand {
         @Nullable final String password = InputUtil.INPUT.nextLine();
         System.out.println("enter your role ('admin', 'user'):");
         @Nullable final String role = InputUtil.INPUT.nextLine();
-        @Nullable final IUserService userService = bootstrap.getUserService();
-        userService.createByLogin(login, password, role);
-        System.out.println("[You successfully registered]");
+        @NotNull final UserEndpointService userEndpointService = bootstrap.getUserEndpointService();
+        if (userEndpointService.getUserEndpointPort().registerUser(bootstrap.getCurrentSession(), login, password, role))
+            System.out.println("[You successfully registered]");
+        else
+            System.out.println("[error]");
         System.out.println();
     }
 

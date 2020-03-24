@@ -3,15 +3,10 @@ package ru.lavrov.tm.command.general;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.api.IProjectService;
-import ru.lavrov.tm.api.ITaskService;
 import ru.lavrov.tm.command.AbstractCommand;
-import ru.lavrov.tm.constant.Constant;
-import ru.lavrov.tm.entity.Project;
-import ru.lavrov.tm.entity.Task;
-import ru.lavrov.tm.entity.User;
-import ru.lavrov.tm.enumerate.Role;
-import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
+import ru.lavrov.tm.endpoint.GeneralCommandsEndpointService;
+import ru.lavrov.tm.endpoint.Role;
+import ru.lavrov.tm.endpoint.Session;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,29 +37,13 @@ public final class DataToXMLByFasterXMLCommand extends AbstractCommand {
     @Override
     public void execute() {
         System.out.println("[Externalization data to XML By fasterXML]");
-        @NotNull final XmlMapper mapper = new XmlMapper();
-        @Nullable final User currentUser = bootstrap.getCurrentUser();
-        if (currentUser == null)
-            throw new UserIsNotAuthorizedException();
-        @NotNull final IProjectService projectService = bootstrap.getProjectService();
-        @NotNull final ITaskService taskService = bootstrap.getTaskService();
-        @NotNull final Collection<Project> projectList = projectService.findAll(currentUser.getId());
-        if (projectList == null)
-            return;
-        @NotNull final Collection<Task> taskList = taskService.findAll(currentUser.getId());
-        if (taskList == null)
-            return;
-        try{
-            mapper.writerWithDefaultPrettyPrinter()
-                    .writeValue(new File(Constant.USERS_FILE_PATH + ".xml"), Arrays.asList(currentUser));
-            mapper.writerWithDefaultPrettyPrinter()
-                    .writeValue(new File(Constant.PROJECTS_FILE_PATH + ".xml"), projectList);
-            mapper.writerWithDefaultPrettyPrinter()
-                    .writeValue(new File(Constant.TASKS_FILE_PATH + ".xml"), taskList);
-        } catch (IOException e) {
-            return;
-        }
-        System.out.println("[ok]");
+        @Nullable final Session currentSession = bootstrap.getCurrentSession();
+        @NotNull final GeneralCommandsEndpointService generalCommandsEndpointService =
+                bootstrap.getGeneralCommandsEndpointService();
+        if (generalCommandsEndpointService.getGeneralCommandsEndpointPort().dataToXMLByFasterXML(currentSession))
+            System.out.println("[ok]");
+        else
+            System.out.println("[error]");
         System.out.println();
     }
 

@@ -1,26 +1,14 @@
 package ru.lavrov.tm.command.general;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.api.IProjectService;
-import ru.lavrov.tm.api.ITaskService;
-import ru.lavrov.tm.api.IUserService;
 import ru.lavrov.tm.command.AbstractCommand;
-import ru.lavrov.tm.entity.Project;
-import ru.lavrov.tm.entity.Task;
-import ru.lavrov.tm.entity.User;
-import ru.lavrov.tm.enumerate.Role;
-import ru.lavrov.tm.exception.project.ProjectNotExistsException;
-import ru.lavrov.tm.exception.task.TaskNotExistsException;
-import ru.lavrov.tm.exception.user.UserNotExistsException;
+import ru.lavrov.tm.endpoint.GeneralCommandsEndpointService;
+import ru.lavrov.tm.endpoint.Role;
+import ru.lavrov.tm.endpoint.Session;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
-
-import static ru.lavrov.tm.constant.Constant.*;
 
 
 public final class DataFromJSONByFasterXMLCommand extends AbstractCommand {
@@ -47,39 +35,13 @@ public final class DataFromJSONByFasterXMLCommand extends AbstractCommand {
     @Override
     public void execute() {
         System.out.println("[Externalization data from JSON By fasterXML]");
-        @Nullable final ObjectMapper objectMapper = new ObjectMapper();
-        @Nullable final Collection<Project> projectList;
-        @Nullable final Collection<Task> taskList;
-        @Nullable final Collection<User> userList;
-        @Nullable final IProjectService projectService = bootstrap.getProjectService();
-        @Nullable final ITaskService taskService = bootstrap.getTaskService();
-        @Nullable final IUserService userService = bootstrap.getUserService();
-        try {
-            projectList = Arrays.asList(objectMapper
-                    .readValue(new File(PROJECTS_FILE_PATH + ".json"), Project[].class));
-            taskList = Arrays.asList(objectMapper
-                    .readValue(new File(TASKS_FILE_PATH + ".json"), Task[].class));
-            userList = Arrays.asList(objectMapper
-                    .readValue(new File(USERS_FILE_PATH + ".json"), User[].class));
-        } catch (IOException e) {
-            return;
-        }
-        for (@Nullable final Project project : projectList) {
-            if (project == null)
-                throw new ProjectNotExistsException();
-            projectService.persist(project);
-        }
-        for (@Nullable final Task task : taskList) {
-            if (task == null)
-                throw new TaskNotExistsException();
-            taskService.persist(task);
-        }
-        for (@Nullable final User user : userList) {
-            if (user == null)
-                throw new UserNotExistsException();
-            userService.persist(user);
-        }
-        System.out.println("[ok]");
+        @Nullable final Session currentSession = bootstrap.getCurrentSession();
+        @NotNull final GeneralCommandsEndpointService generalCommandsEndpointService =
+                bootstrap.getGeneralCommandsEndpointService();
+        if (generalCommandsEndpointService.getGeneralCommandsEndpointPort().dataFromJSONByFasterXML(currentSession))
+            System.out.println("[ok]");
+        else
+            System.out.println("[error]");
         System.out.println();
     }
 

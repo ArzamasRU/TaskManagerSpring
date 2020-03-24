@@ -24,25 +24,27 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _DeleteUser_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "deleteUser");
-    private final static QName _DeleteUserResponse_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "deleteUserResponse");
-    private final static QName _GetUser_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "getUser");
-    private final static QName _GetUserProjects_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "getUserProjects");
-    private final static QName _GetUserProjectsResponse_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "getUserProjectsResponse");
-    private final static QName _GetUserResponse_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "getUserResponse");
-    private final static QName _GetUserTasks_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "getUserTasks");
-    private final static QName _GetUserTasksResponse_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "getUserTasksResponse");
-    private final static QName _LogoutUser_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "logoutUser");
-    private final static QName _LogoutUserResponse_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "logoutUserResponse");
-    private final static QName _Project_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "project");
-    private final static QName _RegisterUser_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "registerUser");
-    private final static QName _RegisterUserResponse_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "registerUserResponse");
-    private final static QName _Task_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "task");
-    private final static QName _UpdateLogin_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "updateLogin");
-    private final static QName _UpdateLoginResponse_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "updateLoginResponse");
-    private final static QName _UpdatePassword_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "updatePassword");
-    private final static QName _UpdatePasswordResponse_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "updatePasswordResponse");
-    private final static QName _User_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "user");
+    private final static QName _DataFromJSONByFasterXML_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "dataFromJSONByFasterXML");
+    private final static QName _DataFromJSONByFasterXMLResponse_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "dataFromJSONByFasterXMLResponse");
+    private final static QName _DataFromJSONByJAXB_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "dataFromJSONByJAXB");
+    private final static QName _DataFromJSONByJAXBResponse_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "dataFromJSONByJAXBResponse");
+    private final static QName _DataFromXMLByFasterXML_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "dataFromXMLByFasterXML");
+    private final static QName _DataFromXMLByFasterXMLResponse_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "dataFromXMLByFasterXMLResponse");
+    private final static QName _DataFromXMLByJAXB_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "dataFromXMLByJAXB");
+    private final static QName _DataFromXMLByJAXBResponse_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "dataFromXMLByJAXBResponse");
+    private final static QName _DataToJSONByFasterXML_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "dataToJSONByFasterXML");
+    private final static QName _DataToJSONByFasterXMLResponse_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "dataToJSONByFasterXMLResponse");
+    private final static QName _DataToJSONByJAXB_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "dataToJSONByJAXB");
+    private final static QName _DataToJSONByJAXBResponse_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "dataToJSONByJAXBResponse");
+    private final static QName _DataToXMLByFasterXML_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "dataToXMLByFasterXML");
+    private final static QName _DataToXMLByFasterXMLResponse_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "dataToXMLByFasterXMLResponse");
+    private final static QName _DataToXMLByJAXB_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "dataToXMLByJAXB");
+    private final static QName _DataToXMLByJAXBResponse_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "dataToXMLByJAXBResponse");
+    private final static QName _Deserialize_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "deserialize");
+    private final static QName _DeserializeResponse_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "deserializeResponse");
+    private final static QName _Serialize_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "serialize");
+    private final static QName _SerializeResponse_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "serializeResponse");
+    private final static QName _Session_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "session");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: ru.lavrov.tm.endpoint
@@ -52,326 +54,360 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link DeleteUser }
+     * Create an instance of {@link DataFromJSONByFasterXML }
      * 
      */
-    public DeleteUser createDeleteUser() {
-        return new DeleteUser();
+    public DataFromJSONByFasterXML createDataFromJSONByFasterXML() {
+        return new DataFromJSONByFasterXML();
     }
 
     /**
-     * Create an instance of {@link DeleteUserResponse }
+     * Create an instance of {@link DataFromJSONByFasterXMLResponse }
      * 
      */
-    public DeleteUserResponse createDeleteUserResponse() {
-        return new DeleteUserResponse();
+    public DataFromJSONByFasterXMLResponse createDataFromJSONByFasterXMLResponse() {
+        return new DataFromJSONByFasterXMLResponse();
     }
 
     /**
-     * Create an instance of {@link GetUser }
+     * Create an instance of {@link DataFromJSONByJAXB }
      * 
      */
-    public GetUser createGetUser() {
-        return new GetUser();
+    public DataFromJSONByJAXB createDataFromJSONByJAXB() {
+        return new DataFromJSONByJAXB();
     }
 
     /**
-     * Create an instance of {@link GetUserProjects }
+     * Create an instance of {@link DataFromJSONByJAXBResponse }
      * 
      */
-    public GetUserProjects createGetUserProjects() {
-        return new GetUserProjects();
+    public DataFromJSONByJAXBResponse createDataFromJSONByJAXBResponse() {
+        return new DataFromJSONByJAXBResponse();
     }
 
     /**
-     * Create an instance of {@link GetUserProjectsResponse }
+     * Create an instance of {@link DataFromXMLByFasterXML }
      * 
      */
-    public GetUserProjectsResponse createGetUserProjectsResponse() {
-        return new GetUserProjectsResponse();
+    public DataFromXMLByFasterXML createDataFromXMLByFasterXML() {
+        return new DataFromXMLByFasterXML();
     }
 
     /**
-     * Create an instance of {@link GetUserResponse }
+     * Create an instance of {@link DataFromXMLByFasterXMLResponse }
      * 
      */
-    public GetUserResponse createGetUserResponse() {
-        return new GetUserResponse();
+    public DataFromXMLByFasterXMLResponse createDataFromXMLByFasterXMLResponse() {
+        return new DataFromXMLByFasterXMLResponse();
     }
 
     /**
-     * Create an instance of {@link GetUserTasks }
+     * Create an instance of {@link DataFromXMLByJAXB }
      * 
      */
-    public GetUserTasks createGetUserTasks() {
-        return new GetUserTasks();
+    public DataFromXMLByJAXB createDataFromXMLByJAXB() {
+        return new DataFromXMLByJAXB();
     }
 
     /**
-     * Create an instance of {@link GetUserTasksResponse }
+     * Create an instance of {@link DataFromXMLByJAXBResponse }
      * 
      */
-    public GetUserTasksResponse createGetUserTasksResponse() {
-        return new GetUserTasksResponse();
+    public DataFromXMLByJAXBResponse createDataFromXMLByJAXBResponse() {
+        return new DataFromXMLByJAXBResponse();
     }
 
     /**
-     * Create an instance of {@link LogoutUser }
+     * Create an instance of {@link DataToJSONByFasterXML }
      * 
      */
-    public LogoutUser createLogoutUser() {
-        return new LogoutUser();
+    public DataToJSONByFasterXML createDataToJSONByFasterXML() {
+        return new DataToJSONByFasterXML();
     }
 
     /**
-     * Create an instance of {@link LogoutUserResponse }
+     * Create an instance of {@link DataToJSONByFasterXMLResponse }
      * 
      */
-    public LogoutUserResponse createLogoutUserResponse() {
-        return new LogoutUserResponse();
+    public DataToJSONByFasterXMLResponse createDataToJSONByFasterXMLResponse() {
+        return new DataToJSONByFasterXMLResponse();
     }
 
     /**
-     * Create an instance of {@link Project }
+     * Create an instance of {@link DataToJSONByJAXB }
      * 
      */
-    public Project createProject() {
-        return new Project();
+    public DataToJSONByJAXB createDataToJSONByJAXB() {
+        return new DataToJSONByJAXB();
     }
 
     /**
-     * Create an instance of {@link RegisterUser }
+     * Create an instance of {@link DataToJSONByJAXBResponse }
      * 
      */
-    public RegisterUser createRegisterUser() {
-        return new RegisterUser();
+    public DataToJSONByJAXBResponse createDataToJSONByJAXBResponse() {
+        return new DataToJSONByJAXBResponse();
     }
 
     /**
-     * Create an instance of {@link RegisterUserResponse }
+     * Create an instance of {@link DataToXMLByFasterXML }
      * 
      */
-    public RegisterUserResponse createRegisterUserResponse() {
-        return new RegisterUserResponse();
+    public DataToXMLByFasterXML createDataToXMLByFasterXML() {
+        return new DataToXMLByFasterXML();
     }
 
     /**
-     * Create an instance of {@link Task }
+     * Create an instance of {@link DataToXMLByFasterXMLResponse }
      * 
      */
-    public Task createTask() {
-        return new Task();
+    public DataToXMLByFasterXMLResponse createDataToXMLByFasterXMLResponse() {
+        return new DataToXMLByFasterXMLResponse();
     }
 
     /**
-     * Create an instance of {@link UpdateLogin }
+     * Create an instance of {@link DataToXMLByJAXB }
      * 
      */
-    public UpdateLogin createUpdateLogin() {
-        return new UpdateLogin();
+    public DataToXMLByJAXB createDataToXMLByJAXB() {
+        return new DataToXMLByJAXB();
     }
 
     /**
-     * Create an instance of {@link UpdateLoginResponse }
+     * Create an instance of {@link DataToXMLByJAXBResponse }
      * 
      */
-    public UpdateLoginResponse createUpdateLoginResponse() {
-        return new UpdateLoginResponse();
+    public DataToXMLByJAXBResponse createDataToXMLByJAXBResponse() {
+        return new DataToXMLByJAXBResponse();
     }
 
     /**
-     * Create an instance of {@link UpdatePassword }
+     * Create an instance of {@link Deserialize }
      * 
      */
-    public UpdatePassword createUpdatePassword() {
-        return new UpdatePassword();
+    public Deserialize createDeserialize() {
+        return new Deserialize();
     }
 
     /**
-     * Create an instance of {@link UpdatePasswordResponse }
+     * Create an instance of {@link DeserializeResponse }
      * 
      */
-    public UpdatePasswordResponse createUpdatePasswordResponse() {
-        return new UpdatePasswordResponse();
+    public DeserializeResponse createDeserializeResponse() {
+        return new DeserializeResponse();
     }
 
     /**
-     * Create an instance of {@link User }
+     * Create an instance of {@link Serialize }
      * 
      */
-    public User createUser() {
-        return new User();
+    public Serialize createSerialize() {
+        return new Serialize();
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link DeleteUser }{@code >}}
+     * Create an instance of {@link SerializeResponse }
      * 
      */
-    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "deleteUser")
-    public JAXBElement<DeleteUser> createDeleteUser(DeleteUser value) {
-        return new JAXBElement<DeleteUser>(_DeleteUser_QNAME, DeleteUser.class, null, value);
+    public SerializeResponse createSerializeResponse() {
+        return new SerializeResponse();
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link DeleteUserResponse }{@code >}}
+     * Create an instance of {@link Session }
      * 
      */
-    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "deleteUserResponse")
-    public JAXBElement<DeleteUserResponse> createDeleteUserResponse(DeleteUserResponse value) {
-        return new JAXBElement<DeleteUserResponse>(_DeleteUserResponse_QNAME, DeleteUserResponse.class, null, value);
+    public Session createSession() {
+        return new Session();
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link GetUser }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link DataFromJSONByFasterXML }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "getUser")
-    public JAXBElement<GetUser> createGetUser(GetUser value) {
-        return new JAXBElement<GetUser>(_GetUser_QNAME, GetUser.class, null, value);
+    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "dataFromJSONByFasterXML")
+    public JAXBElement<DataFromJSONByFasterXML> createDataFromJSONByFasterXML(DataFromJSONByFasterXML value) {
+        return new JAXBElement<DataFromJSONByFasterXML>(_DataFromJSONByFasterXML_QNAME, DataFromJSONByFasterXML.class, null, value);
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link GetUserProjects }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link DataFromJSONByFasterXMLResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "getUserProjects")
-    public JAXBElement<GetUserProjects> createGetUserProjects(GetUserProjects value) {
-        return new JAXBElement<GetUserProjects>(_GetUserProjects_QNAME, GetUserProjects.class, null, value);
+    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "dataFromJSONByFasterXMLResponse")
+    public JAXBElement<DataFromJSONByFasterXMLResponse> createDataFromJSONByFasterXMLResponse(DataFromJSONByFasterXMLResponse value) {
+        return new JAXBElement<DataFromJSONByFasterXMLResponse>(_DataFromJSONByFasterXMLResponse_QNAME, DataFromJSONByFasterXMLResponse.class, null, value);
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link GetUserProjectsResponse }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link DataFromJSONByJAXB }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "getUserProjectsResponse")
-    public JAXBElement<GetUserProjectsResponse> createGetUserProjectsResponse(GetUserProjectsResponse value) {
-        return new JAXBElement<GetUserProjectsResponse>(_GetUserProjectsResponse_QNAME, GetUserProjectsResponse.class, null, value);
+    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "dataFromJSONByJAXB")
+    public JAXBElement<DataFromJSONByJAXB> createDataFromJSONByJAXB(DataFromJSONByJAXB value) {
+        return new JAXBElement<DataFromJSONByJAXB>(_DataFromJSONByJAXB_QNAME, DataFromJSONByJAXB.class, null, value);
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link GetUserResponse }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link DataFromJSONByJAXBResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "getUserResponse")
-    public JAXBElement<GetUserResponse> createGetUserResponse(GetUserResponse value) {
-        return new JAXBElement<GetUserResponse>(_GetUserResponse_QNAME, GetUserResponse.class, null, value);
+    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "dataFromJSONByJAXBResponse")
+    public JAXBElement<DataFromJSONByJAXBResponse> createDataFromJSONByJAXBResponse(DataFromJSONByJAXBResponse value) {
+        return new JAXBElement<DataFromJSONByJAXBResponse>(_DataFromJSONByJAXBResponse_QNAME, DataFromJSONByJAXBResponse.class, null, value);
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link GetUserTasks }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link DataFromXMLByFasterXML }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "getUserTasks")
-    public JAXBElement<GetUserTasks> createGetUserTasks(GetUserTasks value) {
-        return new JAXBElement<GetUserTasks>(_GetUserTasks_QNAME, GetUserTasks.class, null, value);
+    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "dataFromXMLByFasterXML")
+    public JAXBElement<DataFromXMLByFasterXML> createDataFromXMLByFasterXML(DataFromXMLByFasterXML value) {
+        return new JAXBElement<DataFromXMLByFasterXML>(_DataFromXMLByFasterXML_QNAME, DataFromXMLByFasterXML.class, null, value);
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link GetUserTasksResponse }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link DataFromXMLByFasterXMLResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "getUserTasksResponse")
-    public JAXBElement<GetUserTasksResponse> createGetUserTasksResponse(GetUserTasksResponse value) {
-        return new JAXBElement<GetUserTasksResponse>(_GetUserTasksResponse_QNAME, GetUserTasksResponse.class, null, value);
+    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "dataFromXMLByFasterXMLResponse")
+    public JAXBElement<DataFromXMLByFasterXMLResponse> createDataFromXMLByFasterXMLResponse(DataFromXMLByFasterXMLResponse value) {
+        return new JAXBElement<DataFromXMLByFasterXMLResponse>(_DataFromXMLByFasterXMLResponse_QNAME, DataFromXMLByFasterXMLResponse.class, null, value);
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link LogoutUser }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link DataFromXMLByJAXB }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "logoutUser")
-    public JAXBElement<LogoutUser> createLogoutUser(LogoutUser value) {
-        return new JAXBElement<LogoutUser>(_LogoutUser_QNAME, LogoutUser.class, null, value);
+    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "dataFromXMLByJAXB")
+    public JAXBElement<DataFromXMLByJAXB> createDataFromXMLByJAXB(DataFromXMLByJAXB value) {
+        return new JAXBElement<DataFromXMLByJAXB>(_DataFromXMLByJAXB_QNAME, DataFromXMLByJAXB.class, null, value);
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link LogoutUserResponse }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link DataFromXMLByJAXBResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "logoutUserResponse")
-    public JAXBElement<LogoutUserResponse> createLogoutUserResponse(LogoutUserResponse value) {
-        return new JAXBElement<LogoutUserResponse>(_LogoutUserResponse_QNAME, LogoutUserResponse.class, null, value);
+    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "dataFromXMLByJAXBResponse")
+    public JAXBElement<DataFromXMLByJAXBResponse> createDataFromXMLByJAXBResponse(DataFromXMLByJAXBResponse value) {
+        return new JAXBElement<DataFromXMLByJAXBResponse>(_DataFromXMLByJAXBResponse_QNAME, DataFromXMLByJAXBResponse.class, null, value);
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link Project }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link DataToJSONByFasterXML }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "project")
-    public JAXBElement<Project> createProject(Project value) {
-        return new JAXBElement<Project>(_Project_QNAME, Project.class, null, value);
+    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "dataToJSONByFasterXML")
+    public JAXBElement<DataToJSONByFasterXML> createDataToJSONByFasterXML(DataToJSONByFasterXML value) {
+        return new JAXBElement<DataToJSONByFasterXML>(_DataToJSONByFasterXML_QNAME, DataToJSONByFasterXML.class, null, value);
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link RegisterUser }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link DataToJSONByFasterXMLResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "registerUser")
-    public JAXBElement<RegisterUser> createRegisterUser(RegisterUser value) {
-        return new JAXBElement<RegisterUser>(_RegisterUser_QNAME, RegisterUser.class, null, value);
+    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "dataToJSONByFasterXMLResponse")
+    public JAXBElement<DataToJSONByFasterXMLResponse> createDataToJSONByFasterXMLResponse(DataToJSONByFasterXMLResponse value) {
+        return new JAXBElement<DataToJSONByFasterXMLResponse>(_DataToJSONByFasterXMLResponse_QNAME, DataToJSONByFasterXMLResponse.class, null, value);
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link RegisterUserResponse }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link DataToJSONByJAXB }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "registerUserResponse")
-    public JAXBElement<RegisterUserResponse> createRegisterUserResponse(RegisterUserResponse value) {
-        return new JAXBElement<RegisterUserResponse>(_RegisterUserResponse_QNAME, RegisterUserResponse.class, null, value);
+    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "dataToJSONByJAXB")
+    public JAXBElement<DataToJSONByJAXB> createDataToJSONByJAXB(DataToJSONByJAXB value) {
+        return new JAXBElement<DataToJSONByJAXB>(_DataToJSONByJAXB_QNAME, DataToJSONByJAXB.class, null, value);
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link Task }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link DataToJSONByJAXBResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "task")
-    public JAXBElement<Task> createTask(Task value) {
-        return new JAXBElement<Task>(_Task_QNAME, Task.class, null, value);
+    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "dataToJSONByJAXBResponse")
+    public JAXBElement<DataToJSONByJAXBResponse> createDataToJSONByJAXBResponse(DataToJSONByJAXBResponse value) {
+        return new JAXBElement<DataToJSONByJAXBResponse>(_DataToJSONByJAXBResponse_QNAME, DataToJSONByJAXBResponse.class, null, value);
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link UpdateLogin }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link DataToXMLByFasterXML }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "updateLogin")
-    public JAXBElement<UpdateLogin> createUpdateLogin(UpdateLogin value) {
-        return new JAXBElement<UpdateLogin>(_UpdateLogin_QNAME, UpdateLogin.class, null, value);
+    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "dataToXMLByFasterXML")
+    public JAXBElement<DataToXMLByFasterXML> createDataToXMLByFasterXML(DataToXMLByFasterXML value) {
+        return new JAXBElement<DataToXMLByFasterXML>(_DataToXMLByFasterXML_QNAME, DataToXMLByFasterXML.class, null, value);
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link UpdateLoginResponse }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link DataToXMLByFasterXMLResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "updateLoginResponse")
-    public JAXBElement<UpdateLoginResponse> createUpdateLoginResponse(UpdateLoginResponse value) {
-        return new JAXBElement<UpdateLoginResponse>(_UpdateLoginResponse_QNAME, UpdateLoginResponse.class, null, value);
+    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "dataToXMLByFasterXMLResponse")
+    public JAXBElement<DataToXMLByFasterXMLResponse> createDataToXMLByFasterXMLResponse(DataToXMLByFasterXMLResponse value) {
+        return new JAXBElement<DataToXMLByFasterXMLResponse>(_DataToXMLByFasterXMLResponse_QNAME, DataToXMLByFasterXMLResponse.class, null, value);
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link UpdatePassword }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link DataToXMLByJAXB }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "updatePassword")
-    public JAXBElement<UpdatePassword> createUpdatePassword(UpdatePassword value) {
-        return new JAXBElement<UpdatePassword>(_UpdatePassword_QNAME, UpdatePassword.class, null, value);
+    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "dataToXMLByJAXB")
+    public JAXBElement<DataToXMLByJAXB> createDataToXMLByJAXB(DataToXMLByJAXB value) {
+        return new JAXBElement<DataToXMLByJAXB>(_DataToXMLByJAXB_QNAME, DataToXMLByJAXB.class, null, value);
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link UpdatePasswordResponse }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link DataToXMLByJAXBResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "updatePasswordResponse")
-    public JAXBElement<UpdatePasswordResponse> createUpdatePasswordResponse(UpdatePasswordResponse value) {
-        return new JAXBElement<UpdatePasswordResponse>(_UpdatePasswordResponse_QNAME, UpdatePasswordResponse.class, null, value);
+    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "dataToXMLByJAXBResponse")
+    public JAXBElement<DataToXMLByJAXBResponse> createDataToXMLByJAXBResponse(DataToXMLByJAXBResponse value) {
+        return new JAXBElement<DataToXMLByJAXBResponse>(_DataToXMLByJAXBResponse_QNAME, DataToXMLByJAXBResponse.class, null, value);
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link User }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link Deserialize }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "user")
-    public JAXBElement<User> createUser(User value) {
-        return new JAXBElement<User>(_User_QNAME, User.class, null, value);
+    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "deserialize")
+    public JAXBElement<Deserialize> createDeserialize(Deserialize value) {
+        return new JAXBElement<Deserialize>(_Deserialize_QNAME, Deserialize.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link DeserializeResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "deserializeResponse")
+    public JAXBElement<DeserializeResponse> createDeserializeResponse(DeserializeResponse value) {
+        return new JAXBElement<DeserializeResponse>(_DeserializeResponse_QNAME, DeserializeResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link Serialize }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "serialize")
+    public JAXBElement<Serialize> createSerialize(Serialize value) {
+        return new JAXBElement<Serialize>(_Serialize_QNAME, Serialize.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link SerializeResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "serializeResponse")
+    public JAXBElement<SerializeResponse> createSerializeResponse(SerializeResponse value) {
+        return new JAXBElement<SerializeResponse>(_SerializeResponse_QNAME, SerializeResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link Session }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "session")
+    public JAXBElement<Session> createSession(Session value) {
+        return new JAXBElement<Session>(_Session_QNAME, Session.class, null, value);
     }
 
 }

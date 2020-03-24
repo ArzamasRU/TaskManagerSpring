@@ -3,11 +3,12 @@ package ru.lavrov.tm.command.task;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.api.ITaskService;
-import ru.lavrov.tm.command.AbstractCommand;
-import ru.lavrov.tm.entity.User;
-import ru.lavrov.tm.enumerate.Role;
+import ru.lavrov.tm.endpoint.ProjectEndpointService;
+import ru.lavrov.tm.endpoint.Role;
+import ru.lavrov.tm.endpoint.Session;
+import ru.lavrov.tm.endpoint.TaskEndpointService;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
+import ru.lavrov.tm.command.AbstractCommand;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -36,12 +37,12 @@ public final class TaskClearCommand extends AbstractCommand {
 
     @Override
     public void execute() {
-        @Nullable final User currentUser = bootstrap.getCurrentUser();
-        if (currentUser == null)
-            throw new UserIsNotAuthorizedException();
-        @Nullable final ITaskService taskService = bootstrap.getTaskService();
-        taskService.removeAll(currentUser.getId());
-        System.out.println("[ok]");
+        @Nullable final Session currentSession = bootstrap.getCurrentSession();
+        @NotNull final TaskEndpointService taskEndpointService = bootstrap.getTaskEndpointService();
+        if (taskEndpointService.getTaskEndpointPort().removeAll(currentSession))
+            System.out.println("[ok]");
+        else
+            System.out.println("[error]");
         System.out.println();
     }
 

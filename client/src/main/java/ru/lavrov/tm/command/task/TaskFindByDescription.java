@@ -2,13 +2,11 @@ package ru.lavrov.tm.command.task;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.api.IEntity;
-import ru.lavrov.tm.api.ITaskService;
+import ru.lavrov.tm.endpoint.Role;
+import ru.lavrov.tm.endpoint.Session;
+import ru.lavrov.tm.endpoint.Task;
+import ru.lavrov.tm.endpoint.TaskEndpointService;
 import ru.lavrov.tm.command.AbstractCommand;
-import ru.lavrov.tm.entity.Task;
-import ru.lavrov.tm.entity.User;
-import ru.lavrov.tm.enumerate.Role;
-import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 import ru.lavrov.tm.util.InputUtil;
 
 import java.util.Arrays;
@@ -38,17 +36,16 @@ public final class TaskFindByDescription extends AbstractCommand {
     @Override
     public void execute() {
         System.out.println("[TASK LIST]");
-        @Nullable final ITaskService taskService = bootstrap.getTaskService();
-        @Nullable final User currentUser = bootstrap.getCurrentUser();
-        if (currentUser == null)
-            throw new UserIsNotAuthorizedException();
         System.out.println("enter name:");
         @Nullable final String desc = InputUtil.INPUT.nextLine();
-        @Nullable final Collection<Task> taskList = taskService.findAllByDescPart(currentUser.getId(), desc);
+        @Nullable final Session currentSession = bootstrap.getCurrentSession();
+        @NotNull final TaskEndpointService taskEndpointService = bootstrap.getTaskEndpointService();
+        @Nullable final Collection<Task> taskList =
+                taskEndpointService.getTaskEndpointPort().findAllTasksByDescPart(currentSession, desc);
         if (taskList == null)
             return;
         int index = 1;
-        for (@Nullable final IEntity task : taskList) {
+        for (@Nullable final Task task : taskList) {
             if (task == null)
                 continue;
             System.out.println(index++ + ". " + task);

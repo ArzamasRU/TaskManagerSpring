@@ -1,5 +1,6 @@
 package ru.lavrov.tm.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,7 +20,8 @@ public final class Session {
     private String userId;
     @Nullable
     private Role role;
-    private long timeLimit;
+    private long timeStamp;
+    @JsonIgnore
     @Nullable
     private String sign;
 }

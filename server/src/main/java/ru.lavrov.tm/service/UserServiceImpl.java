@@ -32,7 +32,7 @@ public final class UserServiceImpl extends AbstractService<User> implements IUse
         this.userRepository = userRepository;
     }
 
-    public void createByLogin(
+    public boolean createByLogin(
             @Nullable final String login, @Nullable final String password, @Nullable final String role
     ) {
         if (login == null || login.isEmpty())
@@ -58,6 +58,7 @@ public final class UserServiceImpl extends AbstractService<User> implements IUse
         @NotNull String hashedPassword;
             hashedPassword = HashUtil.md5Hard(password);
         persist(new User(login, hashedPassword, currentRole));
+        return true;
     }
 
     public void updatePassword(@Nullable final String userId, @Nullable final String newPassword) {

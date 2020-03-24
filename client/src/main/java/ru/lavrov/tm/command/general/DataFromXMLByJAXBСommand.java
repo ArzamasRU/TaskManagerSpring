@@ -2,19 +2,10 @@ package ru.lavrov.tm.command.general;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.api.IProjectService;
-import ru.lavrov.tm.api.ITaskService;
-import ru.lavrov.tm.api.IUserService;
 import ru.lavrov.tm.command.AbstractCommand;
-import ru.lavrov.tm.constant.Constant;
-import ru.lavrov.tm.entity.Project;
-import ru.lavrov.tm.entity.Task;
-import ru.lavrov.tm.entity.User;
-import ru.lavrov.tm.enumerate.Role;
-import ru.lavrov.tm.exception.project.ProjectNotExistsException;
-import ru.lavrov.tm.exception.task.TaskNotExistsException;
-import ru.lavrov.tm.exception.user.UserNotExistsException;
-import ru.lavrov.tm.util.JAXBUtil;
+import ru.lavrov.tm.endpoint.GeneralCommandsEndpointService;
+import ru.lavrov.tm.endpoint.Role;
+import ru.lavrov.tm.endpoint.Session;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -43,31 +34,13 @@ public final class DataFromXMLByJAXBСommand extends AbstractCommand {
     @Override
     public void execute() {
         System.out.println("[Externalization data from XML By JAXB]");
-        @Nullable final Collection<Project> projectList = JAXBUtil.readFromXMLByJAXB(Project.class, Constant.EXTERNALIZATION_DIR_PATH);
-        @Nullable final IProjectService projectService = bootstrap.getProjectService();
-        if (projectList != null)
-            for (@Nullable final Project project : projectList) {
-                if (project == null)
-                    throw new ProjectNotExistsException();
-                projectService.persist(project);
-            }
-        @Nullable final Collection<Task> taskList = JAXBUtil.readFromXMLByJAXB(Task.class, Constant.EXTERNALIZATION_DIR_PATH);
-        @Nullable final ITaskService taskService = bootstrap.getTaskService();
-        if (taskList != null)
-            for (@Nullable final Task task : taskList) {
-                if (task == null)
-                    throw new TaskNotExistsException();
-                taskService.persist(task);
-            }
-        @Nullable final Collection<User> userList = JAXBUtil.readFromXMLByJAXB(User.class, Constant.EXTERNALIZATION_DIR_PATH);
-        @Nullable final IUserService userService = bootstrap.getUserService();
-        if (userList != null)
-            for (@Nullable final User user : userList) {
-                if (user == null)
-                    throw new UserNotExistsException();
-                userService.persist(user);
-            }
-        System.out.println("[ok]");
+        @Nullable final Session currentSession = bootstrap.getCurrentSession();
+        @NotNull final GeneralCommandsEndpointService generalCommandsEndpointService =
+                bootstrap.getGeneralCommandsEndpointService();
+        if (generalCommandsEndpointService.getGeneralCommandsEndpointPort().dataFromXMLByJAXB(currentSession))
+            System.out.println("[ok]");
+        else
+            System.out.println("[error]");
         System.out.println();
     }
 

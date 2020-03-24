@@ -10,7 +10,11 @@ import ru.lavrov.tm.bootstrap.Bootstrap;
 @Getter
 @Setter
 @NoArgsConstructor
-public class AbstractEndpoint {
+public abstract class AbstractEndpoint {
     @NotNull
     protected IServiceLocator bootstrap;
+
+    public AbstractEndpoint(@NotNull IServiceLocator bootstrap) {
+        this.bootstrap = bootstrap;
+    }
 }

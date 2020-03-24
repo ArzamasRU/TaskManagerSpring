@@ -41,7 +41,7 @@ public abstract class AbstractRepository<T extends IEntity> implements IReposito
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         @Nullable final T entity = entities.get(entityId);
-        if (!entity.getUserId().equals(userId))
+        if (!userId.equals(entity.getUserId()))
             throw new EntityNotExistsException();
         entities.remove(entityId);
     }

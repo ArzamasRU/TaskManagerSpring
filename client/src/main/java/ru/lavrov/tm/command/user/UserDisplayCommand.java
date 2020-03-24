@@ -3,15 +3,8 @@ package ru.lavrov.tm.command.user;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.api.IEntity;
-import ru.lavrov.tm.api.IProjectService;
-import ru.lavrov.tm.api.ITaskService;
 import ru.lavrov.tm.command.AbstractCommand;
-import ru.lavrov.tm.entity.Project;
-import ru.lavrov.tm.entity.Task;
-import ru.lavrov.tm.entity.User;
-import ru.lavrov.tm.enumerate.Role;
-import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
+import ru.lavrov.tm.endpoint.*;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -40,30 +33,26 @@ public final class UserDisplayCommand extends AbstractCommand {
 
     @Override
     public void execute() {
-        @Nullable final IProjectService projectService = bootstrap.getProjectService();
-        @Nullable final ITaskService taskService = bootstrap.getTaskService();
-        @Nullable final User currentUser = bootstrap.getCurrentUser();
-        if (currentUser == null)
-            throw new UserIsNotAuthorizedException();
+        @NotNull final UserEndpointService userEndpointService = bootstrap.getUserEndpointService();
+        @NotNull final Session currentSession = bootstrap.getCurrentSession();
+        @Nullable final User user = userEndpointService.getUserEndpointPort().getUser(currentSession);
+        @NotNull final Collection<Project> projectList =
+                userEndpointService.getUserEndpointPort().getUserProjects(currentSession);
+        @NotNull final Collection<Task> taskList =
+                userEndpointService.getUserEndpointPort().getUserTasks(currentSession);
         System.out.println("[Display user profile]");
         System.out.println("user data:");
-        System.out.println(currentUser.getLogin());
-        System.out.println("attached entities:");
+        System.out.println(user.getLogin());
+        System.out.println("attached projects:");
         int index = 1;
-        @Nullable final Collection<Project> projectList = projectService.findAll(currentUser.getId());
-        if (projectList == null)
-            return;
-        for (@Nullable final IEntity project : projectList) {
+        for (@Nullable final Project project : projectList) {
             if (project == null)
                 continue;
             System.out.println(index++ + ". " + project);
         }
         System.out.println("attached tasks:");
-        @Nullable final Collection<Task> taskList = taskService.findAll(currentUser.getId());
-        if (taskList == null)
-            return;
         index = 1;
-        for (@Nullable final IEntity task : taskList) {
+        for (@Nullable final Task task : taskList) {
             if (task == null)
                 continue;
             System.out.println(index++ + ". " + task);

@@ -35,7 +35,7 @@ public final class ProjectServiceImpl extends AbstractService<Project> implement
     }
 
     @Override
-    public void createByName(@Nullable final String userId, @Nullable final String projectName) {
+    public void createByProjectName(@Nullable final String userId, @Nullable final String projectName) {
         if (projectName == null || projectName.isEmpty())
             throw new ProjectNameIsInvalidException();
         if (userId == null || userId.isEmpty())

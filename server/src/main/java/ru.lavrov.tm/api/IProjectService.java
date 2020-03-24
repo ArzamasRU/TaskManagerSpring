@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.Comparator;
 
 public interface IProjectService extends IService<Project> {
-    void createByName(@Nullable String userId, @Nullable String projectName);
+    void createByProjectName(@Nullable String userId, @Nullable String projectName);
 
     void removeProjectByName(@Nullable String userId, @Nullable String projectName);
 

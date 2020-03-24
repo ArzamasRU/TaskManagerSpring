@@ -2,21 +2,13 @@ package ru.lavrov.tm.command.general;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.api.IProjectService;
-import ru.lavrov.tm.api.ITaskService;
 import ru.lavrov.tm.command.AbstractCommand;
-import ru.lavrov.tm.constant.Constant;
-import ru.lavrov.tm.entity.ExternalizationStorage;
-import ru.lavrov.tm.entity.Project;
-import ru.lavrov.tm.entity.Task;
-import ru.lavrov.tm.entity.User;
-import ru.lavrov.tm.enumerate.Role;
-import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
+import ru.lavrov.tm.endpoint.GeneralCommandsEndpointService;
+import ru.lavrov.tm.endpoint.Role;
+import ru.lavrov.tm.endpoint.Session;
 
 import java.util.Arrays;
 import java.util.Collection;
-
-import static ru.lavrov.tm.util.JAXBUtil.writeToJSONByJAXB;
 
 public final class DataToJSONByJAXBCommand extends AbstractCommand {
     private static final boolean SAFE = true;
@@ -42,25 +34,13 @@ public final class DataToJSONByJAXBCommand extends AbstractCommand {
     @Override
     public void execute() {
         System.out.println("[Externalization data to JSON By JAXB]");
-        @Nullable final User currentUser = bootstrap.getCurrentUser();
-        if (currentUser == null)
-            throw new UserIsNotAuthorizedException();
-        @NotNull final ExternalizationStorage storage = new ExternalizationStorage();
-        @NotNull final IProjectService projectService = bootstrap.getProjectService();
-        @NotNull final Collection<Project> projectList = projectService.findAll(currentUser.getId());
-        if (projectList == null)
-            return;
-        @NotNull final ITaskService taskService = bootstrap.getTaskService();
-        @NotNull final Collection<Task> taskList = taskService.findAll(currentUser.getId());
-        if (taskList == null)
-            return;
-        storage.setProjectList(projectList);
-        storage.setTaskList(taskList);
-        storage.setUserList(Arrays.asList(currentUser));
-        @NotNull final String filePath =
-                Constant.EXTERNALIZATION_DIR_PATH + ExternalizationStorage.class.getSimpleName() + ".json";
-        writeToJSONByJAXB(storage, filePath);
-        System.out.println("[ok]");
+        @Nullable final Session currentSession = bootstrap.getCurrentSession();
+        @NotNull final GeneralCommandsEndpointService generalCommandsEndpointService =
+                bootstrap.getGeneralCommandsEndpointService();
+        if (generalCommandsEndpointService.getGeneralCommandsEndpointPort().dataToJSONByJAXB(currentSession))
+            System.out.println("[ok]");
+        else
+            System.out.println("[error]");
         System.out.println();
     }
 

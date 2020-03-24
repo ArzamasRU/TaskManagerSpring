@@ -3,13 +3,9 @@ package ru.lavrov.tm.command.task;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.api.IEntity;
-import ru.lavrov.tm.api.ITaskService;
-import ru.lavrov.tm.command.AbstractCommand;
-import ru.lavrov.tm.entity.Task;
-import ru.lavrov.tm.entity.User;
-import ru.lavrov.tm.enumerate.Role;
+import ru.lavrov.tm.endpoint.*;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
+import ru.lavrov.tm.command.AbstractCommand;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -39,15 +35,14 @@ public final class TaskListCommand extends AbstractCommand {
     @Override
     public void execute() {
         System.out.println("[TASK LIST]");
-        @Nullable final ITaskService taskService = bootstrap.getTaskService();
-        @Nullable final User currentUser = bootstrap.getCurrentUser();
-        if (currentUser == null)
-            throw new UserIsNotAuthorizedException();
-        int index = 1;
-        @Nullable final Collection<Task> taskList = taskService.findAll(currentUser.getId());
+        @Nullable final Session currentSession = bootstrap.getCurrentSession();
+        @NotNull final TaskEndpointService taskEndpointService = bootstrap.getTaskEndpointService();
+        @Nullable final Collection<Task> taskList =
+                taskEndpointService.getTaskEndpointPort().findAllTasks(currentSession);
         if (taskList == null)
             return;
-        for (@Nullable final IEntity task : taskList) {
+        int index = 1;
+        for (@Nullable final Task task : taskList) {
             if (task == null)
                 continue;
             System.out.println(index++ + ". " + task);

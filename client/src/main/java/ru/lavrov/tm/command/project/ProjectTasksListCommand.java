@@ -3,13 +3,12 @@ package ru.lavrov.tm.command.project;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.api.IEntity;
-import ru.lavrov.tm.api.IProjectService;
-import ru.lavrov.tm.command.AbstractCommand;
-import ru.lavrov.tm.entity.Task;
-import ru.lavrov.tm.entity.User;
-import ru.lavrov.tm.enumerate.Role;
+import ru.lavrov.tm.endpoint.ProjectEndpointService;
+import ru.lavrov.tm.endpoint.Role;
+import ru.lavrov.tm.endpoint.Session;
+import ru.lavrov.tm.endpoint.Task;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
+import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.util.InputUtil;
 
 import java.util.Arrays;
@@ -42,14 +41,13 @@ public final class ProjectTasksListCommand extends AbstractCommand {
         System.out.println("[Tasks of project]");
         System.out.println("enter project name:");
         @Nullable final String projectName = InputUtil.INPUT.nextLine();
-        @Nullable final User currentUser = bootstrap.getCurrentUser();
-        if (currentUser == null)
-            throw new UserIsNotAuthorizedException();
-        @Nullable final IProjectService projectService = bootstrap.getProjectService();
-        @Nullable final Collection<Task> taskList = projectService.getProjectTasks(currentUser.getId(), projectName);
+        @Nullable final Session currentSession = bootstrap.getCurrentSession();
+        @NotNull final ProjectEndpointService projectEndpointService = bootstrap.getProjectEndpointService();
+        @Nullable final Collection<Task> taskList =
+                projectEndpointService.getProjectEndpointPort().getProjectTasks(currentSession, projectName);
         if (taskList == null)
             return;
-        for (@Nullable final IEntity task : taskList) {
+        for (@Nullable final Task task : taskList) {
             if (task == null)
                 continue;
             System.out.println(task);

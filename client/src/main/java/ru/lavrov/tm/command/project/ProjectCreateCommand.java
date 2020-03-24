@@ -3,11 +3,10 @@ package ru.lavrov.tm.command.project;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.api.IProjectService;
 import ru.lavrov.tm.command.AbstractCommand;
-import ru.lavrov.tm.entity.User;
-import ru.lavrov.tm.enumerate.Role;
-import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
+import ru.lavrov.tm.endpoint.ProjectEndpointService;
+import ru.lavrov.tm.endpoint.Role;
+import ru.lavrov.tm.endpoint.Session;
 import ru.lavrov.tm.util.InputUtil;
 
 import java.util.Arrays;
@@ -38,14 +37,14 @@ public final class ProjectCreateCommand extends AbstractCommand {
     @Override
     public void execute() {
         System.out.println("[Project create]");
+        @Nullable final Session currentSession = bootstrap.getCurrentSession();
         System.out.println("enter name:");
-        @Nullable final String projectName = InputUtil.INPUT.nextLine();
-        @Nullable final User currentUser = bootstrap.getCurrentUser();
-        if (currentUser == null)
-            throw new UserIsNotAuthorizedException();
-        @Nullable final IProjectService projectService = bootstrap.getProjectService();
-        projectService.createByName(currentUser.getId(), projectName);
-        System.out.println("[ok]");
+        @NotNull final String projectName = InputUtil.INPUT.nextLine();
+        @NotNull final ProjectEndpointService projectEndpointService = bootstrap.getProjectEndpointService();
+        if (projectEndpointService.getProjectEndpointPort().createByProjectName(currentSession, projectName))
+            System.out.println("[ok]");
+        else
+            System.out.println("[error]");
         System.out.println();
     }
 

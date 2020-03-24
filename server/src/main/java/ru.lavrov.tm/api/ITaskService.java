@@ -1,5 +1,6 @@
 package ru.lavrov.tm.api;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.entity.Task;
 
@@ -7,7 +8,7 @@ import java.util.Collection;
 import java.util.Comparator;
 
 public interface ITaskService extends IService<Task> {
-    void createByName(@Nullable String userId, @Nullable String taskName, @Nullable String projectName);
+    void createByTaskName(@Nullable String userId, @NotNull String taskName, @NotNull String projectName);
 
     void removeTaskByName(@Nullable String userId, @Nullable String taskName);
 

@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element name="arg0" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="arg0" type="{http://endpoint.tm.lavrov.ru/}session" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -31,17 +31,17 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class DeleteUser {
 
-    protected String arg0;
+    protected Session arg0;
 
     /**
      * Gets the value of the arg0 property.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link Session }
      *     
      */
-    public String getArg0() {
+    public Session getArg0() {
         return arg0;
     }
 
@@ -50,10 +50,10 @@ public class DeleteUser {
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link Session }
      *     
      */
-    public void setArg0(String value) {
+    public void setArg0(Session value) {
         this.arg0 = value;
     }
 

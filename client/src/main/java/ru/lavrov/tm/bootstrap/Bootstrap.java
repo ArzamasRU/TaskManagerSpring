@@ -6,56 +6,36 @@ import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.reflections.Reflections;
-import ru.lavrov.tm.endpoint.Session;
-import ru.lavrov.tm.endpoint.SessionEndpointService;
-import ru.lavrov.tm.endpoint.UserEndpointService;
-import ru.lavrov.tm.entity.User;
-import ru.lavrov.tm.enumerate.Role;
+import ru.lavrov.tm.command.AbstractCommand;
+import ru.lavrov.tm.endpoint.*;
 import ru.lavrov.tm.exception.command.CommandDescriptionIsInvalidException;
 import ru.lavrov.tm.exception.command.CommandIsInvalidException;
 import ru.lavrov.tm.exception.command.CommandNotExistsException;
-import ru.lavrov.tm.repository.ProjectRepositoryImpl;
-import ru.lavrov.tm.repository.TaskRepositoryImpl;
-import ru.lavrov.tm.repository.UserRepositoryImpl;
-import ru.lavrov.tm.api.*;
-import ru.lavrov.tm.command.AbstractCommand;
-import ru.lavrov.tm.exception.user.*;
-import ru.lavrov.tm.service.ProjectServiceImpl;
-import ru.lavrov.tm.service.TaskServiceImpl;
-import ru.lavrov.tm.service.UserServiceImpl;
-import ru.lavrov.tm.util.HashUtil;
+import ru.lavrov.tm.exception.user.UserDoNotHavePermissionException;
+import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
+import ru.lavrov.tm.exception.user.UserRoleIsInvalidException;
 import ru.lavrov.tm.util.InputUtil;
 
 import java.util.*;
 
 @Getter
 @NoArgsConstructor
-public final class Bootstrap implements IServiceLocator {
-    @NotNull
-    private final IProjectRepository projectRepository = new ProjectRepositoryImpl();
-    @NotNull
-    private final ITaskRepository taskRepository = new TaskRepositoryImpl();
-    @NotNull
-    private final IUserRepository userRepository = new UserRepositoryImpl();
-    @NotNull
-    private final IProjectService projectService =
-            new ProjectServiceImpl(projectRepository, taskRepository, userRepository);
-    @NotNull
-    private final ITaskService taskService = new TaskServiceImpl(taskRepository, projectRepository, userRepository);
-    @NotNull
-    private final IUserService userService = new UserServiceImpl(userRepository, projectRepository, taskRepository);
+public final class Bootstrap {
     @NotNull
     private final Map<String, AbstractCommand> commands = new LinkedHashMap();
     @NotNull
     private final UserEndpointService userEndpointService = new UserEndpointService();
     @NotNull
     private final SessionEndpointService sessionEndpointService = new SessionEndpointService();
+    @NotNull
+    private final ProjectEndpointService projectEndpointService = new ProjectEndpointService();
+    @NotNull
+    private final TaskEndpointService taskEndpointService = new TaskEndpointService();
+    @NotNull
+    private final GeneralCommandsEndpointService generalCommandsEndpointService = new GeneralCommandsEndpointService();
     @Setter
     @Nullable
     private Session currentSession;
-    @Setter
-    @Nullable
-    private User currentUser;
     @Nullable
     private static final Set<Class<? extends AbstractCommand>> classes;
 
@@ -66,7 +46,6 @@ public final class Bootstrap implements IServiceLocator {
     public void init() throws InstantiationException, IllegalAccessException {
         initProperties();
         initClasses(classes);
-        initUsers();
         System.out.println("*** WELCOME TO TASK MANAGER ***");
         @Nullable String command = null;
         while (!"exit".equals(command)) {
@@ -93,11 +72,6 @@ public final class Bootstrap implements IServiceLocator {
         }
     }
 
-    private void initUsers() {
-        userService.createByLogin("user", "user", Role.USER.getRole());
-        userService.createByLogin("admin", "admin", Role.ADMIN.getRole());
-    }
-
     private void initProperties(){
         System.setProperty("javax.xml.bind.context.factory","org.eclipse.persistence.jaxb.JAXBContextFactory");
     }
@@ -116,18 +90,19 @@ public final class Bootstrap implements IServiceLocator {
     }
 
     private void execute(@Nullable final String command) {
+        if (currentSession != null) System.out.println(currentSession.getSign());
         if (command == null || command.isEmpty())
             throw new CommandIsInvalidException();
         @Nullable final AbstractCommand abstractCommand = commands.get(command);
         if (abstractCommand == null)
             throw new CommandNotExistsException();
-        if (currentUser == null && !abstractCommand.isSafe())
+        if (currentSession == null && !abstractCommand.isSafe())
             throw new UserIsNotAuthorizedException();
         @Nullable Role role;
-        if (currentUser == null)
+        if (currentSession == null)
             role = null;
         else
-            role = currentUser.getRole();
+            role = currentSession.getRole();
         if (!hasPermission(abstractCommand.getRoles(), role))
             throw new UserDoNotHavePermissionException();
         abstractCommand.execute();
@@ -141,27 +116,8 @@ public final class Bootstrap implements IServiceLocator {
         return listRoles.contains(role);
     }
 
-    @Nullable
+    @NotNull
     public List<AbstractCommand> getCommands() {
-        return new ArrayList(commands.values());
-    }
-
-    public void login(@Nullable final String login, @Nullable final String password) {
-        if (login == null || login.isEmpty())
-            throw new UserLoginIsInvalidException();
-        if (password == null || password.isEmpty())
-            throw new UserPasswordIsInvalidException();
-        @Nullable final User user = userRepository.findUserByLogin(login);
-        if (user == null)
-            throw new UserLoginNotExistsException();
-        @Nullable String hashedPassword;
-            hashedPassword = HashUtil.md5Hard(password);
-        if (!hashedPassword.equals(user.getPassword()))
-            throw new UserLoginOrPasswordIsIncorrectException();
-        setCurrentUser(user);
-    }
-
-    public void logout() {
-        setCurrentUser(null);
+        return new ArrayList<>(commands.values());
     }
 }

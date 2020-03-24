@@ -4,7 +4,7 @@ import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.bootstrap.Bootstrap;
-import ru.lavrov.tm.enumerate.Role;
+import ru.lavrov.tm.endpoint.Role;
 
 import java.util.Collection;
 

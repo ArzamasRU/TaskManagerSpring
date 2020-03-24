@@ -3,11 +3,11 @@ package ru.lavrov.tm.command.task;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.api.ITaskService;
-import ru.lavrov.tm.command.AbstractCommand;
-import ru.lavrov.tm.entity.User;
-import ru.lavrov.tm.enumerate.Role;
+import ru.lavrov.tm.endpoint.Role;
+import ru.lavrov.tm.endpoint.Session;
+import ru.lavrov.tm.endpoint.TaskEndpointService;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
+import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.util.InputUtil;
 
 import java.util.Arrays;
@@ -44,12 +44,12 @@ public final class TaskRenameCommand extends AbstractCommand {
         @Nullable final String oldName = InputUtil.INPUT.nextLine();
         System.out.println("enter new task name:");
         @Nullable final String newName = InputUtil.INPUT.nextLine();
-        @Nullable final User currentUser = bootstrap.getCurrentUser();
-        if (currentUser == null)
-            throw new UserIsNotAuthorizedException();
-        @Nullable final ITaskService taskService = bootstrap.getTaskService();
-        taskService.renameTask(currentUser.getId(), projectName, oldName, newName);
-        System.out.println("[ok]");
+        @Nullable final Session currentSession = bootstrap.getCurrentSession();
+        @NotNull final TaskEndpointService taskEndpointService = bootstrap.getTaskEndpointService();
+        if (taskEndpointService.getTaskEndpointPort().renameTask(currentSession, projectName, oldName, newName))
+            System.out.println("[ok]");
+        else
+            System.out.println("[error]");
         System.out.println();
     }
 

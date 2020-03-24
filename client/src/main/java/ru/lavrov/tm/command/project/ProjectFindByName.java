@@ -2,12 +2,11 @@ package ru.lavrov.tm.command.project;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.api.IEntity;
-import ru.lavrov.tm.api.IProjectService;
+import ru.lavrov.tm.endpoint.Project;
+import ru.lavrov.tm.endpoint.ProjectEndpointService;
+import ru.lavrov.tm.endpoint.Role;
+import ru.lavrov.tm.endpoint.Session;
 import ru.lavrov.tm.command.AbstractCommand;
-import ru.lavrov.tm.entity.Project;
-import ru.lavrov.tm.entity.User;
-import ru.lavrov.tm.enumerate.Role;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 import ru.lavrov.tm.util.InputUtil;
 
@@ -38,17 +37,16 @@ public final class ProjectFindByName extends AbstractCommand {
     @Override
     public void execute() {
         System.out.println("[PROJECT LIST]");
-        @Nullable final IProjectService projectService = bootstrap.getProjectService();
-        @Nullable final User currentUser = bootstrap.getCurrentUser();
-        if (currentUser == null)
-            throw new UserIsNotAuthorizedException();
+        @Nullable final Session currentSession = bootstrap.getCurrentSession();
+        @NotNull final ProjectEndpointService projectEndpointService = bootstrap.getProjectEndpointService();
         System.out.println("enter name:");
         @Nullable final String name = InputUtil.INPUT.nextLine();
-        @Nullable final Collection<Project> projectList = projectService.findAllByNamePart(currentUser.getId(), name);
+        @Nullable final Collection<Project> projectList =
+                projectEndpointService.getProjectEndpointPort().findAllByNamePart(currentSession, name);
         if (projectList == null)
             return;
         int index = 1;
-        for (@Nullable final IEntity project : projectList) {
+        for (@Nullable final Project project : projectList) {
             if (project == null)
                 continue;
             System.out.println(index++ + ". " + project);

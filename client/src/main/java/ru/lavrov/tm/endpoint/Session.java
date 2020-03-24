@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence&gt;
  *         &lt;element name="role" type="{http://endpoint.tm.lavrov.ru/}role" minOccurs="0"/&gt;
  *         &lt;element name="sign" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
- *         &lt;element name="timeLimit" type="{http://www.w3.org/2001/XMLSchema}long"/&gt;
+ *         &lt;element name="timeStamp" type="{http://www.w3.org/2001/XMLSchema}long"/&gt;
  *         &lt;element name="userId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "session", propOrder = {
     "role",
     "sign",
-    "timeLimit",
+    "timeStamp",
     "userId"
 })
 public class Session {
@@ -41,7 +41,7 @@ public class Session {
     @XmlSchemaType(name = "string")
     protected Role role;
     protected String sign;
-    protected long timeLimit;
+    protected long timeStamp;
     protected String userId;
 
     /**
@@ -93,19 +93,19 @@ public class Session {
     }
 
     /**
-     * Gets the value of the timeLimit property.
+     * Gets the value of the timeStamp property.
      * 
      */
-    public long getTimeLimit() {
-        return timeLimit;
+    public long getTimeStamp() {
+        return timeStamp;
     }
 
     /**
-     * Sets the value of the timeLimit property.
+     * Sets the value of the timeStamp property.
      * 
      */
-    public void setTimeLimit(long value) {
-        this.timeLimit = value;
+    public void setTimeStamp(long value) {
+        this.timeStamp = value;
     }
 
     /**

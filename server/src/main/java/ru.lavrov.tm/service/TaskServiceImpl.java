@@ -36,7 +36,7 @@ public final class TaskServiceImpl extends AbstractService<Task> implements ITas
     }
 
     @Override
-    public void createByName(
+    public void createByTaskName(
             @Nullable final String userId, @Nullable final String taskName, @Nullable final String projectName
     ) {
         if (taskName == null || taskName.isEmpty())

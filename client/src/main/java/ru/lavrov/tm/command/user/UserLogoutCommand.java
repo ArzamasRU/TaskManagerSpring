@@ -3,8 +3,9 @@ package ru.lavrov.tm.command.user;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.lavrov.tm.endpoint.Role;
+import ru.lavrov.tm.endpoint.UserEndpointService;
 import ru.lavrov.tm.command.AbstractCommand;
-import ru.lavrov.tm.enumerate.Role;
 
 import java.util.Collection;
 
@@ -32,8 +33,8 @@ public final class UserLogoutCommand extends AbstractCommand {
 
     @Override
     public void execute() {
-        bootstrap.logout();
-        System.out.println("you left the session");
+        bootstrap.setCurrentSession(null);
+        System.out.println("[ok]");
         System.out.println();
     }
 
