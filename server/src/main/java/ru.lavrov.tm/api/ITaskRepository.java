@@ -1,6 +1,8 @@
 package ru.lavrov.tm.api;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Task;
 
 import java.util.Collection;
@@ -26,4 +28,6 @@ public interface ITaskRepository extends IRepository<Task> {
     Collection<Task> findAllByNamePart(@Nullable String userId, @Nullable String name);
 
     Collection<Task> findAllByDescPart(@Nullable String userId, @Nullable String description);
+
+    Task findOne(@NotNull String userId, @NotNull String taskId);
 }

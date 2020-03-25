@@ -1,5 +1,6 @@
 package ru.lavrov.tm.api;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.entity.Project;
 
@@ -16,4 +17,6 @@ public interface IProjectRepository extends IRepository<Project> {
     Collection<Project> findAllByNamePart(@Nullable String userId, @Nullable String name);
 
     Collection<Project> findAllByDescPart(@Nullable String userId, @Nullable String description);
+
+    Project findOne(@NotNull String userId, @NotNull String projectId);
 }

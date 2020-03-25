@@ -75,7 +75,7 @@
                         </goals>
                         <configuration>
                             <outputDirectory>
-                                ${project.build.directory}/Taskmanager/lib
+                                ${project.build.directory}/server/lib
                             </outputDirectory>
                             <overWriteReleases>false</overWriteReleases>
                             <overWriteSnapshots>false</overWriteSnapshots>
@@ -101,12 +101,12 @@
                     <artifactItems>
                         <artifactItem>
                             <groupId>ru.lavrov.tm</groupId>
-                            <artifactId>client</artifactId>
+                            <artifactId>server</artifactId>
                             <version>8.0</version>
                             <type>jar</type>
                             <overWrite>true</overWrite>
                             <outputDirectory>
-                                ${project.build.directory}/Taskmanager/bin
+                                ${project.build.directory}/server/bin
                             </outputDirectory>
                             <destFileName>taskmanager.jar</destFileName>
                         </artifactItem>

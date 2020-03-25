@@ -1,8 +1,11 @@
 package ru.lavrov.tm.repository;
 
+import lombok.SneakyThrows;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.IProjectRepository;
 import ru.lavrov.tm.entity.Project;
+import ru.lavrov.tm.enumerate.ColumnName;
 import ru.lavrov.tm.exception.entity.EntityNameIsInvalidException;
 import ru.lavrov.tm.exception.general.DescriptionIsInvalidException;
 import ru.lavrov.tm.exception.general.NameIsInvalidException;
@@ -11,11 +14,22 @@ import ru.lavrov.tm.exception.project.ProjectNameIsInvalidException;
 import ru.lavrov.tm.exception.project.ProjectNotExistsException;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 
 public final class ProjectRepositoryImpl extends AbstractRepository<Project> implements IProjectRepository {
+
+    @NotNull
+    private final Connection connection;
+
+    public ProjectRepositoryImpl(Connection connection) {
+        this.connection = connection;
+    }
 
     @Override
     public void renameProject(
@@ -107,5 +121,46 @@ public final class ProjectRepositoryImpl extends AbstractRepository<Project> imp
             }
         }
         return currentEntity;
+    }
+
+    @Nullable
+    @Override
+    public Project findOne(@NotNull final String userId, @NotNull final String projectId) {
+        @NotNull final String query = "SELECT * FROM app_project WHERE user_id = ? AND id = ?;";
+        @Nullable PreparedStatement preparedStatement = null;
+        @Nullable ResultSet resultSet = null;
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, userId);
+            preparedStatement.setString(2, projectId);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next())
+                return fetch(resultSet);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if (preparedStatement == null)
+            throw new NullPointerException();
+        return null;
+    }
+
+    @Nullable
+    private Project fetch(@Nullable final ResultSet row) {
+        if (row == null)
+            return null;
+        @NotNull final Project project = new Project();
+        try {
+            project.setId(row.getString(ColumnName.ID.toString()));
+            project.setUserId(row.getString(ColumnName.USER_ID.toString()));
+            project.setName(row.getString(ColumnName.NAME.toString()));
+            project.setDescription(row.getString(ColumnName.DESCRIPTION.toString()));
+            project.setDateCreate(row.getDate(ColumnName.DATE_CREATE.toString()));
+            project.getStartDate(row.getDate(ColumnName.DATE_START.toString()));
+            project.setFinishDate(row.getDate(ColumnName.DATE_FINISH.toString()));
+            project.setStatus(Status.valueOf(row.getString(ColumnName.STATUS.toString())));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return project;
     }
 }
