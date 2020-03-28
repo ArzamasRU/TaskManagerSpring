@@ -3,8 +3,10 @@ package ru.lavrov.tm.bootstrap;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.*;
 import ru.lavrov.tm.endpoint.*;
+import ru.lavrov.tm.entity.User;
 import ru.lavrov.tm.enumerate.Role;
 import ru.lavrov.tm.repository.ProjectRepositoryImpl;
 import ru.lavrov.tm.repository.TaskRepositoryImpl;
@@ -13,18 +15,22 @@ import ru.lavrov.tm.service.ProjectServiceImpl;
 import ru.lavrov.tm.service.SessionServiceImpl;
 import ru.lavrov.tm.service.TaskServiceImpl;
 import ru.lavrov.tm.service.UserServiceImpl;
+import ru.lavrov.tm.util.ConnectionUtil;
 
 import javax.xml.ws.Endpoint;
+import java.sql.Connection;
 
 @Getter
 @NoArgsConstructor
 public final class Bootstrap implements IServiceLocator {
     @NotNull
-    private final IProjectRepository projectRepository = new ProjectRepositoryImpl();
+    private final Connection connection = ConnectionUtil.getConnection();
     @NotNull
-    private final ITaskRepository taskRepository = new TaskRepositoryImpl();
+    private final IProjectRepository projectRepository = new ProjectRepositoryImpl(connection);
     @NotNull
-    private final IUserRepository userRepository = new UserRepositoryImpl();
+    private final ITaskRepository taskRepository = new TaskRepositoryImpl(connection);
+    @NotNull
+    private final IUserRepository userRepository = new UserRepositoryImpl(connection);
     @NotNull
     private final IProjectService projectService =
             new ProjectServiceImpl(projectRepository, taskRepository, userRepository);
@@ -43,7 +49,7 @@ public final class Bootstrap implements IServiceLocator {
     @NotNull
     private final TaskEndpoint taskEndpoint = new TaskEndpoint(this);
     @NotNull
-    private final GeneralCommandsEndpoint generalCommandsEndpoint = new GeneralCommandsEndpoint(this);
+    private final GeneralCommandEndpoint generalCommandEndpoint = new GeneralCommandEndpoint(this);
 
     public void init() {
         initProperties();
@@ -57,9 +63,8 @@ public final class Bootstrap implements IServiceLocator {
         Endpoint.publish(SessionEndpoint.URL, sessionEndpoint);
         Endpoint.publish(ProjectEndpoint.URL, projectEndpoint);
         Endpoint.publish(TaskEndpoint.URL, taskEndpoint);
-        Endpoint.publish(GeneralCommandsEndpoint.URL, generalCommandsEndpoint);
+        Endpoint.publish(GeneralCommandEndpoint.URL, generalCommandEndpoint);
     }
-
 
     private void initUsers() {
         userService.createByLogin("user", "user", Role.USER.getRole());

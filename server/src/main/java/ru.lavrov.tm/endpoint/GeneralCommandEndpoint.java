@@ -2,6 +2,7 @@ package ru.lavrov.tm.endpoint;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.*;
@@ -21,12 +22,13 @@ import static ru.lavrov.tm.constant.SerializationConstant.*;
 import static ru.lavrov.tm.util.JAXBUtil.readFromJSONByJAXB;
 import static ru.lavrov.tm.util.JAXBUtil.writeToJSONByJAXB;
 
-@WebService(endpointInterface = "ru.lavrov.tm.endpoint.GeneralCommandsEndpoint")
-public final class GeneralCommandsEndpoint extends AbstractEndpoint{
+@NoArgsConstructor
+@WebService(endpointInterface = "ru.lavrov.tm.endpoint.GeneralCommandEndpoint")
+public final class GeneralCommandEndpoint extends AbstractEndpoint{
 
-    @NotNull public static final String URL = "http://localhost:8090/GeneralCommandsEndpoint?wsdl";
+    @NotNull public static final String URL = "http://localhost:8090/GeneralCommandEndpoint?wsdl";
 
-    public GeneralCommandsEndpoint(final IServiceLocator bootstrap) {
+    public GeneralCommandEndpoint(final IServiceLocator bootstrap) {
         this.bootstrap = bootstrap;
     }
 

@@ -1,5 +1,6 @@
 package ru.lavrov.tm.endpoint;
 
+import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.IServiceLocator;
@@ -11,6 +12,7 @@ import ru.lavrov.tm.exception.user.UserPasswordIsInvalidException;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 
+@NoArgsConstructor
 @WebService(endpointInterface = "ru.lavrov.tm.endpoint.SessionEndpoint")
 public final class SessionEndpoint extends AbstractEndpoint{
 

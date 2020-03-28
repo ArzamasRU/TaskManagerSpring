@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.IEntity;
 import ru.lavrov.tm.enumerate.Role;
@@ -17,6 +18,28 @@ import java.util.UUID;
 @NoArgsConstructor
 @XmlRootElement(name = "user")
 public final class User implements IEntity {
+
+    @NotNull
+    public static final String ID = "id";
+    @NotNull
+    public static final String EMAIL = "email";
+    @NotNull
+    public static final String FIRST_NAME = "firstName";
+    @NotNull
+    public static final String LAST_NAME = "lastName";
+    @NotNull
+    public static final String MIDDLE_NAME = "middleName";
+    @NotNull
+    public static final String LOCKED = "locked";
+    @NotNull
+    public static final String LOGIN = "login";
+    @NotNull
+    public static final String PHONE = "phone";
+    @NotNull
+    public static final String ROLE = "role";
+    @NotNull
+    public static final String PASSWORD_HASH = "passwordHash";
+
     @Nullable
     private String id = UUID.randomUUID().toString();
     @Nullable

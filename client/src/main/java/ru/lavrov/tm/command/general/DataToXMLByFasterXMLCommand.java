@@ -1,15 +1,12 @@
 package ru.lavrov.tm.command.general;
 
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.command.AbstractCommand;
-import ru.lavrov.tm.endpoint.GeneralCommandsEndpointService;
+import ru.lavrov.tm.endpoint.GeneralCommandEndpointService;
 import ru.lavrov.tm.endpoint.Role;
 import ru.lavrov.tm.endpoint.Session;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -38,9 +35,9 @@ public final class DataToXMLByFasterXMLCommand extends AbstractCommand {
     public void execute() {
         System.out.println("[Externalization data to XML By fasterXML]");
         @Nullable final Session currentSession = bootstrap.getCurrentSession();
-        @NotNull final GeneralCommandsEndpointService generalCommandsEndpointService =
-                bootstrap.getGeneralCommandsEndpointService();
-        if (generalCommandsEndpointService.getGeneralCommandsEndpointPort().dataToXMLByFasterXML(currentSession))
+        @NotNull final GeneralCommandEndpointService generalCommandEndpointService =
+                bootstrap.getGeneralCommandEndpointService();
+        if (generalCommandEndpointService.getGeneralCommandEndpointPort().dataToXMLByFasterXML(currentSession))
             System.out.println("[ok]");
         else
             System.out.println("[error]");

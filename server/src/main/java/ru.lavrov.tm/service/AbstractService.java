@@ -16,7 +16,7 @@ public abstract class AbstractService<T extends IEntity> implements IService<T> 
     @NotNull
     protected final IRepository repository;
 
-    public AbstractService(final IRepository abstractRepository) {
+    public AbstractService(@NotNull final IRepository abstractRepository) {
         this.repository = abstractRepository;
     }
 

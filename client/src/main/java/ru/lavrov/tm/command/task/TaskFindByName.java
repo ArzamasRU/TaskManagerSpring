@@ -7,7 +7,6 @@ import ru.lavrov.tm.endpoint.Role;
 import ru.lavrov.tm.endpoint.Session;
 import ru.lavrov.tm.endpoint.Task;
 import ru.lavrov.tm.endpoint.TaskEndpointService;
-import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 import ru.lavrov.tm.util.InputUtil;
 
 import java.util.Arrays;

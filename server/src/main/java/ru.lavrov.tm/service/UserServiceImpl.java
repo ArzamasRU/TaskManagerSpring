@@ -43,13 +43,12 @@ public final class UserServiceImpl extends AbstractService<User> implements IUse
             throw new UserRoleIsInvalidException();
         @Nullable Role currentRole = null;
         boolean roleExists = false;
-        for (Role curRole : Role.values()) {
+        for (Role curRole : Role.values())
             if (role.equals(curRole.getRole())) {
                 currentRole = curRole;
                 roleExists = true;
                 break;
             }
-        }
         if (!roleExists)
             throw new UserRoleIsInvalidException();
         @Nullable final User user = userRepository.findUserByLogin(login);

@@ -3,6 +3,7 @@ package ru.lavrov.tm.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.IComparableEntity;
 import ru.lavrov.tm.api.IEntity;
@@ -17,6 +18,22 @@ import java.util.UUID;
 @NoArgsConstructor
 @XmlRootElement(name = "project")
 public final class Project implements IEntity, IComparableEntity {
+
+    @NotNull
+    public static final String ID = "id";
+    @NotNull
+    public static final String USER_ID = "user_id";
+    @NotNull
+    public static final String NAME = "name";
+    @NotNull
+    public static final String DESCRIPTION = "description";
+    @NotNull
+    public static final String START_DATE = "dateBegin";
+    @NotNull
+    public static final String FINISH_DATE = "dateEnd";
+    @NotNull
+    public static final String STATUS = "status";
+
     @Nullable
     private String name;
     @Nullable

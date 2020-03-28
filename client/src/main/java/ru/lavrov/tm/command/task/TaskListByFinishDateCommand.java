@@ -11,7 +11,6 @@ import ru.lavrov.tm.endpoint.TaskEndpointService;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Comparator;
 
 @NoArgsConstructor
 public final class TaskListByFinishDateCommand extends AbstractCommand {

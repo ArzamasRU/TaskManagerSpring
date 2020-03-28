@@ -40,7 +40,7 @@ public final class JAXBUtil {
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             @Nullable final String className = currClass.getSimpleName();
             int index = 1;
-            for (final T t : list) {
+            for (@Nullable final T t : list) {
                 if (t == null)
                     continue;
                 @Nullable final File file = new File(path + className + index++ + ".xml");

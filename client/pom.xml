@@ -2,12 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>TaskManager</artifactId>
-        <groupId>i-teco</groupId>
-        <version>1.0-SNAPSHOT</version>
-    </parent>
     <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>ru.lavrov.tm</groupId>
+        <artifactId>TaskManager</artifactId>
+        <version>2.0</version>
+    </parent>
 
     <artifactId>client</artifactId>
 
@@ -16,6 +16,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
                 <configuration>
                     <source>8</source>
                     <target>8</target>
@@ -24,6 +25,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
                 <configuration>
                     <archive>
                         <manifest>
@@ -66,28 +68,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy-dependencies</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>
-                                ${project.build.directory}/server/lib
-                            </outputDirectory>
-                            <overWriteReleases>false</overWriteReleases>
-                            <overWriteSnapshots>false</overWriteSnapshots>
-                            <overWriteIfNewer>true</overWriteIfNewer>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.0.1</version>
+                <version>3.1.2</version>
                 <executions>
                     <execution>
                         <id>copy</id>
@@ -101,8 +82,8 @@
                     <artifactItems>
                         <artifactItem>
                             <groupId>ru.lavrov.tm</groupId>
-                            <artifactId>server</artifactId>
-                            <version>8.0</version>
+                            <artifactId>client</artifactId>
+                            <version>2.0</version>
                             <type>jar</type>
                             <overWrite>true</overWrite>
                             <outputDirectory>
@@ -115,25 +96,25 @@
                     <overWriteSnapshots>true</overWriteSnapshots>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>com.webcohesion.enunciate</groupId>
-                <artifactId>enunciate-maven-plugin</artifactId>
-                <version>2.11.1</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>docs</goal>
-                        </goals>
-                        <configuration>
-                            <docsDir>${project.build.directory}/docs</docsDir>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>com.webcohesion.enunciate</groupId>-->
+<!--                <artifactId>enunciate-maven-plugin</artifactId>-->
+<!--                <version>2.11.1</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <goals>-->
+<!--                            <goal>docs</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <docsDir>${project.build.directory}/docs</docsDir>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
             <plugin>
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-codegen-plugin</artifactId>
-                <version>3.2.7</version>
+                <version>3.3.5</version>
                 <executions>
                     <execution>
                         <id>generate-sources</id>
@@ -165,7 +146,7 @@
                                 </wsdlOption>
                                 <wsdlOption>
                                     <wsdl>
-                                        http://localhost:8090/GeneralCommandsEndpoint?wsdl
+                                        http://localhost:8090/GeneralCommandEndpoint?wsdl
                                     </wsdl>
                                 </wsdlOption>
                             </wsdlOptions>

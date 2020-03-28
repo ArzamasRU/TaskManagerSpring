@@ -1,6 +1,7 @@
 package ru.lavrov.tm.enumerate;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public enum Role {
     ADMIN("admin"),
@@ -21,5 +22,17 @@ public enum Role {
     @NotNull
     public String displayName() {
         return name();
+    }
+
+    @Nullable
+    public static Role getByRole(@NotNull final String role) {
+        if (role == null || role.isEmpty())
+            return null;
+        Role[] list = Role.values();
+        for (@Nullable final Role currentRole: list) {
+            if (role.equals(currentRole.getRole()))
+                return currentRole;
+        }
+        return null;
     }
 }

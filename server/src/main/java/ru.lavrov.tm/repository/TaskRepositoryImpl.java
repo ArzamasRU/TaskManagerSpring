@@ -2,7 +2,10 @@ package ru.lavrov.tm.repository;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.sql2o.tools.NamedParameterStatement;
 import ru.lavrov.tm.api.ITaskRepository;
+import ru.lavrov.tm.entity.User;
+import ru.lavrov.tm.enumerate.Role;
 import ru.lavrov.tm.exception.entity.EntityNameIsInvalidException;
 import ru.lavrov.tm.exception.general.DescriptionIsInvalidException;
 import ru.lavrov.tm.exception.general.NameIsInvalidException;
@@ -13,13 +16,21 @@ import ru.lavrov.tm.exception.task.TaskExistsException;
 import ru.lavrov.tm.exception.task.TaskNameIsInvalidException;
 import ru.lavrov.tm.exception.task.TaskNotExistsException;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
+import ru.lavrov.tm.exception.user.UserNotExistsException;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
 public final class TaskRepositoryImpl extends AbstractRepository<Task> implements ITaskRepository {
+
+    public TaskRepositoryImpl(@NotNull final Connection connection) {
+        super(connection);
+    }
 
     @Override
     public void removeTaskByName(@Nullable final String userId, @Nullable final String taskName) {
@@ -190,5 +201,10 @@ public final class TaskRepositoryImpl extends AbstractRepository<Task> implement
                 list.add(entity);
         }
         return list;
+    }
+
+    @Override
+    public Task findOne(@NotNull String userId, @NotNull String taskId) {
+        return null;
     }
 }

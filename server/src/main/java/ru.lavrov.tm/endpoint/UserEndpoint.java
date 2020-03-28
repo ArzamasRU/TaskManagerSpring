@@ -1,5 +1,6 @@
 package ru.lavrov.tm.endpoint;
 
+import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.*;
@@ -13,6 +14,7 @@ import javax.jws.WebMethod;
 import javax.jws.WebService;
 import java.util.*;
 
+@NoArgsConstructor
 @WebService(endpointInterface = "ru.lavrov.tm.endpoint.UserEndpoint")
 public final class UserEndpoint extends AbstractEndpoint{
 

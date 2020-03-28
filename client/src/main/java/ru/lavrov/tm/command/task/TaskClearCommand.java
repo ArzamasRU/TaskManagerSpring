@@ -3,12 +3,10 @@ package ru.lavrov.tm.command.task;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.endpoint.ProjectEndpointService;
+import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.endpoint.Role;
 import ru.lavrov.tm.endpoint.Session;
 import ru.lavrov.tm.endpoint.TaskEndpointService;
-import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
-import ru.lavrov.tm.command.AbstractCommand;
 
 import java.util.Arrays;
 import java.util.Collection;

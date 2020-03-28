@@ -32,7 +32,7 @@ public final class Bootstrap {
     @NotNull
     private final TaskEndpointService taskEndpointService = new TaskEndpointService();
     @NotNull
-    private final GeneralCommandsEndpointService generalCommandsEndpointService = new GeneralCommandsEndpointService();
+    private final GeneralCommandEndpointService generalCommandEndpointService = new GeneralCommandEndpointService();
     @Setter
     @Nullable
     private Session currentSession;

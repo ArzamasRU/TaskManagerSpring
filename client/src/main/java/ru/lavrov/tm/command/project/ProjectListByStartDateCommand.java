@@ -8,11 +8,9 @@ import ru.lavrov.tm.endpoint.Project;
 import ru.lavrov.tm.endpoint.ProjectEndpointService;
 import ru.lavrov.tm.endpoint.Role;
 import ru.lavrov.tm.endpoint.Session;
-import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Comparator;
 
 @NoArgsConstructor
 public final class ProjectListByStartDateCommand extends AbstractCommand {

@@ -3,7 +3,7 @@ package ru.lavrov.tm.command.general;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.command.AbstractCommand;
-import ru.lavrov.tm.endpoint.GeneralCommandsEndpointService;
+import ru.lavrov.tm.endpoint.GeneralCommandEndpointService;
 import ru.lavrov.tm.endpoint.Role;
 import ru.lavrov.tm.endpoint.Session;
 
@@ -35,9 +35,9 @@ public final class DataToXMLByJAXBСommand extends AbstractCommand {
     public void execute() {
         System.out.println("[Externalization data to XML By JAXB]");
         @Nullable final Session currentSession = bootstrap.getCurrentSession();
-        @NotNull final GeneralCommandsEndpointService generalCommandsEndpointService =
-                bootstrap.getGeneralCommandsEndpointService();
-        if (generalCommandsEndpointService.getGeneralCommandsEndpointPort().dataToXMLByJAXB(currentSession))
+        @NotNull final GeneralCommandEndpointService generalCommandEndpointService =
+                bootstrap.getGeneralCommandEndpointService();
+        if (generalCommandEndpointService.getGeneralCommandEndpointPort().dataToXMLByJAXB(currentSession))
             System.out.println("[ok]");
         else
             System.out.println("[error]");
