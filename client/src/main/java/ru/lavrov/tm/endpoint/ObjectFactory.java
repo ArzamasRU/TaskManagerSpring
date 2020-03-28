@@ -222,8 +222,12 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link DataFromJSONByFasterXML }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link DataFromJSONByFasterXML }{@code >}
      * 
+     * @param value
+     *     Java instance representing xml element's value.
+     * @return
+     *     the new instance of {@link JAXBElement }{@code <}{@link DataFromJSONByFasterXML }{@code >}
      */
     @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "dataFromJSONByFasterXML")
     public JAXBElement<DataFromJSONByFasterXML> createDataFromJSONByFasterXML(DataFromJSONByFasterXML value) {
@@ -231,8 +235,12 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link DataFromJSONByFasterXMLResponse }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link DataFromJSONByFasterXMLResponse }{@code >}
      * 
+     * @param value
+     *     Java instance representing xml element's value.
+     * @return
+     *     the new instance of {@link JAXBElement }{@code <}{@link DataFromJSONByFasterXMLResponse }{@code >}
      */
     @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "dataFromJSONByFasterXMLResponse")
     public JAXBElement<DataFromJSONByFasterXMLResponse> createDataFromJSONByFasterXMLResponse(DataFromJSONByFasterXMLResponse value) {
@@ -240,8 +248,12 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link DataFromJSONByJAXB }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link DataFromJSONByJAXB }{@code >}
      * 
+     * @param value
+     *     Java instance representing xml element's value.
+     * @return
+     *     the new instance of {@link JAXBElement }{@code <}{@link DataFromJSONByJAXB }{@code >}
      */
     @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "dataFromJSONByJAXB")
     public JAXBElement<DataFromJSONByJAXB> createDataFromJSONByJAXB(DataFromJSONByJAXB value) {
@@ -249,8 +261,12 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link DataFromJSONByJAXBResponse }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link DataFromJSONByJAXBResponse }{@code >}
      * 
+     * @param value
+     *     Java instance representing xml element's value.
+     * @return
+     *     the new instance of {@link JAXBElement }{@code <}{@link DataFromJSONByJAXBResponse }{@code >}
      */
     @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "dataFromJSONByJAXBResponse")
     public JAXBElement<DataFromJSONByJAXBResponse> createDataFromJSONByJAXBResponse(DataFromJSONByJAXBResponse value) {
@@ -258,8 +274,12 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link DataFromXMLByFasterXML }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link DataFromXMLByFasterXML }{@code >}
      * 
+     * @param value
+     *     Java instance representing xml element's value.
+     * @return
+     *     the new instance of {@link JAXBElement }{@code <}{@link DataFromXMLByFasterXML }{@code >}
      */
     @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "dataFromXMLByFasterXML")
     public JAXBElement<DataFromXMLByFasterXML> createDataFromXMLByFasterXML(DataFromXMLByFasterXML value) {
@@ -267,8 +287,12 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link DataFromXMLByFasterXMLResponse }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link DataFromXMLByFasterXMLResponse }{@code >}
      * 
+     * @param value
+     *     Java instance representing xml element's value.
+     * @return
+     *     the new instance of {@link JAXBElement }{@code <}{@link DataFromXMLByFasterXMLResponse }{@code >}
      */
     @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "dataFromXMLByFasterXMLResponse")
     public JAXBElement<DataFromXMLByFasterXMLResponse> createDataFromXMLByFasterXMLResponse(DataFromXMLByFasterXMLResponse value) {
@@ -276,8 +300,12 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link DataFromXMLByJAXB }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link DataFromXMLByJAXB }{@code >}
      * 
+     * @param value
+     *     Java instance representing xml element's value.
+     * @return
+     *     the new instance of {@link JAXBElement }{@code <}{@link DataFromXMLByJAXB }{@code >}
      */
     @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "dataFromXMLByJAXB")
     public JAXBElement<DataFromXMLByJAXB> createDataFromXMLByJAXB(DataFromXMLByJAXB value) {
@@ -285,8 +313,12 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link DataFromXMLByJAXBResponse }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link DataFromXMLByJAXBResponse }{@code >}
      * 
+     * @param value
+     *     Java instance representing xml element's value.
+     * @return
+     *     the new instance of {@link JAXBElement }{@code <}{@link DataFromXMLByJAXBResponse }{@code >}
      */
     @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "dataFromXMLByJAXBResponse")
     public JAXBElement<DataFromXMLByJAXBResponse> createDataFromXMLByJAXBResponse(DataFromXMLByJAXBResponse value) {
@@ -294,8 +326,12 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link DataToJSONByFasterXML }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link DataToJSONByFasterXML }{@code >}
      * 
+     * @param value
+     *     Java instance representing xml element's value.
+     * @return
+     *     the new instance of {@link JAXBElement }{@code <}{@link DataToJSONByFasterXML }{@code >}
      */
     @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "dataToJSONByFasterXML")
     public JAXBElement<DataToJSONByFasterXML> createDataToJSONByFasterXML(DataToJSONByFasterXML value) {
@@ -303,8 +339,12 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link DataToJSONByFasterXMLResponse }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link DataToJSONByFasterXMLResponse }{@code >}
      * 
+     * @param value
+     *     Java instance representing xml element's value.
+     * @return
+     *     the new instance of {@link JAXBElement }{@code <}{@link DataToJSONByFasterXMLResponse }{@code >}
      */
     @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "dataToJSONByFasterXMLResponse")
     public JAXBElement<DataToJSONByFasterXMLResponse> createDataToJSONByFasterXMLResponse(DataToJSONByFasterXMLResponse value) {
@@ -312,8 +352,12 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link DataToJSONByJAXB }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link DataToJSONByJAXB }{@code >}
      * 
+     * @param value
+     *     Java instance representing xml element's value.
+     * @return
+     *     the new instance of {@link JAXBElement }{@code <}{@link DataToJSONByJAXB }{@code >}
      */
     @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "dataToJSONByJAXB")
     public JAXBElement<DataToJSONByJAXB> createDataToJSONByJAXB(DataToJSONByJAXB value) {
@@ -321,8 +365,12 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link DataToJSONByJAXBResponse }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link DataToJSONByJAXBResponse }{@code >}
      * 
+     * @param value
+     *     Java instance representing xml element's value.
+     * @return
+     *     the new instance of {@link JAXBElement }{@code <}{@link DataToJSONByJAXBResponse }{@code >}
      */
     @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "dataToJSONByJAXBResponse")
     public JAXBElement<DataToJSONByJAXBResponse> createDataToJSONByJAXBResponse(DataToJSONByJAXBResponse value) {
@@ -330,8 +378,12 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link DataToXMLByFasterXML }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link DataToXMLByFasterXML }{@code >}
      * 
+     * @param value
+     *     Java instance representing xml element's value.
+     * @return
+     *     the new instance of {@link JAXBElement }{@code <}{@link DataToXMLByFasterXML }{@code >}
      */
     @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "dataToXMLByFasterXML")
     public JAXBElement<DataToXMLByFasterXML> createDataToXMLByFasterXML(DataToXMLByFasterXML value) {
@@ -339,8 +391,12 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link DataToXMLByFasterXMLResponse }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link DataToXMLByFasterXMLResponse }{@code >}
      * 
+     * @param value
+     *     Java instance representing xml element's value.
+     * @return
+     *     the new instance of {@link JAXBElement }{@code <}{@link DataToXMLByFasterXMLResponse }{@code >}
      */
     @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "dataToXMLByFasterXMLResponse")
     public JAXBElement<DataToXMLByFasterXMLResponse> createDataToXMLByFasterXMLResponse(DataToXMLByFasterXMLResponse value) {
@@ -348,8 +404,12 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link DataToXMLByJAXB }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link DataToXMLByJAXB }{@code >}
      * 
+     * @param value
+     *     Java instance representing xml element's value.
+     * @return
+     *     the new instance of {@link JAXBElement }{@code <}{@link DataToXMLByJAXB }{@code >}
      */
     @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "dataToXMLByJAXB")
     public JAXBElement<DataToXMLByJAXB> createDataToXMLByJAXB(DataToXMLByJAXB value) {
@@ -357,8 +417,12 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link DataToXMLByJAXBResponse }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link DataToXMLByJAXBResponse }{@code >}
      * 
+     * @param value
+     *     Java instance representing xml element's value.
+     * @return
+     *     the new instance of {@link JAXBElement }{@code <}{@link DataToXMLByJAXBResponse }{@code >}
      */
     @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "dataToXMLByJAXBResponse")
     public JAXBElement<DataToXMLByJAXBResponse> createDataToXMLByJAXBResponse(DataToXMLByJAXBResponse value) {
@@ -366,8 +430,12 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link Deserialize }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link Deserialize }{@code >}
      * 
+     * @param value
+     *     Java instance representing xml element's value.
+     * @return
+     *     the new instance of {@link JAXBElement }{@code <}{@link Deserialize }{@code >}
      */
     @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "deserialize")
     public JAXBElement<Deserialize> createDeserialize(Deserialize value) {
@@ -375,8 +443,12 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link DeserializeResponse }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link DeserializeResponse }{@code >}
      * 
+     * @param value
+     *     Java instance representing xml element's value.
+     * @return
+     *     the new instance of {@link JAXBElement }{@code <}{@link DeserializeResponse }{@code >}
      */
     @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "deserializeResponse")
     public JAXBElement<DeserializeResponse> createDeserializeResponse(DeserializeResponse value) {
@@ -384,8 +456,12 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link Serialize }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link Serialize }{@code >}
      * 
+     * @param value
+     *     Java instance representing xml element's value.
+     * @return
+     *     the new instance of {@link JAXBElement }{@code <}{@link Serialize }{@code >}
      */
     @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "serialize")
     public JAXBElement<Serialize> createSerialize(Serialize value) {
@@ -393,8 +469,12 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link SerializeResponse }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link SerializeResponse }{@code >}
      * 
+     * @param value
+     *     Java instance representing xml element's value.
+     * @return
+     *     the new instance of {@link JAXBElement }{@code <}{@link SerializeResponse }{@code >}
      */
     @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "serializeResponse")
     public JAXBElement<SerializeResponse> createSerializeResponse(SerializeResponse value) {
@@ -402,8 +482,12 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link Session }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link Session }{@code >}
      * 
+     * @param value
+     *     Java instance representing xml element's value.
+     * @return
+     *     the new instance of {@link JAXBElement }{@code <}{@link Session }{@code >}
      */
     @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "session")
     public JAXBElement<Session> createSession(Session value) {
