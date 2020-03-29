@@ -33,6 +33,8 @@ public final class Task implements IEntity, IComparableEntity {
     public static final String START_DATE = "dateBegin";
     @NotNull
     public static final String FINISH_DATE = "dateEnd";
+    @NotNull
+    public static final String STATUS = "status";
 
     @Nullable
     private String name;

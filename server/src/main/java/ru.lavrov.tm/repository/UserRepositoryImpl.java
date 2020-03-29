@@ -69,7 +69,7 @@ public final class UserRepositoryImpl extends AbstractRepository<User> implement
         if (login == null || login.isEmpty())
             throw new EntityNameIsInvalidException();
         @Nullable User user = null;
-        @NotNull final String query = "SELECT FROM app_user WHERE login = :login";
+        @NotNull final String query = "SELECT * FROM app_user WHERE login = :login";
         try {
             @Nullable final NamedParameterStatement namedParameterStatement =
                     new NamedParameterStatement(connection, query, false);
