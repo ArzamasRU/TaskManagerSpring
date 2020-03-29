@@ -21,4 +21,6 @@ public interface IProjectService extends IService<Project> {
     Collection<Project> findAllByNamePart(@Nullable String userId, @Nullable String name);
 
     Collection<Project> findAllByDescPart(@Nullable String userId, @Nullable String description);
+
+    void removeProject(@Nullable final String userId, @Nullable final String entityId);
 }

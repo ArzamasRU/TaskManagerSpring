@@ -37,6 +37,7 @@ public final class SessionServiceImpl implements ISessionService {
     }
 
     @NotNull
+    @Override
     public Session login(@NotNull final String login, @NotNull final String password) {
         if (login == null || login.isEmpty())
             throw new UserLoginIsInvalidException();
@@ -48,11 +49,12 @@ public final class SessionServiceImpl implements ISessionService {
         if (!password.equals(user.getPassword()))
             throw new UserLoginOrPasswordIsIncorrectException();
         @NotNull final Session session =
-                new Session(user.getId(), user.getRole(), System.currentTimeMillis(), null);
+                new Session(user.getId(), user.getRole(), System.currentTimeMillis());
         session.setSign(getSign(session, SignConstant.SALT, SignConstant.CYCLE));
         return session;
     }
 
+    @Override
     public boolean hasPermission(@Nullable final Session session, @Nullable final Collection<Role> listRoles) {
         if (listRoles == null)
             return true;

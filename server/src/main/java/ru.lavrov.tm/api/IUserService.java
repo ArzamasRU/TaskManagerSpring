@@ -14,4 +14,6 @@ public interface IUserService extends IService<User> {
     User findOne(@Nullable String userId);
 
     User findUserByLogin(@Nullable String login);
+
+     void removeUser(@Nullable final String userId);
 }

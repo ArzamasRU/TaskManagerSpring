@@ -4,19 +4,16 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.sql2o.tools.NamedParameterStatement;
 import ru.lavrov.tm.api.ITaskRepository;
-import ru.lavrov.tm.entity.User;
-import ru.lavrov.tm.enumerate.Role;
+import ru.lavrov.tm.entity.Task;
 import ru.lavrov.tm.exception.entity.EntityNameIsInvalidException;
+import ru.lavrov.tm.exception.entity.EntityNotExistsException;
 import ru.lavrov.tm.exception.general.DescriptionIsInvalidException;
 import ru.lavrov.tm.exception.general.NameIsInvalidException;
-import ru.lavrov.tm.entity.Task;
-import ru.lavrov.tm.exception.project.ProjectNameIsInvalidException;
 import ru.lavrov.tm.exception.project.ProjectNotExistsException;
-import ru.lavrov.tm.exception.task.TaskExistsException;
+import ru.lavrov.tm.exception.task.TaskNameExistsException;
 import ru.lavrov.tm.exception.task.TaskNameIsInvalidException;
 import ru.lavrov.tm.exception.task.TaskNotExistsException;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
-import ru.lavrov.tm.exception.user.UserNotExistsException;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -24,7 +21,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.List;
+import java.util.Date;
 
 public final class TaskRepositoryImpl extends AbstractRepository<Task> implements ITaskRepository {
 
@@ -32,115 +29,56 @@ public final class TaskRepositoryImpl extends AbstractRepository<Task> implement
         super(connection);
     }
 
-    @Override
-    public void removeTaskByName(@Nullable final String userId, @Nullable final String taskName) {
-        if (taskName == null || taskName.isEmpty())
-            throw new TaskNameIsInvalidException();
-        if (userId == null || userId.isEmpty())
-            throw new UserIsNotAuthorizedException();
-        @Nullable final Task task = findEntityByName(userId, taskName);
-        if (task == null)
-            throw new TaskNotExistsException();
-        if (!task.getUserId().equals(userId))
-            throw new TaskNotExistsException();
-        entities.remove(task.getId());
-    }
-
-    @Nullable
-    @Override
-    public Collection<Task> getProjectTasks(@Nullable final String userId, @Nullable final String projectId) {
-        if (userId == null || userId.isEmpty())
-            throw new UserIsNotAuthorizedException();
-        if (projectId == null || projectId.isEmpty())
-            throw new ProjectNotExistsException();
-        @NotNull final List<Task> list = new ArrayList<>();
-        for (@Nullable final Task task : entities.values()) {
-            if (task == null)
-                continue;
-            boolean isProjectIdEquals = task.getProjectId().equals(projectId);
-            boolean isTaskUserIdEquals = task.getUserId().equals(userId);
-            if (isProjectIdEquals && isTaskUserIdEquals) {
-                list.add(task);
-            }
-        }
-        return list;
-    }
-
-    @Override
-    public void removeProjectTasks(@Nullable final String userId, @Nullable final String projectId) {
-        if (userId == null || userId.isEmpty())
-            throw new UserIsNotAuthorizedException();
-        if (projectId == null || projectId.isEmpty())
-            throw new ProjectNotExistsException();
-        for (@Nullable final Task task : entities.values()) {
-            if (task == null)
-                continue;
-            boolean isProjectIdEquals = task.getProjectId().equals(projectId);
-            boolean isTaskUserIdEquals = task.getUserId().equals(userId);
-            if (isProjectIdEquals && isTaskUserIdEquals) {
-                entities.remove(task.getId());
-            }
-        }
-    }
-
-    @Nullable
-    @Override
-    public Task findProjectTaskByName(
-            @Nullable final String userId, @Nullable final String taskName, @Nullable final String projectId
-    ) {
-        if (taskName == null || taskName.isEmpty())
-            throw new TaskNameIsInvalidException();
-        if (userId == null || userId.isEmpty())
-            throw new UserIsNotAuthorizedException();
-        if (projectId == null)
-            throw new ProjectNotExistsException();
-        @Nullable Task currentTask = null;
-        for (@Nullable final Task task : entities.values()) {
-            if (task == null)
-                continue;
-            boolean isProjectIdEquals = task.getProjectId().equals(projectId);
-            boolean isTaskUserIdEquals = task.getUserId().equals(userId);
-            boolean isTaskNameEquals = task.getName().equals(taskName);
-            if (isTaskNameEquals && isProjectIdEquals && isTaskUserIdEquals) {
-                currentTask = task;
-                break;
-            }
-        }
-        return currentTask;
-    }
-
-    @Override
     public void renameTask(
-            @Nullable final String userId, @Nullable final String projectId, @Nullable final String oldName,
+            @Nullable final String userId,
+            @Nullable final String projectId,
+            @Nullable final String oldName,
             @Nullable final String newName
     ) {
-        if (projectId == null || projectId.isEmpty())
-            throw new ProjectNameIsInvalidException();
         if (newName == null || newName.isEmpty() || oldName == null || oldName.isEmpty())
             throw new TaskNameIsInvalidException();
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        @Nullable final Task task = findEntityByName(userId, oldName);
+        @Nullable Task task = findProjectTaskByName(userId, newName, projectId);
+        if (task != null)
+            throw new TaskNameExistsException();
+        task = findProjectTaskByName(userId, oldName, projectId);
         if (task == null)
-            throw new TaskNotExistsException();
-        if (task.getUserId().equals(userId))
-            throw new TaskNotExistsException();
-        if (findProjectTaskByName(userId, newName, projectId) != null)
-            throw new TaskExistsException();
-        task.setName(newName);
+            throw new TaskNameIsInvalidException();
+        @NotNull final String query = "UPDATE app_task SET  name = :name " +
+                "WHERE id = :id AND user_id = :user_id AND project_id = :project_id";
+        try {
+            @Nullable final NamedParameterStatement namedParameterStatement =
+                    new NamedParameterStatement(connection, query, false);
+            namedParameterStatement.setString("id", task.getId());
+            namedParameterStatement.setString("user_id", task.getUserId());
+            namedParameterStatement.setString("project_id", task.getProjectId());
+            namedParameterStatement.setString("name", newName);
+            namedParameterStatement.execute();
+            namedParameterStatement.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    @Nullable
+    @NotNull
     @Override
     public Collection<Task> findAll(@Nullable final String userId, @Nullable final Comparator<Task> comparator) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        @Nullable final Collection<Task> list = new ArrayList<>();
-        for (@Nullable final Task entity : entities.values()) {
-            if (entity == null)
-                continue;
-            if (entity.getUserId().equals(userId))
-                list.add(entity);
+        @NotNull final Collection<Task> list = new ArrayList<>();
+        @NotNull final String query = "SELECT * FROM app_task WHERE user_id = :user_id";
+        try {
+            @Nullable final NamedParameterStatement namedParameterStatement =
+                    new NamedParameterStatement(connection, query, false);
+            namedParameterStatement.setString("user_id", userId);
+            @Nullable final ResultSet resultSet = namedParameterStatement.executeQuery();
+            while (resultSet.next())
+                list.add(fetch(resultSet));
+            resultSet.close();
+            namedParameterStatement.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         if (comparator == null)
             return list;
@@ -148,63 +86,275 @@ public final class TaskRepositoryImpl extends AbstractRepository<Task> implement
         return list;
     }
 
-    @Nullable
-    @Override
-    public Task findEntityByName(@Nullable final String userId, @Nullable final String entityName) {
-        if (entityName == null || entityName.isEmpty())
-            throw new EntityNameIsInvalidException();
-        if (userId == null || userId.isEmpty())
-            throw new UserIsNotAuthorizedException();
-        @Nullable Task currentEntity = null;
-        for (@Nullable final Task entity : entities.values()) {
-            if (entity == null)
-                continue;
-            boolean isEntityNameEquals = entityName.equals(entity.getName());
-            boolean isEntityUserIdEquals = entity.getUserId().equals(userId);
-            if (isEntityNameEquals && isEntityUserIdEquals) {
-                currentEntity = entity;
-                break;
-            }
-        }
-        return currentEntity;
-    }
-
-    @Nullable
-    @Override
-    public Collection<Task> findAllByNamePart(@Nullable final String userId, @Nullable final String name) {
-        if (userId == null || userId.isEmpty())
-            throw new UserIsNotAuthorizedException();
-        if (name == null || name.isEmpty())
-            throw new NameIsInvalidException();
-        @Nullable final Collection<Task> list = new ArrayList<>();
-        for (@Nullable final Task entity : entities.values()) {
-            if (entity == null)
-                continue;
-            if (entity.getUserId().equals(userId) && entity.getName().contains(name))
-                list.add(entity);
-        }
-        return list;
-    }
-
-    @Nullable
+    @NotNull
     @Override
     public Collection<Task> findAllByDescPart(@Nullable final String userId, @Nullable final String description) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         if (description == null || description.isEmpty())
             throw new DescriptionIsInvalidException();
-        @Nullable final Collection<Task> list = new ArrayList<>();
-        for (@Nullable final Task entity : entities.values()) {
-            if (entity == null)
-                continue;
-            if (entity.getUserId().equals(userId) && entity.getDescription().contains(description))
-                list.add(entity);
+        @NotNull final Collection<Task> list = new ArrayList<>();
+        @NotNull final String query = "SELECT FROM app_task " +
+                "WHERE user_id = :user_id AND description LIKE :description";
+        try {
+            @Nullable final NamedParameterStatement namedParameterStatement =
+                    new NamedParameterStatement(connection, query, false);
+            namedParameterStatement.setString("description", description);
+            namedParameterStatement.setString("user_id", userId);
+            @Nullable final ResultSet resultSet = namedParameterStatement.executeQuery();
+            while (resultSet.next())
+                list.add(fetch(resultSet));
+            resultSet.close();
+            namedParameterStatement.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    @NotNull
+    @Override
+    public Collection<Task> findAllByNamePart(@Nullable final String userId, @Nullable final String name) {
+        if (userId == null || userId.isEmpty())
+            throw new UserIsNotAuthorizedException();
+        if (name == null || name.isEmpty())
+            throw new NameIsInvalidException();
+        @NotNull final Collection<Task> list = new ArrayList<>();
+        @NotNull final String query = "SELECT FROM app_task WHERE user_id = :user_id AND name LIKE :name";
+        try {
+            @Nullable final NamedParameterStatement namedParameterStatement =
+                    new NamedParameterStatement(connection, query, false);
+            namedParameterStatement.setString("name", name);
+            namedParameterStatement.setString("user_id", userId);
+            @Nullable final ResultSet resultSet = namedParameterStatement.executeQuery();
+            while (resultSet.next())
+                list.add(fetch(resultSet));
+            resultSet.close();
+            namedParameterStatement.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return list;
     }
 
     @Override
-    public Task findOne(@NotNull String userId, @NotNull String taskId) {
-        return null;
+    public Collection<Task> getProjectTasks(@Nullable String userId, @Nullable String projectId) {
+        if (projectId == null || projectId.isEmpty())
+            throw new ProjectNotExistsException();
+        if (userId == null || userId.isEmpty())
+            throw new UserIsNotAuthorizedException();
+        @NotNull final Collection<Task> list = new ArrayList<>();
+        @NotNull final String query = "SELECT * FROM app_task WHERE user_id = :user_id AND project_id = :project_id";
+        try {
+            @Nullable final NamedParameterStatement namedParameterStatement =
+                    new NamedParameterStatement(connection, query, false);
+            namedParameterStatement.setString("user_id", userId);
+            namedParameterStatement.setString("project_id", projectId);
+            @Nullable final ResultSet resultSet = namedParameterStatement.executeQuery();
+            while (resultSet.next())
+                list.add(fetch(resultSet));
+            resultSet.close();
+            namedParameterStatement.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    @Override
+    public void removeProjectTasks(@Nullable String userId, @Nullable String projectId) {
+        if (projectId == null || projectId.isEmpty())
+            throw new ProjectNotExistsException();
+        if (userId == null || userId.isEmpty())
+            throw new UserIsNotAuthorizedException();
+        @NotNull final String query = "DELETE FROM app_task WHERE user_id = :user_id AND project_id = :project_id";
+        try {
+            @Nullable final NamedParameterStatement namedParameterStatement =
+                    new NamedParameterStatement(connection, query, false);
+            namedParameterStatement.setString("user_id", userId);
+            namedParameterStatement.setString("project_id", projectId);
+            namedParameterStatement.execute();
+            namedParameterStatement.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Nullable
+    @Override
+    public Task findProjectTaskByName(
+            @Nullable final String userId, @Nullable final String entityName, @Nullable String projectId
+    ) {
+        if (entityName == null || entityName.isEmpty())
+            throw new EntityNameIsInvalidException();
+        if (userId == null || userId.isEmpty())
+            throw new UserIsNotAuthorizedException();
+        @Nullable Task task = null;
+        @NotNull final String query = "SELECT FROM app_task " +
+                "WHERE user_id = :user_id AND name = :name AND project_id = :project_id";
+        try {
+            @Nullable final NamedParameterStatement namedParameterStatement =
+                    new NamedParameterStatement(connection, query, false);
+            namedParameterStatement.setString("name", entityName);
+            namedParameterStatement.setString("user_id", userId);
+            @Nullable final ResultSet resultSet = namedParameterStatement.executeQuery();
+            if (resultSet.next())
+                task = fetch(resultSet);
+            resultSet.close();
+            namedParameterStatement.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return task;
+    }
+
+    @Nullable
+    @Override
+    public Task findOne(@NotNull final String userId, @NotNull final String taskId) {
+        if (taskId == null || taskId.isEmpty())
+            throw new TaskNotExistsException();
+        if (userId == null || userId.isEmpty())
+            throw new UserIsNotAuthorizedException();
+        @Nullable Task task = null;
+        @NotNull final String query = "SELECT * FROM app_task WHERE user_id = :user_id AND id = :id";
+        try {
+            @Nullable final NamedParameterStatement namedParameterStatement =
+                    new NamedParameterStatement(connection, query, false);
+            namedParameterStatement.setString("user_id", userId);
+            namedParameterStatement.setString("id", taskId);
+            @Nullable final ResultSet resultSet = namedParameterStatement.executeQuery();
+            if (resultSet.next())
+                task = fetch(resultSet);
+            resultSet.close();
+            namedParameterStatement.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return task;
+    }
+
+    public void persist(@NotNull final Task task) {
+        if (task == null)
+            throw new TaskNotExistsException();
+        @NotNull final String query =
+                "INSERT INTO app_task (id, user_id, name, description, dateBegin, dateEnd) " +
+                        "VALUES (:id, :user_id, :name, :description, :dateBegin, :dateEnd)";
+        try {
+            @Nullable final NamedParameterStatement namedParameterStatement =
+                    new NamedParameterStatement(connection, query, false);
+            namedParameterStatement.setString("id", task.getId());
+            namedParameterStatement.setString("user_id", task.getUserId());
+            namedParameterStatement.setString("name", task.getName());
+            namedParameterStatement.setString("description", task.getDescription());
+            @Nullable final Date startDate = task.getStartDate();
+            @Nullable final Date finishDate = task.getFinishDate();
+            namedParameterStatement
+                    .setDate("dateBegin", startDate == null ? null : new java.sql.Date(startDate.getTime()));
+            namedParameterStatement
+                    .setDate("dateEnd", finishDate == null ? null : new java.sql.Date(finishDate.getTime()));
+            namedParameterStatement.execute();
+            namedParameterStatement.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void merge(@NotNull final Task task) {
+        if (task == null)
+            throw new TaskNotExistsException();
+        @NotNull final String query = "UPDATE app_task SET user_id = :user_id, name = :name, " +
+                "description = :description, dateBegin = :dateBegin, dateEnd = :dateEnd, WHERE id = :id ";
+        try {
+            @Nullable final NamedParameterStatement namedParameterStatement =
+                    new NamedParameterStatement(connection, query, false);
+            namedParameterStatement.setString("id", task.getId());
+            namedParameterStatement.setString("user_id", task.getUserId());
+            namedParameterStatement.setString("name", task.getName());
+            namedParameterStatement.setString("description", task.getDescription());
+            @Nullable final Date startDate = task.getStartDate();
+            @Nullable final Date finishDate = task.getFinishDate();
+            namedParameterStatement
+                    .setDate("dateBegin", startDate == null ? null : new java.sql.Date(startDate.getTime()));
+            namedParameterStatement
+                    .setDate("dateEnd", finishDate == null ? null : new java.sql.Date(finishDate.getTime()));
+            namedParameterStatement.execute();
+            namedParameterStatement.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void removeTaskByName(@Nullable final String userId, @Nullable final String entityId) {
+        if (entityId == null || entityId.isEmpty())
+            throw new EntityNotExistsException();
+        if (userId == null || userId.isEmpty())
+            throw new UserIsNotAuthorizedException();
+        @NotNull final String query = "DELETE FROM app_task WHERE user_id = :user_id AND id = :id";
+        try {
+            @Nullable final NamedParameterStatement namedParameterStatement =
+                    new NamedParameterStatement(connection, query, false);
+            namedParameterStatement.setString("user_id", userId);
+            namedParameterStatement.setString("id", entityId);
+            namedParameterStatement.execute();
+            namedParameterStatement.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void removeAll(@NotNull final String userId) {
+        if (userId == null || userId.isEmpty())
+            throw new UserIsNotAuthorizedException();
+        @NotNull final String query = "DELETE FROM app_task WHERE user_id = :user_id";
+        try {
+            @Nullable final NamedParameterStatement namedParameterStatement =
+                    new NamedParameterStatement(connection, query, false);
+            namedParameterStatement.setString("user_id", userId);
+            namedParameterStatement.execute();
+            namedParameterStatement.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @NotNull
+    @Override
+    public Collection<Task> findAll(@NotNull final String userId) {
+        if (userId == null || userId.isEmpty())
+            throw new UserIsNotAuthorizedException();
+        @NotNull final Collection<Task> list = new ArrayList<>();
+        @NotNull final String query = "SELECT * FROM app_task WHERE user_id = :user_id";
+        try {
+            @Nullable final NamedParameterStatement namedParameterStatement =
+                    new NamedParameterStatement(connection, query, false);
+            namedParameterStatement.setString("user_id", userId);
+            @Nullable final ResultSet resultSet = namedParameterStatement.executeQuery();
+            while (resultSet.next())
+                list.add(fetch(resultSet));
+            resultSet.close();
+            namedParameterStatement.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    @NotNull
+    private Task fetch(@NotNull final ResultSet row) {
+        if (row == null)
+            throw new NullPointerException();
+        @NotNull final Task task = new Task();
+        try {
+            task.setId(row.getString(Task.ID));
+            task.setUserId(row.getString(Task.USER_ID));
+            task.setName(row.getString(Task.NAME));
+            task.setDescription(row.getString(Task.DESCRIPTION));
+            task.setStartDate(row.getDate(Task.START_DATE));
+            task.setFinishDate(row.getDate(Task.FINISH_DATE));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return task;
     }
 }

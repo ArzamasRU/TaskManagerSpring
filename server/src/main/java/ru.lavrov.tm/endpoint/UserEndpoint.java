@@ -46,7 +46,7 @@ public final class UserEndpoint extends AbstractEndpoint{
         if (!sessionService.isSessionValid(session))
             return false;
         @NotNull final IUserService userService = bootstrap.getUserService();
-        userService.remove(session.getUserId(), session.getUserId());
+        userService.removeUser(session.getUserId());
         return true;
     }
 

@@ -21,8 +21,6 @@ public interface ITaskRepository extends IRepository<Task> {
             @Nullable String userId, @Nullable String projectId, @Nullable String oldName, @Nullable String newName
     );
 
-//    Task findEntityByName(@Nullable String userId, @Nullable String entityName);
-
     Collection<Task> findAll(@Nullable String userId, @Nullable Comparator<Task> comparator);
 
     Collection<Task> findAllByNamePart(@Nullable String userId, @Nullable String name);

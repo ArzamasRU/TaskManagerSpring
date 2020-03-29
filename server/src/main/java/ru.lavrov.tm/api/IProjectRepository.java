@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.entity.Project;
 
+import java.sql.ResultSet;
 import java.util.Collection;
 import java.util.Comparator;
 
@@ -19,4 +20,6 @@ public interface IProjectRepository extends IRepository<Project> {
     Collection<Project> findAllByDescPart(@Nullable String userId, @Nullable String description);
 
     Project findOne(@NotNull String userId, @NotNull String projectId);
+
+    void removeProject(@Nullable final String userId, @Nullable final String entityId);
 }

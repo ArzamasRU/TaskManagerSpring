@@ -67,8 +67,10 @@ public final class Bootstrap implements IServiceLocator {
     }
 
     private void initUsers() {
-        userService.createByLogin("user", "user", Role.USER.getRole());
-        userService.createByLogin("admin", "admin", Role.ADMIN.getRole());
+        if (userService.findUserByLogin("user") == null)
+            userService.createByLogin("user", "user", Role.USER.getRole());
+        if (userService.findUserByLogin("admin") == null)
+            userService.createByLogin("admin", "admin", Role.ADMIN.getRole());
     }
 
     private void initProperties() {

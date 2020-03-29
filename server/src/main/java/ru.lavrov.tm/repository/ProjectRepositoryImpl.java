@@ -28,6 +28,7 @@ public final class ProjectRepositoryImpl extends AbstractRepository<Project> imp
         super(connection);
     }
 
+    @Override
     public void renameProject(
             @Nullable final String userId, @Nullable final String oldName, @Nullable final String newName
     ) {
@@ -181,6 +182,7 @@ public final class ProjectRepositoryImpl extends AbstractRepository<Project> imp
         return project;
     }
 
+    @Override
     public void persist(@NotNull final Project project) {
         if (project == null)
             throw new ProjectNotExistsException();
@@ -207,6 +209,7 @@ public final class ProjectRepositoryImpl extends AbstractRepository<Project> imp
         }
     }
 
+    @Override
     public void merge(@NotNull final Project project) {
         if (project == null)
             throw new ProjectNotExistsException();
@@ -233,7 +236,7 @@ public final class ProjectRepositoryImpl extends AbstractRepository<Project> imp
     }
 
     @Override
-    public void remove(@Nullable final String userId, @Nullable final String entityId) {
+    public void removeProject(@Nullable final String userId, @Nullable final String entityId) {
         if (entityId == null || entityId.isEmpty())
             throw new EntityNotExistsException();
         if (userId == null || userId.isEmpty())
@@ -251,6 +254,7 @@ public final class ProjectRepositoryImpl extends AbstractRepository<Project> imp
         }
     }
 
+    @Override
     public void removeAll(@NotNull final String userId) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();

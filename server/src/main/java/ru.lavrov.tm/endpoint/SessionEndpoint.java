@@ -31,5 +31,4 @@ public final class SessionEndpoint extends AbstractEndpoint{
         @NotNull final ISessionService sessionService = bootstrap.getSessionService();
         return sessionService.login(login, password);
     }
-
 }

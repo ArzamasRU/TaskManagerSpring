@@ -9,6 +9,7 @@ import ru.lavrov.tm.api.IUserRepository;
 import ru.lavrov.tm.api.IUserService;
 import ru.lavrov.tm.entity.User;
 import ru.lavrov.tm.enumerate.Role;
+import ru.lavrov.tm.exception.project.ProjectNameIsInvalidException;
 import ru.lavrov.tm.exception.util.UtilAlgorithmNotExistsException;
 import ru.lavrov.tm.exception.user.*;
 import ru.lavrov.tm.util.HashUtil;
@@ -95,5 +96,10 @@ public final class UserServiceImpl extends AbstractService<User> implements IUse
         return userRepository.findUserByLogin(login);
     }
 
-
+    @Override
+    public void removeUser(@Nullable final String userId) {
+        if (userId == null || userId.isEmpty())
+            throw new UserIsNotAuthorizedException();
+        userRepository.removeUser(userId);
+    }
 }

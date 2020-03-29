@@ -107,6 +107,7 @@ public final class UserRepositoryImpl extends AbstractRepository<User> implement
         return user;
     }
 
+    @Override
     public void persist(@NotNull final User user) {
         if (user == null)
             throw new UserNotExistsException();
@@ -126,6 +127,7 @@ public final class UserRepositoryImpl extends AbstractRepository<User> implement
         }
     }
 
+    @Override
     public void merge(@NotNull final User user) {
         if (user == null)
             throw new UserNotExistsException();
@@ -145,7 +147,8 @@ public final class UserRepositoryImpl extends AbstractRepository<User> implement
         }
     }
 
-    public void remove(@NotNull final String userId) {
+    @Override
+    public void removeUser(@NotNull final String userId) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         @NotNull final String query = "DELETE FROM app_user WHERE id = :id";
@@ -158,6 +161,11 @@ public final class UserRepositoryImpl extends AbstractRepository<User> implement
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void removeAll(@Nullable String userId){
+        removeUser(userId);
     }
 
     @NotNull

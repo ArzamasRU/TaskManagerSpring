@@ -183,7 +183,7 @@ public final class ProjectEndpoint extends AbstractEndpoint{
         if (entityId == null || entityId.isEmpty())
             return false;
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
-        projectService.remove(session.getUserId(), entityId);
+        projectService.removeProject(session.getUserId(), entityId);
         return true;
     }
 }

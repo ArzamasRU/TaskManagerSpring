@@ -14,7 +14,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @XmlRootElement(name = "session")
 public final class Session {
 
@@ -31,4 +30,10 @@ public final class Session {
     @JsonIgnore
     @Nullable
     private String sign;
+
+    public Session(@Nullable String userId, @Nullable Role role, long timeStamp) {
+        this.userId = userId;
+        this.role = role;
+        this.timeStamp = timeStamp;
+    }
 }

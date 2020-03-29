@@ -34,14 +34,14 @@ public abstract class AbstractService<T extends IEntity> implements IService<T> 
         repository.persist(entity);
     }
 
-    @Override
-    public void remove(@Nullable final String userId, @Nullable final String entityId) {
-        if (userId == null || userId.isEmpty())
-            throw new UserIsNotAuthorizedException();
-        if (entityId == null || entityId.isEmpty())
-            throw new ProjectNotExistsException();
-        repository.remove(userId, entityId);
-    }
+//    @Override
+//    public void remove(@Nullable final String userId, @Nullable final String entityId) {
+//        if (userId == null || userId.isEmpty())
+//            throw new UserIsNotAuthorizedException();
+//        if (entityId == null || entityId.isEmpty())
+//            throw new ProjectNotExistsException();
+//        repository.remove(userId, entityId);
+//    }
 
     @Override
     public void removeAll(@Nullable final String userId) {

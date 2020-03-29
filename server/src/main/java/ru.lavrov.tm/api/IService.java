@@ -9,8 +9,6 @@ public interface IService<T extends IEntity> {
 
     void merge(@Nullable T entity);
 
-    void remove(@Nullable String userId, @Nullable String entityId);
-
     void removeAll(@Nullable String userId);
 
     Collection<T> findAll(@Nullable String userId);

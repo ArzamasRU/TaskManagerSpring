@@ -302,9 +302,9 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
         @Nullable final Collection<Project> projectList;
         @Nullable final Collection<Task> taskList;
         @Nullable final Collection<User> userList;
-        @Nullable final IProjectService projectService = bootstrap.getProjectService();
-        @Nullable final ITaskService taskService = bootstrap.getTaskService();
-        @Nullable final IUserService userService = bootstrap.getUserService();
+        @NotNull final IProjectService projectService = bootstrap.getProjectService();
+        @NotNull final ITaskService taskService = bootstrap.getTaskService();
+        @NotNull final IUserService userService = bootstrap.getUserService();
         try {
             projectList = Arrays.asList(objectMapper
                     .readValue(new File(PROJECTS_FILE_PATH + ".json"), Project[].class));

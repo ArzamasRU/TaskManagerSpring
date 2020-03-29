@@ -1,5 +1,6 @@
 package ru.lavrov.tm.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.IProjectRepository;
@@ -15,8 +16,14 @@ import ru.lavrov.tm.exception.project.ProjectNotExistsException;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 import ru.lavrov.tm.entity.Task;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
+
+import static ru.lavrov.tm.constant.SerializationConstant.PROJECTS_FILE_PATH;
 
 public final class ProjectServiceImpl extends AbstractService<Project> implements IProjectService {
     @NotNull
@@ -54,8 +61,18 @@ public final class ProjectServiceImpl extends AbstractService<Project> implement
         @Nullable final Project project = projectRepository.findEntityByName(userId, projectName);
         if (project != null)
             throw new ProjectNameExistsException();
-        remove(userId, project.getId());
+        removeProject(userId, project.getId());
         taskRepository.removeProjectTasks(userId, project.getId());
+    }
+
+    @Override
+    public void removeProject(@Nullable final String userId, @Nullable final String projectId) {
+        if (projectId == null || projectId.isEmpty())
+            throw new ProjectNameIsInvalidException();
+        if (userId == null || userId.isEmpty())
+            throw new UserIsNotAuthorizedException();
+        removeProject(userId, projectId);
+        taskRepository.removeProjectTasks(userId, projectId);
     }
 
     @Nullable
