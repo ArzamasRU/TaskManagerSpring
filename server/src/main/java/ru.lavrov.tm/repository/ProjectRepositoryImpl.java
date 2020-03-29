@@ -8,6 +8,7 @@ import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.User;
 import ru.lavrov.tm.enumerate.Status;
 import ru.lavrov.tm.exception.entity.EntityNameIsInvalidException;
+import ru.lavrov.tm.exception.entity.EntityNotExistsException;
 import ru.lavrov.tm.exception.general.DescriptionIsInvalidException;
 import ru.lavrov.tm.exception.general.NameIsInvalidException;
 import ru.lavrov.tm.exception.project.ProjectNameExistsException;
@@ -30,7 +31,6 @@ public final class ProjectRepositoryImpl extends AbstractRepository<Project> imp
         super(connection);
     }
 
-    @Override
     public void renameProject(
             @Nullable final String userId, @Nullable final String oldName, @Nullable final String newName
     ) {
@@ -42,32 +42,15 @@ public final class ProjectRepositoryImpl extends AbstractRepository<Project> imp
         if (project != null)
             throw new ProjectNameExistsException();
         project = findEntityByName(userId, oldName);
-        if (project != null)
-            throw new ProjectNameExistsException();
-        if (!project.getUserId().equals(userId))
-            throw new ProjectNotExistsException();
-        project.setName(newName);
-    }
-
-    public void merge(@NotNull final Project project) {
         if (project == null)
-            throw new ProjectNotExistsException();
-        @NotNull final String query = "UPDATE app_project SET user_id = :user_id, name = :name, " +
-                "description = :description, dateBegin = :dateBegin, dateEnd = :dateEnd, WHERE id = :id ";
+            throw new ProjectNameIsInvalidException();
+        @NotNull final String query = "UPDATE app_project SET  name = :name WHERE id = :id AND user_id = :user_id";
         try {
             @Nullable final NamedParameterStatement namedParameterStatement =
                     new NamedParameterStatement(connection, query, false);
             namedParameterStatement.setString("id", project.getId());
             namedParameterStatement.setString("user_id", project.getUserId());
-            namedParameterStatement.setString("name", project.getName());
-            namedParameterStatement.setString("description", project.getDescription());
-            @Nullable final Date startDate = project.getStartDate();
-            @Nullable final Date finishDate = project.getFinishDate();
-            namedParameterStatement
-                    .setDate("dateBegin", startDate == null ? null : new java.sql.Date(startDate.getTime()));
-            namedParameterStatement
-                    .setDate("dateEnd", finishDate == null ? null : new java.sql.Date(finishDate.getTime()));
-//            namedParameterStatement.setString("status", project.getStatus().getStatus());
+            namedParameterStatement.setString("name", newName);
             namedParameterStatement.execute();
             namedParameterStatement.close();
         } catch (Exception e) {
@@ -81,11 +64,11 @@ public final class ProjectRepositoryImpl extends AbstractRepository<Project> imp
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         @NotNull final Collection<Project> list = new ArrayList<>();
-        @NotNull final String query = "SELECT * FROM app_project WHERE id = :id";
+        @NotNull final String query = "SELECT * FROM app_project WHERE user_id = :user_id";
         try {
             @Nullable final NamedParameterStatement namedParameterStatement =
                     new NamedParameterStatement(connection, query, false);
-            namedParameterStatement.setString("id", userId);
+            namedParameterStatement.setString("user_id", userId);
             @Nullable final ResultSet resultSet = namedParameterStatement.executeQuery();
             while (resultSet.next())
                 list.add(fetch(resultSet));
@@ -253,7 +236,26 @@ public final class ProjectRepositoryImpl extends AbstractRepository<Project> imp
         }
     }
 
-    public void remove(@NotNull final String userId) {
+    @Override
+    public void remove(@Nullable final String userId, @Nullable final String entityId) {
+        if (entityId == null || entityId.isEmpty())
+            throw new EntityNotExistsException();
+        if (userId == null || userId.isEmpty())
+            throw new UserIsNotAuthorizedException();
+        @NotNull final String query = "DELETE FROM app_project WHERE user_id = :user_id AND id = :id";
+        try {
+            @Nullable final NamedParameterStatement namedParameterStatement =
+                    new NamedParameterStatement(connection, query, false);
+            namedParameterStatement.setString("user_id", userId);
+            namedParameterStatement.setString("id", entityId);
+            namedParameterStatement.execute();
+            namedParameterStatement.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void removeAll(@NotNull final String userId) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         @NotNull final String query = "DELETE FROM app_project WHERE user_id = :user_id";
