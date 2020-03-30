@@ -2,7 +2,15 @@ package ru.lavrov.tm.bootstrap;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.apache.ibatis.datasource.pooled.PooledDataSource;
+import org.apache.ibatis.mapping.Environment;
+import org.apache.ibatis.session.Configuration;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.apache.ibatis.transaction.TransactionFactory;
+import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.*;
 import ru.lavrov.tm.endpoint.*;
 import ru.lavrov.tm.enumerate.Role;
@@ -15,8 +23,11 @@ import ru.lavrov.tm.service.TaskServiceImpl;
 import ru.lavrov.tm.service.UserServiceImpl;
 import ru.lavrov.tm.util.ConnectionUtil;
 
+import javax.sql.DataSource;
 import javax.xml.ws.Endpoint;
 import java.sql.Connection;
+
+import static ru.lavrov.tm.util.PropertyUtil.appProperties;
 
 @Getter
 @NoArgsConstructor
@@ -67,5 +78,24 @@ public final class Bootstrap implements IServiceLocator {
     private void initProperties() {
         System.setProperty("javax.xml.bind.context.factory", "org.eclipse.persistence.jaxb.JAXBContextFactory");
     }
+
+    public SqlSessionFactory getSqlSessionFactory() {
+        @Nullable final String user = appProperties.getProperty("login");
+        @Nullable final String password = appProperties.getProperty("password");
+        @Nullable final String url = appProperties.getProperty("url");
+        @Nullable final String driver = appProperties.getProperty("driver");
+        final DataSource dataSource = new PooledDataSource(driver, url, user, password);
+        final TransactionFactory transactionFactory =
+                new JdbcTransactionFactory();
+        final Environment environment =
+                new Environment("development", transactionFactory, dataSource);
+        final Configuration configuration = new Configuration(environment);
+        configuration.addMapper(IUserRepository.class);
+        configuration.addMapper(IProjectRepository.class);
+        configuration.addMapper(ISessionRepository.class);
+        configuration.addMapper(ITaskRepository.class);
+        return new SqlSessionFactoryBuilder().build(configuration);
+    }
+
 }
 
