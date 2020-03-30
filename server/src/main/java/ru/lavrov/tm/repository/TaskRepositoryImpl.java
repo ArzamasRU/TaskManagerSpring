@@ -24,7 +24,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Date;
 
-public final class TaskRepositoryImpl extends AbstractRepository<Task> implements ITaskRepository {
+public final class TaskRepositoryImpl extends AbstractRepository implements ITaskRepository {
 
     public TaskRepositoryImpl(@NotNull final Connection connection) {
         super(connection);

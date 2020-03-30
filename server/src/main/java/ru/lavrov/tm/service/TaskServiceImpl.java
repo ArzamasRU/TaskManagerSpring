@@ -5,7 +5,6 @@ import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.IProjectRepository;
 import ru.lavrov.tm.api.ITaskRepository;
 import ru.lavrov.tm.api.ITaskService;
-import ru.lavrov.tm.api.IUserRepository;
 import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Task;
 import ru.lavrov.tm.exception.general.DescriptionIsInvalidException;
@@ -15,25 +14,15 @@ import ru.lavrov.tm.exception.project.ProjectNotExistsException;
 import ru.lavrov.tm.exception.task.TaskNameExistsException;
 import ru.lavrov.tm.exception.task.TaskNameIsInvalidException;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
+import ru.lavrov.tm.repository.ProjectRepositoryImpl;
+import ru.lavrov.tm.repository.TaskRepositoryImpl;
 
+import java.nio.channels.ConnectionPendingException;
+import java.sql.Connection;
 import java.util.Collection;
 import java.util.Comparator;
 
-public final class TaskServiceImpl extends AbstractService<Task> implements ITaskService {
-    @NotNull
-    protected final IProjectRepository projectRepository;
-    @NotNull
-    protected final ITaskRepository taskRepository;
-    @NotNull
-    protected final IUserRepository userRepository;
-
-    public TaskServiceImpl(final ITaskRepository taskRepository, final IProjectRepository projectRepository,
-                           final IUserRepository userRepository) {
-        super(taskRepository);
-        this.projectRepository = projectRepository;
-        this.taskRepository = taskRepository;
-        this.userRepository = userRepository;
-    }
+public final class TaskServiceImpl extends AbstractService implements ITaskService {
 
     @Override
     public void createByTaskName(
@@ -45,6 +34,11 @@ public final class TaskServiceImpl extends AbstractService<Task> implements ITas
             throw new ProjectNameIsInvalidException();
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
+        @Nullable final Connection connection = getConnection();
+        if (connection == null)
+            throw new ConnectionPendingException();
+        @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(connection);
+        @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(connection);
         @Nullable final Project project = projectRepository.findEntityByName(userId, projectName);
         if (project == null)
             throw new ProjectNotExistsException();
@@ -52,7 +46,7 @@ public final class TaskServiceImpl extends AbstractService<Task> implements ITas
             throw new ProjectNotExistsException();
         if (taskRepository.findProjectTaskByName(userId, taskName, project.getId()) != null)
             throw new TaskNameExistsException();
-        persist(new Task(taskName, project.getId(), userId));
+        taskRepository.persist(new Task(taskName, project.getId(), userId));
     }
 
     @Override
@@ -61,6 +55,10 @@ public final class TaskServiceImpl extends AbstractService<Task> implements ITas
             throw new TaskNameIsInvalidException();
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
+        @Nullable final Connection connection = getConnection();
+        if (connection == null)
+            throw new ConnectionPendingException();
+        @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(connection);
         taskRepository.removeTaskByName(userId, taskName);
     }
 
@@ -70,6 +68,10 @@ public final class TaskServiceImpl extends AbstractService<Task> implements ITas
             throw new TaskNameIsInvalidException();
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
+        @Nullable final Connection connection = getConnection();
+        if (connection == null)
+            throw new ConnectionPendingException();
+        @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(connection);
         taskRepository.removeTask(userId, taskId);
     }
 
@@ -84,6 +86,11 @@ public final class TaskServiceImpl extends AbstractService<Task> implements ITas
             throw new TaskNameIsInvalidException();
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
+        @Nullable final Connection connection = getConnection();
+        if (connection == null)
+            throw new ConnectionPendingException();
+        @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(connection);
+        @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(connection);
         @Nullable final Project project = projectRepository.findEntityByName(userId, newName);
         if (project == null)
             throw new ProjectNotExistsException();
@@ -97,6 +104,10 @@ public final class TaskServiceImpl extends AbstractService<Task> implements ITas
             throw new UserIsNotAuthorizedException();
         if (name == null || name.isEmpty())
             throw new NameIsInvalidException();
+        @Nullable final Connection connection = getConnection();
+        if (connection == null)
+            throw new ConnectionPendingException();
+        @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(connection);
         @Nullable final Collection<Task> collection = taskRepository.findAllByNamePart(userId, name);
         return collection;
     }
@@ -108,6 +119,10 @@ public final class TaskServiceImpl extends AbstractService<Task> implements ITas
             throw new UserIsNotAuthorizedException();
         if (description == null || description.isEmpty())
             throw new DescriptionIsInvalidException();
+        @Nullable final Connection connection = getConnection();
+        if (connection == null)
+            throw new ConnectionPendingException();
+        @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(connection);
         @Nullable final Collection<Task> collection = taskRepository.findAllByDescPart(userId, description);
         return collection;
     }
@@ -117,6 +132,55 @@ public final class TaskServiceImpl extends AbstractService<Task> implements ITas
     public Collection<Task> findAll(@Nullable String userId, @Nullable Comparator<Task> comparator) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
+        @Nullable final Connection connection = getConnection();
+        if (connection == null)
+            throw new ConnectionPendingException();
+        @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(connection);
         return taskRepository.findAll(userId, comparator);
+    }
+
+    @Override
+    public void persist(@Nullable final Task entity) {
+        if (entity == null)
+            throw new ProjectNotExistsException();
+        @Nullable final Connection connection = getConnection();
+        if (connection == null)
+            throw new ConnectionPendingException();
+        @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(connection);
+        taskRepository.persist(entity);
+    }
+
+    @Override
+    public void merge(@Nullable final Task entity) {
+        if (entity == null)
+            throw new ProjectNotExistsException();
+        @Nullable final Connection connection = getConnection();
+        if (connection == null)
+            throw new ConnectionPendingException();
+        @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(connection);
+        taskRepository.persist(entity);
+    }
+
+    @Override
+    public void removeAll(@Nullable final String userId) {
+        if (userId == null || userId.isEmpty())
+            throw new UserIsNotAuthorizedException();
+        @Nullable final Connection connection = getConnection();
+        if (connection == null)
+            throw new ConnectionPendingException();
+        @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(connection);
+        taskRepository.removeAll(userId);
+    }
+
+    @Nullable
+    @Override
+    public Collection<Task> findAll(@Nullable final String userId) {
+        if (userId == null || userId.isEmpty())
+            throw new UserIsNotAuthorizedException();
+        @Nullable final Connection connection = getConnection();
+        if (connection == null)
+            throw new ConnectionPendingException();
+        @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(connection);
+        return taskRepository.findAll(userId);
     }
 }

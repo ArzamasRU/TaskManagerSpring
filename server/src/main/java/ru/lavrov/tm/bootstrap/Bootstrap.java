@@ -24,20 +24,13 @@ public final class Bootstrap implements IServiceLocator {
     @NotNull
     private final Connection connection = ConnectionUtil.getConnection();
     @NotNull
-    private final IProjectRepository projectRepository = new ProjectRepositoryImpl(connection);
+    private final IProjectService projectService = new ProjectServiceImpl();
     @NotNull
-    private final ITaskRepository taskRepository = new TaskRepositoryImpl(connection);
+    private final ITaskService taskService = new TaskServiceImpl();
     @NotNull
-    private final IUserRepository userRepository = new UserRepositoryImpl(connection);
+    private final IUserService userService = new UserServiceImpl();
     @NotNull
-    private final IProjectService projectService =
-            new ProjectServiceImpl(projectRepository, taskRepository, userRepository);
-    @NotNull
-    private final ITaskService taskService = new TaskServiceImpl(taskRepository, projectRepository, userRepository);
-    @NotNull
-    private final IUserService userService = new UserServiceImpl(userRepository, projectRepository, taskRepository);
-    @NotNull
-    private final ISessionService sessionService = new SessionServiceImpl(userRepository);
+    private final ISessionService sessionService = new SessionServiceImpl();
     @NotNull
     private final UserEndpoint userEndpoint = new UserEndpoint(this);
     @NotNull

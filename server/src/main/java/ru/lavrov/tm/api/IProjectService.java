@@ -4,10 +4,11 @@ import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Task;
 
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Comparator;
 
-public interface IProjectService extends IService<Project> {
+public interface IProjectService extends IService {
     void createByProjectName(@Nullable String userId, @Nullable String projectName);
 
     void removeProjectByName(@Nullable String userId, @Nullable String projectName);
@@ -23,4 +24,12 @@ public interface IProjectService extends IService<Project> {
     Collection<Project> findAllByDescPart(@Nullable String userId, @Nullable String description);
 
     void removeProject(@Nullable final String userId, @Nullable final String entityId);
+
+    void persist(@Nullable Project entity);
+
+    void merge(@Nullable Project entity);
+
+    void removeAll(@Nullable String userId);
+
+    Collection<Project> findAll(@Nullable String userId);
 }

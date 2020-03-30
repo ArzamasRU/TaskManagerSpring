@@ -1,15 +1,12 @@
 package ru.lavrov.tm.api;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Collection;
 
-public interface IService<T extends IEntity> {
-    void persist(@Nullable T entity);
-
-    void merge(@Nullable T entity);
-
-    void removeAll(@Nullable String userId);
-
-    Collection<T> findAll(@Nullable String userId);
+public interface IService {
+    Connection getConnection();
 }

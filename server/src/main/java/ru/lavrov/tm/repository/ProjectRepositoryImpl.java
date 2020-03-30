@@ -23,7 +23,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Date;
 
-public final class ProjectRepositoryImpl extends AbstractRepository<Project> implements IProjectRepository {
+public final class ProjectRepositoryImpl extends AbstractRepository implements IProjectRepository {
 
     public ProjectRepositoryImpl(@NotNull final Connection connection) {
         super(connection);

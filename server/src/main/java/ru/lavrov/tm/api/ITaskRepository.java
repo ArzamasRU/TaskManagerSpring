@@ -2,12 +2,13 @@ package ru.lavrov.tm.api;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Task;
 
 import java.util.Collection;
 import java.util.Comparator;
 
-public interface ITaskRepository extends IRepository<Task> {
+public interface ITaskRepository {
     void removeTaskByName(@Nullable String userId, @Nullable String taskName);
 
     void removeTask(@Nullable String userId, @Nullable String taskId);
@@ -29,4 +30,12 @@ public interface ITaskRepository extends IRepository<Task> {
     Collection<Task> findAllByDescPart(@Nullable String userId, @Nullable String description);
 
     Task findOne(@NotNull String userId, @NotNull String taskId);
+
+    void persist(@Nullable Task entity);
+
+    void merge(@Nullable Task entity);
+
+    void removeAll(@Nullable String userId);
+
+    Collection<Task> findAll(@Nullable String userId);
 }

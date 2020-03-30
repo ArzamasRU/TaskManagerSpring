@@ -3,25 +3,23 @@ package ru.lavrov.tm.service;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.ISessionService;
+import ru.lavrov.tm.api.ITaskRepository;
 import ru.lavrov.tm.api.IUserRepository;
 import ru.lavrov.tm.constant.SignConstant;
 import ru.lavrov.tm.entity.Session;
 import ru.lavrov.tm.entity.User;
 import ru.lavrov.tm.enumerate.Role;
 import ru.lavrov.tm.exception.user.*;
+import ru.lavrov.tm.repository.TaskRepositoryImpl;
+import ru.lavrov.tm.repository.UserRepositoryImpl;
 
+import java.nio.channels.ConnectionPendingException;
+import java.sql.Connection;
 import java.util.Collection;
 
 import static ru.lavrov.tm.util.SignUtil.getSign;
 
-public final class SessionServiceImpl implements ISessionService {
-
-    @NotNull
-    private final IUserRepository userRepository;
-
-    public SessionServiceImpl(final IUserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+public final class SessionServiceImpl extends AbstractService implements ISessionService {
 
     public boolean isSessionValid(@Nullable final Session session){
         if (session == null)
@@ -42,6 +40,10 @@ public final class SessionServiceImpl implements ISessionService {
             throw new UserLoginIsInvalidException();
         if (password == null || password.isEmpty())
             throw new UserPasswordIsInvalidException();
+        @Nullable final Connection connection = getConnection();
+        if (connection == null)
+            throw new ConnectionPendingException();
+        @NotNull final IUserRepository userRepository = new UserRepositoryImpl(connection);
         @Nullable final User user = userRepository.findUserByLogin(login);
         if (user == null)
             throw new UserLoginNotExistsException();

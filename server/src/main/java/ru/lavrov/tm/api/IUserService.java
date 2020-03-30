@@ -1,9 +1,12 @@
 package ru.lavrov.tm.api;
 
 import org.jetbrains.annotations.Nullable;
+import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.User;
 
-public interface IUserService extends IService<User> {
+import java.util.Collection;
+
+public interface IUserService extends IService {
     boolean createByLogin(@Nullable String login, @Nullable String password, @Nullable String role);
 
     void updatePassword(@Nullable String userId, @Nullable String newPassword);
@@ -14,5 +17,13 @@ public interface IUserService extends IService<User> {
 
     User findUserByLogin(@Nullable String login);
 
-     void removeUser(@Nullable final String userId);
+    void removeUser(@Nullable final String userId);
+
+    void persist(@Nullable User entity);
+
+    void merge(@Nullable User entity);
+
+    void removeAll(@Nullable String userId);
+
+    Collection<User> findAll(@Nullable String userId);
 }

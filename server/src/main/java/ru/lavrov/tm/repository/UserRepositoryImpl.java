@@ -19,7 +19,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public final class UserRepositoryImpl extends AbstractRepository<User> implements IUserRepository {
+public final class UserRepositoryImpl extends AbstractRepository implements IUserRepository {
 
     public UserRepositoryImpl(@NotNull Connection connection) {
         super(connection);
