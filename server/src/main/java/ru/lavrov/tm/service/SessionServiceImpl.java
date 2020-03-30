@@ -41,6 +41,7 @@ public final class SessionServiceImpl extends AbstractService implements ISessio
         if (password == null || password.isEmpty())
             throw new UserPasswordIsInvalidException();
         @Nullable final Connection connection = getConnection();
+        System.out.println(connection);
         if (connection == null)
             throw new ConnectionPendingException();
         @NotNull final IUserRepository userRepository = new UserRepositoryImpl(connection);

@@ -96,7 +96,7 @@ public final class TaskRepositoryImpl extends AbstractRepository implements ITas
         if (description == null || description.isEmpty())
             throw new DescriptionIsInvalidException();
         @NotNull final Collection<Task> list = new ArrayList<>();
-        @NotNull final String query = "SELECT FROM app_task " +
+        @NotNull final String query = "SELECT * FROM app_task " +
                 "WHERE user_id = :user_id AND description LIKE :description";
         try {
             @Nullable final NamedParameterStatement namedParameterStatement =
@@ -122,7 +122,7 @@ public final class TaskRepositoryImpl extends AbstractRepository implements ITas
         if (name == null || name.isEmpty())
             throw new NameIsInvalidException();
         @NotNull final Collection<Task> list = new ArrayList<>();
-        @NotNull final String query = "SELECT FROM app_task WHERE user_id = :user_id AND name LIKE :name";
+        @NotNull final String query = "SELECT * FROM app_task WHERE user_id = :user_id AND name LIKE :name";
         try {
             @Nullable final NamedParameterStatement namedParameterStatement =
                     new NamedParameterStatement(connection, query, false);
@@ -192,7 +192,7 @@ public final class TaskRepositoryImpl extends AbstractRepository implements ITas
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         @Nullable Task task = null;
-        @NotNull final String query = "SELECT FROM app_task " +
+        @NotNull final String query = "SELECT * FROM app_task " +
                 "WHERE user_id = :user_id AND name = :name AND project_id = :project_id";
         try {
             @Nullable final NamedParameterStatement namedParameterStatement =

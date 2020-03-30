@@ -30,6 +30,7 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         @Nullable final Connection connection = getConnection();
+        System.out.println(connection);
         if (connection == null)
             throw new ConnectionPendingException();
         @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(connection);

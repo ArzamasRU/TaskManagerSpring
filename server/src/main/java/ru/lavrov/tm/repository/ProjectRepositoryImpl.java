@@ -90,7 +90,7 @@ public final class ProjectRepositoryImpl extends AbstractRepository implements I
         if (description == null || description.isEmpty())
             throw new DescriptionIsInvalidException();
         @NotNull final Collection<Project> list = new ArrayList<>();
-        @NotNull final String query = "SELECT FROM app_project " +
+        @NotNull final String query = "SELECT * FROM app_project " +
                 "WHERE user_id = :user_id AND description LIKE :description";
         try {
             @Nullable final NamedParameterStatement namedParameterStatement =
@@ -116,7 +116,7 @@ public final class ProjectRepositoryImpl extends AbstractRepository implements I
         if (name == null || name.isEmpty())
             throw new NameIsInvalidException();
         @NotNull final Collection<Project> list = new ArrayList<>();
-        @NotNull final String query = "SELECT FROM app_project WHERE user_id = :user_id AND name LIKE :name";
+        @NotNull final String query = "SELECT * FROM app_project WHERE user_id = :user_id AND name LIKE :name";
         try {
             @Nullable final NamedParameterStatement namedParameterStatement =
                     new NamedParameterStatement(connection, query, false);
@@ -141,7 +141,7 @@ public final class ProjectRepositoryImpl extends AbstractRepository implements I
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         @Nullable Project project = null;
-        @NotNull final String query = "SELECT FROM app_project WHERE user_id = :user_id AND name = :name";
+        @NotNull final String query = "SELECT * FROM app_project WHERE user_id = :user_id AND name = :name";
         try {
             @Nullable final NamedParameterStatement namedParameterStatement =
                     new NamedParameterStatement(connection, query, false);
