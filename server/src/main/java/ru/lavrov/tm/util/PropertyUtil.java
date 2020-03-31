@@ -13,7 +13,7 @@ public class PropertyUtil {
     @NotNull
     public static Properties appProperties = new Properties();
 
-    {
+    public static void load(){
         try {
             @Nullable final FileInputStream fis =
                     new FileInputStream("server/src/main/resources/application.properties");

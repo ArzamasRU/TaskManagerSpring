@@ -1,5 +1,6 @@
 package ru.lavrov.tm.api;
 
+import org.apache.ibatis.annotations.Insert;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.entity.Project;
@@ -23,6 +24,8 @@ public interface IProjectRepository {
 
     void removeProject(@Nullable final String userId, @Nullable final String entityId);
 
+//    @Insert("INSERT INTO app_project (id, user_id, name, description, date_start, date_finish, status) " +
+//            "values (#{id}, #{userId}, #{name}, #{description}, #{startDate}, #{finishDate}, #{status})")
     void persist(@Nullable Project entity);
 
     void merge(@Nullable Project entity);

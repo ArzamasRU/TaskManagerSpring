@@ -38,7 +38,7 @@ public final class Task implements IEntity, IComparableEntity {
 
     @Nullable
     private String name;
-    @Nullable
+    @NotNull
     private String id = UUID.randomUUID().toString();
     @Nullable
     private String description;

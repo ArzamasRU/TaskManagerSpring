@@ -27,7 +27,8 @@ public final class SignUtil {
             @Nullable final String salt,
             @Nullable final Integer cycle
     ) {
-        if (value == null || salt == null || cycle == null) return null;
+        if (value == null || salt == null || cycle == null)
+            return null;
         @Nullable String result = value;
         for (int i = 0; i < cycle; i++)
             result = HashUtil.md5Hard(salt + result + salt);

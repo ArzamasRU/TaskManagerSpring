@@ -39,7 +39,7 @@ public final class User implements IEntity {
     @NotNull
     public static final String PASSWORD_HASH = "passwordHash";
 
-    @Nullable
+    @NotNull
     private String id = UUID.randomUUID().toString();
     @Nullable
     private String login;

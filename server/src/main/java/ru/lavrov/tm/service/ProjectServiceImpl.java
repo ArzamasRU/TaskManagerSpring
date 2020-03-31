@@ -1,12 +1,16 @@
 package ru.lavrov.tm.service;
 
+import org.apache.ibatis.session.SqlSession;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.IProjectRepository;
 import ru.lavrov.tm.api.IProjectService;
 import ru.lavrov.tm.api.ITaskRepository;
+import ru.lavrov.tm.api.ITestRepository;
+import ru.lavrov.tm.bootstrap.Bootstrap;
 import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Task;
+import ru.lavrov.tm.entity.Test;
 import ru.lavrov.tm.exception.general.DescriptionIsInvalidException;
 import ru.lavrov.tm.exception.general.NameIsInvalidException;
 import ru.lavrov.tm.exception.project.ProjectNameExistsException;
@@ -23,6 +27,13 @@ import java.util.Comparator;
 
 public final class ProjectServiceImpl extends AbstractService implements IProjectService {
 
+    @NotNull
+    private final Bootstrap bootstrap;
+
+    public ProjectServiceImpl(@NotNull final Bootstrap bootstrap) {
+        this.bootstrap = bootstrap;
+    }
+
     @Override
     public void createByProjectName(@Nullable final String userId, @Nullable final String projectName) {
         if (projectName == null || projectName.isEmpty())
@@ -30,13 +41,18 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         @Nullable final Connection connection = getConnection();
-        System.out.println(connection);
         if (connection == null)
             throw new ConnectionPendingException();
         @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(connection);
         if (projectRepository.findEntityByName(userId, projectName) != null)
             throw new ProjectNameExistsException();
-        projectRepository.persist(new Project(projectName, userId));
+//        projectRepository.persist(new Project(projectName, userId));
+        @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        final ITestRepository testRepository = sqlSession.getMapper(ITestRepository.class);
+        testRepository.persist(new Test(projectName));
+        testRepository.persist2("userId", projectName + "!");
+        sqlSession.commit();
+        sqlSession.close();
     }
 
     @Override
