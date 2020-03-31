@@ -17,9 +17,9 @@ public class Test {
     @NotNull
     private String id = UUID.randomUUID().toString();
     @Nullable
-    private String str;
+    private String string;
 
-    public Test(@Nullable String str) {
-        this.str = str;
+    public Test(@Nullable String string) {
+        this.string = string;
     }
 }

@@ -1,10 +1,12 @@
 package ru.lavrov.tm.service;
 
+import org.apache.ibatis.session.SqlSession;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.IProjectRepository;
 import ru.lavrov.tm.api.ITaskRepository;
 import ru.lavrov.tm.api.ITaskService;
+import ru.lavrov.tm.bootstrap.Bootstrap;
 import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Task;
 import ru.lavrov.tm.exception.general.DescriptionIsInvalidException;
@@ -14,7 +16,6 @@ import ru.lavrov.tm.exception.project.ProjectNotExistsException;
 import ru.lavrov.tm.exception.task.TaskNameExistsException;
 import ru.lavrov.tm.exception.task.TaskNameIsInvalidException;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
-import ru.lavrov.tm.repository.ProjectRepositoryImpl;
 import ru.lavrov.tm.repository.TaskRepositoryImpl;
 
 import java.nio.channels.ConnectionPendingException;
@@ -23,6 +24,13 @@ import java.util.Collection;
 import java.util.Comparator;
 
 public final class TaskServiceImpl extends AbstractService implements ITaskService {
+
+    @NotNull
+    private final Bootstrap bootstrap;
+
+    public TaskServiceImpl(@NotNull Bootstrap bootstrap) {
+        this.bootstrap = bootstrap;
+    }
 
     @Override
     public void createByTaskName(
@@ -38,7 +46,8 @@ public final class TaskServiceImpl extends AbstractService implements ITaskServi
         if (connection == null)
             throw new ConnectionPendingException();
         @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(connection);
-        @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(connection);
+        @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final IProjectRepository projectRepository = sqlSession.getMapper(IProjectRepository.class);
         @Nullable final Project project = projectRepository.findEntityByName(userId, projectName);
         if (project == null)
             throw new ProjectNotExistsException();
@@ -90,7 +99,8 @@ public final class TaskServiceImpl extends AbstractService implements ITaskServi
         if (connection == null)
             throw new ConnectionPendingException();
         @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(connection);
-        @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(connection);
+        @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final IProjectRepository projectRepository = sqlSession.getMapper(IProjectRepository.class);
         @Nullable final Project project = projectRepository.findEntityByName(userId, newName);
         if (project == null)
             throw new ProjectNotExistsException();

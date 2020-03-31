@@ -6,18 +6,15 @@ import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.IProjectRepository;
 import ru.lavrov.tm.api.IProjectService;
 import ru.lavrov.tm.api.ITaskRepository;
-import ru.lavrov.tm.api.ITestRepository;
 import ru.lavrov.tm.bootstrap.Bootstrap;
 import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Task;
-import ru.lavrov.tm.entity.Test;
 import ru.lavrov.tm.exception.general.DescriptionIsInvalidException;
 import ru.lavrov.tm.exception.general.NameIsInvalidException;
 import ru.lavrov.tm.exception.project.ProjectNameExistsException;
 import ru.lavrov.tm.exception.project.ProjectNameIsInvalidException;
 import ru.lavrov.tm.exception.project.ProjectNotExistsException;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
-import ru.lavrov.tm.repository.ProjectRepositoryImpl;
 import ru.lavrov.tm.repository.TaskRepositoryImpl;
 
 import java.nio.channels.ConnectionPendingException;
@@ -43,14 +40,11 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
-        @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(connection);
+        @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final IProjectRepository projectRepository = sqlSession.getMapper(IProjectRepository.class);
         if (projectRepository.findEntityByName(userId, projectName) != null)
             throw new ProjectNameExistsException();
-//        projectRepository.persist(new Project(projectName, userId));
-        @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
-        final ITestRepository testRepository = sqlSession.getMapper(ITestRepository.class);
-        testRepository.persist(new Test(projectName));
-        testRepository.persist2("userId", projectName + "!");
+        projectRepository.persist(new Project(projectName, userId));
         sqlSession.commit();
         sqlSession.close();
     }
@@ -64,7 +58,8 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
-        @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(connection);
+        @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final IProjectRepository projectRepository = sqlSession.getMapper(IProjectRepository.class);
         @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(connection);
         @Nullable final Project project = projectRepository.findEntityByName(userId, projectName);
         if (project != null)
@@ -82,7 +77,8 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
-        @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(connection);
+        @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final IProjectRepository projectRepository = sqlSession.getMapper(IProjectRepository.class);
         @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(connection);
         projectRepository.removeProject(userId, projectId);
         taskRepository.removeProjectTasks(userId, projectId);
@@ -98,7 +94,8 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
-        @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(connection);
+        @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final IProjectRepository projectRepository = sqlSession.getMapper(IProjectRepository.class);
         @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(connection);
         @Nullable final Project project = projectRepository.findEntityByName(userId, projectName);
         if (project == null)
@@ -121,7 +118,8 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
-        @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(connection);
+        @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final IProjectRepository projectRepository = sqlSession.getMapper(IProjectRepository.class);
         projectRepository.renameProject(userId, oldName, newName);
     }
 
@@ -135,7 +133,8 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
-        @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(connection);
+        @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final IProjectRepository projectRepository = sqlSession.getMapper(IProjectRepository.class);
         @Nullable final Collection<Project> collection = projectRepository.findAllByNamePart(userId, name);
         return collection;
     }
@@ -150,7 +149,8 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
-        @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(connection);
+        @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final IProjectRepository projectRepository = sqlSession.getMapper(IProjectRepository.class);
         @Nullable final Collection<Project> collection = projectRepository.findAllByDescPart(userId, description);
         return collection;
     }
@@ -163,7 +163,8 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
-        @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(connection);
+        @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final IProjectRepository projectRepository = sqlSession.getMapper(IProjectRepository.class);
         return projectRepository.findAll(userId, comparator);
     }
 
@@ -174,7 +175,8 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
-        @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(connection);
+        @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final IProjectRepository projectRepository = sqlSession.getMapper(IProjectRepository.class);
         projectRepository.persist(entity);
     }
 
@@ -185,7 +187,8 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
-        @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(connection);
+        @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final IProjectRepository projectRepository = sqlSession.getMapper(IProjectRepository.class);
         projectRepository.persist(entity);
     }
 
@@ -196,7 +199,8 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
-        @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(connection);
+        @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final IProjectRepository projectRepository = sqlSession.getMapper(IProjectRepository.class);
         projectRepository.removeAll(userId);
     }
 
@@ -208,7 +212,8 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
-        @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(connection);
+        @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final IProjectRepository projectRepository = sqlSession.getMapper(IProjectRepository.class);
         return projectRepository.findAll(userId);
     }
 }

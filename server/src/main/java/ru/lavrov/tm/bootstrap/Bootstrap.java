@@ -31,7 +31,7 @@ public final class Bootstrap implements IServiceLocator {
     @NotNull
     private final IProjectService projectService = new ProjectServiceImpl(this);
     @NotNull
-    private final ITaskService taskService = new TaskServiceImpl();
+    private final ITaskService taskService = new TaskServiceImpl(this);
     @NotNull
     private final IUserService userService = new UserServiceImpl();
     @NotNull
