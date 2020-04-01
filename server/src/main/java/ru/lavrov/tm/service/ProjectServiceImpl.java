@@ -15,7 +15,6 @@ import ru.lavrov.tm.exception.project.ProjectNameExistsException;
 import ru.lavrov.tm.exception.project.ProjectNameIsInvalidException;
 import ru.lavrov.tm.exception.project.ProjectNotExistsException;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
-import ru.lavrov.tm.repository.TaskRepositoryImpl;
 
 import java.nio.channels.ConnectionPendingException;
 import java.sql.Connection;
@@ -61,7 +60,7 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
             throw new ConnectionPendingException();
         @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
         @NotNull final IProjectRepository projectRepository = sqlSession.getMapper(IProjectRepository.class);
-        @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(connection);
+        @NotNull final ITaskRepository taskRepository = sqlSession.getMapper(ITaskRepository.class);
         @Nullable final Project project = projectRepository.findEntityByName(userId, projectName);
         if (project != null)
             throw new ProjectNameExistsException();
@@ -82,7 +81,7 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
             throw new ConnectionPendingException();
         @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
         @NotNull final IProjectRepository projectRepository = sqlSession.getMapper(IProjectRepository.class);
-        @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(connection);
+        @NotNull final ITaskRepository taskRepository = sqlSession.getMapper(ITaskRepository.class);
         projectRepository.removeProject(userId, projectId);
         taskRepository.removeProjectTasks(userId, projectId);
         sqlSession.commit();
@@ -101,7 +100,7 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
             throw new ConnectionPendingException();
         @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
         @NotNull final IProjectRepository projectRepository = sqlSession.getMapper(IProjectRepository.class);
-        @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(connection);
+        @NotNull final ITaskRepository taskRepository = sqlSession.getMapper(ITaskRepository.class);
         @Nullable final Project project = projectRepository.findEntityByName(userId, projectName);
         if (project == null)
             throw new ProjectNotExistsException();

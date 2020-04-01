@@ -33,9 +33,9 @@ public final class Bootstrap implements IServiceLocator {
     @NotNull
     private final ITaskService taskService = new TaskServiceImpl(this);
     @NotNull
-    private final IUserService userService = new UserServiceImpl();
+    private final IUserService userService = new UserServiceImpl(this);
     @NotNull
-    private final ISessionService sessionService = new SessionServiceImpl();
+    private final ISessionService sessionService = new SessionServiceImpl(this);
     @NotNull
     private final UserEndpoint userEndpoint = new UserEndpoint(this);
     @NotNull
@@ -86,10 +86,9 @@ public final class Bootstrap implements IServiceLocator {
                 new Environment("development", transactionFactory, dataSource);
         final Configuration configuration = new Configuration(environment);
         configuration.addMapper(ITestRepository.class);
-        //        configuration.addMapper(IUserRepository.class);
+        configuration.addMapper(IUserRepository.class);
         configuration.addMapper(IProjectRepository.class);
-//        configuration.addMapper(ISessionRepository.class);
-//        configuration.addMapper(ITaskRepository.class);
+        configuration.addMapper(ITaskRepository.class);
         return new SqlSessionFactoryBuilder().build(configuration);
     }
 

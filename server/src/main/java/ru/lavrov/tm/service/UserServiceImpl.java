@@ -1,18 +1,15 @@
 package ru.lavrov.tm.service;
 
-
+import org.apache.ibatis.session.SqlSession;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.api.IProjectRepository;
-import ru.lavrov.tm.api.ITaskRepository;
 import ru.lavrov.tm.api.IUserRepository;
 import ru.lavrov.tm.api.IUserService;
+import ru.lavrov.tm.bootstrap.Bootstrap;
 import ru.lavrov.tm.entity.User;
 import ru.lavrov.tm.enumerate.Role;
 import ru.lavrov.tm.exception.project.ProjectNotExistsException;
 import ru.lavrov.tm.exception.user.*;
-import ru.lavrov.tm.repository.TaskRepositoryImpl;
-import ru.lavrov.tm.repository.UserRepositoryImpl;
 import ru.lavrov.tm.util.HashUtil;
 
 import java.nio.channels.ConnectionPendingException;
@@ -20,6 +17,13 @@ import java.sql.Connection;
 import java.util.Collection;
 
 public final class UserServiceImpl extends AbstractService implements IUserService {
+
+    @NotNull
+    private final Bootstrap bootstrap;
+
+    public UserServiceImpl(@NotNull final Bootstrap bootstrap) {
+        this.bootstrap = bootstrap;
+    }
 
     public boolean createByLogin(
             @Nullable final String login, @Nullable final String password, @Nullable final String role
@@ -43,13 +47,16 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
-        @NotNull final IUserRepository userRepository = new UserRepositoryImpl(connection);
+        @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final IUserRepository userRepository = sqlSession.getMapper(IUserRepository.class);
         @Nullable final User user = userRepository.findUserByLogin(login);
         if (user != null)
             throw new UserLoginExistsException();
         @NotNull String hashedPassword;
             hashedPassword = HashUtil.md5Hard(password);
         userRepository.persist(new User(login, hashedPassword, currentRole));
+        sqlSession.commit();
+        sqlSession.close();
         return true;
     }
 
@@ -61,8 +68,11 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
-        @NotNull final IUserRepository userRepository = new UserRepositoryImpl(connection);
+        @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final IUserRepository userRepository = sqlSession.getMapper(IUserRepository.class);
         userRepository.updatePassword(userId, newPassword);
+        sqlSession.commit();
+        sqlSession.close();
     }
 
     public void updateLogin(@Nullable final String userId, @Nullable final String newLogin) {
@@ -73,11 +83,14 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
-        @NotNull final IUserRepository userRepository = new UserRepositoryImpl(connection);
+        @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final IUserRepository userRepository = sqlSession.getMapper(IUserRepository.class);
         @Nullable final User user = userRepository.findUserByLogin(newLogin);
         if (user != null)
             throw new UserLoginExistsException();
         userRepository.updateLogin(userId, newLogin);
+        sqlSession.commit();
+        sqlSession.close();
     }
 
     @Nullable
@@ -88,7 +101,8 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
-        @NotNull final IUserRepository userRepository = new UserRepositoryImpl(connection);
+        @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final IUserRepository userRepository = sqlSession.getMapper(IUserRepository.class);
         return userRepository.findOne(userId);
     }
 
@@ -100,7 +114,8 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
-        @NotNull final IUserRepository userRepository = new UserRepositoryImpl(connection);
+        @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final IUserRepository userRepository = sqlSession.getMapper(IUserRepository.class);
         return userRepository.findUserByLogin(login);
     }
 
@@ -111,7 +126,8 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
-        @NotNull final IUserRepository userRepository = new UserRepositoryImpl(connection);
+        @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final IUserRepository userRepository = sqlSession.getMapper(IUserRepository.class);
         userRepository.removeUser(userId);
     }
 
@@ -122,8 +138,11 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
-        @NotNull final IUserRepository userRepository = new UserRepositoryImpl(connection);
+        @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final IUserRepository userRepository = sqlSession.getMapper(IUserRepository.class);
         userRepository.persist(entity);
+        sqlSession.commit();
+        sqlSession.close();
     }
 
     @Override
@@ -133,19 +152,11 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
-        @NotNull final IUserRepository userRepository = new UserRepositoryImpl(connection);
+        @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final IUserRepository userRepository = sqlSession.getMapper(IUserRepository.class);
         userRepository.persist(entity);
-    }
-
-    @Override
-    public void removeAll(@Nullable final String userId) {
-        if (userId == null || userId.isEmpty())
-            throw new UserIsNotAuthorizedException();
-        @Nullable final Connection connection = getConnection();
-        if (connection == null)
-            throw new ConnectionPendingException();
-        @NotNull final IUserRepository userRepository = new UserRepositoryImpl(connection);
-        userRepository.removeAll(userId);
+        sqlSession.commit();
+        sqlSession.close();
     }
 
     @Nullable
@@ -156,7 +167,8 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
-        @NotNull final IUserRepository userRepository = new UserRepositoryImpl(connection);
+        @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final IUserRepository userRepository = sqlSession.getMapper(IUserRepository.class);
         return userRepository.findAll(userId);
     }
 }

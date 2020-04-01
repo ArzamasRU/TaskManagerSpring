@@ -16,10 +16,10 @@ import ru.lavrov.tm.exception.project.ProjectNotExistsException;
 import ru.lavrov.tm.exception.task.TaskNameExistsException;
 import ru.lavrov.tm.exception.task.TaskNameIsInvalidException;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
-import ru.lavrov.tm.repository.TaskRepositoryImpl;
 
 import java.nio.channels.ConnectionPendingException;
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 
@@ -45,8 +45,8 @@ public final class TaskServiceImpl extends AbstractService implements ITaskServi
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
-        @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(connection);
         @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final ITaskRepository taskRepository = sqlSession.getMapper(ITaskRepository.class);
         @NotNull final IProjectRepository projectRepository = sqlSession.getMapper(IProjectRepository.class);
         @Nullable final Project project = projectRepository.findEntityByName(userId, projectName);
         if (project == null)
@@ -56,6 +56,8 @@ public final class TaskServiceImpl extends AbstractService implements ITaskServi
         if (taskRepository.findProjectTaskByName(userId, taskName, project.getId()) != null)
             throw new TaskNameExistsException();
         taskRepository.persist(new Task(taskName, project.getId(), userId));
+        sqlSession.commit();
+        sqlSession.close();
     }
 
     @Override
@@ -67,8 +69,11 @@ public final class TaskServiceImpl extends AbstractService implements ITaskServi
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
-        @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(connection);
+        @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final ITaskRepository taskRepository = sqlSession.getMapper(ITaskRepository.class);
         taskRepository.removeTaskByName(userId, taskName);
+        sqlSession.commit();
+        sqlSession.close();
     }
 
     @Override
@@ -80,8 +85,11 @@ public final class TaskServiceImpl extends AbstractService implements ITaskServi
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
-        @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(connection);
+        @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final ITaskRepository taskRepository = sqlSession.getMapper(ITaskRepository.class);
         taskRepository.removeTask(userId, taskId);
+        sqlSession.commit();
+        sqlSession.close();
     }
 
     @Override
@@ -98,13 +106,15 @@ public final class TaskServiceImpl extends AbstractService implements ITaskServi
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
-        @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(connection);
         @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final ITaskRepository taskRepository = sqlSession.getMapper(ITaskRepository.class);
         @NotNull final IProjectRepository projectRepository = sqlSession.getMapper(IProjectRepository.class);
         @Nullable final Project project = projectRepository.findEntityByName(userId, newName);
         if (project == null)
             throw new ProjectNotExistsException();
         taskRepository.renameTask(userId, project.getId(), oldName, newName);
+        sqlSession.commit();
+        sqlSession.close();
     }
 
     @Nullable
@@ -117,7 +127,8 @@ public final class TaskServiceImpl extends AbstractService implements ITaskServi
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
-        @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(connection);
+        @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final ITaskRepository taskRepository = sqlSession.getMapper(ITaskRepository.class);
         @Nullable final Collection<Task> collection = taskRepository.findAllByNamePart(userId, name);
         return collection;
     }
@@ -132,7 +143,8 @@ public final class TaskServiceImpl extends AbstractService implements ITaskServi
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
-        @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(connection);
+        @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final ITaskRepository taskRepository = sqlSession.getMapper(ITaskRepository.class);
         @Nullable final Collection<Task> collection = taskRepository.findAllByDescPart(userId, description);
         return collection;
     }
@@ -142,11 +154,17 @@ public final class TaskServiceImpl extends AbstractService implements ITaskServi
     public Collection<Task> findAll(@Nullable String userId, @Nullable Comparator<Task> comparator) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
+        @Nullable Collection<Task> list;
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
-        @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(connection);
-        return taskRepository.findAll(userId, comparator);
+        @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final ITaskRepository taskRepository = sqlSession.getMapper(ITaskRepository.class);
+        list = taskRepository.findAll(userId);
+        if (comparator == null)
+            return list;
+        ((ArrayList<Task>) list).sort(comparator);
+        return list;
     }
 
     @Override
@@ -156,8 +174,11 @@ public final class TaskServiceImpl extends AbstractService implements ITaskServi
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
-        @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(connection);
+        @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final ITaskRepository taskRepository = sqlSession.getMapper(ITaskRepository.class);
         taskRepository.persist(entity);
+        sqlSession.commit();
+        sqlSession.close();
     }
 
     @Override
@@ -167,7 +188,8 @@ public final class TaskServiceImpl extends AbstractService implements ITaskServi
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
-        @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(connection);
+        @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final ITaskRepository taskRepository = sqlSession.getMapper(ITaskRepository.class);
         taskRepository.persist(entity);
     }
 
@@ -178,8 +200,11 @@ public final class TaskServiceImpl extends AbstractService implements ITaskServi
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
-        @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(connection);
+        @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final ITaskRepository taskRepository = sqlSession.getMapper(ITaskRepository.class);
         taskRepository.removeAll(userId);
+        sqlSession.commit();
+        sqlSession.close();
     }
 
     @Nullable
@@ -190,7 +215,8 @@ public final class TaskServiceImpl extends AbstractService implements ITaskServi
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
-        @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(connection);
+        @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final ITaskRepository taskRepository = sqlSession.getMapper(ITaskRepository.class);
         return taskRepository.findAll(userId);
     }
 }

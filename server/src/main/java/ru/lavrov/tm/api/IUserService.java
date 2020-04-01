@@ -23,7 +23,5 @@ public interface IUserService extends IService {
 
     void merge(@Nullable User entity);
 
-    void removeAll(@Nullable String userId);
-
     Collection<User> findAll(@Nullable String userId);
 }
