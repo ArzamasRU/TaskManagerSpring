@@ -16,11 +16,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "session")
 public final class Session {
 
-    @NotNull public static final String ID = "id";
-    @NotNull public static final String SIGNATURE = "signature";
-    @NotNull public static final String USER_ID = "user_Id";
-    @NotNull public static final String TIMESTAMP = "timestamp";
-
     @Nullable
     private String userId;
     @Nullable

@@ -14,16 +14,12 @@ import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.*;
 import ru.lavrov.tm.endpoint.*;
 import ru.lavrov.tm.enumerate.Role;
-import ru.lavrov.tm.service.ProjectServiceImpl;
-import ru.lavrov.tm.service.SessionServiceImpl;
-import ru.lavrov.tm.service.TaskServiceImpl;
-import ru.lavrov.tm.service.UserServiceImpl;
-import ru.lavrov.tm.util.PropertyUtil;
+import ru.lavrov.tm.service.*;
 
 import javax.sql.DataSource;
 import javax.xml.ws.Endpoint;
 
-import static ru.lavrov.tm.util.PropertyUtil.appProperties;
+import static ru.lavrov.tm.service.PropertyServiceImpl.appProperties;
 
 @Getter
 @NoArgsConstructor
@@ -36,6 +32,8 @@ public final class Bootstrap implements IServiceLocator {
     private final IUserService userService = new UserServiceImpl(this);
     @NotNull
     private final ISessionService sessionService = new SessionServiceImpl(this);
+    @NotNull
+    private final IPropertyService propertyService = new PropertyServiceImpl();
     @NotNull
     private final UserEndpoint userEndpoint = new UserEndpoint(this);
     @NotNull
@@ -71,7 +69,6 @@ public final class Bootstrap implements IServiceLocator {
 
     private void initProperties() {
         System.setProperty("javax.xml.bind.context.factory", "org.eclipse.persistence.jaxb.JAXBContextFactory");
-        PropertyUtil.load();
     }
 
     public SqlSessionFactory getSqlSessionFactory() {

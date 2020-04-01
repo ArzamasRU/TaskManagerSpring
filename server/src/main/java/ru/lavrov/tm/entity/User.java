@@ -19,27 +19,6 @@ import java.util.UUID;
 public final class User implements IEntity {
 
     @NotNull
-    public static final String ID = "id";
-    @NotNull
-    public static final String EMAIL = "email";
-    @NotNull
-    public static final String FIRST_NAME = "firstName";
-    @NotNull
-    public static final String LAST_NAME = "lastName";
-    @NotNull
-    public static final String MIDDLE_NAME = "middleName";
-    @NotNull
-    public static final String LOCKED = "locked";
-    @NotNull
-    public static final String LOGIN = "login";
-    @NotNull
-    public static final String PHONE = "phone";
-    @NotNull
-    public static final String ROLE = "role";
-    @NotNull
-    public static final String PASSWORD_HASH = "passwordHash";
-
-    @NotNull
     private String id = UUID.randomUUID().toString();
     @Nullable
     private String login;
