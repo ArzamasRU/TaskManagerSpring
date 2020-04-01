@@ -19,6 +19,7 @@ import ru.lavrov.tm.repository.TaskRepositoryImpl;
 
 import java.nio.channels.ConnectionPendingException;
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 
@@ -66,6 +67,8 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
             throw new ProjectNameExistsException();
         projectRepository.removeProject(userId, project.getId());
         taskRepository.removeProjectTasks(userId, project.getId());
+        sqlSession.commit();
+        sqlSession.close();
     }
 
     @Override
@@ -82,6 +85,8 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
         @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(connection);
         projectRepository.removeProject(userId, projectId);
         taskRepository.removeProjectTasks(userId, projectId);
+        sqlSession.commit();
+        sqlSession.close();
     }
 
     @Nullable
@@ -121,6 +126,8 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
         @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
         @NotNull final IProjectRepository projectRepository = sqlSession.getMapper(IProjectRepository.class);
         projectRepository.renameProject(userId, oldName, newName);
+        sqlSession.commit();
+        sqlSession.close();
     }
 
     @Nullable
@@ -160,12 +167,17 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
     public Collection<Project> findAll(@Nullable final String userId, @Nullable final Comparator<Project> comparator) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
+        @Nullable Collection<Project> list;
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
         @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
         @NotNull final IProjectRepository projectRepository = sqlSession.getMapper(IProjectRepository.class);
-        return projectRepository.findAll(userId, comparator);
+        list = projectRepository.findAll(userId);
+        if (comparator == null)
+            return list;
+        ((ArrayList<Project>) list).sort(comparator);
+        return list;
     }
 
     @Override
@@ -178,6 +190,8 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
         @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
         @NotNull final IProjectRepository projectRepository = sqlSession.getMapper(IProjectRepository.class);
         projectRepository.persist(entity);
+        sqlSession.commit();
+        sqlSession.close();
     }
 
     @Override
@@ -190,6 +204,8 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
         @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
         @NotNull final IProjectRepository projectRepository = sqlSession.getMapper(IProjectRepository.class);
         projectRepository.persist(entity);
+        sqlSession.commit();
+        sqlSession.close();
     }
 
     @Override
@@ -202,6 +218,8 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
         @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
         @NotNull final IProjectRepository projectRepository = sqlSession.getMapper(IProjectRepository.class);
         projectRepository.removeAll(userId);
+        sqlSession.commit();
+        sqlSession.close();
     }
 
     @Nullable
