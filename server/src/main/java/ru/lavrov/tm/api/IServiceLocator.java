@@ -8,4 +8,6 @@ public interface IServiceLocator {
     IUserService getUserService();
 
     ISessionService getSessionService();
+
+    ITokenService getTokenService();
 }

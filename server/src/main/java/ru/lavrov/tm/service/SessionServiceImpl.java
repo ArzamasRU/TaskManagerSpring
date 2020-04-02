@@ -16,6 +16,7 @@ import java.nio.channels.ConnectionPendingException;
 import java.sql.Connection;
 import java.util.Collection;
 
+import static ru.lavrov.tm.service.PropertyServiceImpl.appProperties;
 import static ru.lavrov.tm.util.SignUtil.getSign;
 
 public final class SessionServiceImpl extends AbstractService implements ISessionService {
@@ -33,7 +34,8 @@ public final class SessionServiceImpl extends AbstractService implements ISessio
         if (System.currentTimeMillis() - session.getTimeStamp() > 60000) {
             return false;
         }
-        @Nullable final String currentSign = getSign(session, SignConstant.SALT, SignConstant.CYCLE);
+        @Nullable final String currentSign = getSign(session, appProperties.getProperty("salt"),
+                Integer.parseInt(appProperties.getProperty("cycle")));
         if (currentSign == null || currentSign.isEmpty())
             return false;
         return currentSign.equals(session.getSign());
@@ -47,20 +49,19 @@ public final class SessionServiceImpl extends AbstractService implements ISessio
         if (password == null || password.isEmpty())
             throw new UserPasswordIsInvalidException();
         @Nullable final Connection connection = getConnection();
-        System.out.println(connection);
         if (connection == null)
             throw new ConnectionPendingException();
         @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
         @NotNull final IUserRepository userRepository = sqlSession.getMapper(IUserRepository.class);
         @Nullable final User user = userRepository.findUserByLogin(login);
-        System.out.println(user.getRole());
         if (user == null)
             throw new UserLoginNotExistsException();
         if (!password.equals(user.getPassword()))
             throw new UserLoginOrPasswordIsIncorrectException();
         @NotNull final Session session =
                 new Session(user.getId(), user.getRole(), System.currentTimeMillis());
-        session.setSign(getSign(session, SignConstant.SALT, SignConstant.CYCLE));
+        session.setSign(getSign(session, appProperties.getProperty("salt"),
+                Integer.parseInt(appProperties.getProperty("cycle"))));
         return session;
     }
 

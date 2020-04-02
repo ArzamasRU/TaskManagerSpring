@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import static ru.lavrov.tm.constant.SerializationConstant.*;
+import static ru.lavrov.tm.service.PropertyServiceImpl.appProperties;
 import static ru.lavrov.tm.util.JAXBUtil.readFromJSONByJAXB;
 import static ru.lavrov.tm.util.JAXBUtil.writeToJSONByJAXB;
 
@@ -39,13 +40,13 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
             return false;
         @NotNull final IUserService userService = bootstrap.getUserService();
         @NotNull final User user = userService.findOne(session.getUserId());
-        SerializationUtil.write(Arrays.asList(user), SerializationConstant.USERS_FILE_PATH);
+        SerializationUtil.write(Arrays.asList(user), appProperties.getProperty("users_file_path"));
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
         @NotNull final Collection<Project> projectList = projectService.findAll(session.getUserId());
-        SerializationUtil.write(projectList, SerializationConstant.PROJECTS_FILE_PATH);
+        SerializationUtil.write(projectList, appProperties.getProperty("projects_file_path"));
         @Nullable final ITaskService taskService = bootstrap.getTaskService();
         @Nullable final Collection<Task> taskList = taskService.findAll(session.getUserId());
-        SerializationUtil.write(taskList, SerializationConstant.TASKS_FILE_PATH);
+        SerializationUtil.write(taskList, appProperties.getProperty("tasks_file_path"));
         return true;
     }
 
@@ -54,21 +55,24 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
         @NotNull final ISessionService sessionService = bootstrap.getSessionService();
         if (!sessionService.isSessionValid(session))
             return false;
-        @Nullable final Collection<Project> projectList = SerializationUtil.read(SerializationConstant.PROJECTS_FILE_PATH);
+        @Nullable final Collection<Project> projectList =
+                SerializationUtil.read(appProperties.getProperty("projects_file_path"));
         @Nullable final IProjectService projectService = bootstrap.getProjectService();
         if (projectList != null)
             for (@Nullable final Project project : projectList) {
                 if (project != null)
                     projectService.persist(project);
             }
-        @Nullable final Collection<Task> taskList = SerializationUtil.read(SerializationConstant.TASKS_FILE_PATH);
+        @Nullable final Collection<Task> taskList =
+                SerializationUtil.read(appProperties.getProperty("tasks_file_path"));
         @Nullable final ITaskService taskService = bootstrap.getTaskService();
         if (taskList != null)
             for (@Nullable final Task task : taskList) {
                 if (task != null)
                     taskService.persist(task);
             }
-        @Nullable final Collection<User> userList = SerializationUtil.read(SerializationConstant.USERS_FILE_PATH);
+        @Nullable final Collection<User> userList =
+                SerializationUtil.read(appProperties.getProperty("users_file_path"));
         @Nullable final IUserService userService = bootstrap.getUserService();
         if (userList != null)
             for (@Nullable final User user : userList) {
@@ -87,17 +91,17 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
         @Nullable final User user = userService.findOne(session.getUserId());
         if (user == null)
             return false;
-        JAXBUtil.writeToXMLByJAXB(Arrays.asList(user), SerializationConstant.EXTERNALIZATION_DIR_PATH);
+        JAXBUtil.writeToXMLByJAXB(Arrays.asList(user), appProperties.getProperty("externalization_dir_path"));
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
         @Nullable final Collection<Project> projectList = projectService.findAll(session.getUserId());
         if (projectList == null)
             return false;
-        JAXBUtil.writeToXMLByJAXB(projectList, SerializationConstant.EXTERNALIZATION_DIR_PATH);
+        JAXBUtil.writeToXMLByJAXB(projectList, appProperties.getProperty("externalization_dir_path"));
         @NotNull final ITaskService taskService = bootstrap.getTaskService();
         @Nullable final Collection<Task> taskList = taskService.findAll(session.getUserId());
         if (taskList == null)
             return false;
-        JAXBUtil.writeToXMLByJAXB(taskList, SerializationConstant.EXTERNALIZATION_DIR_PATH);
+        JAXBUtil.writeToXMLByJAXB(taskList, appProperties.getProperty("externalization_dir_path"));
         return true;
     }
 
@@ -120,12 +124,12 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
         if (taskList == null)
             return false;
         try{
-            mapper.writerWithDefaultPrettyPrinter()
-                    .writeValue(new File(SerializationConstant.USERS_FILE_PATH + ".xml"), Arrays.asList(user));
-            mapper.writerWithDefaultPrettyPrinter()
-                    .writeValue(new File(SerializationConstant.PROJECTS_FILE_PATH + ".xml"), projectList);
-            mapper.writerWithDefaultPrettyPrinter()
-                    .writeValue(new File(SerializationConstant.TASKS_FILE_PATH + ".xml"), taskList);
+            mapper.writerWithDefaultPrettyPrinter().writeValue(
+                    new File(appProperties.getProperty("users_file_path") + ".xml"), Arrays.asList(user));
+            mapper.writerWithDefaultPrettyPrinter().writeValue(
+                    new File(appProperties.getProperty("projects_file_path") + ".xml"), projectList);
+            mapper.writerWithDefaultPrettyPrinter().writeValue(
+                    new File(appProperties.getProperty("tasks_file_path") + ".xml"), taskList);
         } catch (IOException e) {
             return false;
         }
@@ -154,7 +158,8 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
         storage.setTaskList(taskList);
         storage.setUserList(Arrays.asList(user));
         @NotNull final String filePath =
-                SerializationConstant.EXTERNALIZATION_DIR_PATH + ExternalizationStorage.class.getSimpleName() + ".json";
+                appProperties.getProperty("externalization_dir_path")
+                        + ExternalizationStorage.class.getSimpleName() + ".json";
         writeToJSONByJAXB(storage, filePath);
         return true;
     }
@@ -178,12 +183,12 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
         if (taskList == null)
             return false;
         try{
-            objectMapper.writerWithDefaultPrettyPrinter()
-                    .writeValue(new File(SerializationConstant.USERS_FILE_PATH + ".json"), user);
-            objectMapper.writerWithDefaultPrettyPrinter()
-                    .writeValue(new File(SerializationConstant.PROJECTS_FILE_PATH + ".json"), projectList);
-            objectMapper.writerWithDefaultPrettyPrinter()
-                    .writeValue(new File(SerializationConstant.TASKS_FILE_PATH + ".json"), taskList);
+            objectMapper.writerWithDefaultPrettyPrinter().writeValue(
+                    new File(appProperties.getProperty("users_file_path") + ".json"), user);
+            objectMapper.writerWithDefaultPrettyPrinter().writeValue(
+                    new File(appProperties.getProperty("projects_file_path") + ".json"), projectList);
+            objectMapper.writerWithDefaultPrettyPrinter().writeValue(
+                    new File(appProperties.getProperty("tasks_file_path") + ".json"), taskList);
         } catch (IOException e) {
             return false;
         }
@@ -196,7 +201,7 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
         if (!sessionService.isSessionValid(session))
             return false;
         @Nullable final Collection<Project> projectList =
-                JAXBUtil.readFromXMLByJAXB(Project.class, SerializationConstant.EXTERNALIZATION_DIR_PATH);
+                JAXBUtil.readFromXMLByJAXB(Project.class, appProperties.getProperty("externalization_dir_path"));
         @Nullable final IProjectService projectService = bootstrap.getProjectService();
         if (projectList != null)
             for (@Nullable final Project project : projectList) {
@@ -204,7 +209,7 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
                     projectService.persist(project);
             }
         @Nullable final Collection<Task> taskList =
-                JAXBUtil.readFromXMLByJAXB(Task.class, SerializationConstant.EXTERNALIZATION_DIR_PATH);
+                JAXBUtil.readFromXMLByJAXB(Task.class, appProperties.getProperty("externalization_dir_path"));
         @Nullable final ITaskService taskService = bootstrap.getTaskService();
         if (taskList != null)
             for (@Nullable final Task task : taskList) {
@@ -212,7 +217,7 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
                     taskService.persist(task);
             }
         @Nullable final Collection<User> userList =
-                JAXBUtil.readFromXMLByJAXB(User.class, SerializationConstant.EXTERNALIZATION_DIR_PATH);
+                JAXBUtil.readFromXMLByJAXB(User.class, appProperties.getProperty("externalization_dir_path"));
         @Nullable final IUserService userService = bootstrap.getUserService();
         if (userList != null)
             for (@Nullable final User user : userList) {
@@ -235,12 +240,12 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
         @Nullable final ITaskService taskService = bootstrap.getTaskService();
         @Nullable final IUserService userService = bootstrap.getUserService();
         try {
-            projectList = Arrays.asList(xmlMapper
-                    .readValue(new File(SerializationConstant.PROJECTS_FILE_PATH + ".xml"), Project[].class));
-            taskList = Arrays.asList(xmlMapper
-                    .readValue(new File(SerializationConstant.TASKS_FILE_PATH + ".xml"), Task[].class));
-            userList = Arrays.asList(xmlMapper
-                    .readValue(new File(SerializationConstant.USERS_FILE_PATH + ".xml"), User[].class));
+            projectList = Arrays.asList(xmlMapper.readValue(
+                    new File(appProperties.getProperty("projects_file_path") + ".xml"), Project[].class));
+            taskList = Arrays.asList(xmlMapper.readValue(
+                    new File(appProperties.getProperty("tasks_file_path") + ".xml"), Task[].class));
+            userList = Arrays.asList(xmlMapper.readValue(
+                    new File(appProperties.getProperty("users_file_path") + ".xml"), User[].class));
         } catch (IOException e) {
             return false;
         }
@@ -265,7 +270,8 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
         if (!sessionService.isSessionValid(session))
             return false;
         @NotNull final String filePath =
-                SerializationConstant.EXTERNALIZATION_DIR_PATH + ExternalizationStorage.class.getSimpleName() + ".json";
+                appProperties.getProperty("externalization_dir_path")
+                        + ExternalizationStorage.class.getSimpleName() + ".json";
         @Nullable final ExternalizationStorage storage = readFromJSONByJAXB(ExternalizationStorage.class , filePath);
         if (storage == null)
             return false;

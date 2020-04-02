@@ -33,6 +33,8 @@ public final class Bootstrap implements IServiceLocator {
     @NotNull
     private final ISessionService sessionService = new SessionServiceImpl(this);
     @NotNull
+    private final ITokenService tokenService = new TokenServiceImpl(this);
+    @NotNull
     private final IPropertyService propertyService = new PropertyServiceImpl();
     @NotNull
     private final UserEndpoint userEndpoint = new UserEndpoint(this);
