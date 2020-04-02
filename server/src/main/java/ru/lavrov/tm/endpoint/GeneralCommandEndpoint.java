@@ -29,7 +29,7 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
     @NotNull public static final String URL = "http://localhost:8090/GeneralCommandEndpoint?wsdl";
 
     public GeneralCommandEndpoint(final IServiceLocator bootstrap) {
-        this.bootstrap = bootstrap;
+        super(bootstrap);
     }
 
     @WebMethod

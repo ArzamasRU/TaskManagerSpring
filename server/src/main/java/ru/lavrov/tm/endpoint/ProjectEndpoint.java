@@ -28,7 +28,7 @@ public final class ProjectEndpoint extends AbstractEndpoint{
     @NotNull public static final String URL = "http://localhost:8090/ProjectEndpoint?wsdl";
 
     public ProjectEndpoint(final IServiceLocator bootstrap) {
-        this.bootstrap = bootstrap;
+        super(bootstrap);
     }
 
     @WebMethod

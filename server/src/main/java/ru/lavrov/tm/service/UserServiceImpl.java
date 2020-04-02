@@ -47,9 +47,14 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
             throw new UserLoginExistsException();
         @NotNull String hashedPassword;
             hashedPassword = HashUtil.md5Hard(password);
-        userRepository.persist(new User(login, hashedPassword, currentRole));
-        sqlSession.commit();
-        sqlSession.close();
+        try{
+            userRepository.persist(new User(login, hashedPassword, currentRole));
+            sqlSession.commit();
+        } catch (Exception e) {
+            sqlSession.rollback();
+        } finally {
+            sqlSession.close();
+        }
         return true;
     }
 
@@ -63,9 +68,14 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
             throw new ConnectionPendingException();
         @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
         @NotNull final IUserRepository userRepository = sqlSession.getMapper(IUserRepository.class);
-        userRepository.updatePassword(userId, newPassword);
-        sqlSession.commit();
-        sqlSession.close();
+        try {
+            userRepository.updatePassword(userId, newPassword);
+            sqlSession.commit();
+        } catch (Exception e) {
+            sqlSession.rollback();
+        } finally {
+            sqlSession.close();
+        }
     }
 
     public void updateLogin(@Nullable final String userId, @Nullable final String newLogin) {
@@ -81,9 +91,14 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
         @Nullable final User user = userRepository.findUserByLogin(newLogin);
         if (user != null)
             throw new UserLoginExistsException();
-        userRepository.updateLogin(userId, newLogin);
-        sqlSession.commit();
-        sqlSession.close();
+        try {
+            userRepository.updateLogin(userId, newLogin);
+            sqlSession.commit();
+        } catch (Exception e) {
+            sqlSession.rollback();
+        } finally {
+            sqlSession.close();
+        }
     }
 
     @Nullable
@@ -133,9 +148,14 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
             throw new ConnectionPendingException();
         @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
         @NotNull final IUserRepository userRepository = sqlSession.getMapper(IUserRepository.class);
-        userRepository.persist(entity);
-        sqlSession.commit();
-        sqlSession.close();
+        try {
+            userRepository.persist(entity);
+            sqlSession.commit();
+        } catch (Exception e) {
+            sqlSession.rollback();
+        } finally {
+            sqlSession.close();
+        }
     }
 
     @Override
@@ -147,9 +167,14 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
             throw new ConnectionPendingException();
         @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
         @NotNull final IUserRepository userRepository = sqlSession.getMapper(IUserRepository.class);
-        userRepository.persist(entity);
-        sqlSession.commit();
-        sqlSession.close();
+        try {
+            userRepository.persist(entity);
+            sqlSession.commit();
+        } catch (Exception e) {
+            sqlSession.rollback();
+        } finally {
+            sqlSession.close();
+        }
     }
 
     @Nullable

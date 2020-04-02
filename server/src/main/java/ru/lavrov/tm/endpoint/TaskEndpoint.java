@@ -27,7 +27,7 @@ public final class TaskEndpoint extends AbstractEndpoint{
     @NotNull public static final String URL = "http://localhost:8090/TaskEndpoint?wsdl";
 
     public TaskEndpoint(final IServiceLocator bootstrap) {
-        this.bootstrap = bootstrap;
+        super(bootstrap);
     }
 
     @WebMethod

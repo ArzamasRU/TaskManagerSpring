@@ -55,9 +55,14 @@ public final class TaskServiceImpl extends AbstractService implements ITaskServi
             throw new ProjectNotExistsException();
         if (taskRepository.findProjectTaskByName(userId, taskName, project.getId()) != null)
             throw new TaskNameExistsException();
-        taskRepository.persist(new Task(taskName, project.getId(), userId));
-        sqlSession.commit();
-        sqlSession.close();
+        try {
+            taskRepository.persist(new Task(taskName, project.getId(), userId));
+            sqlSession.commit();
+        } catch (Exception e) {
+            sqlSession.rollback();
+        } finally {
+            sqlSession.close();
+        }
     }
 
     @Override
@@ -71,9 +76,14 @@ public final class TaskServiceImpl extends AbstractService implements ITaskServi
             throw new ConnectionPendingException();
         @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
         @NotNull final ITaskRepository taskRepository = sqlSession.getMapper(ITaskRepository.class);
-        taskRepository.removeTaskByName(userId, taskName);
-        sqlSession.commit();
-        sqlSession.close();
+        try {
+            taskRepository.removeTaskByName(userId, taskName);
+            sqlSession.commit();
+        } catch (Exception e) {
+            sqlSession.rollback();
+        } finally {
+            sqlSession.close();
+        }
     }
 
     @Override
@@ -87,9 +97,14 @@ public final class TaskServiceImpl extends AbstractService implements ITaskServi
             throw new ConnectionPendingException();
         @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
         @NotNull final ITaskRepository taskRepository = sqlSession.getMapper(ITaskRepository.class);
-        taskRepository.removeTask(userId, taskId);
-        sqlSession.commit();
-        sqlSession.close();
+        try {
+            taskRepository.removeTask(userId, taskId);
+            sqlSession.commit();
+        } catch (Exception e) {
+            sqlSession.rollback();
+        } finally {
+            sqlSession.close();
+        }
     }
 
     @Override
@@ -112,9 +127,14 @@ public final class TaskServiceImpl extends AbstractService implements ITaskServi
         @Nullable final Project project = projectRepository.findEntityByName(userId, newName);
         if (project == null)
             throw new ProjectNotExistsException();
-        taskRepository.renameTask(userId, project.getId(), oldName, newName);
-        sqlSession.commit();
-        sqlSession.close();
+        try {
+            taskRepository.renameTask(userId, project.getId(), oldName, newName);
+            sqlSession.commit();
+        } catch (Exception e) {
+            sqlSession.rollback();
+        } finally {
+            sqlSession.close();
+        }
     }
 
     @Nullable
@@ -176,9 +196,14 @@ public final class TaskServiceImpl extends AbstractService implements ITaskServi
             throw new ConnectionPendingException();
         @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
         @NotNull final ITaskRepository taskRepository = sqlSession.getMapper(ITaskRepository.class);
-        taskRepository.persist(entity);
-        sqlSession.commit();
-        sqlSession.close();
+        try {
+            taskRepository.persist(entity);
+            sqlSession.commit();
+        } catch (Exception e) {
+            sqlSession.rollback();
+        } finally {
+            sqlSession.close();
+        }
     }
 
     @Override
@@ -202,9 +227,14 @@ public final class TaskServiceImpl extends AbstractService implements ITaskServi
             throw new ConnectionPendingException();
         @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
         @NotNull final ITaskRepository taskRepository = sqlSession.getMapper(ITaskRepository.class);
-        taskRepository.removeAll(userId);
-        sqlSession.commit();
-        sqlSession.close();
+        try {
+            taskRepository.removeAll(userId);
+            sqlSession.commit();
+        } catch (Exception e) {
+            sqlSession.rollback();
+        } finally {
+            sqlSession.close();
+        }
     }
 
     @Nullable

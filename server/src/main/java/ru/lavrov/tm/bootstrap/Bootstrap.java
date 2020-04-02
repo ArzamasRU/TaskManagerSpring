@@ -84,7 +84,6 @@ public final class Bootstrap implements IServiceLocator {
         final Environment environment =
                 new Environment("development", transactionFactory, dataSource);
         final Configuration configuration = new Configuration(environment);
-        configuration.addMapper(ITestRepository.class);
         configuration.addMapper(IUserRepository.class);
         configuration.addMapper(IProjectRepository.class);
         configuration.addMapper(ITaskRepository.class);
