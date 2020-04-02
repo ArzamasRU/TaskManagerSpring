@@ -6,14 +6,12 @@ import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.endpoint.*;
 
-import java.util.Arrays;
 import java.util.Collection;
 
 @NoArgsConstructor
 public final class UserDisplayCommand extends AbstractCommand {
     private static final boolean SAFE = false;
-    @Nullable
-    private static final Collection<Role> ROLES = Arrays.asList(Role.ADMIN, Role.USER);
+
     @NotNull
     private static final String COMMAND = "user-display";
     @NotNull
@@ -34,7 +32,7 @@ public final class UserDisplayCommand extends AbstractCommand {
     @Override
     public void execute() {
         @NotNull final UserEndpointService userEndpointService = bootstrap.getUserEndpointService();
-        @NotNull final String token = bootstrap.getToken();
+        @NotNull final String token = bootstrap.getCurrentToken();
         @Nullable final User user = userEndpointService.getUserEndpointPort().getUser(token);
         @NotNull final Collection<Project> projectList =
                 userEndpointService.getUserEndpointPort().getUserProjects(token);
@@ -65,9 +63,5 @@ public final class UserDisplayCommand extends AbstractCommand {
         return SAFE;
     }
 
-    @Nullable
-    @Override
-    public Collection<Role> getRoles() {
-        return ROLES;
-    }
+
 }

@@ -6,17 +6,13 @@ import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.endpoint.Project;
 import ru.lavrov.tm.endpoint.ProjectEndpointService;
-import ru.lavrov.tm.endpoint.Role;
-import ru.lavrov.tm.endpoint.Session;
 
-import java.util.Arrays;
 import java.util.Collection;
 
 @NoArgsConstructor
 public final class ProjectListByStartDateCommand extends AbstractCommand {
     private static final boolean SAFE = false;
-    @Nullable
-    private static final Collection<Role> ROLES = Arrays.asList(Role.ADMIN, Role.USER);
+
     @NotNull
     private static final String COMMAND = "project-list-by-start-date";
     @NotNull
@@ -37,7 +33,7 @@ public final class ProjectListByStartDateCommand extends AbstractCommand {
     @Override
     public void execute() {
         System.out.println("[PROJECT LIST]");
-        @Nullable final String token = bootstrap.getToken();
+        @Nullable final String token = bootstrap.getCurrentToken();
         @NotNull final ProjectEndpointService projectEndpointService = bootstrap.getProjectEndpointService();
         @Nullable final Collection<Project> projectList =
                 projectEndpointService.getProjectEndpointPort().findAllByStartDate(token);
@@ -57,9 +53,5 @@ public final class ProjectListByStartDateCommand extends AbstractCommand {
         return SAFE;
     }
 
-    @Nullable
-    @Override
-    public Collection<Role> getRoles() {
-        return ROLES;
-    }
+
 }

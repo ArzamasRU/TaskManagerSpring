@@ -4,17 +4,12 @@ import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.command.AbstractCommand;
-import ru.lavrov.tm.endpoint.Role;
 import ru.lavrov.tm.endpoint.UserEndpointService;
 import ru.lavrov.tm.util.InputUtil;
-
-import java.util.Collection;
 
 @NoArgsConstructor
 public final class UserRegisterCommand extends AbstractCommand {
     private static final boolean SAFE = true;
-    @Nullable
-    private static final Collection<Role> ROLES = null;
     @NotNull
     private static final String COMMAND = "register";
     @NotNull
@@ -42,7 +37,7 @@ public final class UserRegisterCommand extends AbstractCommand {
         System.out.println("enter your role ('admin', 'user'):");
         @Nullable final String role = InputUtil.INPUT.nextLine();
         @NotNull final UserEndpointService userEndpointService = bootstrap.getUserEndpointService();
-        if (userEndpointService.getUserEndpointPort().registerUser(bootstrap.getToken(), login, password, role))
+        if (userEndpointService.getUserEndpointPort().registerUser(bootstrap.getCurrentToken(), login, password, role))
             System.out.println("[You successfully registered]");
         else
             System.out.println("[error]");
@@ -54,9 +49,5 @@ public final class UserRegisterCommand extends AbstractCommand {
         return SAFE;
     }
 
-    @Nullable
-    @Override
-    public Collection<Role> getRoles() {
-        return ROLES;
-    }
+
 }

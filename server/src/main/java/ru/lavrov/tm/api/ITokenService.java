@@ -12,7 +12,7 @@ public interface ITokenService {
 
     String login(@NotNull String login, @NotNull String password);
 
-    void validate(@Nullable final String token);
+    void validate(@Nullable final String token, @Nullable final Collection<Role> roles);
 
     Token getToken(@Nullable final String token);
 }

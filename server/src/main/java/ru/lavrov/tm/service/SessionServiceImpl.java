@@ -30,12 +30,13 @@ public final class SessionServiceImpl extends AbstractService implements ISessio
         this.bootstrap = bootstrap;
     }
 
-    public void validate(@Nullable final Session session){
+    public void validate(@Nullable final Session session, @Nullable final Collection<Role> roles){
         if (session == null)
             throw new SessionIsInvalidException();
         if (System.currentTimeMillis() - session.getTimeStamp() > 60000) {
             throw new SessionTimeIsOverException();
         }
+        validatePermission(session, roles);
         @Nullable final String currentSign = getSign(session, appProperties.getProperty("salt"),
                 Integer.parseInt(appProperties.getProperty("cycle")));
         if (currentSign == null || currentSign.isEmpty())
@@ -69,13 +70,14 @@ public final class SessionServiceImpl extends AbstractService implements ISessio
     }
 
     @Override
-    public boolean hasPermission(@Nullable final Session session, @Nullable final Collection<Role> listRoles) {
-        if (listRoles == null)
-            return true;
-        @NotNull final Role role = session.getRole();
-        if (role == null)
-            throw new UserRoleIsInvalidException();
-        return listRoles.contains(role);
+    public void validatePermission(@Nullable final Session session, @Nullable final Collection<Role> listRoles) {
+        if (listRoles != null) {
+            @NotNull final Role role = session.getRole();
+            if (role == null)
+                throw new UserRoleIsInvalidException();
+            if (!listRoles.contains(role))
+                throw new UserRoleIsInvalidException();
+        }
     }
 }
 

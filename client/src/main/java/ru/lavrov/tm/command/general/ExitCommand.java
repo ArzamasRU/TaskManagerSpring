@@ -11,8 +11,6 @@ import java.util.Collection;
 @NoArgsConstructor
 public final class ExitCommand extends AbstractCommand {
     private static final boolean SAFE = true;
-    @Nullable
-    private static final Collection<Role> ROLES = null;
     @NotNull
     private static final String COMMAND = "exit";
     @NotNull
@@ -40,9 +38,5 @@ public final class ExitCommand extends AbstractCommand {
         return SAFE;
     }
 
-    @Nullable
-    @Override
-    public Collection<Role> getRoles() {
-        return ROLES;
-    }
+
 }

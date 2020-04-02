@@ -31,8 +31,5 @@ public abstract class AbstractCommand {
     }
 
     public abstract boolean isSafe();
-
-    @Nullable
-    public abstract Collection<Role> getRoles();
 }
 

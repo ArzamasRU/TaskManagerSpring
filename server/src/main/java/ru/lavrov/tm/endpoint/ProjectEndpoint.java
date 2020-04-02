@@ -13,9 +13,11 @@ import ru.lavrov.tm.comparator.StatusComparator;
 import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Session;
 import ru.lavrov.tm.entity.Task;
+import ru.lavrov.tm.enumerate.Role;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 
@@ -31,10 +33,11 @@ public final class ProjectEndpoint extends AbstractEndpoint{
 
     @WebMethod
     public boolean createByProjectName(@Nullable final String token, @Nullable final String projectName) {
+        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         if (projectName == null || projectName.isEmpty())
             return false;
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token);
+        tokenService.validate(token, roles);
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
         @Nullable final Session session = tokenService.getToken(token).getSession();
         projectService.createByProjectName(session.getUserId(), projectName);
@@ -43,10 +46,11 @@ public final class ProjectEndpoint extends AbstractEndpoint{
 
     @WebMethod
     public boolean removeProjectByName(@Nullable final String token, @NotNull final String projectName) {
+        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         if (projectName == null || projectName.isEmpty())
             return false;
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token);
+        tokenService.validate(token, roles);
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
         @Nullable final Session session = tokenService.getToken(token).getSession();
         projectService.removeProjectByName(session.getUserId(), projectName);
@@ -56,8 +60,9 @@ public final class ProjectEndpoint extends AbstractEndpoint{
     @WebMethod
     @Nullable
     public Collection<Task> getProjectTasks(@Nullable final String token, @Nullable final String projectName) {
+        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token);
+        tokenService.validate(token, roles);
         if (projectName == null || projectName.isEmpty())
             return null;
         @Nullable final Session session = tokenService.getToken(token).getSession();
@@ -69,10 +74,11 @@ public final class ProjectEndpoint extends AbstractEndpoint{
     public boolean renameProject(
             @Nullable final String token, @NotNull final String oldName, @NotNull final String newName
     ) {
+        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         if (newName == null || newName.isEmpty() || oldName == null || oldName.isEmpty())
             return false;
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token);
+        tokenService.validate(token, roles);
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
         @Nullable final Session session = tokenService.getToken(token).getSession();
         projectService.renameProject(session.getUserId(), oldName, newName);
@@ -82,10 +88,11 @@ public final class ProjectEndpoint extends AbstractEndpoint{
     @WebMethod
     @Nullable
     public Collection<Project> findAllByNamePart(@Nullable final String token, @Nullable final String name) {
+        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         if (name == null || name.isEmpty())
             return null;
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token);
+        tokenService.validate(token, roles);
         @Nullable final Session session = tokenService.getToken(token).getSession();
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
         return projectService.findAllByNamePart(session.getUserId(), name);
@@ -94,10 +101,11 @@ public final class ProjectEndpoint extends AbstractEndpoint{
     @WebMethod
     @Nullable
     public Collection<Project> findAllByDescPart(@Nullable final String token, @Nullable final String description) {
+        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         if (description == null || description.isEmpty())
             return null;
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token);
+        tokenService.validate(token, roles);
         @Nullable final Session session = tokenService.getToken(token).getSession();
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
         return projectService.findAllByDescPart(session.getUserId(), description);
@@ -106,8 +114,9 @@ public final class ProjectEndpoint extends AbstractEndpoint{
     @WebMethod
     @Nullable
     public Collection<Project> findAll(@Nullable final String token) {
+        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token);
+        tokenService.validate(token, roles);
         @Nullable final Session session = tokenService.getToken(token).getSession();
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
         return projectService.findAll(session.getUserId());
@@ -116,8 +125,9 @@ public final class ProjectEndpoint extends AbstractEndpoint{
     @WebMethod
     @Nullable
     public Collection<Project> findAllByStatus(@Nullable final String token) {
+        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token);
+        tokenService.validate(token, roles);
         @Nullable final Session session = tokenService.getToken(token).getSession();
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
         @NotNull final Comparator comparator = new StatusComparator();
@@ -127,8 +137,9 @@ public final class ProjectEndpoint extends AbstractEndpoint{
     @WebMethod
     @Nullable
     public Collection<Project> findAllByFinishDate(@Nullable final String token) {
+        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token);
+        tokenService.validate(token, roles);
         @Nullable final Session session = tokenService.getToken(token).getSession();
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
         @NotNull final Comparator comparator = new FinishDateComparator();
@@ -138,8 +149,9 @@ public final class ProjectEndpoint extends AbstractEndpoint{
     @WebMethod
     @Nullable
     public Collection<Project> findAllByStartDate(@Nullable final String token) {
+        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token);
+        tokenService.validate(token, roles);
         @Nullable final Session session = tokenService.getToken(token).getSession();
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
         @NotNull final Comparator comparator = new StartDateComparator();
@@ -148,8 +160,9 @@ public final class ProjectEndpoint extends AbstractEndpoint{
 
     @WebMethod
     public boolean removeAll(@Nullable final String token) {
+        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token);
+        tokenService.validate(token, roles);
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
         @Nullable final Session session = tokenService.getToken(token).getSession();
         projectService.removeAll(session.getUserId());
@@ -158,8 +171,9 @@ public final class ProjectEndpoint extends AbstractEndpoint{
 
     @WebMethod
     public boolean remove(@Nullable final String token, @NotNull final String entityId) {
+        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token);
+        tokenService.validate(token, roles);
         if (entityId == null || entityId.isEmpty())
             return false;
         @NotNull final IProjectService projectService = bootstrap.getProjectService();

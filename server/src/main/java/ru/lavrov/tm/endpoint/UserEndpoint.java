@@ -8,10 +8,12 @@ import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Session;
 import ru.lavrov.tm.entity.Task;
 import ru.lavrov.tm.entity.User;
+import ru.lavrov.tm.enumerate.Role;
 import ru.lavrov.tm.exception.user.UserDoNotHavePermissionException;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
+import java.util.Arrays;
 import java.util.Collection;
 
 @NoArgsConstructor
@@ -42,8 +44,9 @@ public final class UserEndpoint extends AbstractEndpoint{
 
     @WebMethod
     public boolean deleteUser(@Nullable final String token){
+        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token);
+        tokenService.validate(token, roles);
         @NotNull final IUserService userService = bootstrap.getUserService();
         @Nullable final Session session = tokenService.getToken(token).getSession();
         userService.removeUser(session.getUserId());
@@ -53,8 +56,9 @@ public final class UserEndpoint extends AbstractEndpoint{
     @WebMethod
     @Nullable
     public Collection<Project> getUserProjects(@Nullable final String token){
+        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token);
+        tokenService.validate(token, roles);
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
         @Nullable final Session session = tokenService.getToken(token).getSession();
         return projectService.findAll(session.getUserId());
@@ -63,8 +67,9 @@ public final class UserEndpoint extends AbstractEndpoint{
     @WebMethod
     @Nullable
     public Collection<Task> getUserTasks(@Nullable final String token){
+        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token);
+        tokenService.validate(token, roles);
         @NotNull final ITaskService taskService = bootstrap.getTaskService();
         @Nullable final Session session = tokenService.getToken(token).getSession();
         return taskService.findAll(session.getUserId());
@@ -73,8 +78,9 @@ public final class UserEndpoint extends AbstractEndpoint{
     @WebMethod
     @Nullable
     public User getUser(@Nullable final String token){
+        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token);
+        tokenService.validate(token, roles);
         @NotNull final IUserService userService = bootstrap.getUserService();
         @Nullable final Session session = tokenService.getToken(token).getSession();
         return userService.findOne(session.getUserId());

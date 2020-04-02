@@ -4,20 +4,14 @@ import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.command.AbstractCommand;
-import ru.lavrov.tm.endpoint.Role;
-import ru.lavrov.tm.endpoint.SessionEndpointService;
 import ru.lavrov.tm.endpoint.TokenEndpointService;
 import ru.lavrov.tm.util.InputUtil;
-
-import java.util.Collection;
 
 import static ru.lavrov.tm.util.HashUtil.md5Hard;
 
 @NoArgsConstructor
 public final class UserLoginCommand extends AbstractCommand {
     private static final boolean SAFE = true;
-    @Nullable
-    private static final Collection<Role> ROLES = null;
     @NotNull
     private static final String COMMAND = "login";
     @NotNull
@@ -48,7 +42,7 @@ public final class UserLoginCommand extends AbstractCommand {
         if (token == null  || token.isEmpty())
             System.out.println("[login or password is incorrect!]");
         else {
-            bootstrap.setToken(token);
+            bootstrap.setCurrentToken(token);
             System.out.println("[You are logged in]");
         }
 
@@ -60,9 +54,5 @@ public final class UserLoginCommand extends AbstractCommand {
         return SAFE;
     }
 
-    @Nullable
-    @Override
-    public Collection<Role> getRoles() {
-        return ROLES;
-    }
+
 }

@@ -9,6 +9,7 @@ import ru.lavrov.tm.api.ITokenService;
 import ru.lavrov.tm.bootstrap.Bootstrap;
 import ru.lavrov.tm.entity.Session;
 import ru.lavrov.tm.entity.Token;
+import ru.lavrov.tm.enumerate.Role;
 import ru.lavrov.tm.exception.security.TokenIsInvalidException;
 import ru.lavrov.tm.exception.security.TokenSignIsInvalidException;
 import ru.lavrov.tm.exception.user.UserLoginIsInvalidException;
@@ -18,6 +19,7 @@ import ru.lavrov.tm.util.SignUtil;
 
 import javax.json.JsonException;
 import java.io.IOException;
+import java.util.Collection;
 
 import static ru.lavrov.tm.service.PropertyServiceImpl.appProperties;
 import static ru.lavrov.tm.util.SignUtil.getSign;
@@ -32,10 +34,10 @@ public final class TokenServiceImpl extends AbstractService implements ITokenSer
     }
 
     @Override
-    public void validate(@Nullable final String token) {
+    public void validate(@Nullable final String token, @Nullable final Collection<Role> roles) {
         Token curToken = getToken(token);
         @NotNull final ISessionService sessionService = bootstrap.getSessionService();
-        sessionService.validate(curToken.getSession());
+        sessionService.validate(curToken.getSession(), roles);
         @NotNull final String currSign = getSign(curToken,  appProperties.getProperty("salt"),
                 Integer.parseInt(appProperties.getProperty("cycle")));
         if (!currSign.equals(curToken.getSignature()))

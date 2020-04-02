@@ -4,17 +4,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.endpoint.GeneralCommandEndpointService;
-import ru.lavrov.tm.endpoint.Role;
-import ru.lavrov.tm.endpoint.Session;
-
-import java.util.Arrays;
-import java.util.Collection;
 
 
 public final class DataFromJSONByFasterXMLCommand extends AbstractCommand {
-    private static final boolean SAFE = true;
-    @Nullable
-    private static final Collection<Role> ROLES = Arrays.asList(Role.ADMIN, Role.USER);
+    final boolean SAFE = false;
     @NotNull
     private static final String COMMAND = "from-JSON-by-fasterXML";
     @NotNull
@@ -35,7 +28,7 @@ public final class DataFromJSONByFasterXMLCommand extends AbstractCommand {
     @Override
     public void execute() {
         System.out.println("[Externalization data from JSON By fasterXML]");
-        @Nullable final String token = bootstrap.getToken();
+        @Nullable final String token = bootstrap.getCurrentToken();
         @NotNull final GeneralCommandEndpointService generalCommandEndpointService =
                 bootstrap.getGeneralCommandEndpointService();
         if (generalCommandEndpointService.getGeneralCommandEndpointPort().dataFromJSONByFasterXML(token))
@@ -50,9 +43,5 @@ public final class DataFromJSONByFasterXMLCommand extends AbstractCommand {
         return SAFE;
     }
 
-    @Nullable
-    @Override
-    public Collection<Role> getRoles() {
-        return ROLES;
-    }
+
 }

@@ -12,8 +12,6 @@ import java.util.Collection;
 @NoArgsConstructor
 public final class AboutCommand extends AbstractCommand {
     private static final boolean SAFE = true;
-    @Nullable
-    private static final Collection<Role> ROLES = null;
     @NotNull
     private static final String COMMAND = "about";
     @NotNull
@@ -47,9 +45,5 @@ public final class AboutCommand extends AbstractCommand {
         return SAFE;
     }
 
-    @Nullable
-    @Override
-    public Collection<Role> getRoles() {
-        return ROLES;
-    }
+
 }

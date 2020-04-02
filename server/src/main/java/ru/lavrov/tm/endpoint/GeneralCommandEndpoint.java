@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.*;
 import ru.lavrov.tm.entity.*;
+import ru.lavrov.tm.enumerate.Role;
 import ru.lavrov.tm.util.JAXBUtil;
 import ru.lavrov.tm.util.SerializationUtil;
 
@@ -33,8 +34,9 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
 
     @WebMethod
     public boolean serialize(@Nullable final String token) {
+        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token);
+        tokenService.validate(token, roles);
         @Nullable final Session session = tokenService.getToken(token).getSession();
         @NotNull final IUserService userService = bootstrap.getUserService();
         @NotNull final User user = userService.findOne(session.getUserId());
@@ -50,8 +52,9 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
 
     @WebMethod
     public boolean deserialize(@Nullable final String token) {
+        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token);
+        tokenService.validate(token, roles);
         @Nullable final Collection<Project> projectList =
                 SerializationUtil.read(appProperties.getProperty("projects_file_path"));
         @Nullable final IProjectService projectService = bootstrap.getProjectService();
@@ -81,8 +84,9 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
 
     @WebMethod
     public boolean dataToXMLByJAXB(@Nullable final String token) {
+        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token);
+        tokenService.validate(token, roles);
         @Nullable final Session session = tokenService.getToken(token).getSession();
         @NotNull final IUserService userService = bootstrap.getUserService();
         @Nullable final User user = userService.findOne(session.getUserId());
@@ -104,9 +108,10 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
 
     @WebMethod
     public boolean dataToXMLByFasterXML(@Nullable final String token) {
+        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final XmlMapper mapper = new XmlMapper();
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token);
+        tokenService.validate(token, roles);
         @Nullable final Session session = tokenService.getToken(token).getSession();
         @NotNull final IUserService userService = bootstrap.getUserService();
         @Nullable final User user = userService.findOne(session.getUserId());
@@ -135,8 +140,9 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
 
     @WebMethod
     public boolean dataToJSONByJAXB(@Nullable final String token) {
+        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token);
+        tokenService.validate(token, roles);
         @Nullable final Session session = tokenService.getToken(token).getSession();
         @NotNull final IUserService userService = bootstrap.getUserService();
         @Nullable final User user = userService.findOne(session.getUserId());
@@ -163,9 +169,10 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
 
     @WebMethod
     public boolean dataToJSONByFasterXML(@Nullable final String token) {
+        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ObjectMapper objectMapper = new ObjectMapper();
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token);
+        tokenService.validate(token, roles);
         @Nullable final Session session = tokenService.getToken(token).getSession();
         @NotNull final IUserService userService = bootstrap.getUserService();
         @Nullable final User user = userService.findOne(session.getUserId());
@@ -194,8 +201,9 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
 
     @WebMethod
     public boolean dataFromXMLByJAXB(@Nullable final String token) {
+        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token);
+        tokenService.validate(token, roles);
         @Nullable final Collection<Project> projectList =
                 JAXBUtil.readFromXMLByJAXB(Project.class, appProperties.getProperty("externalization_dir_path"));
         @Nullable final IProjectService projectService = bootstrap.getProjectService();
@@ -225,8 +233,9 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
 
     @WebMethod
     public boolean dataFromXMLByFasterXML(@Nullable final String token) {
+        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token);
+        tokenService.validate(token, roles);
         @Nullable final XmlMapper xmlMapper = new XmlMapper();
         @Nullable final Collection<Project> projectList;
         @Nullable final Collection<Task> taskList;
@@ -261,8 +270,9 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
 
     @WebMethod
     public boolean dataFromJSONByJAXB(@Nullable final String token) {
+        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token);
+        tokenService.validate(token, roles);
         @NotNull final String filePath =
                 appProperties.getProperty("externalization_dir_path")
                         + ExternalizationStorage.class.getSimpleName() + ".json";
@@ -295,8 +305,9 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
 
     @WebMethod
     public boolean dataFromJSONByFasterXML(@Nullable final String token) {
+        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token);
+        tokenService.validate(token, roles);
         @Nullable final ObjectMapper objectMapper = new ObjectMapper();
         @Nullable final Collection<Project> projectList;
         @Nullable final Collection<Task> taskList;

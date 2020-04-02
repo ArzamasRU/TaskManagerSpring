@@ -11,7 +11,6 @@ import ru.lavrov.tm.endpoint.*;
 import ru.lavrov.tm.exception.command.CommandDescriptionIsInvalidException;
 import ru.lavrov.tm.exception.command.CommandIsInvalidException;
 import ru.lavrov.tm.exception.command.CommandNotExistsException;
-import ru.lavrov.tm.exception.user.UserDoNotHavePermissionException;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 import ru.lavrov.tm.exception.user.UserRoleIsInvalidException;
 import ru.lavrov.tm.util.InputUtil;
@@ -35,7 +34,7 @@ public final class Bootstrap {
     private final TokenEndpointService tokenEndpointService = new TokenEndpointService();
     @Setter
     @Nullable
-    private String token;
+    private String currentToken;
     @Nullable
     private static final Set<Class<? extends AbstractCommand>> classes;
 
@@ -95,24 +94,9 @@ public final class Bootstrap {
         @Nullable final AbstractCommand abstractCommand = commands.get(command);
         if (abstractCommand == null)
             throw new CommandNotExistsException();
-//        if (currentSession == null && !abstractCommand.isSafe())
-//            throw new UserIsNotAuthorizedException();
-//        @Nullable Role role;
-//        if (currentSession == null)
-//            role = null;
-//        else
-//            role = currentSession.getRole();
-//        if (!hasPermission(abstractCommand.getRoles(), role))
-//            throw new UserDoNotHavePermissionException();
+        if (currentToken == null && !abstractCommand.isSafe())
+            throw new UserIsNotAuthorizedException();
         abstractCommand.execute();
-    }
-
-    private boolean hasPermission(@Nullable final Collection<Role> listRoles, @Nullable Role role) {
-        if (listRoles == null)
-            return true;
-        if (role == null)
-            throw new UserRoleIsInvalidException();
-        return listRoles.contains(role);
     }
 
     @NotNull

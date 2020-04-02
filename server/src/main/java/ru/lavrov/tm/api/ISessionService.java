@@ -12,7 +12,7 @@ public interface ISessionService {
 
     Session login(@NotNull String login, @NotNull String password);
 
-    boolean hasPermission(@Nullable Session session, @Nullable Collection<Role> listRoles);
+    void validatePermission(@Nullable Session session, @Nullable Collection<Role> listRoles);
 
-    void validate(@Nullable final Session session);
+    void validate(@Nullable final Session session, @Nullable final Collection<Role> roles);
 }
