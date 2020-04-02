@@ -30,19 +30,6 @@ public final class SessionServiceImpl extends AbstractService implements ISessio
         this.bootstrap = bootstrap;
     }
 
-    public boolean isSessionValid(@Nullable final Session session){
-        if (session == null)
-            return false;
-        if (System.currentTimeMillis() - session.getTimeStamp() > 60000) {
-            return false;
-        }
-        @Nullable final String currentSign = getSign(session, appProperties.getProperty("salt"),
-                Integer.parseInt(appProperties.getProperty("cycle")));
-        if (currentSign == null || currentSign.isEmpty())
-            return false;
-        return currentSign.equals(session.getSign());
-    }
-
     public void validate(@Nullable final Session session){
         if (session == null)
             throw new SessionIsInvalidException();

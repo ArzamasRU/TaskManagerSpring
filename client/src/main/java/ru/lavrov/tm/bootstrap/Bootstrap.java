@@ -35,7 +35,7 @@ public final class Bootstrap {
     private final GeneralCommandEndpointService generalCommandEndpointService = new GeneralCommandEndpointService();
     @Setter
     @Nullable
-    private Session currentSession;
+    private String token;
     @Nullable
     private static final Set<Class<? extends AbstractCommand>> classes;
 
@@ -95,15 +95,15 @@ public final class Bootstrap {
         @Nullable final AbstractCommand abstractCommand = commands.get(command);
         if (abstractCommand == null)
             throw new CommandNotExistsException();
-        if (currentSession == null && !abstractCommand.isSafe())
-            throw new UserIsNotAuthorizedException();
-        @Nullable Role role;
-        if (currentSession == null)
-            role = null;
-        else
-            role = currentSession.getRole();
-        if (!hasPermission(abstractCommand.getRoles(), role))
-            throw new UserDoNotHavePermissionException();
+//        if (currentSession == null && !abstractCommand.isSafe())
+//            throw new UserIsNotAuthorizedException();
+//        @Nullable Role role;
+//        if (currentSession == null)
+//            role = null;
+//        else
+//            role = currentSession.getRole();
+//        if (!hasPermission(abstractCommand.getRoles(), role))
+//            throw new UserDoNotHavePermissionException();
         abstractCommand.execute();
     }
 

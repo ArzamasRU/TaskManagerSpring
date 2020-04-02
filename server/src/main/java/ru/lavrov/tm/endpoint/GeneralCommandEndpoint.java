@@ -32,10 +32,10 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
     }
 
     @WebMethod
-    public boolean serialize(@Nullable final Session session) {
-        @NotNull final ISessionService sessionService = bootstrap.getSessionService();
-        if (!sessionService.isSessionValid(session))
-            return false;
+    public boolean serialize(@Nullable final String token) {
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token);
+        @Nullable final Session session = tokenService.getToken(token).getSession();
         @NotNull final IUserService userService = bootstrap.getUserService();
         @NotNull final User user = userService.findOne(session.getUserId());
         SerializationUtil.write(Arrays.asList(user), appProperties.getProperty("users_file_path"));
@@ -49,10 +49,9 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
     }
 
     @WebMethod
-    public boolean deserialize(@Nullable final Session session) {
-        @NotNull final ISessionService sessionService = bootstrap.getSessionService();
-        if (!sessionService.isSessionValid(session))
-            return false;
+    public boolean deserialize(@Nullable final String token) {
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token);
         @Nullable final Collection<Project> projectList =
                 SerializationUtil.read(appProperties.getProperty("projects_file_path"));
         @Nullable final IProjectService projectService = bootstrap.getProjectService();
@@ -81,10 +80,10 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
     }
 
     @WebMethod
-    public boolean dataToXMLByJAXB(@Nullable final Session session) {
-        @NotNull final ISessionService sessionService = bootstrap.getSessionService();
-        if (!sessionService.isSessionValid(session))
-            return false;
+    public boolean dataToXMLByJAXB(@Nullable final String token) {
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token);
+        @Nullable final Session session = tokenService.getToken(token).getSession();
         @NotNull final IUserService userService = bootstrap.getUserService();
         @Nullable final User user = userService.findOne(session.getUserId());
         if (user == null)
@@ -104,11 +103,11 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
     }
 
     @WebMethod
-    public boolean dataToXMLByFasterXML(@Nullable final Session session) {
+    public boolean dataToXMLByFasterXML(@Nullable final String token) {
         @NotNull final XmlMapper mapper = new XmlMapper();
-        @NotNull final ISessionService sessionService = bootstrap.getSessionService();
-        if (!sessionService.isSessionValid(session))
-            return false;
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token);
+        @Nullable final Session session = tokenService.getToken(token).getSession();
         @NotNull final IUserService userService = bootstrap.getUserService();
         @Nullable final User user = userService.findOne(session.getUserId());
         if (user == null)
@@ -135,10 +134,10 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
     }
 
     @WebMethod
-    public boolean dataToJSONByJAXB(@Nullable final Session session) {
-        @NotNull final ISessionService sessionService = bootstrap.getSessionService();
-        if (!sessionService.isSessionValid(session))
-            return false;
+    public boolean dataToJSONByJAXB(@Nullable final String token) {
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token);
+        @Nullable final Session session = tokenService.getToken(token).getSession();
         @NotNull final IUserService userService = bootstrap.getUserService();
         @Nullable final User user = userService.findOne(session.getUserId());
         if (user == null)
@@ -163,11 +162,11 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
     }
 
     @WebMethod
-    public boolean dataToJSONByFasterXML(@Nullable final Session session) {
+    public boolean dataToJSONByFasterXML(@Nullable final String token) {
         @NotNull final ObjectMapper objectMapper = new ObjectMapper();
-        @NotNull final ISessionService sessionService = bootstrap.getSessionService();
-        if (!sessionService.isSessionValid(session))
-            return false;
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token);
+        @Nullable final Session session = tokenService.getToken(token).getSession();
         @NotNull final IUserService userService = bootstrap.getUserService();
         @Nullable final User user = userService.findOne(session.getUserId());
         if (user == null)
@@ -194,10 +193,9 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
     }
 
     @WebMethod
-    public boolean dataFromXMLByJAXB(@Nullable final Session session) {
-        @NotNull final ISessionService sessionService = bootstrap.getSessionService();
-        if (!sessionService.isSessionValid(session))
-            return false;
+    public boolean dataFromXMLByJAXB(@Nullable final String token) {
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token);
         @Nullable final Collection<Project> projectList =
                 JAXBUtil.readFromXMLByJAXB(Project.class, appProperties.getProperty("externalization_dir_path"));
         @Nullable final IProjectService projectService = bootstrap.getProjectService();
@@ -226,10 +224,9 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
     }
 
     @WebMethod
-    public boolean dataFromXMLByFasterXML(@Nullable final Session session) {
-        @NotNull final ISessionService sessionService = bootstrap.getSessionService();
-        if (!sessionService.isSessionValid(session))
-            return false;
+    public boolean dataFromXMLByFasterXML(@Nullable final String token) {
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token);
         @Nullable final XmlMapper xmlMapper = new XmlMapper();
         @Nullable final Collection<Project> projectList;
         @Nullable final Collection<Task> taskList;
@@ -263,10 +260,9 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
     }
 
     @WebMethod
-    public boolean dataFromJSONByJAXB(@Nullable final Session session) {
-        @NotNull final ISessionService sessionService = bootstrap.getSessionService();
-        if (!sessionService.isSessionValid(session))
-            return false;
+    public boolean dataFromJSONByJAXB(@Nullable final String token) {
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token);
         @NotNull final String filePath =
                 appProperties.getProperty("externalization_dir_path")
                         + ExternalizationStorage.class.getSimpleName() + ".json";
@@ -298,10 +294,9 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
     }
 
     @WebMethod
-    public boolean dataFromJSONByFasterXML(@Nullable final Session session) {
-        @NotNull final ISessionService sessionService = bootstrap.getSessionService();
-        if (!sessionService.isSessionValid(session))
-            return false;
+    public boolean dataFromJSONByFasterXML(@Nullable final String token) {
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token);
         @Nullable final ObjectMapper objectMapper = new ObjectMapper();
         @Nullable final Collection<Project> projectList;
         @Nullable final Collection<Task> taskList;

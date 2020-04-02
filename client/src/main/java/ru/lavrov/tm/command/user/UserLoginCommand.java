@@ -5,7 +5,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.endpoint.Role;
-import ru.lavrov.tm.endpoint.Session;
 import ru.lavrov.tm.endpoint.SessionEndpointService;
 import ru.lavrov.tm.util.InputUtil;
 
@@ -43,14 +42,15 @@ public final class UserLoginCommand extends AbstractCommand {
         System.out.println("enter password:");
         @NotNull final String password = InputUtil.INPUT.nextLine();
         @Nullable final String hashedPassword = md5Hard(password);
-        @NotNull final SessionEndpointService sessionEndpointService = bootstrap.getSessionEndpointService();
-        @Nullable final Session session = sessionEndpointService.getSessionEndpointPort().login(login, hashedPassword);
-        if (session != null) {
-            bootstrap.setCurrentSession(session);
+        @NotNull final TokenEndpointService tokenEndpointService = bootstrap.getTokenEndpointService();
+        @Nullable final String token = tokenEndpointService.getTokenEndpointPort().login(login, hashedPassword);
+        if (token == null  || token.isEmpty())
+            System.out.println("[login or password is incorrect!]");
+        else {
+            bootstrap.setToken(token);
             System.out.println("[You are logged in]");
         }
-        else
-            System.out.println("[login or password is incorrect!]");
+
         System.out.println();
     }
 

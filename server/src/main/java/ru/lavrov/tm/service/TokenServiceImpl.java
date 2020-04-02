@@ -9,7 +9,6 @@ import ru.lavrov.tm.api.ITokenService;
 import ru.lavrov.tm.bootstrap.Bootstrap;
 import ru.lavrov.tm.entity.Session;
 import ru.lavrov.tm.entity.Token;
-import ru.lavrov.tm.enumerate.Role;
 import ru.lavrov.tm.exception.security.TokenIsInvalidException;
 import ru.lavrov.tm.exception.security.TokenSignIsInvalidException;
 import ru.lavrov.tm.exception.user.UserLoginIsInvalidException;
@@ -19,7 +18,6 @@ import ru.lavrov.tm.util.SignUtil;
 
 import javax.json.JsonException;
 import java.io.IOException;
-import java.util.Collection;
 
 import static ru.lavrov.tm.service.PropertyServiceImpl.appProperties;
 import static ru.lavrov.tm.util.SignUtil.getSign;
@@ -35,16 +33,7 @@ public final class TokenServiceImpl extends AbstractService implements ITokenSer
 
     @Override
     public void validate(@Nullable final String token) {
-        if (token == null)
-            throw new TokenIsInvalidException();
-        @NotNull final String decryptedToken = AESUtil.decrypt(token, appProperties.getProperty("key"));
-        @NotNull final ObjectMapper objectMapper = new ObjectMapper();
-        @Nullable Token curToken;
-        try {
-            curToken = objectMapper.readValue(decryptedToken, Token.class);
-        } catch (IOException e) {
-            throw new JsonException("Json reading is failed");
-        }
+        Token curToken = getToken(token);
         @NotNull final ISessionService sessionService = bootstrap.getSessionService();
         sessionService.validate(curToken.getSession());
         @NotNull final String currSign = getSign(curToken,  appProperties.getProperty("salt"),
@@ -75,6 +64,22 @@ public final class TokenServiceImpl extends AbstractService implements ITokenSer
         }
         @NotNull final String encryptedToken = AESUtil.encrypt(jsonToken, appProperties.getProperty("key"));
         return encryptedToken;
+    }
+
+    @Nullable
+    @Override
+    public Token getToken(@Nullable final String token) {
+        if (token == null)
+            throw new TokenIsInvalidException();
+        @NotNull final String decryptedToken = AESUtil.decrypt(token, appProperties.getProperty("key"));
+        @NotNull final ObjectMapper objectMapper = new ObjectMapper();
+        @Nullable Token curToken;
+        try {
+            curToken = objectMapper.readValue(decryptedToken, Token.class);
+        } catch (IOException e) {
+            throw new JsonException("Json reading is failed");
+        }
+        return curToken;
     }
 }
 

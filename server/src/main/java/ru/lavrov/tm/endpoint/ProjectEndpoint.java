@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.IProjectService;
 import ru.lavrov.tm.api.IServiceLocator;
 import ru.lavrov.tm.api.ISessionService;
+import ru.lavrov.tm.api.ITokenService;
 import ru.lavrov.tm.comparator.FinishDateComparator;
 import ru.lavrov.tm.comparator.StartDateComparator;
 import ru.lavrov.tm.comparator.StatusComparator;
@@ -29,105 +30,95 @@ public final class ProjectEndpoint extends AbstractEndpoint{
     }
 
     @WebMethod
-    public boolean createByProjectName(@Nullable final Session session, @Nullable final String projectName) {
+    public boolean createByProjectName(@Nullable final String token, @Nullable final String projectName) {
         if (projectName == null || projectName.isEmpty())
             return false;
-        @NotNull final ISessionService sessionService = bootstrap.getSessionService();
-        if (!sessionService.isSessionValid(session))
-            return false;
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token);
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
+        @Nullable final Session session = tokenService.getToken(token).getSession();
         projectService.createByProjectName(session.getUserId(), projectName);
         return true;
     }
 
     @WebMethod
-    public boolean removeProjectByName(@Nullable final Session session, @NotNull final String projectName) {
+    public boolean removeProjectByName(@Nullable final String token, @NotNull final String projectName) {
         if (projectName == null || projectName.isEmpty())
             return false;
-        @NotNull final ISessionService sessionService = bootstrap.getSessionService();
-        if (!sessionService.isSessionValid(session))
-            return false;
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token);
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
+        @Nullable final Session session = tokenService.getToken(token).getSession();
         projectService.removeProjectByName(session.getUserId(), projectName);
         return true;
     }
 
     @WebMethod
     @Nullable
-    public Collection<Task> getProjectTasks(@Nullable final Session session, @Nullable final String projectName) {
-        if (session == null)
-            return null;
+    public Collection<Task> getProjectTasks(@Nullable final String token, @Nullable final String projectName) {
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token);
         if (projectName == null || projectName.isEmpty())
             return null;
-        @NotNull final ISessionService sessionService = bootstrap.getSessionService();
-        if (!sessionService.isSessionValid(session))
-            return null;
+        @Nullable final Session session = tokenService.getToken(token).getSession();
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
         return projectService.getProjectTasks(session.getUserId(), projectName);
     }
 
     @WebMethod
     public boolean renameProject(
-            @Nullable final Session session, @NotNull final String oldName, @NotNull final String newName
+            @Nullable final String token, @NotNull final String oldName, @NotNull final String newName
     ) {
         if (newName == null || newName.isEmpty() || oldName == null || oldName.isEmpty())
             return false;
-        @NotNull final ISessionService sessionService = bootstrap.getSessionService();
-        if (!sessionService.isSessionValid(session))
-            return false;
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token);
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
+        @Nullable final Session session = tokenService.getToken(token).getSession();
         projectService.renameProject(session.getUserId(), oldName, newName);
         return true;
     }
 
     @WebMethod
     @Nullable
-    public Collection<Project> findAllByNamePart(@Nullable final Session session, @Nullable final String name) {
+    public Collection<Project> findAllByNamePart(@Nullable final String token, @Nullable final String name) {
         if (name == null || name.isEmpty())
             return null;
-        if (session == null)
-            return null;
-        @NotNull final ISessionService sessionService = bootstrap.getSessionService();
-        if (!sessionService.isSessionValid(session))
-            return null;
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token);
+        @Nullable final Session session = tokenService.getToken(token).getSession();
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
         return projectService.findAllByNamePart(session.getUserId(), name);
     }
 
     @WebMethod
     @Nullable
-    public Collection<Project> findAllByDescPart(@Nullable final Session session, @Nullable final String description) {
+    public Collection<Project> findAllByDescPart(@Nullable final String token, @Nullable final String description) {
         if (description == null || description.isEmpty())
             return null;
-        if (session == null)
-            return null;
-        @NotNull final ISessionService sessionService = bootstrap.getSessionService();
-        if (!sessionService.isSessionValid(session))
-            return null;
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token);
+        @Nullable final Session session = tokenService.getToken(token).getSession();
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
         return projectService.findAllByDescPart(session.getUserId(), description);
     }
 
     @WebMethod
     @Nullable
-    public Collection<Project> findAll(@Nullable final Session session) {
-        if (session == null)
-            return null;
-        @NotNull final ISessionService sessionService = bootstrap.getSessionService();
-        if (!sessionService.isSessionValid(session))
-            return null;
+    public Collection<Project> findAll(@Nullable final String token) {
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token);
+        @Nullable final Session session = tokenService.getToken(token).getSession();
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
         return projectService.findAll(session.getUserId());
     }
 
     @WebMethod
     @Nullable
-    public Collection<Project> findAllByStatus(@Nullable final Session session) {
-        if (session == null)
-            return null;
-        @NotNull final ISessionService sessionService = bootstrap.getSessionService();
-        if (!sessionService.isSessionValid(session))
-            return null;
+    public Collection<Project> findAllByStatus(@Nullable final String token) {
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token);
+        @Nullable final Session session = tokenService.getToken(token).getSession();
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
         @NotNull final Comparator comparator = new StatusComparator();
         return projectService.findAll(session.getUserId(), comparator);
@@ -135,12 +126,10 @@ public final class ProjectEndpoint extends AbstractEndpoint{
 
     @WebMethod
     @Nullable
-    public Collection<Project> findAllByFinishDate(@Nullable final Session session) {
-        if (session == null)
-            return null;
-        @NotNull final ISessionService sessionService = bootstrap.getSessionService();
-        if (!sessionService.isSessionValid(session))
-            return null;
+    public Collection<Project> findAllByFinishDate(@Nullable final String token) {
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token);
+        @Nullable final Session session = tokenService.getToken(token).getSession();
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
         @NotNull final Comparator comparator = new FinishDateComparator();
         return projectService.findAll(session.getUserId(), comparator);
@@ -148,39 +137,33 @@ public final class ProjectEndpoint extends AbstractEndpoint{
 
     @WebMethod
     @Nullable
-    public Collection<Project> findAllByStartDate(@Nullable final Session session) {
-        if (session == null)
-            return null;
-        @NotNull final ISessionService sessionService = bootstrap.getSessionService();
-        if (!sessionService.isSessionValid(session))
-            return null;
+    public Collection<Project> findAllByStartDate(@Nullable final String token) {
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token);
+        @Nullable final Session session = tokenService.getToken(token).getSession();
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
         @NotNull final Comparator comparator = new StartDateComparator();
         return projectService.findAll(session.getUserId(), comparator);
     }
 
     @WebMethod
-    public boolean removeAll(@Nullable final Session session) {
-        if (session == null)
-            return false;
-        @NotNull final ISessionService sessionService = bootstrap.getSessionService();
-        if (!sessionService.isSessionValid(session))
-            return false;
+    public boolean removeAll(@Nullable final String token) {
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token);
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
+        @Nullable final Session session = tokenService.getToken(token).getSession();
         projectService.removeAll(session.getUserId());
         return true;
     }
 
     @WebMethod
-    public boolean remove(@Nullable final Session session, @NotNull final String entityId) {
-        if (session == null)
-            return false;
-        @NotNull final ISessionService sessionService = bootstrap.getSessionService();
-        if (!sessionService.isSessionValid(session))
-            return false;
+    public boolean remove(@Nullable final String token, @NotNull final String entityId) {
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token);
         if (entityId == null || entityId.isEmpty())
             return false;
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
+        @Nullable final Session session = tokenService.getToken(token).getSession();
         projectService.removeProject(session.getUserId(), entityId);
         return true;
     }

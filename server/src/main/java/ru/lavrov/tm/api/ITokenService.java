@@ -13,4 +13,6 @@ public interface ITokenService {
     String login(@NotNull String login, @NotNull String password);
 
     void validate(@Nullable final String token);
+
+    Token getToken(@Nullable final String token);
 }

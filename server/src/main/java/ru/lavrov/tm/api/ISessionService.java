@@ -10,8 +10,6 @@ import java.util.Collection;
 
 public interface ISessionService {
 
-    boolean isSessionValid(@NotNull Session session);
-
     Session login(@NotNull String login, @NotNull String password);
 
     boolean hasPermission(@Nullable Session session, @Nullable Collection<Role> listRoles);

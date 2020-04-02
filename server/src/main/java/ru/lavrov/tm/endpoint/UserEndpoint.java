@@ -25,7 +25,7 @@ public final class UserEndpoint extends AbstractEndpoint{
     }
 
     @WebMethod
-    public boolean registerUser(@Nullable final Session session,
+    public boolean registerUser(@Nullable final String token,
                                 @NotNull final String login,
                                 @NotNull final String password,
                                 @NotNull final String role){
@@ -41,48 +41,42 @@ public final class UserEndpoint extends AbstractEndpoint{
     }
 
     @WebMethod
-    public boolean deleteUser(@Nullable final Session session){
-        @NotNull final ISessionService sessionService = bootstrap.getSessionService();
-        if (!sessionService.isSessionValid(session))
-            return false;
+    public boolean deleteUser(@Nullable final String token){
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token);
         @NotNull final IUserService userService = bootstrap.getUserService();
+        @Nullable final Session session = tokenService.getToken(token).getSession();
         userService.removeUser(session.getUserId());
         return true;
     }
 
     @WebMethod
     @Nullable
-    public Collection<Project> getUserProjects(@Nullable final Session session){
-        if (session == null)
-            return null;
-        @NotNull final ISessionService sessionService = bootstrap.getSessionService();
-        if (!sessionService.isSessionValid(session))
-            return null;
+    public Collection<Project> getUserProjects(@Nullable final String token){
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token);
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
+        @Nullable final Session session = tokenService.getToken(token).getSession();
         return projectService.findAll(session.getUserId());
     }
 
     @WebMethod
     @Nullable
-    public Collection<Task> getUserTasks(@Nullable final Session session){
-        if (session == null)
-            return null;
-        @NotNull final ISessionService sessionService = bootstrap.getSessionService();
-        if (!sessionService.isSessionValid(session))
-            throw new UserDoNotHavePermissionException();
+    public Collection<Task> getUserTasks(@Nullable final String token){
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token);
         @NotNull final ITaskService taskService = bootstrap.getTaskService();
+        @Nullable final Session session = tokenService.getToken(token).getSession();
         return taskService.findAll(session.getUserId());
     }
 
     @WebMethod
     @Nullable
-    public User getUser(@Nullable final Session session){
-        if (session == null)
-            return null;
-        @NotNull final ISessionService sessionService = bootstrap.getSessionService();
-        if (!sessionService.isSessionValid(session))
-            throw new UserDoNotHavePermissionException();
+    public User getUser(@Nullable final String token){
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token);
         @NotNull final IUserService userService = bootstrap.getUserService();
+        @Nullable final Session session = tokenService.getToken(token).getSession();
         return userService.findOne(session.getUserId());
     }
 }

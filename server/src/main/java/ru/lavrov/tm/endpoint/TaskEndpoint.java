@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.IServiceLocator;
 import ru.lavrov.tm.api.ISessionService;
 import ru.lavrov.tm.api.ITaskService;
+import ru.lavrov.tm.api.ITokenService;
 import ru.lavrov.tm.comparator.FinishDateComparator;
 import ru.lavrov.tm.comparator.StartDateComparator;
 import ru.lavrov.tm.comparator.StatusComparator;
@@ -29,34 +30,34 @@ public final class TaskEndpoint extends AbstractEndpoint{
 
     @WebMethod
     public boolean createByTaskName(
-            @Nullable final Session session, @NotNull final String taskName, @NotNull final String projectName
+            @Nullable final String token, @NotNull final String taskName, @NotNull final String projectName
     ) {
         if (taskName == null || taskName.isEmpty())
             return false;
         if (projectName == null || projectName.isEmpty())
             return false;
-        @NotNull final ISessionService sessionService = bootstrap.getSessionService();
-        if (!sessionService.isSessionValid(session))
-            return false;
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token);
+        @Nullable final Session session = tokenService.getToken(token).getSession();
         @NotNull final ITaskService taskService = bootstrap.getTaskService();
         taskService.createByTaskName(session.getUserId(), taskName, projectName);
         return true;
     }
 
     @WebMethod
-    public boolean removeTaskByName(@Nullable final Session session, @NotNull final String taskName) {
+    public boolean removeTaskByName(@Nullable final String token, @NotNull final String taskName) {
         if (taskName == null || taskName.isEmpty())
             return false;
-        @NotNull final ISessionService sessionService = bootstrap.getSessionService();
-        if (!sessionService.isSessionValid(session))
-            return false;
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token);
+        @Nullable final Session session = tokenService.getToken(token).getSession();
         @NotNull final ITaskService taskService = bootstrap.getTaskService();
         taskService.removeTaskByName(session.getUserId(), taskName);
         return true;
     }
 
     @WebMethod
-    public boolean renameTask(@Nullable final Session session,
+    public boolean renameTask(@Nullable final String token,
                               @NotNull final String projectName,
                               @NotNull final String oldName,
                               @NotNull final String newName
@@ -65,9 +66,9 @@ public final class TaskEndpoint extends AbstractEndpoint{
             return false;
         if (newName == null || newName.isEmpty() || oldName == null || oldName.isEmpty())
             return false;
-        @NotNull final ISessionService sessionService = bootstrap.getSessionService();
-        if (!sessionService.isSessionValid(session))
-            return false;
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token);
+        @Nullable final Session session = tokenService.getToken(token).getSession();
         @NotNull final ITaskService taskService = bootstrap.getTaskService();
         taskService.renameTask(session.getUserId(), projectName, oldName, newName);
         return true;
@@ -75,44 +76,44 @@ public final class TaskEndpoint extends AbstractEndpoint{
 
     @WebMethod
     @Nullable
-    public Collection<Task> findAllTasksByNamePart(@Nullable final Session session, @NotNull final String name) {
+    public Collection<Task> findAllTasksByNamePart(@Nullable final String token, @NotNull final String name) {
         if (name == null || name.isEmpty())
             return null;
-        @NotNull final ISessionService sessionService = bootstrap.getSessionService();
-        if (!sessionService.isSessionValid(session))
-            return null;
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token);
+        @Nullable final Session session = tokenService.getToken(token).getSession();
         @NotNull final ITaskService taskService = bootstrap.getTaskService();
         return taskService.findAllByNamePart(session.getUserId(), name);
     }
 
     @WebMethod
     @Nullable
-    public Collection<Task> findAllTasksByDescPart(@Nullable final Session session, @NotNull final String description) {
+    public Collection<Task> findAllTasksByDescPart(@Nullable final String token, @NotNull final String description) {
         if (description == null || description.isEmpty())
             return null;
-        @NotNull final ISessionService sessionService = bootstrap.getSessionService();
-        if (!sessionService.isSessionValid(session))
-            return null;
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token);
+        @Nullable final Session session = tokenService.getToken(token).getSession();
         @NotNull final ITaskService taskService = bootstrap.getTaskService();
         return taskService.findAllByDescPart(session.getUserId(), description);
     }
 
     @WebMethod
     @Nullable
-    public Collection<Task> findAllTasks(@Nullable final Session session) {
-        @NotNull final ISessionService sessionService = bootstrap.getSessionService();
-        if (!sessionService.isSessionValid(session))
-            return null;
+    public Collection<Task> findAllTasks(@Nullable final String token) {
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token);
+        @Nullable final Session session = tokenService.getToken(token).getSession();
         @NotNull final ITaskService taskService = bootstrap.getTaskService();
         return taskService.findAll(session.getUserId());
     }
 
     @WebMethod
     @Nullable
-    public Collection<Task> findAllTasksByStatus(@Nullable final Session session) {
-        @NotNull final ISessionService sessionService = bootstrap.getSessionService();
-        if (!sessionService.isSessionValid(session))
-            return null;
+    public Collection<Task> findAllTasksByStatus(@Nullable final String token) {
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token);
+        @Nullable final Session session = tokenService.getToken(token).getSession();
         @NotNull final ITaskService taskService = bootstrap.getTaskService();
         @NotNull final Comparator comparator = new StatusComparator();
         return taskService.findAll(session.getUserId(), comparator);
@@ -120,10 +121,10 @@ public final class TaskEndpoint extends AbstractEndpoint{
 
     @WebMethod
     @Nullable
-    public Collection<Task> findAllTasksByStartDate(@Nullable final Session session) {
-        @NotNull final ISessionService sessionService = bootstrap.getSessionService();
-        if (!sessionService.isSessionValid(session))
-            return null;
+    public Collection<Task> findAllTasksByStartDate(@Nullable final String token) {
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token);
+        @Nullable final Session session = tokenService.getToken(token).getSession();
         @NotNull final ITaskService taskService = bootstrap.getTaskService();
         @NotNull final Comparator comparator = new StartDateComparator();
         return taskService.findAll(session.getUserId(), comparator);
@@ -131,37 +132,33 @@ public final class TaskEndpoint extends AbstractEndpoint{
 
     @WebMethod
     @Nullable
-    public Collection<Task> findAllTasksByFinishDate(@Nullable final Session session) {
-        @NotNull final ISessionService sessionService = bootstrap.getSessionService();
-        if (!sessionService.isSessionValid(session))
-            return null;
+    public Collection<Task> findAllTasksByFinishDate(@Nullable final String token) {
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token);
+        @Nullable final Session session = tokenService.getToken(token).getSession();
         @NotNull final ITaskService taskService = bootstrap.getTaskService();
         @NotNull final Comparator comparator = new FinishDateComparator();
         return taskService.findAll(session.getUserId(), comparator);
     }
 
     @WebMethod
-    public boolean removeAll(@Nullable final Session session) {
-        if (session == null)
-            return false;
-        @NotNull final ISessionService sessionService = bootstrap.getSessionService();
-        if (!sessionService.isSessionValid(session))
-            return false;
+    public boolean removeAll(@Nullable final String token) {
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token);
+        @Nullable final Session session = tokenService.getToken(token).getSession();
         @NotNull final ITaskService taskService = bootstrap.getTaskService();
         taskService.removeAll(session.getUserId());
         return true;
     }
 
     @WebMethod
-    public boolean remove(@Nullable final Session session, @NotNull final String entityId) {
-        if (session == null)
-            return false;
-        @NotNull final ISessionService sessionService = bootstrap.getSessionService();
-        if (!sessionService.isSessionValid(session))
-            return false;
+    public boolean remove(@Nullable final String token, @NotNull final String entityId) {
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token);
         if (entityId == null || entityId.isEmpty())
             return false;
         @NotNull final ITaskService taskService = bootstrap.getTaskService();
+        @Nullable final Session session = tokenService.getToken(token).getSession();
         taskService.removeTask(session.getUserId(), entityId);
         return true;
     }
