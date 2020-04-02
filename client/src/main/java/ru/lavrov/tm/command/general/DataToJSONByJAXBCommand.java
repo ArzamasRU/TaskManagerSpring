@@ -34,10 +34,10 @@ public final class DataToJSONByJAXBCommand extends AbstractCommand {
     @Override
     public void execute() {
         System.out.println("[Externalization data to JSON By JAXB]");
-        @Nullable final Session currentSession = bootstrap.getCurrentSession();
+        @Nullable final String token = bootstrap.getToken();
         @NotNull final GeneralCommandEndpointService generalCommandEndpointService =
                 bootstrap.getGeneralCommandEndpointService();
-        if (generalCommandEndpointService.getGeneralCommandEndpointPort().dataToJSONByJAXB(currentSession))
+        if (generalCommandEndpointService.getGeneralCommandEndpointPort().dataToJSONByJAXB(token))
             System.out.println("[ok]");
         else
             System.out.println("[error]");

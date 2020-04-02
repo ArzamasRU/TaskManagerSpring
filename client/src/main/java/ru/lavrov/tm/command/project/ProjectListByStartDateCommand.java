@@ -37,10 +37,10 @@ public final class ProjectListByStartDateCommand extends AbstractCommand {
     @Override
     public void execute() {
         System.out.println("[PROJECT LIST]");
-        @Nullable final Session currentSession = bootstrap.getCurrentSession();
+        @Nullable final String token = bootstrap.getToken();
         @NotNull final ProjectEndpointService projectEndpointService = bootstrap.getProjectEndpointService();
         @Nullable final Collection<Project> projectList =
-                projectEndpointService.getProjectEndpointPort().findAllByStartDate(currentSession);
+                projectEndpointService.getProjectEndpointPort().findAllByStartDate(token);
         if (projectList == null)
             return;
         int index = 1;

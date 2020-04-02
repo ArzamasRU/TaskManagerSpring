@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.endpoint.Role;
 import ru.lavrov.tm.endpoint.SessionEndpointService;
+import ru.lavrov.tm.endpoint.TokenEndpointService;
 import ru.lavrov.tm.util.InputUtil;
 
 import java.util.Collection;

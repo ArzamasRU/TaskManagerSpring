@@ -44,7 +44,6 @@ public class ObjectFactory {
     private final static QName _DeserializeResponse_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "deserializeResponse");
     private final static QName _Serialize_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "serialize");
     private final static QName _SerializeResponse_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "serializeResponse");
-    private final static QName _Session_QNAME = new QName("http://endpoint.tm.lavrov.ru/", "session");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: ru.lavrov.tm.endpoint
@@ -211,14 +210,6 @@ public class ObjectFactory {
      */
     public SerializeResponse createSerializeResponse() {
         return new SerializeResponse();
-    }
-
-    /**
-     * Create an instance of {@link Session }
-     * 
-     */
-    public Session createSession() {
-        return new Session();
     }
 
     /**
@@ -479,19 +470,6 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "serializeResponse")
     public JAXBElement<SerializeResponse> createSerializeResponse(SerializeResponse value) {
         return new JAXBElement<SerializeResponse>(_SerializeResponse_QNAME, SerializeResponse.class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link Session }{@code >}
-     * 
-     * @param value
-     *     Java instance representing xml element's value.
-     * @return
-     *     the new instance of {@link JAXBElement }{@code <}{@link Session }{@code >}
-     */
-    @XmlElementDecl(namespace = "http://endpoint.tm.lavrov.ru/", name = "session")
-    public JAXBElement<Session> createSession(Session value) {
-        return new JAXBElement<Session>(_Session_QNAME, Session.class, null, value);
     }
 
 }

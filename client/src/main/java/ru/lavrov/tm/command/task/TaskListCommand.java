@@ -35,10 +35,10 @@ public final class TaskListCommand extends AbstractCommand {
     @Override
     public void execute() {
         System.out.println("[TASK LIST]");
-        @Nullable final Session currentSession = bootstrap.getCurrentSession();
+        @Nullable final String token = bootstrap.getToken();
         @NotNull final TaskEndpointService taskEndpointService = bootstrap.getTaskEndpointService();
         @Nullable final Collection<Task> taskList =
-                taskEndpointService.getTaskEndpointPort().findAllTasks(currentSession);
+                taskEndpointService.getTaskEndpointPort().findAllTasks(token);
         if (taskList == null)
             return;
         int index = 1;

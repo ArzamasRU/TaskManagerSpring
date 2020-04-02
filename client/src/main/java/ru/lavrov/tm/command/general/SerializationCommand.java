@@ -34,10 +34,10 @@ public final class SerializationCommand extends AbstractCommand {
     @Override
     public void execute() {
         System.out.println("[Serialize data]");
-        @Nullable final Session currentSession = bootstrap.getCurrentSession();
+        @Nullable final String token = bootstrap.getToken();
         @NotNull final GeneralCommandEndpointService generalCommandEndpointService =
                 bootstrap.getGeneralCommandEndpointService();
-        if (generalCommandEndpointService.getGeneralCommandEndpointPort().serialize(currentSession))
+        if (generalCommandEndpointService.getGeneralCommandEndpointPort().serialize(token))
             System.out.println("[ok]");
         else
             System.out.println("[error]");

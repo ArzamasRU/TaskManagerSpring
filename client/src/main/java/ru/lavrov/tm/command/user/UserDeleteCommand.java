@@ -34,7 +34,7 @@ public final class UserDeleteCommand extends AbstractCommand {
     @Override
     public void execute() {
         @NotNull final UserEndpointService userEndpointService = bootstrap.getUserEndpointService();
-        if (userEndpointService.getUserEndpointPort().deleteUser(bootstrap.getCurrentSession()))
+        if (userEndpointService.getUserEndpointPort().deleteUser(bootstrap.getToken()))
             System.out.println("[ok]");
         else
             System.out.println("[error]");

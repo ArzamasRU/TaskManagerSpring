@@ -39,9 +39,9 @@ public final class ProjectRemoveCommand extends AbstractCommand {
         System.out.println("[project remove]");
         System.out.println("enter name:");
         @Nullable final String projectName = InputUtil.INPUT.nextLine();
-        @Nullable final Session currentSession = bootstrap.getCurrentSession();
+        @Nullable final String token = bootstrap.getToken();
         @NotNull final ProjectEndpointService projectEndpointService = bootstrap.getProjectEndpointService();
-        if (projectEndpointService.getProjectEndpointPort().removeProjectByName(currentSession, projectName))
+        if (projectEndpointService.getProjectEndpointPort().removeProjectByName(token, projectName))
             System.out.println("[ok]");
         else
             System.out.println("[error]");

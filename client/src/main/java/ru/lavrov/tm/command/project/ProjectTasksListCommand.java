@@ -40,10 +40,10 @@ public final class ProjectTasksListCommand extends AbstractCommand {
         System.out.println("[Tasks of project]");
         System.out.println("enter project name:");
         @Nullable final String projectName = InputUtil.INPUT.nextLine();
-        @Nullable final Session currentSession = bootstrap.getCurrentSession();
+        @Nullable final String token = bootstrap.getToken();
         @NotNull final ProjectEndpointService projectEndpointService = bootstrap.getProjectEndpointService();
         @Nullable final Collection<Task> taskList =
-                projectEndpointService.getProjectEndpointPort().getProjectTasks(currentSession, projectName);
+                projectEndpointService.getProjectEndpointPort().getProjectTasks(token, projectName);
         if (taskList == null)
             return;
         for (@Nullable final Task task : taskList) {

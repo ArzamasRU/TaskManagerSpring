@@ -37,10 +37,10 @@ public final class TaskListByStartDateCommand extends AbstractCommand {
     @Override
     public void execute() {
         System.out.println("[TASK LIST]");
-        @Nullable final Session currentSession = bootstrap.getCurrentSession();
+        @Nullable final String token = bootstrap.getToken();
         @NotNull final TaskEndpointService taskEndpointService = bootstrap.getTaskEndpointService();
         @Nullable final Collection<Task> taskList =
-                taskEndpointService.getTaskEndpointPort().findAllTasksByStartDate(currentSession);
+                taskEndpointService.getTaskEndpointPort().findAllTasksByStartDate(token);
         if (taskList == null)
             return;
         int index = 1;

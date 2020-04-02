@@ -34,12 +34,12 @@ public final class UserDisplayCommand extends AbstractCommand {
     @Override
     public void execute() {
         @NotNull final UserEndpointService userEndpointService = bootstrap.getUserEndpointService();
-        @NotNull final Session currentSession = bootstrap.getCurrentSession();
-        @Nullable final User user = userEndpointService.getUserEndpointPort().getUser(currentSession);
+        @NotNull final String token = bootstrap.getToken();
+        @Nullable final User user = userEndpointService.getUserEndpointPort().getUser(token);
         @NotNull final Collection<Project> projectList =
-                userEndpointService.getUserEndpointPort().getUserProjects(currentSession);
+                userEndpointService.getUserEndpointPort().getUserProjects(token);
         @NotNull final Collection<Task> taskList =
-                userEndpointService.getUserEndpointPort().getUserTasks(currentSession);
+                userEndpointService.getUserEndpointPort().getUserTasks(token);
         System.out.println("[Display user profile]");
         System.out.println("user data:");
         System.out.println(user.getLogin());

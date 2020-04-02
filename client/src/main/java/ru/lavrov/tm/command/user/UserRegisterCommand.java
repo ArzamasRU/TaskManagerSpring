@@ -42,7 +42,7 @@ public final class UserRegisterCommand extends AbstractCommand {
         System.out.println("enter your role ('admin', 'user'):");
         @Nullable final String role = InputUtil.INPUT.nextLine();
         @NotNull final UserEndpointService userEndpointService = bootstrap.getUserEndpointService();
-        if (userEndpointService.getUserEndpointPort().registerUser(bootstrap.getCurrentSession(), login, password, role))
+        if (userEndpointService.getUserEndpointPort().registerUser(bootstrap.getToken(), login, password, role))
             System.out.println("[You successfully registered]");
         else
             System.out.println("[error]");

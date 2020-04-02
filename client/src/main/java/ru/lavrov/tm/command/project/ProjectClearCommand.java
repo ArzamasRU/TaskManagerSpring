@@ -35,9 +35,9 @@ public final class ProjectClearCommand extends AbstractCommand {
 
     @Override
     public void execute() {
-        @Nullable final Session currentSession = bootstrap.getCurrentSession();
+        @Nullable final String token = bootstrap.getToken();
         @NotNull final ProjectEndpointService projectEndpointService = bootstrap.getProjectEndpointService();
-        if (projectEndpointService.getProjectEndpointPort().removeAll(currentSession))
+        if (projectEndpointService.getProjectEndpointPort().removeAll(token))
             System.out.println("[ok]");
         else
             System.out.println("[error]");

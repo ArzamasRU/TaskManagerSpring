@@ -36,12 +36,12 @@ public final class ProjectFindByDescription extends AbstractCommand {
     @Override
     public void execute() {
         System.out.println("[PROJECT LIST]");
-        @Nullable final Session currentSession = bootstrap.getCurrentSession();
+        @Nullable final String token = bootstrap.getToken();
         @NotNull final ProjectEndpointService projectEndpointService = bootstrap.getProjectEndpointService();
         System.out.println("enter name:");
         @Nullable final String desc = InputUtil.INPUT.nextLine();
         @Nullable final Collection<Project> projectList =
-                projectEndpointService.getProjectEndpointPort().findAllByDescPart(currentSession, desc);
+                projectEndpointService.getProjectEndpointPort().findAllByDescPart(token, desc);
         if (projectList == null)
             return;
         int index = 1;

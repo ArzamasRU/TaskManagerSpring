@@ -3,7 +3,6 @@ package ru.lavrov.tm.endpoint;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -21,7 +20,6 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="login" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
  *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
  *         &lt;element name="password" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
- *         &lt;element name="role" type="{http://endpoint.tm.lavrov.ru/}role" minOccurs="0"/&gt;
  *         &lt;element name="userId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
@@ -37,7 +35,6 @@ import javax.xml.bind.annotation.XmlType;
     "login",
     "name",
     "password",
-    "role",
     "userId"
 })
 public class User {
@@ -46,8 +43,6 @@ public class User {
     protected String login;
     protected String name;
     protected String password;
-    @XmlSchemaType(name = "string")
-    protected Role role;
     protected String userId;
 
     /**
@@ -144,30 +139,6 @@ public class User {
      */
     public void setPassword(String value) {
         this.password = value;
-    }
-
-    /**
-     * Gets the value of the role property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Role }
-     *     
-     */
-    public Role getRole() {
-        return role;
-    }
-
-    /**
-     * Sets the value of the role property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Role }
-     *     
-     */
-    public void setRole(Role value) {
-        this.role = value;
     }
 
     /**

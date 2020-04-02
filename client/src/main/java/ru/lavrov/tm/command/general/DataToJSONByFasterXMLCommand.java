@@ -34,10 +34,10 @@ public final class DataToJSONByFasterXMLCommand extends AbstractCommand {
     @Override
     public void execute() {
         System.out.println("[Externalization data to JSON By fasterXML]");
-        @Nullable final Session currentSession = bootstrap.getCurrentSession();
+        @Nullable final String token = bootstrap.getToken();
         @NotNull final GeneralCommandEndpointService generalCommandEndpointService =
                 bootstrap.getGeneralCommandEndpointService();
-        if (generalCommandEndpointService.getGeneralCommandEndpointPort().dataToJSONByFasterXML(currentSession))
+        if (generalCommandEndpointService.getGeneralCommandEndpointPort().dataToJSONByFasterXML(token))
             System.out.println("[ok]");
         else
             System.out.println("[error]");

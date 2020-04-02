@@ -38,10 +38,10 @@ public final class TaskFindByDescription extends AbstractCommand {
         System.out.println("[TASK LIST]");
         System.out.println("enter name:");
         @Nullable final String desc = InputUtil.INPUT.nextLine();
-        @Nullable final Session currentSession = bootstrap.getCurrentSession();
+        @Nullable final String token = bootstrap.getToken();
         @NotNull final TaskEndpointService taskEndpointService = bootstrap.getTaskEndpointService();
         @Nullable final Collection<Task> taskList =
-                taskEndpointService.getTaskEndpointPort().findAllTasksByDescPart(currentSession, desc);
+                taskEndpointService.getTaskEndpointPort().findAllTasksByDescPart(token, desc);
         if (taskList == null)
             return;
         int index = 1;

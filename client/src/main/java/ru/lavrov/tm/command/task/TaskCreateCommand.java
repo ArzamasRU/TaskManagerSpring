@@ -41,9 +41,9 @@ public final class TaskCreateCommand extends AbstractCommand {
         @Nullable final String taskName = InputUtil.INPUT.nextLine();
         System.out.println("enter project name:");
         @Nullable final String projectName = InputUtil.INPUT.nextLine();
-        @Nullable final Session currentSession = bootstrap.getCurrentSession();
+        @Nullable final String token = bootstrap.getToken();
         @NotNull final TaskEndpointService taskEndpointService = bootstrap.getTaskEndpointService();
-        if (taskEndpointService.getTaskEndpointPort().createByTaskName(currentSession, taskName, projectName))
+        if (taskEndpointService.getTaskEndpointPort().createByTaskName(token, taskName, projectName))
             System.out.println("[ok]");
         else
             System.out.println("[error]");

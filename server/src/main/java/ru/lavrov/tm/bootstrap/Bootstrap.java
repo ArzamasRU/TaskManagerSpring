@@ -39,7 +39,7 @@ public final class Bootstrap implements IServiceLocator {
     @NotNull
     private final UserEndpoint userEndpoint = new UserEndpoint(this);
     @NotNull
-    private final SessionEndpoint sessionEndpoint = new SessionEndpoint(this);
+    private final TokenEndpoint tokenEndpoint = new TokenEndpoint(this);
     @NotNull
     private final ProjectEndpoint projectEndpoint = new ProjectEndpoint(this);
     @NotNull
@@ -56,7 +56,7 @@ public final class Bootstrap implements IServiceLocator {
 
     private void initEndpoints() {
         Endpoint.publish(UserEndpoint.URL, userEndpoint);
-        Endpoint.publish(SessionEndpoint.URL, sessionEndpoint);
+        Endpoint.publish(TokenEndpoint.URL, tokenEndpoint);
         Endpoint.publish(ProjectEndpoint.URL, projectEndpoint);
         Endpoint.publish(TaskEndpoint.URL, taskEndpoint);
         Endpoint.publish(GeneralCommandEndpoint.URL, generalCommandEndpoint);

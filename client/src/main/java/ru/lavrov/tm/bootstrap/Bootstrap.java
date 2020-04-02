@@ -26,13 +26,13 @@ public final class Bootstrap {
     @NotNull
     private final UserEndpointService userEndpointService = new UserEndpointService();
     @NotNull
-    private final SessionEndpointService sessionEndpointService = new SessionEndpointService();
-    @NotNull
     private final ProjectEndpointService projectEndpointService = new ProjectEndpointService();
     @NotNull
     private final TaskEndpointService taskEndpointService = new TaskEndpointService();
     @NotNull
     private final GeneralCommandEndpointService generalCommandEndpointService = new GeneralCommandEndpointService();
+    @NotNull
+    private final TokenEndpointService tokenEndpointService = new TokenEndpointService();
     @Setter
     @Nullable
     private String token;

@@ -34,10 +34,10 @@ public final class DeserializationCommand extends AbstractCommand {
     @Override
     public void execute() {
         System.out.println("[Deserialize data]");
-        @Nullable final Session currentSession = bootstrap.getCurrentSession();
+        @Nullable final String token = bootstrap.getToken();
         @NotNull final GeneralCommandEndpointService generalCommandEndpointService =
                 bootstrap.getGeneralCommandEndpointService();
-        if (generalCommandEndpointService.getGeneralCommandEndpointPort().deserialize(currentSession))
+        if (generalCommandEndpointService.getGeneralCommandEndpointPort().deserialize(token))
             System.out.println("[ok]");
         else
             System.out.println("[error]");

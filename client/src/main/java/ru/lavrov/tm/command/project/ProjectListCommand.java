@@ -37,10 +37,10 @@ public final class ProjectListCommand extends AbstractCommand {
     @Override
     public void execute() {
         System.out.println("[PROJECT LIST]");
-        @Nullable final Session currentSession = bootstrap.getCurrentSession();
+        @Nullable final String token = bootstrap.getToken();
         @NotNull final ProjectEndpointService projectEndpointService = bootstrap.getProjectEndpointService();
         @Nullable final Collection<Project> projectList =
-                projectEndpointService.getProjectEndpointPort().findAll(currentSession);
+                projectEndpointService.getProjectEndpointPort().findAll(token);
         if (projectList == null)
             return;
         int index = 1;

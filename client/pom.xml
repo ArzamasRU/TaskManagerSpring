@@ -126,7 +126,7 @@
                             <wsdlOptions>
                                 <wsdlOption>
                                     <wsdl>
-                                        http://localhost:8090/SessionEndpoint?wsdl
+                                        http://localhost:8090/TokenEndpoint?wsdl
                                     </wsdl>
                                 </wsdlOption>
                                 <wsdlOption>

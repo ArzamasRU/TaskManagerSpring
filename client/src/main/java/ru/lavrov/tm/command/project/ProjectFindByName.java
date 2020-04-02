@@ -36,12 +36,12 @@ public final class ProjectFindByName extends AbstractCommand {
     @Override
     public void execute() {
         System.out.println("[PROJECT LIST]");
-        @Nullable final Session currentSession = bootstrap.getCurrentSession();
+        @Nullable final String token = bootstrap.getToken();
         @NotNull final ProjectEndpointService projectEndpointService = bootstrap.getProjectEndpointService();
         System.out.println("enter name:");
         @Nullable final String name = InputUtil.INPUT.nextLine();
         @Nullable final Collection<Project> projectList =
-                projectEndpointService.getProjectEndpointPort().findAllByNamePart(currentSession, name);
+                projectEndpointService.getProjectEndpointPort().findAllByNamePart(token, name);
         if (projectList == null)
             return;
         int index = 1;

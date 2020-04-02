@@ -39,9 +39,9 @@ public final class TaskRemoveCommand extends AbstractCommand {
         System.out.println("[task remove]");
         System.out.println("enter name:");
         @Nullable final String taskName = InputUtil.INPUT.nextLine();
-        @Nullable final Session currentSession = bootstrap.getCurrentSession();
+        @Nullable final String token = bootstrap.getToken();
         @NotNull final TaskEndpointService taskEndpointService = bootstrap.getTaskEndpointService();
-        if (taskEndpointService.getTaskEndpointPort().removeTaskByName(currentSession, taskName))
+        if (taskEndpointService.getTaskEndpointPort().removeTaskByName(token, taskName))
             System.out.println("[ok]");
         else
             System.out.println("[error]");

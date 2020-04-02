@@ -32,7 +32,7 @@ public final class UserLogoutCommand extends AbstractCommand {
 
     @Override
     public void execute() {
-        bootstrap.setCurrentSession(null);
+        bootstrap.setToken(null);
         System.out.println("[ok]");
         System.out.println();
     }

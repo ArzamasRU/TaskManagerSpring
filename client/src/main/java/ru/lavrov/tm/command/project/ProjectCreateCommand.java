@@ -37,11 +37,11 @@ public final class ProjectCreateCommand extends AbstractCommand {
     @Override
     public void execute() {
         System.out.println("[Project create]");
-        @Nullable final Session currentSession = bootstrap.getCurrentSession();
+        @Nullable final String token = bootstrap.getToken();
         System.out.println("enter name:");
         @NotNull final String projectName = InputUtil.INPUT.nextLine();
         @NotNull final ProjectEndpointService projectEndpointService = bootstrap.getProjectEndpointService();
-        if (projectEndpointService.getProjectEndpointPort().createByProjectName(currentSession, projectName))
+        if (projectEndpointService.getProjectEndpointPort().createByProjectName(token, projectName))
             System.out.println("[ok]");
         else
             System.out.println("[error]");
