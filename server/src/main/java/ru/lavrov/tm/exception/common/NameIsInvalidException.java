@@ -1,4 +1,4 @@
-package ru.lavrov.tm.exception.general;
+package ru.lavrov.tm.exception.common;
 
 public final class NameIsInvalidException extends RuntimeException {
     private static final String message = "name is empty or null!";

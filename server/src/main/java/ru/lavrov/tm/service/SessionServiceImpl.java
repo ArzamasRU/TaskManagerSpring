@@ -6,10 +6,12 @@ import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.ISessionService;
 import ru.lavrov.tm.api.IUserRepository;
 import ru.lavrov.tm.bootstrap.Bootstrap;
-import ru.lavrov.tm.constant.SignConstant;
 import ru.lavrov.tm.entity.Session;
 import ru.lavrov.tm.entity.User;
 import ru.lavrov.tm.enumerate.Role;
+import ru.lavrov.tm.exception.security.SessionIsInvalidException;
+import ru.lavrov.tm.exception.security.SessionSignIsInvalidException;
+import ru.lavrov.tm.exception.security.SessionTimeIsOverException;
 import ru.lavrov.tm.exception.user.*;
 
 import java.nio.channels.ConnectionPendingException;
@@ -39,6 +41,20 @@ public final class SessionServiceImpl extends AbstractService implements ISessio
         if (currentSign == null || currentSign.isEmpty())
             return false;
         return currentSign.equals(session.getSign());
+    }
+
+    public void validate(@Nullable final Session session){
+        if (session == null)
+            throw new SessionIsInvalidException();
+        if (System.currentTimeMillis() - session.getTimeStamp() > 60000) {
+            throw new SessionTimeIsOverException();
+        }
+        @Nullable final String currentSign = getSign(session, appProperties.getProperty("salt"),
+                Integer.parseInt(appProperties.getProperty("cycle")));
+        if (currentSign == null || currentSign.isEmpty())
+            throw new SessionSignIsInvalidException();
+        if (currentSign.equals(session.getSign()))
+            throw new SessionSignIsInvalidException();
     }
 
     @NotNull

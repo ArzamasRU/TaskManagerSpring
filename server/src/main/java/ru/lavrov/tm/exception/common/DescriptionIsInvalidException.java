@@ -1,4 +1,4 @@
-package ru.lavrov.tm.exception.general;
+package ru.lavrov.tm.exception.common;
 
 public final class DescriptionIsInvalidException extends RuntimeException {
     private static final String message = "description is empty or null!";

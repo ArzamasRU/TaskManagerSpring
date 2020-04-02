@@ -10,9 +10,7 @@ import java.util.Collection;
 
 public interface ITokenService {
 
-    boolean isTokenValid(@NotNull Token token);
-
     String login(@NotNull String login, @NotNull String password);
 
-    boolean hasPermission(@Nullable Token token, @Nullable Collection<Role> listRoles);
+    void validate(@Nullable final String token);
 }

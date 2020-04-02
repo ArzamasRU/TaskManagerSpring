@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.*;
-import ru.lavrov.tm.constant.SerializationConstant;
 import ru.lavrov.tm.entity.*;
 import ru.lavrov.tm.util.JAXBUtil;
 import ru.lavrov.tm.util.SerializationUtil;
@@ -18,7 +17,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static ru.lavrov.tm.constant.SerializationConstant.*;
 import static ru.lavrov.tm.service.PropertyServiceImpl.appProperties;
 import static ru.lavrov.tm.util.JAXBUtil.readFromJSONByJAXB;
 import static ru.lavrov.tm.util.JAXBUtil.writeToJSONByJAXB;
@@ -312,12 +310,12 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
         @NotNull final ITaskService taskService = bootstrap.getTaskService();
         @NotNull final IUserService userService = bootstrap.getUserService();
         try {
-            projectList = Arrays.asList(objectMapper
-                    .readValue(new File(PROJECTS_FILE_PATH + ".json"), Project[].class));
-            taskList = Arrays.asList(objectMapper
-                    .readValue(new File(TASKS_FILE_PATH + ".json"), Task[].class));
-            userList = Arrays.asList(objectMapper
-                    .readValue(new File(USERS_FILE_PATH + ".json"), User[].class));
+            projectList = Arrays.asList(objectMapper.readValue(
+                    new File(appProperties.getProperty("projects_file_path") + ".json"), Project[].class));
+            taskList = Arrays.asList(objectMapper.readValue(
+                    new File(appProperties.getProperty("tasks_file_path") + ".json"), Task[].class));
+            userList = Arrays.asList(objectMapper.readValue(
+                    new File(appProperties.getProperty("users_file_path") + ".json"), User[].class));
         } catch (IOException e) {
             return false;
         }
