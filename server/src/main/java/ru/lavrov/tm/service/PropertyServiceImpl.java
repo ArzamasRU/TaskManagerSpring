@@ -10,10 +10,11 @@ import java.io.IOException;
 import java.util.Properties;
 
 public final class PropertyServiceImpl implements IPropertyService {
+
     @NotNull
     public static Properties appProperties = new Properties();
 
-    public void PropertyServiceImpl(){
+    public PropertyServiceImpl(){
         try {
             @Nullable final FileInputStream fis =
                     new FileInputStream("server/src/main/resources/application.properties");

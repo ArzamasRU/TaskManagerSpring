@@ -59,6 +59,15 @@ public final class User implements IEntity {
         setLogin(login);
     }
 
+    @JsonIgnore
+    public void setRole(@Nullable final String role) {
+        @Nullable final Role curRole = Role.getByRole(role);
+        if (curRole != null)
+            this.role = curRole;
+        else
+            this.role = Role.valueOf(role);
+    }
+
     @Nullable
     @Override
     public String toString() {

@@ -34,15 +34,8 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
             throw new UserPasswordIsInvalidException();
         if (role == null || role.isEmpty())
             throw new UserRoleIsInvalidException();
-        @Nullable Role currentRole = null;
-        boolean roleExists = false;
-        for (Role curRole : Role.values())
-            if (role.equals(curRole.getRole())) {
-                currentRole = curRole;
-                roleExists = true;
-                break;
-            }
-        if (!roleExists)
+        @Nullable Role currentRole = Role.getByRole(role);
+        if (currentRole == null)
             throw new UserRoleIsInvalidException();
         @Nullable final Connection connection = getConnection();
         if (connection == null)

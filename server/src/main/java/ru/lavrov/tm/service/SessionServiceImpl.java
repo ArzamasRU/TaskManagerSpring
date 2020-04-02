@@ -53,6 +53,7 @@ public final class SessionServiceImpl extends AbstractService implements ISessio
         @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
         @NotNull final IUserRepository userRepository = sqlSession.getMapper(IUserRepository.class);
         @Nullable final User user = userRepository.findUserByLogin(login);
+        System.out.println(user.getRole());
         if (user == null)
             throw new UserLoginNotExistsException();
         if (!password.equals(user.getPassword()))
