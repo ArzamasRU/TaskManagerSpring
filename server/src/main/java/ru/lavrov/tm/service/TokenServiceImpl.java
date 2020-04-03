@@ -40,7 +40,7 @@ public final class TokenServiceImpl extends AbstractService implements ITokenSer
         sessionService.validate(curToken.getSession(), roles);
         @NotNull final String currSign = getSign(curToken,  appProperties.getProperty("salt"),
                 appProperties.getIntProperty("cycle"));
-        if (!currSign.equals(curToken.getSignature()))
+        if (!currSign.equals(curToken.getSign()))
             throw new TokenSignIsInvalidException();
     }
 
@@ -55,7 +55,7 @@ public final class TokenServiceImpl extends AbstractService implements ITokenSer
         @NotNull final Session session = sessionService.login(login, password);
         @NotNull final Token token = new Token();
         token.setSession(session);
-        token.setSignature(SignUtil.getSign(token, appProperties.getProperty("salt"),
+        token.setSign(SignUtil.getSign(token, appProperties.getProperty("salt"),
                 appProperties.getIntProperty("cycle")));
         @NotNull final ObjectMapper objectMapper = new ObjectMapper();
         @NotNull final String jsonToken;

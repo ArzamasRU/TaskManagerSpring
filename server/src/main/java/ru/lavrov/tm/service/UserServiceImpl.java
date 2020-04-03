@@ -18,13 +18,6 @@ import java.util.Collection;
 
 public final class UserServiceImpl extends AbstractService implements IUserService {
 
-    @NotNull
-    private final Bootstrap bootstrap;
-
-    public UserServiceImpl(@NotNull final Bootstrap bootstrap) {
-        this.bootstrap = bootstrap;
-    }
-
     public boolean createByLogin(
             @Nullable final String login, @Nullable final String password, @Nullable final String role
     ) {
@@ -40,7 +33,7 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
-        @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final SqlSession sqlSession = Bootstrap.getSqlSessionFactory().openSession();
         @NotNull final IUserRepository userRepository = sqlSession.getMapper(IUserRepository.class);
         @Nullable final User user = userRepository.findUserByLogin(login);
         if (user != null)
@@ -66,7 +59,7 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
-        @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final SqlSession sqlSession = Bootstrap.getSqlSessionFactory().openSession();
         @NotNull final IUserRepository userRepository = sqlSession.getMapper(IUserRepository.class);
         try {
             userRepository.updatePassword(userId, newPassword);
@@ -86,7 +79,7 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
-        @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final SqlSession sqlSession = Bootstrap.getSqlSessionFactory().openSession();
         @NotNull final IUserRepository userRepository = sqlSession.getMapper(IUserRepository.class);
         @Nullable final User user = userRepository.findUserByLogin(newLogin);
         if (user != null)
@@ -109,7 +102,7 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
-        @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final SqlSession sqlSession = Bootstrap.getSqlSessionFactory().openSession();
         @NotNull final IUserRepository userRepository = sqlSession.getMapper(IUserRepository.class);
         return userRepository.findOne(userId);
     }
@@ -122,7 +115,7 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
-        @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final SqlSession sqlSession = Bootstrap.getSqlSessionFactory().openSession();
         @NotNull final IUserRepository userRepository = sqlSession.getMapper(IUserRepository.class);
         return userRepository.findUserByLogin(login);
     }
@@ -134,7 +127,7 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
-        @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final SqlSession sqlSession = Bootstrap.getSqlSessionFactory().openSession();
         @NotNull final IUserRepository userRepository = sqlSession.getMapper(IUserRepository.class);
         userRepository.removeUser(userId);
     }
@@ -146,7 +139,7 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
-        @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final SqlSession sqlSession = Bootstrap.getSqlSessionFactory().openSession();
         @NotNull final IUserRepository userRepository = sqlSession.getMapper(IUserRepository.class);
         try {
             userRepository.persist(entity);
@@ -165,7 +158,7 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
-        @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final SqlSession sqlSession = Bootstrap.getSqlSessionFactory().openSession();
         @NotNull final IUserRepository userRepository = sqlSession.getMapper(IUserRepository.class);
         try {
             userRepository.persist(entity);
@@ -185,7 +178,7 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
-        @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final SqlSession sqlSession = Bootstrap.getSqlSessionFactory().openSession();
         @NotNull final IUserRepository userRepository = sqlSession.getMapper(IUserRepository.class);
         return userRepository.findAll(userId);
     }

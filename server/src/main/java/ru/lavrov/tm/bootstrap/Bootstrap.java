@@ -25,13 +25,13 @@ import static ru.lavrov.tm.service.AppPropertyServiceImpl.appProperties;
 @NoArgsConstructor
 public final class Bootstrap implements IServiceLocator {
     @NotNull
-    private final IProjectService projectService = new ProjectServiceImpl(this);
+    private final IProjectService projectService = new ProjectServiceImpl();
     @NotNull
-    private final ITaskService taskService = new TaskServiceImpl(this);
+    private final ITaskService taskService = new TaskServiceImpl();
     @NotNull
-    private final IUserService userService = new UserServiceImpl(this);
+    private final IUserService userService = new UserServiceImpl();
     @NotNull
-    private final ISessionService sessionService = new SessionServiceImpl(this);
+    private final ISessionService sessionService = new SessionServiceImpl();
     @NotNull
     private final ITokenService tokenService = new TokenServiceImpl(this);
     @NotNull
@@ -73,7 +73,7 @@ public final class Bootstrap implements IServiceLocator {
         System.setProperty("javax.xml.bind.context.factory", "org.eclipse.persistence.jaxb.JAXBContextFactory");
     }
 
-    public SqlSessionFactory getSqlSessionFactory() {
+    public static SqlSessionFactory getSqlSessionFactory() {
         @Nullable final String user = appProperties.getProperty("login");
         @Nullable final String password = appProperties.getProperty("password");
         @Nullable final String url = appProperties.getProperty("url");

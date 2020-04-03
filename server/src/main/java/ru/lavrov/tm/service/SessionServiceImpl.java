@@ -23,13 +23,6 @@ import static ru.lavrov.tm.util.SignUtil.getSign;
 
 public final class SessionServiceImpl extends AbstractService implements ISessionService {
 
-    @NotNull
-    private final Bootstrap bootstrap;
-
-    public SessionServiceImpl(@NotNull final Bootstrap bootstrap) {
-        this.bootstrap = bootstrap;
-    }
-
     public void validate(@Nullable final Session session, @Nullable final Collection<Role> roles){
         if (session == null)
             throw new SessionIsInvalidException();
@@ -55,7 +48,7 @@ public final class SessionServiceImpl extends AbstractService implements ISessio
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
-        @NotNull final SqlSession sqlSession = bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final SqlSession sqlSession = Bootstrap.getSqlSessionFactory().openSession();
         @NotNull final IUserRepository userRepository = sqlSession.getMapper(IUserRepository.class);
         @Nullable final User user = userRepository.findUserByLogin(login);
         if (user == null)

@@ -21,5 +21,5 @@ public final class Token {
     private Session session;
 
     @Nullable
-    private String signature;
+    private String sign;
 }
