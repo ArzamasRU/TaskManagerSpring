@@ -4,10 +4,7 @@ import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.IServiceLocator;
-import ru.lavrov.tm.api.ISessionService;
 import ru.lavrov.tm.api.ITokenService;
-import ru.lavrov.tm.entity.Session;
-import ru.lavrov.tm.entity.Token;
 
 import javax.jws.WebService;
 

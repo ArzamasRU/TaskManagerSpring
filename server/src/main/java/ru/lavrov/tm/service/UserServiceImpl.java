@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.IUserRepository;
 import ru.lavrov.tm.api.IUserService;
 import ru.lavrov.tm.bootstrap.Bootstrap;
-import ru.lavrov.tm.entity.User;
+import ru.lavrov.tm.dto.User;
 import ru.lavrov.tm.enumerate.Role;
 import ru.lavrov.tm.exception.project.ProjectNotExistsException;
 import ru.lavrov.tm.exception.user.*;

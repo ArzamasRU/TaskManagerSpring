@@ -3,11 +3,9 @@ package ru.lavrov.tm.api;
 import org.apache.ibatis.annotations.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.entity.Project;
-import ru.lavrov.tm.entity.Task;
+import ru.lavrov.tm.dto.Task;
 
 import java.util.Collection;
-import java.util.Comparator;
 
 public interface ITaskRepository {
     @Delete("DELETE FROM app_task WHERE user_id = #{userId} AND name = #{name}")

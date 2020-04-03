@@ -1,4 +1,4 @@
-package ru.lavrov.tm.entity;
+package ru.lavrov.tm.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;

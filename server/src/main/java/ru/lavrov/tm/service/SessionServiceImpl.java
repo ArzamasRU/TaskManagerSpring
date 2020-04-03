@@ -6,8 +6,8 @@ import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.ISessionService;
 import ru.lavrov.tm.api.IUserRepository;
 import ru.lavrov.tm.bootstrap.Bootstrap;
-import ru.lavrov.tm.entity.Session;
-import ru.lavrov.tm.entity.User;
+import ru.lavrov.tm.dto.Session;
+import ru.lavrov.tm.dto.User;
 import ru.lavrov.tm.enumerate.Role;
 import ru.lavrov.tm.exception.security.SessionIsInvalidException;
 import ru.lavrov.tm.exception.security.SessionSignIsInvalidException;
@@ -18,7 +18,7 @@ import java.nio.channels.ConnectionPendingException;
 import java.sql.Connection;
 import java.util.Collection;
 
-import static ru.lavrov.tm.service.PropertyServiceImpl.appProperties;
+import static ru.lavrov.tm.service.AppPropertyServiceImpl.appProperties;
 import static ru.lavrov.tm.util.SignUtil.getSign;
 
 public final class SessionServiceImpl extends AbstractService implements ISessionService {
@@ -38,7 +38,7 @@ public final class SessionServiceImpl extends AbstractService implements ISessio
         }
         validatePermission(session, roles);
         @Nullable final String currentSign = getSign(session, appProperties.getProperty("salt"),
-                Integer.parseInt(appProperties.getProperty("cycle")));
+                appProperties.getIntProperty("cycle"));
         if (currentSign == null || currentSign.isEmpty())
             throw new SessionSignIsInvalidException();
         if (currentSign.equals(session.getSign()))
@@ -65,7 +65,7 @@ public final class SessionServiceImpl extends AbstractService implements ISessio
         @NotNull final Session session =
                 new Session(user.getId(), user.getRole(), System.currentTimeMillis());
         session.setSign(getSign(session, appProperties.getProperty("salt"),
-                Integer.parseInt(appProperties.getProperty("cycle"))));
+                appProperties.getIntProperty("cycle")));
         return session;
     }
 

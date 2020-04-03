@@ -4,14 +4,13 @@ import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.IServiceLocator;
-import ru.lavrov.tm.api.ISessionService;
 import ru.lavrov.tm.api.ITaskService;
 import ru.lavrov.tm.api.ITokenService;
 import ru.lavrov.tm.comparator.FinishDateComparator;
 import ru.lavrov.tm.comparator.StartDateComparator;
 import ru.lavrov.tm.comparator.StatusComparator;
-import ru.lavrov.tm.entity.Session;
-import ru.lavrov.tm.entity.Task;
+import ru.lavrov.tm.dto.Session;
+import ru.lavrov.tm.dto.Task;
 import ru.lavrov.tm.enumerate.Role;
 
 import javax.jws.WebMethod;

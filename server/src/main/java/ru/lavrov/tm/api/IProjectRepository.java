@@ -3,10 +3,9 @@ package ru.lavrov.tm.api;
 import org.apache.ibatis.annotations.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.entity.Project;
+import ru.lavrov.tm.dto.Project;
 
 import java.util.Collection;
-import java.util.Comparator;
 
 public interface IProjectRepository {
     @Update("UPDATE app_project SET name = #{newName} WHERE name = #{oldName} AND user_id = #{userId}")

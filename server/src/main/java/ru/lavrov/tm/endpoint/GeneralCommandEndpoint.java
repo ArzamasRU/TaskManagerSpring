@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.*;
-import ru.lavrov.tm.entity.*;
+import ru.lavrov.tm.dto.*;
 import ru.lavrov.tm.enumerate.Role;
 import ru.lavrov.tm.util.JAXBUtil;
 import ru.lavrov.tm.util.SerializationUtil;
@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static ru.lavrov.tm.service.PropertyServiceImpl.appProperties;
+import static ru.lavrov.tm.service.AppPropertyServiceImpl.appProperties;
 import static ru.lavrov.tm.util.JAXBUtil.readFromJSONByJAXB;
 import static ru.lavrov.tm.util.JAXBUtil.writeToJSONByJAXB;
 

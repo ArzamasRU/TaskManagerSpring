@@ -1,8 +1,7 @@
 package ru.lavrov.tm.api;
 
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.entity.Project;
-import ru.lavrov.tm.entity.User;
+import ru.lavrov.tm.dto.User;
 
 import java.util.Collection;
 

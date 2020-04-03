@@ -6,7 +6,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import static ru.lavrov.tm.service.PropertyServiceImpl.appProperties;
+import static ru.lavrov.tm.service.AppPropertyServiceImpl.appProperties;
 
 public final class ConnectionUtil {
 

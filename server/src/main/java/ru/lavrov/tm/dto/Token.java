@@ -1,10 +1,11 @@
-package ru.lavrov.tm.entity;
+package ru.lavrov.tm.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.lavrov.tm.dto.Session;
 
 import java.util.UUID;
 

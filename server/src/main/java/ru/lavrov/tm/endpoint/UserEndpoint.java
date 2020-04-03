@@ -4,12 +4,11 @@ import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.*;
-import ru.lavrov.tm.entity.Project;
-import ru.lavrov.tm.entity.Session;
-import ru.lavrov.tm.entity.Task;
-import ru.lavrov.tm.entity.User;
+import ru.lavrov.tm.dto.Project;
+import ru.lavrov.tm.dto.Session;
+import ru.lavrov.tm.dto.Task;
+import ru.lavrov.tm.dto.User;
 import ru.lavrov.tm.enumerate.Role;
-import ru.lavrov.tm.exception.user.UserDoNotHavePermissionException;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;

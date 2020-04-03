@@ -2,8 +2,7 @@ package ru.lavrov.tm.api;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.entity.Project;
-import ru.lavrov.tm.entity.Task;
+import ru.lavrov.tm.dto.Task;
 
 import java.util.Collection;
 import java.util.Comparator;

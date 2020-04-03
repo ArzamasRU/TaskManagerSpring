@@ -7,8 +7,8 @@ import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.ISessionService;
 import ru.lavrov.tm.api.ITokenService;
 import ru.lavrov.tm.bootstrap.Bootstrap;
-import ru.lavrov.tm.entity.Session;
-import ru.lavrov.tm.entity.Token;
+import ru.lavrov.tm.dto.Session;
+import ru.lavrov.tm.dto.Token;
 import ru.lavrov.tm.enumerate.Role;
 import ru.lavrov.tm.exception.security.TokenIsInvalidException;
 import ru.lavrov.tm.exception.security.TokenSignIsInvalidException;
@@ -21,7 +21,7 @@ import javax.json.JsonException;
 import java.io.IOException;
 import java.util.Collection;
 
-import static ru.lavrov.tm.service.PropertyServiceImpl.appProperties;
+import static ru.lavrov.tm.service.AppPropertyServiceImpl.appProperties;
 import static ru.lavrov.tm.util.SignUtil.getSign;
 
 public final class TokenServiceImpl extends AbstractService implements ITokenService {
@@ -39,7 +39,7 @@ public final class TokenServiceImpl extends AbstractService implements ITokenSer
         @NotNull final ISessionService sessionService = bootstrap.getSessionService();
         sessionService.validate(curToken.getSession(), roles);
         @NotNull final String currSign = getSign(curToken,  appProperties.getProperty("salt"),
-                Integer.parseInt(appProperties.getProperty("cycle")));
+                appProperties.getIntProperty("cycle"));
         if (!currSign.equals(curToken.getSignature()))
             throw new TokenSignIsInvalidException();
     }
@@ -56,7 +56,7 @@ public final class TokenServiceImpl extends AbstractService implements ITokenSer
         @NotNull final Token token = new Token();
         token.setSession(session);
         token.setSignature(SignUtil.getSign(token, appProperties.getProperty("salt"),
-                Integer.parseInt(appProperties.getProperty("cycle"))));
+                appProperties.getIntProperty("cycle")));
         @NotNull final ObjectMapper objectMapper = new ObjectMapper();
         @NotNull final String jsonToken;
         try {

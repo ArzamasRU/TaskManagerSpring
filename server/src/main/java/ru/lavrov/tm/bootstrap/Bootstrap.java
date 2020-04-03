@@ -19,7 +19,7 @@ import ru.lavrov.tm.service.*;
 import javax.sql.DataSource;
 import javax.xml.ws.Endpoint;
 
-import static ru.lavrov.tm.service.PropertyServiceImpl.appProperties;
+import static ru.lavrov.tm.service.AppPropertyServiceImpl.appProperties;
 
 @Getter
 @NoArgsConstructor
@@ -35,7 +35,7 @@ public final class Bootstrap implements IServiceLocator {
     @NotNull
     private final ITokenService tokenService = new TokenServiceImpl(this);
     @NotNull
-    private final IPropertyService propertyService = new PropertyServiceImpl();
+    private final IAppPropertyService propertyService = new AppPropertyServiceImpl();
     @NotNull
     private final UserEndpoint userEndpoint = new UserEndpoint(this);
     @NotNull
