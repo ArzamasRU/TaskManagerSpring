@@ -40,9 +40,14 @@ public final class TaskEndpoint extends AbstractEndpoint{
             return false;
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
-        @Nullable final Session session = tokenService.getToken(token).getSession();
+        @Nullable final Session session = tokenService.decryptToken(token).getSession();
         @NotNull final ITaskService taskService = bootstrap.getTaskService();
-        taskService.createByTaskName(session.getUserId(), taskName, projectName);
+        try {
+            taskService.createByTaskName(session.getUserId(), taskName, projectName);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return false;
+        }
         return true;
     }
 
@@ -53,9 +58,14 @@ public final class TaskEndpoint extends AbstractEndpoint{
             return false;
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
-        @Nullable final Session session = tokenService.getToken(token).getSession();
+        @Nullable final Session session = tokenService.decryptToken(token).getSession();
         @NotNull final ITaskService taskService = bootstrap.getTaskService();
-        taskService.removeTaskByName(session.getUserId(), taskName);
+        try {
+            taskService.removeTaskByName(session.getUserId(), taskName);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return false;
+        }
         return true;
     }
 
@@ -72,9 +82,14 @@ public final class TaskEndpoint extends AbstractEndpoint{
             return false;
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
-        @Nullable final Session session = tokenService.getToken(token).getSession();
+        @Nullable final Session session = tokenService.decryptToken(token).getSession();
         @NotNull final ITaskService taskService = bootstrap.getTaskService();
-        taskService.renameTask(session.getUserId(), projectName, oldName, newName);
+        try {
+            taskService.renameTask(session.getUserId(), projectName, oldName, newName);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return false;
+        }
         return true;
     }
 
@@ -86,7 +101,7 @@ public final class TaskEndpoint extends AbstractEndpoint{
             return null;
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
-        @Nullable final Session session = tokenService.getToken(token).getSession();
+        @Nullable final Session session = tokenService.decryptToken(token).getSession();
         @NotNull final ITaskService taskService = bootstrap.getTaskService();
         return taskService.findAllByNamePart(session.getUserId(), name);
     }
@@ -99,7 +114,7 @@ public final class TaskEndpoint extends AbstractEndpoint{
             return null;
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
-        @Nullable final Session session = tokenService.getToken(token).getSession();
+        @Nullable final Session session = tokenService.decryptToken(token).getSession();
         @NotNull final ITaskService taskService = bootstrap.getTaskService();
         return taskService.findAllByDescPart(session.getUserId(), description);
     }
@@ -110,7 +125,7 @@ public final class TaskEndpoint extends AbstractEndpoint{
         @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
-        @Nullable final Session session = tokenService.getToken(token).getSession();
+        @Nullable final Session session = tokenService.decryptToken(token).getSession();
         @NotNull final ITaskService taskService = bootstrap.getTaskService();
         return taskService.findAll(session.getUserId());
     }
@@ -121,7 +136,7 @@ public final class TaskEndpoint extends AbstractEndpoint{
         @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
-        @Nullable final Session session = tokenService.getToken(token).getSession();
+        @Nullable final Session session = tokenService.decryptToken(token).getSession();
         @NotNull final ITaskService taskService = bootstrap.getTaskService();
         @NotNull final Comparator comparator = new StatusComparator();
         return taskService.findAll(session.getUserId(), comparator);
@@ -133,7 +148,7 @@ public final class TaskEndpoint extends AbstractEndpoint{
         @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
-        @Nullable final Session session = tokenService.getToken(token).getSession();
+        @Nullable final Session session = tokenService.decryptToken(token).getSession();
         @NotNull final ITaskService taskService = bootstrap.getTaskService();
         @NotNull final Comparator comparator = new StartDateComparator();
         return taskService.findAll(session.getUserId(), comparator);
@@ -145,7 +160,7 @@ public final class TaskEndpoint extends AbstractEndpoint{
         @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
-        @Nullable final Session session = tokenService.getToken(token).getSession();
+        @Nullable final Session session = tokenService.decryptToken(token).getSession();
         @NotNull final ITaskService taskService = bootstrap.getTaskService();
         @NotNull final Comparator comparator = new FinishDateComparator();
         return taskService.findAll(session.getUserId(), comparator);
@@ -156,9 +171,14 @@ public final class TaskEndpoint extends AbstractEndpoint{
         @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
-        @Nullable final Session session = tokenService.getToken(token).getSession();
+        @Nullable final Session session = tokenService.decryptToken(token).getSession();
         @NotNull final ITaskService taskService = bootstrap.getTaskService();
-        taskService.removeAll(session.getUserId());
+        try {
+            taskService.removeAll(session.getUserId());
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return false;
+        }
         return true;
     }
 
@@ -170,8 +190,13 @@ public final class TaskEndpoint extends AbstractEndpoint{
         if (entityId == null || entityId.isEmpty())
             return false;
         @NotNull final ITaskService taskService = bootstrap.getTaskService();
-        @Nullable final Session session = tokenService.getToken(token).getSession();
-        taskService.removeTask(session.getUserId(), entityId);
+        @Nullable final Session session = tokenService.decryptToken(token).getSession();
+        try {
+            taskService.removeTask(session.getUserId(), entityId);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return false;
+        }
         return true;
     }
 }

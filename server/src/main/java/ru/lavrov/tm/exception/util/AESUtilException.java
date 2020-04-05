@@ -1,7 +1,7 @@
 package ru.lavrov.tm.exception.util;
 
 public final class AESUtilException extends RuntimeException {
-    private static final String message = "AES encryption error!";
+    private static final String message = "AES algorithm error!";
 
     public AESUtilException() {
         super(message);

@@ -6,7 +6,7 @@ import ru.lavrov.tm.dto.User;
 import java.util.Collection;
 
 public interface IUserService extends IService {
-    boolean createByLogin(@Nullable String login, @Nullable String password, @Nullable String role);
+    void createByLogin(@Nullable String login, @Nullable String password, @Nullable String role);
 
     void updatePassword(@Nullable String userId, @Nullable String newPassword);
 

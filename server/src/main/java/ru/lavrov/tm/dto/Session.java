@@ -21,7 +21,6 @@ public final class Session {
     @Nullable
     private Role role;
     private long timeStamp;
-    @JsonIgnore
     @Nullable
     private String sign;
 

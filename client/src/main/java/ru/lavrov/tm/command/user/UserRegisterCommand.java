@@ -7,6 +7,8 @@ import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.endpoint.UserEndpointService;
 import ru.lavrov.tm.util.InputUtil;
 
+import static ru.lavrov.tm.util.HashUtil.md5Hard;
+
 @NoArgsConstructor
 public final class UserRegisterCommand extends AbstractCommand {
     private static final boolean SAFE = true;
@@ -34,10 +36,11 @@ public final class UserRegisterCommand extends AbstractCommand {
         @Nullable final String login = InputUtil.INPUT.nextLine();
         System.out.println("enter password:");
         @Nullable final String password = InputUtil.INPUT.nextLine();
+        @Nullable final String hashedPassword = md5Hard(password);
         System.out.println("enter your role ('admin', 'user'):");
         @Nullable final String role = InputUtil.INPUT.nextLine();
         @NotNull final UserEndpointService userEndpointService = bootstrap.getUserEndpointService();
-        if (userEndpointService.getUserEndpointPort().registerUser(bootstrap.getCurrentToken(), login, password, role))
+        if (userEndpointService.getUserEndpointPort().registerUser(login, hashedPassword, role))
             System.out.println("[You successfully registered]");
         else
             System.out.println("[error]");

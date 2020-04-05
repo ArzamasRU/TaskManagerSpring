@@ -37,7 +37,7 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
         @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
-        @Nullable final Session session = tokenService.getToken(token).getSession();
+        @Nullable final Session session = tokenService.decryptToken(token).getSession();
         @NotNull final IUserService userService = bootstrap.getUserService();
         @NotNull final User user = userService.findOne(session.getUserId());
         SerializationUtil.write(Arrays.asList(user), appProperties.getProperty("users_file_path"));
@@ -87,7 +87,7 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
         @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
-        @Nullable final Session session = tokenService.getToken(token).getSession();
+        @Nullable final Session session = tokenService.decryptToken(token).getSession();
         @NotNull final IUserService userService = bootstrap.getUserService();
         @Nullable final User user = userService.findOne(session.getUserId());
         if (user == null)
@@ -112,7 +112,7 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
         @NotNull final XmlMapper mapper = new XmlMapper();
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
-        @Nullable final Session session = tokenService.getToken(token).getSession();
+        @Nullable final Session session = tokenService.decryptToken(token).getSession();
         @NotNull final IUserService userService = bootstrap.getUserService();
         @Nullable final User user = userService.findOne(session.getUserId());
         if (user == null)
@@ -143,7 +143,7 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
         @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
-        @Nullable final Session session = tokenService.getToken(token).getSession();
+        @Nullable final Session session = tokenService.decryptToken(token).getSession();
         @NotNull final IUserService userService = bootstrap.getUserService();
         @Nullable final User user = userService.findOne(session.getUserId());
         if (user == null)
@@ -173,7 +173,7 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
         @NotNull final ObjectMapper objectMapper = new ObjectMapper();
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
-        @Nullable final Session session = tokenService.getToken(token).getSession();
+        @Nullable final Session session = tokenService.decryptToken(token).getSession();
         @NotNull final IUserService userService = bootstrap.getUserService();
         @Nullable final User user = userService.findOne(session.getUserId());
         if (user == null)

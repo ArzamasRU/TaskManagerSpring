@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.endpoint.GeneralCommandEndpointService;
 
-public final class DataFromXMLByJAXBСommand extends AbstractCommand {
+public final class DataFromXMLByJAXBCommand extends AbstractCommand {
     final boolean SAFE = false;
     @NotNull
     private static final String COMMAND = "from-XML-by-JAXB";

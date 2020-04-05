@@ -1,5 +1,6 @@
 package ru.lavrov.tm.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,10 +17,8 @@ public final class Token {
 
     @NotNull
     protected String id = UUID.randomUUID().toString();
-
     @Nullable
     private Session session;
-
     @Nullable
     private String sign;
 }

@@ -38,8 +38,13 @@ public final class ProjectEndpoint extends AbstractEndpoint{
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
-        @Nullable final Session session = tokenService.getToken(token).getSession();
-        projectService.createByProjectName(session.getUserId(), projectName);
+        @Nullable final Session session = tokenService.decryptToken(token).getSession();
+        try {
+            projectService.createByProjectName(session.getUserId(), projectName);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return false;
+        }
         return true;
     }
 
@@ -51,8 +56,13 @@ public final class ProjectEndpoint extends AbstractEndpoint{
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
-        @Nullable final Session session = tokenService.getToken(token).getSession();
-        projectService.removeProjectByName(session.getUserId(), projectName);
+        @Nullable final Session session = tokenService.decryptToken(token).getSession();
+        try {
+            projectService.removeProjectByName(session.getUserId(), projectName);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return false;
+        }
         return true;
     }
 
@@ -64,7 +74,7 @@ public final class ProjectEndpoint extends AbstractEndpoint{
         tokenService.validate(token, roles);
         if (projectName == null || projectName.isEmpty())
             return null;
-        @Nullable final Session session = tokenService.getToken(token).getSession();
+        @Nullable final Session session = tokenService.decryptToken(token).getSession();
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
         return projectService.getProjectTasks(session.getUserId(), projectName);
     }
@@ -79,8 +89,13 @@ public final class ProjectEndpoint extends AbstractEndpoint{
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
-        @Nullable final Session session = tokenService.getToken(token).getSession();
-        projectService.renameProject(session.getUserId(), oldName, newName);
+        @Nullable final Session session = tokenService.decryptToken(token).getSession();
+        try {
+            projectService.renameProject(session.getUserId(), oldName, newName);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return false;
+        }
         return true;
     }
 
@@ -92,7 +107,7 @@ public final class ProjectEndpoint extends AbstractEndpoint{
             return null;
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
-        @Nullable final Session session = tokenService.getToken(token).getSession();
+        @Nullable final Session session = tokenService.decryptToken(token).getSession();
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
         return projectService.findAllByNamePart(session.getUserId(), name);
     }
@@ -105,7 +120,7 @@ public final class ProjectEndpoint extends AbstractEndpoint{
             return null;
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
-        @Nullable final Session session = tokenService.getToken(token).getSession();
+        @Nullable final Session session = tokenService.decryptToken(token).getSession();
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
         return projectService.findAllByDescPart(session.getUserId(), description);
     }
@@ -116,7 +131,7 @@ public final class ProjectEndpoint extends AbstractEndpoint{
         @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
-        @Nullable final Session session = tokenService.getToken(token).getSession();
+        @Nullable final Session session = tokenService.decryptToken(token).getSession();
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
         return projectService.findAll(session.getUserId());
     }
@@ -127,7 +142,7 @@ public final class ProjectEndpoint extends AbstractEndpoint{
         @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
-        @Nullable final Session session = tokenService.getToken(token).getSession();
+        @Nullable final Session session = tokenService.decryptToken(token).getSession();
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
         @NotNull final Comparator comparator = new StatusComparator();
         return projectService.findAll(session.getUserId(), comparator);
@@ -139,7 +154,7 @@ public final class ProjectEndpoint extends AbstractEndpoint{
         @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
-        @Nullable final Session session = tokenService.getToken(token).getSession();
+        @Nullable final Session session = tokenService.decryptToken(token).getSession();
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
         @NotNull final Comparator comparator = new FinishDateComparator();
         return projectService.findAll(session.getUserId(), comparator);
@@ -151,7 +166,7 @@ public final class ProjectEndpoint extends AbstractEndpoint{
         @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
-        @Nullable final Session session = tokenService.getToken(token).getSession();
+        @Nullable final Session session = tokenService.decryptToken(token).getSession();
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
         @NotNull final Comparator comparator = new StartDateComparator();
         return projectService.findAll(session.getUserId(), comparator);
@@ -163,8 +178,13 @@ public final class ProjectEndpoint extends AbstractEndpoint{
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
-        @Nullable final Session session = tokenService.getToken(token).getSession();
-        projectService.removeAll(session.getUserId());
+        @Nullable final Session session = tokenService.decryptToken(token).getSession();
+        try {
+            projectService.removeAll(session.getUserId());
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return false;
+        }
         return true;
     }
 
@@ -176,8 +196,13 @@ public final class ProjectEndpoint extends AbstractEndpoint{
         if (entityId == null || entityId.isEmpty())
             return false;
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
-        @Nullable final Session session = tokenService.getToken(token).getSession();
-        projectService.removeProject(session.getUserId(), entityId);
+        @Nullable final Session session = tokenService.decryptToken(token).getSession();
+        try {
+            projectService.removeProject(session.getUserId(), entityId);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return false;
+        }
         return true;
     }
 }

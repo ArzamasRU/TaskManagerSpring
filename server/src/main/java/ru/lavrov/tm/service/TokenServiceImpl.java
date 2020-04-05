@@ -15,7 +15,6 @@ import ru.lavrov.tm.exception.security.TokenSignIsInvalidException;
 import ru.lavrov.tm.exception.user.UserLoginIsInvalidException;
 import ru.lavrov.tm.exception.user.UserPasswordIsInvalidException;
 import ru.lavrov.tm.util.AESUtil;
-import ru.lavrov.tm.util.SignUtil;
 
 import javax.json.JsonException;
 import java.io.IOException;
@@ -35,13 +34,16 @@ public final class TokenServiceImpl extends AbstractService implements ITokenSer
 
     @Override
     public void validate(@Nullable final String token, @Nullable final Collection<Role> roles) {
-        Token curToken = getToken(token);
+        @Nullable final Token curToken = decryptToken(token);
+        @Nullable final String currSign = curToken.getSign();
+        curToken.setSign(null);
+        @NotNull final String resultSign = getSign(curToken,  appProperties.getProperty("salt"),
+                appProperties.getIntProperty("cycle"));
+        if (!resultSign.equals(currSign))
+            throw new TokenSignIsInvalidException();
+        curToken.setSign(currSign);
         @NotNull final ISessionService sessionService = bootstrap.getSessionService();
         sessionService.validate(curToken.getSession(), roles);
-        @NotNull final String currSign = getSign(curToken,  appProperties.getProperty("salt"),
-                appProperties.getIntProperty("cycle"));
-        if (!currSign.equals(curToken.getSign()))
-            throw new TokenSignIsInvalidException();
     }
 
     @NotNull
@@ -55,22 +57,15 @@ public final class TokenServiceImpl extends AbstractService implements ITokenSer
         @NotNull final Session session = sessionService.login(login, password);
         @NotNull final Token token = new Token();
         token.setSession(session);
-        token.setSign(SignUtil.getSign(token, appProperties.getProperty("salt"),
+        token.setSign(getSign(token, appProperties.getProperty("salt"),
                 appProperties.getIntProperty("cycle")));
-        @NotNull final ObjectMapper objectMapper = new ObjectMapper();
-        @NotNull final String jsonToken;
-        try {
-            jsonToken = objectMapper.writeValueAsString(token);
-        } catch (JsonProcessingException e) {
-            throw new JsonException("Json writing is failed");
-        }
-        @NotNull final String encryptedToken = AESUtil.encrypt(jsonToken, appProperties.getProperty("key"));
+        @Nullable final String encryptedToken = encryptToken(token);
         return encryptedToken;
     }
 
     @Nullable
     @Override
-    public Token getToken(@Nullable final String token) {
+    public Token decryptToken(@Nullable final String token) {
         if (token == null)
             throw new TokenIsInvalidException();
         @NotNull final String decryptedToken = AESUtil.decrypt(token, appProperties.getProperty("key"));
@@ -82,6 +77,19 @@ public final class TokenServiceImpl extends AbstractService implements ITokenSer
             throw new JsonException("Json reading is failed");
         }
         return curToken;
+    }
+
+    @Nullable
+    @Override
+    public String encryptToken(@Nullable final Token token) {
+        @NotNull final ObjectMapper objectMapper = new ObjectMapper();
+        @NotNull final String jsonToken;
+        try {
+            jsonToken = objectMapper.writeValueAsString(token);
+        } catch (JsonProcessingException e) {
+            throw new JsonException("Json writing is failed");
+        }
+        return AESUtil.encrypt(jsonToken, appProperties.getProperty("key"));
     }
 }
 

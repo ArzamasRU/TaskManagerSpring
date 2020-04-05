@@ -13,5 +13,7 @@ public interface ITokenService {
 
     void validate(@Nullable final String token, @Nullable final Collection<Role> roles);
 
-    Token getToken(@Nullable final String token);
+    Token decryptToken(@Nullable final String token);
+
+    String encryptToken(@Nullable final Token token);
 }

@@ -10,7 +10,6 @@ import ru.lavrov.tm.dto.User;
 import ru.lavrov.tm.enumerate.Role;
 import ru.lavrov.tm.exception.project.ProjectNotExistsException;
 import ru.lavrov.tm.exception.user.*;
-import ru.lavrov.tm.util.HashUtil;
 
 import java.nio.channels.ConnectionPendingException;
 import java.sql.Connection;
@@ -18,7 +17,7 @@ import java.util.Collection;
 
 public final class UserServiceImpl extends AbstractService implements IUserService {
 
-    public boolean createByLogin(
+    public void createByLogin(
             @Nullable final String login, @Nullable final String password, @Nullable final String role
     ) {
         if (login == null || login.isEmpty())
@@ -38,17 +37,14 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
         @Nullable final User user = userRepository.findUserByLogin(login);
         if (user != null)
             throw new UserLoginExistsException();
-        @NotNull String hashedPassword;
-            hashedPassword = HashUtil.md5Hard(password);
         try{
-            userRepository.persist(new User(login, hashedPassword, currentRole));
+            userRepository.persist(new User(login, password, currentRole));
             sqlSession.commit();
         } catch (Exception e) {
             sqlSession.rollback();
         } finally {
             sqlSession.close();
         }
-        return true;
     }
 
     public void updatePassword(@Nullable final String userId, @Nullable final String newPassword) {
@@ -129,7 +125,14 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
             throw new ConnectionPendingException();
         @NotNull final SqlSession sqlSession = Bootstrap.getSqlSessionFactory().openSession();
         @NotNull final IUserRepository userRepository = sqlSession.getMapper(IUserRepository.class);
-        userRepository.removeUser(userId);
+        try {
+            userRepository.removeUser(userId);
+            sqlSession.commit();
+        } catch (Exception e) {
+            sqlSession.rollback();
+        } finally {
+            sqlSession.close();
+        }
     }
 
     @Override

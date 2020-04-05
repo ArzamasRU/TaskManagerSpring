@@ -60,8 +60,8 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
         @NotNull final IProjectRepository projectRepository = sqlSession.getMapper(IProjectRepository.class);
         @NotNull final ITaskRepository taskRepository = sqlSession.getMapper(ITaskRepository.class);
         @Nullable final Project project = projectRepository.findEntityByName(userId, projectName);
-        if (project != null)
-            throw new ProjectNameExistsException();
+        if (project == null)
+            throw new ProjectNotExistsException();
         try {
             projectRepository.removeProject(userId, project.getId());
             taskRepository.removeProjectTasks(userId, project.getId());

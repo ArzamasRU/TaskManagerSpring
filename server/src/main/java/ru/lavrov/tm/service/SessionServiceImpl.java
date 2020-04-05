@@ -30,12 +30,15 @@ public final class SessionServiceImpl extends AbstractService implements ISessio
             throw new SessionTimeIsOverException();
         }
         validatePermission(session, roles);
-        @Nullable final String currentSign = getSign(session, appProperties.getProperty("salt"),
+        @Nullable final String currSign = session.getSign();
+        session.setSign(null);
+        @Nullable final String resultSign = getSign(session, appProperties.getProperty("salt"),
                 appProperties.getIntProperty("cycle"));
-        if (currentSign == null || currentSign.isEmpty())
+        if (resultSign == null || resultSign.isEmpty())
             throw new SessionSignIsInvalidException();
-        if (currentSign.equals(session.getSign()))
+        if (!resultSign.equals(currSign))
             throw new SessionSignIsInvalidException();
+        session.setSign(currSign);
     }
 
     @NotNull

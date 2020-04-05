@@ -165,4 +165,21 @@
         <tag>HEAD</tag>
         <url>http://127.0.0.1/dummy</url>
     </scm>
+    <profiles>
+        <profile>
+            <id>unit</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <test.category>ru.lavrov.tm.marker.UnitCategory</test.category>
+            </properties>
+        </profile>
+        <profile>
+            <id>load</id>
+            <properties>
+                <test.category>ru.lavrov.tm.marker.LoadCategory</test.category>
+            </properties>
+        </profile>
+    </profiles>
 </project>

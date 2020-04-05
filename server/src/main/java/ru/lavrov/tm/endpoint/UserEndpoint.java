@@ -26,8 +26,7 @@ public final class UserEndpoint extends AbstractEndpoint{
     }
 
     @WebMethod
-    public boolean registerUser(@Nullable final String token,
-                                @NotNull final String login,
+    public boolean registerUser(@NotNull final String login,
                                 @NotNull final String password,
                                 @NotNull final String role){
 
@@ -38,7 +37,13 @@ public final class UserEndpoint extends AbstractEndpoint{
         if (role == null || role.isEmpty())
             return false;
         @NotNull final IUserService userService = bootstrap.getUserService();
-        return userService.createByLogin(login, password, role);
+        try {
+            userService.createByLogin(login, password, role);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     @WebMethod
@@ -47,8 +52,13 @@ public final class UserEndpoint extends AbstractEndpoint{
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
         @NotNull final IUserService userService = bootstrap.getUserService();
-        @Nullable final Session session = tokenService.getToken(token).getSession();
-        userService.removeUser(session.getUserId());
+        @Nullable final Session session = tokenService.decryptToken(token).getSession();
+        try {
+            userService.removeUser(session.getUserId());
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return false;
+        }
         return true;
     }
 
@@ -59,8 +69,13 @@ public final class UserEndpoint extends AbstractEndpoint{
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
-        @Nullable final Session session = tokenService.getToken(token).getSession();
-        return projectService.findAll(session.getUserId());
+        @Nullable final Session session = tokenService.decryptToken(token).getSession();
+        try {
+            return projectService.findAll(session.getUserId());
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @WebMethod
@@ -70,8 +85,13 @@ public final class UserEndpoint extends AbstractEndpoint{
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
         @NotNull final ITaskService taskService = bootstrap.getTaskService();
-        @Nullable final Session session = tokenService.getToken(token).getSession();
-        return taskService.findAll(session.getUserId());
+        @Nullable final Session session = tokenService.decryptToken(token).getSession();
+        try {
+            return taskService.findAll(session.getUserId());
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @WebMethod
@@ -81,7 +101,12 @@ public final class UserEndpoint extends AbstractEndpoint{
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
         @NotNull final IUserService userService = bootstrap.getUserService();
-        @Nullable final Session session = tokenService.getToken(token).getSession();
-        return userService.findOne(session.getUserId());
+        @Nullable final Session session = tokenService.decryptToken(token).getSession();
+        try {
+            return userService.findOne(session.getUserId());
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

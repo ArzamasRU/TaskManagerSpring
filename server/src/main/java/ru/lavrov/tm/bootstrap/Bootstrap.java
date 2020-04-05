@@ -12,6 +12,7 @@ import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.*;
+import ru.lavrov.tm.dto.Token;
 import ru.lavrov.tm.endpoint.*;
 import ru.lavrov.tm.enumerate.Role;
 import ru.lavrov.tm.service.*;

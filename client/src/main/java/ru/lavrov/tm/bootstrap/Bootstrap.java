@@ -8,11 +8,11 @@ import org.jetbrains.annotations.Nullable;
 import org.reflections.Reflections;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.endpoint.*;
+import ru.lavrov.tm.exception.bootstrap.InitializationClassException;
 import ru.lavrov.tm.exception.command.CommandDescriptionIsInvalidException;
 import ru.lavrov.tm.exception.command.CommandIsInvalidException;
 import ru.lavrov.tm.exception.command.CommandNotExistsException;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
-import ru.lavrov.tm.exception.user.UserRoleIsInvalidException;
 import ru.lavrov.tm.util.InputUtil;
 
 import java.util.*;
@@ -42,24 +42,25 @@ public final class Bootstrap {
         classes = new Reflections("ru.lavrov.tm").getSubTypesOf(AbstractCommand.class);
     }
 
-    public void init() throws InstantiationException, IllegalAccessException {
+    public void init() {
         initProperties();
         initClasses(classes);
+    }
+
+    public void start() {
         System.out.println("*** WELCOME IN CLIENT APP OF TASK MANAGER ***");
         @Nullable String command = null;
         while (!"exit".equals(command)) {
             command = InputUtil.INPUT.nextLine();
             try {
-                execute(command);
+                executeCommand(command);
             } catch (RuntimeException e) {
                 System.out.println(e.getMessage());
             }
         }
     }
 
-    private void initClasses(
-            @Nullable Collection<Class<? extends AbstractCommand>> classes
-    ) throws IllegalAccessException, InstantiationException {
+    private void initClasses(@Nullable Collection<Class<? extends AbstractCommand>> classes)  {
         if (classes == null || classes.isEmpty())
             return;
         for (@Nullable Class command : classes) {
@@ -67,7 +68,11 @@ public final class Bootstrap {
                 continue;
             if (!AbstractCommand.class.isAssignableFrom(command))
                 continue;
-            registry((AbstractCommand) command.newInstance());
+            try {
+                registry((AbstractCommand) command.newInstance());
+            } catch (ReflectiveOperationException e) {
+                throw new InitializationClassException();
+            }
         }
     }
 
@@ -88,7 +93,7 @@ public final class Bootstrap {
         commands.put(cliCommand, command);
     }
 
-    private void execute(@Nullable final String command) {
+    private void executeCommand(@Nullable final String command) {
         if (command == null || command.isEmpty())
             throw new CommandIsInvalidException();
         @Nullable final AbstractCommand abstractCommand = commands.get(command);
