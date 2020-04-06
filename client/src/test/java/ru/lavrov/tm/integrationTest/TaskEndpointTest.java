@@ -133,6 +133,7 @@ public class TaskEndpointTest {
     }
 
     @Test
+    @Category(TaskTestCategory.class)
     void removeTest() {
         boolean success;
         @Nullable Task task = taskEndpoint.findTaskByName(token, TEST_TASK_NAME);

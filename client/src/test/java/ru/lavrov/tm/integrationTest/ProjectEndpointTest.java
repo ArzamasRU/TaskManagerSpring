@@ -124,7 +124,6 @@ public class ProjectEndpointTest {
     }
 
     @Test
-    @Category(ProjectTestCategory.class)
     void removeTest() {
         boolean success;
         @Nullable Project project = projectEndpoint.findProjectByName(token, TEST_PROJECT_NAME);

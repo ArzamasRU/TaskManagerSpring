@@ -5,10 +5,8 @@ import org.jetbrains.annotations.Nullable;
 import org.junit.experimental.categories.Category;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import ru.lavrov.tm.bootstrap.Bootstrap;
-import ru.lavrov.tm.category.IntegrationTest;
 import ru.lavrov.tm.category.UserTestCategory;
 import ru.lavrov.tm.endpoint.*;
 
@@ -17,8 +15,7 @@ import java.util.Collection;
 import static org.junit.jupiter.api.Assertions.*;
 import static ru.lavrov.tm.util.HashUtil.md5Hard;
 
-@Category(IntegrationTest.class)
-@Tag("integration-test")
+@Category(UserTestCategory.class)
 public class UserEndpointTest {
 
     @NotNull
@@ -106,6 +103,7 @@ public class UserEndpointTest {
     }
 
     @Test
+    @Category(UserTestCategory.class)
     void getUserProjectsTest() {
         boolean success = projectEndpoint.createByProjectName(token, TEST_PROJECT_NAME);
         assertTrue(success);
