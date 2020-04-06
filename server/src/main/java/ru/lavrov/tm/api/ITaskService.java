@@ -31,4 +31,6 @@ public interface ITaskService extends IService {
     void removeAll(@Nullable String userId);
 
     Collection<Task> findAll(@Nullable String userId);
+
+    Task findTaskByName(@Nullable String userId, @Nullable final String taskName);
 }

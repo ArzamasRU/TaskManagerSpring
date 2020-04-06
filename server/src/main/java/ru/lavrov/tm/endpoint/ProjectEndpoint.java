@@ -114,6 +114,19 @@ public final class ProjectEndpoint extends AbstractEndpoint{
 
     @WebMethod
     @Nullable
+    public Project findProjectByName(@Nullable final String token, @Nullable final String name) {
+        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
+        if (name == null || name.isEmpty())
+            return null;
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token, roles);
+        @Nullable final Session session = tokenService.decryptToken(token).getSession();
+        @NotNull final IProjectService projectService = bootstrap.getProjectService();
+        return projectService.findProjectByName(session.getUserId(), name);
+    }
+
+    @WebMethod
+    @Nullable
     public Collection<Project> findAllByDescPart(@Nullable final String token, @Nullable final String description) {
         @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         if (description == null || description.isEmpty())
@@ -134,6 +147,17 @@ public final class ProjectEndpoint extends AbstractEndpoint{
         @Nullable final Session session = tokenService.decryptToken(token).getSession();
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
         return projectService.findAll(session.getUserId());
+    }
+
+    @WebMethod
+    @Nullable
+    public Project findOne(@Nullable final String token, @Nullable final String entityId) {
+        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token, roles);
+        @Nullable final Session session = tokenService.decryptToken(token).getSession();
+        @NotNull final IProjectService projectService = bootstrap.getProjectService();
+        return projectService.findOne(session.getUserId(), entityId);
     }
 
     @WebMethod

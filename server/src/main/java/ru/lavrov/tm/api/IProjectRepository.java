@@ -36,7 +36,7 @@ public interface IProjectRepository {
     })
     Collection<Project> findAll(@Param("userId") @Nullable String userId);
 
-    @Select("SELECT * FROM app_project WHERE user_id = #{userId} AND name LIKE #{name}")
+    @Select("SELECT * FROM app_project WHERE user_id = #{userId} AND name LIKE #{pattern}")
     @Results(value = {
             @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),
@@ -46,9 +46,9 @@ public interface IProjectRepository {
             @Result(property = "finishDate", column = "dateEnd")
     })
     Collection<Project> findAllByNamePart(@Param("userId") @Nullable String userId,
-                                          @Param("name")  @Nullable String name);
+                                          @Param("pattern")  @Nullable String pattern);
 
-    @Select("SELECT * FROM app_project WHERE user_id = #{userId} AND description LIKE #{description}")
+    @Select("SELECT * FROM app_project WHERE user_id = #{userId} AND description LIKE #{pattern}")
     @Results(value = {
             @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),
@@ -58,7 +58,7 @@ public interface IProjectRepository {
             @Result(property = "finishDate", column = "dateEnd")
     })
     Collection<Project> findAllByDescPart(@Param("userId") @Nullable String userId,
-                                          @Param("description") @Nullable String description);
+                                          @Param("pattern") @Nullable String pattern);
 
     @Select("SELECT * FROM app_project WHERE user_id = #{userId} AND id = #{id}")
     @Results(value = {

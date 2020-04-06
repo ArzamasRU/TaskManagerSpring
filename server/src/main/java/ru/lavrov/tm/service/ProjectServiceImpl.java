@@ -48,6 +48,20 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
     }
 
     @Override
+    public Project findProjectByName(@Nullable final String userId, @Nullable final String projectName) {
+        if (projectName == null || projectName.isEmpty())
+            throw new ProjectNameIsInvalidException();
+        if (userId == null || userId.isEmpty())
+            throw new UserIsNotAuthorizedException();
+        @Nullable final Connection connection = getConnection();
+        if (connection == null)
+            throw new ConnectionPendingException();
+        @NotNull final SqlSession sqlSession = Bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final IProjectRepository projectRepository = sqlSession.getMapper(IProjectRepository.class);
+        return projectRepository.findEntityByName(userId, projectName);
+    }
+
+    @Override
     public void removeProjectByName(@Nullable final String userId, @Nullable final String projectName) {
         if (projectName == null || projectName.isEmpty())
             throw new ProjectNameIsInvalidException();
@@ -154,7 +168,8 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
             throw new ConnectionPendingException();
         @NotNull final SqlSession sqlSession = Bootstrap.getSqlSessionFactory().openSession();
         @NotNull final IProjectRepository projectRepository = sqlSession.getMapper(IProjectRepository.class);
-        @Nullable final Collection<Project> collection = projectRepository.findAllByNamePart(userId, name);
+        @Nullable final Collection<Project> collection =
+                projectRepository.findAllByNamePart(userId, "%" + name + "%");
         return collection;
     }
 
@@ -170,7 +185,8 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
             throw new ConnectionPendingException();
         @NotNull final SqlSession sqlSession = Bootstrap.getSqlSessionFactory().openSession();
         @NotNull final IProjectRepository projectRepository = sqlSession.getMapper(IProjectRepository.class);
-        @Nullable final Collection<Project> collection = projectRepository.findAllByDescPart(userId, description);
+        @Nullable final Collection<Project> collection =
+                projectRepository.findAllByDescPart(userId, "%" + description + "%");
         return collection;
     }
 
@@ -260,6 +276,21 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
         @NotNull final SqlSession sqlSession = Bootstrap.getSqlSessionFactory().openSession();
         @NotNull final IProjectRepository projectRepository = sqlSession.getMapper(IProjectRepository.class);
         return projectRepository.findAll(userId);
+    }
+
+    @Nullable
+    @Override
+    public Project findOne(@Nullable final String userId, @Nullable String entityID) {
+        if (userId == null || userId.isEmpty())
+            throw new UserIsNotAuthorizedException();
+        if (entityID == null || entityID.isEmpty())
+            throw new ProjectNotExistsException();
+        @Nullable final Connection connection = getConnection();
+        if (connection == null)
+            throw new ConnectionPendingException();
+        @NotNull final SqlSession sqlSession = Bootstrap.getSqlSessionFactory().openSession();
+        @NotNull final IProjectRepository projectRepository = sqlSession.getMapper(IProjectRepository.class);
+        return projectRepository.findOne(userId, entityID);
     }
 }
 

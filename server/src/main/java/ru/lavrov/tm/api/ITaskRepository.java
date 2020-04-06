@@ -3,6 +3,7 @@ package ru.lavrov.tm.api;
 import org.apache.ibatis.annotations.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.lavrov.tm.dto.Project;
 import ru.lavrov.tm.dto.Task;
 
 import java.util.Collection;
@@ -14,7 +15,7 @@ public interface ITaskRepository {
 
     @Delete("DELETE FROM app_task WHERE user_id = #{userId} AND id = #{id}")
     void removeTask(@Param("userId") @Nullable String userId,
-                    @Param("userId") @Nullable String id);
+                    @Param("id") @Nullable String id);
 
     @Select("SELECT * FROM app_task WHERE user_id = #{userId} AND project_id = #{projectId}")
     @Results(value = {
@@ -67,7 +68,7 @@ public interface ITaskRepository {
     })
     Collection<Task> findAll(@Param("userId") @Nullable String userId);
 
-    @Select("SELECT * FROM app_task WHERE user_id = #{userId} AND name LIKE #{name}")
+    @Select("SELECT * FROM app_task WHERE user_id = #{userId} AND name LIKE #{pattern}")
     @Results(value = {
             @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),
@@ -78,9 +79,9 @@ public interface ITaskRepository {
             @Result(property = "projectId", column = "project_id")
     })
     Collection<Task> findAllByNamePart(@Param("userId") @Nullable String userId,
-                                       @Param("name") @Nullable String name);
+                                       @Param("pattern") @Nullable String pattern);
 
-    @Select("SELECT * FROM app_task WHERE user_id = #{userId} AND description LIKE #{description}")
+    @Select("SELECT * FROM app_task WHERE user_id = #{userId} AND description LIKE #{pattern}")
     @Results(value = {
             @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),
@@ -91,7 +92,7 @@ public interface ITaskRepository {
             @Result(property = "projectId", column = "project_id")
     })
     Collection<Task> findAllByDescPart(@Param("userId") @Nullable String userId,
-                                       @Param("description") @Nullable String description);
+                                       @Param("pattern") @Nullable String pattern);
 
     @Select("SELECT * FROM app_task WHERE user_id = #{userId} AND id = #{id}")
     @Results(value = {
@@ -116,4 +117,17 @@ public interface ITaskRepository {
 
     @Delete("DELETE FROM app_task WHERE user_id = #{userId}")
     void removeAll(@Param("userId") @Nullable String userId);
+
+    @Select("SELECT * FROM app_task WHERE user_id = #{userId} AND name = #{taskName}")
+    @Results(value = {
+            @Result(property = "id", column = "id"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "description", column = "description"),
+            @Result(property = "userId", column = "user_id"),
+            @Result(property = "startDate", column = "dateBegin"),
+            @Result(property = "finishDate", column = "dateEnd"),
+            @Result(property = "projectId", column = "project_id")
+    })
+    Task findEntityByName(@Param("userId") @Nullable String userId,
+                             @Param("taskName") @Nullable String taskName);
 }

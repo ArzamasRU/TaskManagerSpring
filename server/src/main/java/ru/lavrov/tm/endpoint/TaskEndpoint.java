@@ -108,6 +108,19 @@ public final class TaskEndpoint extends AbstractEndpoint{
 
     @WebMethod
     @Nullable
+    public Task findTaskByName(@Nullable final String token, @NotNull final String name) {
+        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
+        if (name == null || name.isEmpty())
+            return null;
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token, roles);
+        @Nullable final Session session = tokenService.decryptToken(token).getSession();
+        @NotNull final ITaskService taskService = bootstrap.getTaskService();
+        return taskService.findTaskByName(session.getUserId(), name);
+    }
+
+    @WebMethod
+    @Nullable
     public Collection<Task> findAllTasksByDescPart(@Nullable final String token, @NotNull final String description) {
         @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         if (description == null || description.isEmpty())

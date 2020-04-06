@@ -5,9 +5,11 @@ import org.jetbrains.annotations.Nullable;
 import org.junit.experimental.categories.Category;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import ru.lavrov.tm.bootstrap.Bootstrap;
-import ru.lavrov.tm.category.FirstCategory;
+import ru.lavrov.tm.category.IntegrationTest;
+import ru.lavrov.tm.category.UserTestCategory;
 import ru.lavrov.tm.endpoint.*;
 
 import java.util.Collection;
@@ -15,7 +17,8 @@ import java.util.Collection;
 import static org.junit.jupiter.api.Assertions.*;
 import static ru.lavrov.tm.util.HashUtil.md5Hard;
 
-@Category(FirstCategory.class)
+@Category(IntegrationTest.class)
+@Tag("integration-test")
 public class UserEndpointTest {
 
     @NotNull
@@ -37,19 +40,19 @@ public class UserEndpointTest {
     private String token;
 
     @NotNull
-    private final String login = "testAdmin";
+    private static final String LOGIN = "testAdmin";
 
     @NotNull
-    private final String password = "testAdmin";
+    private static final String PASSWORD = "testAdmin";
 
     @NotNull
-    private final String role = "admin";
+    private static final String ROLE = "admin";
 
     @NotNull
-    private final String testProjectName = "testProject";
+    private static final String TEST_PROJECT_NAME = "testProject";
 
     @NotNull
-    private final String testTaskName = "testTask";
+    private static final String TEST_TASK_NAME = "testTask";
 
     @BeforeEach
     void init() {
@@ -71,10 +74,10 @@ public class UserEndpointTest {
         assertNotNull(taskEndpointService);
         taskEndpoint = taskEndpointService.getTaskEndpointPort();
         assertNotNull(taskEndpoint);
-        @Nullable final String hashedPassword = md5Hard(password);
+        @Nullable final String hashedPassword = md5Hard(PASSWORD);
         assertNotNull(hashedPassword);
 
-        token = tokenEndpoint.login(login, hashedPassword);
+        token = tokenEndpoint.login(LOGIN, hashedPassword);
         if (token != null) {
             @Nullable final Collection<Task> taskList = taskEndpoint.findAllTasks(token);
             if (taskList != null || !taskList.isEmpty()) {
@@ -90,9 +93,9 @@ public class UserEndpointTest {
             assertTrue(success);
         }
 
-        success = userEndpoint.registerUser(login, hashedPassword, role);
+        success = userEndpoint.registerUser(LOGIN, hashedPassword, ROLE);
         assertTrue(success);
-        token = tokenEndpoint.login(login, hashedPassword);
+        token = tokenEndpoint.login(LOGIN, hashedPassword);
         assertNotNull(token);
     }
 
@@ -104,7 +107,7 @@ public class UserEndpointTest {
 
     @Test
     void getUserProjectsTest() {
-        boolean success = projectEndpoint.createByProjectName(token, testProjectName);
+        boolean success = projectEndpoint.createByProjectName(token, TEST_PROJECT_NAME);
         assertTrue(success);
         @Nullable final Collection<Project> projectList = userEndpoint.getUserProjects(token);
         assertNotNull(projectList);
@@ -112,15 +115,15 @@ public class UserEndpointTest {
         for (@Nullable final Project project : projectList) {
             assertNotNull(project);
         }
-        success = projectEndpoint.removeProjectByName(token, testProjectName);
+        success = projectEndpoint.removeProjectByName(token, TEST_PROJECT_NAME);
         assertTrue(success);
     }
 
     @Test
     void getUserTasksTest() {
-        boolean success = projectEndpoint.createByProjectName(token, testProjectName);
+        boolean success = projectEndpoint.createByProjectName(token, TEST_PROJECT_NAME);
         assertTrue(success);
-        success = taskEndpoint.createByTaskName(token, testTaskName, testProjectName);
+        success = taskEndpoint.createByTaskName(token, TEST_TASK_NAME, TEST_PROJECT_NAME);
         assertTrue(success);
         @Nullable final Collection<Task> taskList =  userEndpoint.getUserTasks(token);
         assertNotNull(taskList);
@@ -128,9 +131,9 @@ public class UserEndpointTest {
         for (@Nullable final Task task : taskList) {
             assertNotNull(task);
         }
-        success = taskEndpoint.removeTaskByName(token, testTaskName);
+        success = taskEndpoint.removeTaskByName(token, TEST_TASK_NAME);
         assertTrue(success);
-        success = projectEndpoint.removeProjectByName(token, testProjectName);
+        success = projectEndpoint.removeProjectByName(token, TEST_PROJECT_NAME);
         assertTrue(success);
     }
 
@@ -138,9 +141,5 @@ public class UserEndpointTest {
     void getUserBadTest() {
         @Nullable final User user = userEndpoint.getUser(token);
         assertNotNull(user);
-    }
-
-    public String getToken() {
-        return token;
     }
 }

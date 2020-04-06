@@ -31,4 +31,8 @@ public interface IProjectService extends IService {
     void removeAll(@Nullable String userId);
 
     Collection<Project> findAll(@Nullable String userId);
+
+    Project findOne(@Nullable String userId, @Nullable String entityId);
+
+    Project findProjectByName(@Nullable final String userId, @Nullable final String projectName);
 }
