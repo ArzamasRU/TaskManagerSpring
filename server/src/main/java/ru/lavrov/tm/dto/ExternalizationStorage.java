@@ -18,12 +18,12 @@ public final class ExternalizationStorage {
 
     @Nullable
     @XmlElement(name = "projects")
-    private Collection<ProjectDTO> projectList;
+    private Collection<Project> projectList;
     @Nullable
     @XmlElement(name = "tasks")
-    private Collection<TaskDTO> taskList;
+    private Collection<Task> taskList;
     @Nullable
     @XmlElement(name = "users")
-    private Collection<UserDTO> userList;
+    private Collection<User> userList;
 
 }

@@ -3,7 +3,11 @@ package ru.lavrov.tm.bootstrap;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.apache.ibatis.datasource.pooled.PooledDataSource;
-import org.apache.ibatis.mapping.Environment;
+import org.hibernate.boot.Metadata;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Environment;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
@@ -13,11 +17,20 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.*;
 import ru.lavrov.tm.endpoint.*;
+import ru.lavrov.tm.entity.Project;
+import ru.lavrov.tm.entity.Session;
+import ru.lavrov.tm.entity.Task;
+import ru.lavrov.tm.entity.User;
 import ru.lavrov.tm.enumerate.Role;
 import ru.lavrov.tm.service.*;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import javax.xml.ws.Endpoint;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static ru.lavrov.tm.service.AppPropertyServiceImpl.appProperties;
 
@@ -46,6 +59,8 @@ public final class Bootstrap implements IServiceLocator {
     private final TaskEndpoint taskEndpoint = new TaskEndpoint(this);
     @NotNull
     private final GeneralCommandEndpoint generalCommandEndpoint = new GeneralCommandEndpoint(this);
+    @NotNull
+    private final EntityManagerFactory entityManagerFactory = getEntityManagerFactory();
 
     public void init() {
         initProperties();
@@ -73,45 +88,46 @@ public final class Bootstrap implements IServiceLocator {
         System.setProperty("javax.xml.bind.context.factory", "org.eclipse.persistence.jaxb.JAXBContextFactory");
     }
 
-    public static SqlSessionFactory getSqlSessionFactory() {
-        @Nullable final String user = appProperties.getProperty("login");
-        @Nullable final String password = appProperties.getProperty("password");
-        @Nullable final String url = appProperties.getProperty("url");
-        @Nullable final String driver = appProperties.getProperty("driver");
-        final DataSource dataSource = new PooledDataSource(driver, url, user, password);
-        final TransactionFactory transactionFactory =
-                new JdbcTransactionFactory();
-        final Environment environment =
-                new Environment("development", transactionFactory, dataSource);
-        final Configuration configuration = new Configuration(environment);
-        configuration.addMapper(IUserRepository.class);
-        configuration.addMapper(IProjectRepository.class);
-        configuration.addMapper(ITaskRepository.class);
-        return new SqlSessionFactoryBuilder().build(configuration);
+//    public static SqlSessionFactory getSqlSessionFactory() {
+//        @Nullable final String user = appProperties.getProperty("login");
+//        @Nullable final String password = appProperties.getProperty("password");
+//        @Nullable final String url = appProperties.getProperty("url");
+//        @Nullable final String driver = appProperties.getProperty("driver");
+//        final DataSource dataSource = new PooledDataSource(driver, url, user, password);
+//        final TransactionFactory transactionFactory =
+//                new JdbcTransactionFactory();
+//        final Environment environment =
+//                new Environment("development", transactionFactory, dataSource);
+//        final Configuration configuration = new Configuration(environment);
+//        configuration.addMapper(IUserRepository.class);
+//        configuration.addMapper(IProjectRepository.class);
+//        configuration.addMapper(ITaskRepository.class);
+//        return new SqlSessionFactoryBuilder().build(configuration);
+//    }
+
+    public @NotNull EntityManager getEntityManager() {
+        return entityManagerFactory.createEntityManager();
     }
 
-//    private EntityManagerFactory factory() {
-//        final Map<String, String> settings = new HashMap<>();
-//        settings.put(Environment.DRIVER, appProperties.getProperty("driver"));
-//        settings.put(Environment.URL, appProperties.getProperty("url"));
-//        settings.put(Environment.USER, appProperties.getProperty("login"));
-//        settings.put(Environment.PASS, appProperties.getProperty("password"));
-//        settings.put(Environment.DIALECT,
-//                "org.hibernate.dialect.MySQL5InnoDBDialect");
-//        settings.put(Environment.HBM2DDL_AUTO, "update");
-//        settings.put(Environment.SHOW_SQL, "true");
-//        final StandardServiceRegistryBuilder registryBuilder
-//                = new StandardServiceRegistryBuilder();
-//        registryBuilder.applySettings(settings);
-//        final StandardServiceRegistry registry = registryBuilder.build();
-//        final MetadataSources sources = new MetadataSources(registry);
-//        sources.addAnnotatedClass(Task.class);
-//        sources.addAnnotatedClass(Project.class);
-//        sources.addAnnotatedClass(User.class);
-//        sources.addAnnotatedClass(Session.class);
-//        sources.addAnnotatedClass(Cat.class);
-//        final Metadata metadata = sources.getMetadataBuilder().build();
-//        return metadata.getSessionFactoryBuilder().build();
-//    }
+    private static EntityManagerFactory getEntityManagerFactory() {
+        @NotNull final Map<String, String> settings = new HashMap<>();
+        settings.put(Environment.DRIVER, appProperties.getProperty("driver"));
+        settings.put(Environment.URL, appProperties.getProperty("url"));
+        settings.put(Environment.USER, appProperties.getProperty("login"));
+        settings.put(Environment.PASS, appProperties.getProperty("password"));
+        settings.put(Environment.DIALECT, appProperties.getProperty("dialect"));
+        settings.put(Environment.HBM2DDL_AUTO, appProperties.getProperty("HBM2DDL_AUTO"));
+        settings.put(Environment.SHOW_SQL, appProperties.getProperty("SHOW_SQL"));
+        @NotNull final StandardServiceRegistryBuilder registryBuilder = new StandardServiceRegistryBuilder();
+        registryBuilder.applySettings(settings);
+        @NotNull final StandardServiceRegistry registry = registryBuilder.build();
+        @NotNull final MetadataSources sources = new MetadataSources(registry);
+        sources.addAnnotatedClass(Task.class);
+        sources.addAnnotatedClass(Project.class);
+        sources.addAnnotatedClass(User.class);
+        sources.addAnnotatedClass(Session.class);
+        @NotNull final Metadata metadata = sources.getMetadataBuilder().build();
+        return metadata.getSessionFactoryBuilder().build();
+    }
 }
 

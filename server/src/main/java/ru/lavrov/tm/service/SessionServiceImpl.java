@@ -7,7 +7,6 @@ import ru.lavrov.tm.api.ISessionService;
 import ru.lavrov.tm.api.IUserRepository;
 import ru.lavrov.tm.bootstrap.Bootstrap;
 import ru.lavrov.tm.entity.Session;
-import ru.lavrov.tm.dto.UserDTO;
 import ru.lavrov.tm.enumerate.Role;
 import ru.lavrov.tm.exception.security.SessionIsInvalidException;
 import ru.lavrov.tm.exception.security.SessionSignIsInvalidException;
@@ -53,7 +52,7 @@ public final class SessionServiceImpl extends AbstractService implements ISessio
             throw new ConnectionPendingException();
         @NotNull final SqlSession sqlSession = Bootstrap.getSqlSessionFactory().openSession();
         @NotNull final IUserRepository userRepository = sqlSession.getMapper(IUserRepository.class);
-        @Nullable final UserDTO user = userRepository.findUserByLogin(login);
+        @Nullable final User user = userRepository.findUserByLogin(login);
         if (user == null)
             throw new UserLoginNotExistsException();
         if (!password.equals(user.getPassword()))

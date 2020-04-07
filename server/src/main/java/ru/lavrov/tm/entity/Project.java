@@ -12,7 +12,6 @@ import ru.lavrov.tm.enumerate.Status;
 import ru.lavrov.tm.exception.project.ProjectNotExistsException;
 
 import javax.persistence.*;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.util.*;
 
 @Getter

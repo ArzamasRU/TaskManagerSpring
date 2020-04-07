@@ -2,7 +2,7 @@ package ru.lavrov.tm.api;
 
 import org.apache.ibatis.annotations.*;
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.dto.UserDTO;
+import ru.lavrov.tm.entity.User;
 
 import java.util.Collection;
 
@@ -22,7 +22,7 @@ public interface IUserRepository {
             @Result(property = "password", column = "passwordHash"),
             @Result(property = "role", column = "role")
     })
-    UserDTO findUserByLogin(@Param("login") @Nullable String login);
+    User findUserByLogin(@Param("login") @Nullable String login);
 
     @Select("SELECT * FROM app_user WHERE id = #{userId}")
     @Results(value = {
@@ -31,16 +31,16 @@ public interface IUserRepository {
             @Result(property = "password", column = "passwordHash"),
             @Result(property = "role", column = "role")
     })
-    UserDTO findOne(@Param("userId") @Nullable String userId);
+    User findOne(@Param("userId") @Nullable String userId);
 
     @Delete("DELETE FROM app_user WHERE id = #{userId}")
     void removeUser(@Param("userId") @Nullable final String userId);
 
     @Insert("INSERT INTO app_user (id, login, passwordHash, role) VALUES (#{id}, #{login}, #{password}, #{role})")
-    void persist(@Nullable UserDTO user);
+    void persist(@Nullable User user);
 
     @Update("UPDATE app_user SET login = #{login}, passwordHash = #{password}, role = #{role} WHERE id = #{id}")
-    void merge(@Nullable UserDTO entity);
+    void merge(@Nullable User entity);
 
     @Select("SELECT * FROM app_user WHERE id = #{userId}")
     @Results(value = {
@@ -49,5 +49,5 @@ public interface IUserRepository {
             @Result(property = "password", column = "passwordHash"),
             @Result(property = "role", column = "role")
     })
-    Collection<UserDTO> findAll(@Param("userId") @Nullable String userId);
+    Collection<User> findAll(@Param("userId") @Nullable String userId);
 }

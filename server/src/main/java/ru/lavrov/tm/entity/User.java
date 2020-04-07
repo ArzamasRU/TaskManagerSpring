@@ -1,20 +1,20 @@
 package ru.lavrov.tm.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.IEntity;
+import ru.lavrov.tm.dto.UserDTO;
 import ru.lavrov.tm.enumerate.Role;
+import ru.lavrov.tm.exception.user.UserNotExistsException;
 
 import javax.persistence.CascadeType;
 import javax.persistence.OneToMany;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -47,6 +47,18 @@ public final class User extends AbstractEntity implements IEntity {
             } catch (NullPointerException e) {
                 this.role = null;
             }
+    }
+
+    @NotNull
+    public static UserDTO getUserDTO(@NotNull final User user) {
+        if (user == null)
+            throw new UserNotExistsException();
+        @NotNull final UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getId());
+        userDTO.setLogin(user.getLogin());
+        userDTO.setPassword(user.getPassword());
+        userDTO.setRole(user.getRole());
+        return userDTO;
     }
 
     @Nullable

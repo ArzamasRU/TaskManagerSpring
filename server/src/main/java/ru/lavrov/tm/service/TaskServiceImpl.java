@@ -7,8 +7,6 @@ import ru.lavrov.tm.api.IProjectRepository;
 import ru.lavrov.tm.api.ITaskRepository;
 import ru.lavrov.tm.api.ITaskService;
 import ru.lavrov.tm.bootstrap.Bootstrap;
-import ru.lavrov.tm.dto.ProjectDTO;
-import ru.lavrov.tm.dto.TaskDTO;
 import ru.lavrov.tm.exception.common.DescriptionIsInvalidException;
 import ru.lavrov.tm.exception.common.NameIsInvalidException;
 import ru.lavrov.tm.exception.project.ProjectNameIsInvalidException;
@@ -42,7 +40,7 @@ public final class TaskServiceImpl extends AbstractService implements ITaskServi
         @NotNull final SqlSession sqlSession = Bootstrap.getSqlSessionFactory().openSession();
         @NotNull final ITaskRepository taskRepository = sqlSession.getMapper(ITaskRepository.class);
         @NotNull final IProjectRepository projectRepository = sqlSession.getMapper(IProjectRepository.class);
-        @Nullable final ProjectDTO project = projectRepository.findEntityByName(userId, projectName);
+        @Nullable final Project project = projectRepository.findEntityByName(userId, projectName);
         if (project == null)
             throw new ProjectNotExistsException();
         if (!project.getUserId().equals(userId))
@@ -50,7 +48,7 @@ public final class TaskServiceImpl extends AbstractService implements ITaskServi
         if (taskRepository.findProjectTaskByName(userId, taskName, project.getId()) != null)
             throw new TaskNameExistsException();
         try {
-            taskRepository.persist(new TaskDTO(taskName, project.getId(), userId));
+            taskRepository.persist(new Task(taskName, project.getId(), userId));
             sqlSession.commit();
         } catch (Exception e) {
             sqlSession.rollback();
@@ -118,10 +116,10 @@ public final class TaskServiceImpl extends AbstractService implements ITaskServi
         @NotNull final SqlSession sqlSession = Bootstrap.getSqlSessionFactory().openSession();
         @NotNull final ITaskRepository taskRepository = sqlSession.getMapper(ITaskRepository.class);
         @NotNull final IProjectRepository projectRepository = sqlSession.getMapper(IProjectRepository.class);
-        @Nullable final ProjectDTO project = projectRepository.findEntityByName(userId, projectName);
+        @Nullable final Project project = projectRepository.findEntityByName(userId, projectName);
         if (project == null)
             throw new ProjectNotExistsException();
-        @Nullable final TaskDTO task = taskRepository.findEntityByName(userId, oldName);
+        @Nullable final Task task = taskRepository.findEntityByName(userId, oldName);
         if (task == null)
             throw new TaskNotExistsException();
         try {
@@ -136,7 +134,7 @@ public final class TaskServiceImpl extends AbstractService implements ITaskServi
 
     @Nullable
     @Override
-    public Collection<TaskDTO> findAllByNamePart(@Nullable final String userId, @Nullable final String name) {
+    public Collection<Task> findAllByNamePart(@Nullable final String userId, @Nullable final String name) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         if (name == null || name.isEmpty())
@@ -146,14 +144,14 @@ public final class TaskServiceImpl extends AbstractService implements ITaskServi
             throw new ConnectionPendingException();
         @NotNull final SqlSession sqlSession = Bootstrap.getSqlSessionFactory().openSession();
         @NotNull final ITaskRepository taskRepository = sqlSession.getMapper(ITaskRepository.class);
-        @Nullable final Collection<TaskDTO> collection =
+        @Nullable final Collection<Task> collection =
                 taskRepository.findAllByNamePart(userId, "%" + name + "%");
         return collection;
     }
 
     @Nullable
     @Override
-    public Collection<TaskDTO> findAllByDescPart(@Nullable final String userId, @Nullable final String description) {
+    public Collection<Task> findAllByDescPart(@Nullable final String userId, @Nullable final String description) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         if (description == null || description.isEmpty())
@@ -163,17 +161,17 @@ public final class TaskServiceImpl extends AbstractService implements ITaskServi
             throw new ConnectionPendingException();
         @NotNull final SqlSession sqlSession = Bootstrap.getSqlSessionFactory().openSession();
         @NotNull final ITaskRepository taskRepository = sqlSession.getMapper(ITaskRepository.class);
-        @Nullable final Collection<TaskDTO> collection =
+        @Nullable final Collection<Task> collection =
                 taskRepository.findAllByDescPart(userId, "%" + description + "%");
         return collection;
     }
 
     @Nullable
     @Override
-    public Collection<TaskDTO> findAll(@Nullable String userId, @Nullable Comparator<TaskDTO> comparator) {
+    public Collection<Task> findAll(@Nullable String userId, @Nullable Comparator<Task> comparator) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        @Nullable Collection<TaskDTO> list;
+        @Nullable Collection<Task> list;
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
@@ -182,13 +180,13 @@ public final class TaskServiceImpl extends AbstractService implements ITaskServi
         list = taskRepository.findAll(userId);
         if (comparator == null)
             return list;
-        ((ArrayList<TaskDTO>) list).sort(comparator);
+        ((ArrayList<Task>) list).sort(comparator);
         return list;
     }
 
     @Nullable
     @Override
-    public TaskDTO findTaskByName(@Nullable String userId, @Nullable final String taskName) {
+    public Task findTaskByName(@Nullable String userId, @Nullable final String taskName) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         if (taskName == null || taskName.isEmpty())
@@ -202,7 +200,7 @@ public final class TaskServiceImpl extends AbstractService implements ITaskServi
     }
 
     @Override
-    public void persist(@Nullable final TaskDTO entity) {
+    public void persist(@Nullable final Task entity) {
         if (entity == null)
             throw new ProjectNotExistsException();
         @Nullable final Connection connection = getConnection();
@@ -221,7 +219,7 @@ public final class TaskServiceImpl extends AbstractService implements ITaskServi
     }
 
     @Override
-    public void merge(@Nullable final TaskDTO entity) {
+    public void merge(@Nullable final Task entity) {
         if (entity == null)
             throw new ProjectNotExistsException();
         @Nullable final Connection connection = getConnection();
@@ -253,7 +251,7 @@ public final class TaskServiceImpl extends AbstractService implements ITaskServi
 
     @Nullable
     @Override
-    public Collection<TaskDTO> findAll(@Nullable final String userId) {
+    public Collection<Task> findAll(@Nullable final String userId) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         @Nullable final Connection connection = getConnection();

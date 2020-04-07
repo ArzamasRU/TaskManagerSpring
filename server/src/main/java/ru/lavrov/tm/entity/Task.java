@@ -14,7 +14,6 @@ import ru.lavrov.tm.exception.task.TaskNotExistsException;
 import javax.persistence.ManyToOne;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
-import java.util.UUID;
 
 @Getter
 @Setter
