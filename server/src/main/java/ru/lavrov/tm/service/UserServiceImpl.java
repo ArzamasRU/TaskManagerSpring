@@ -19,19 +19,13 @@ import java.util.Collection;
 
 public final class UserServiceImpl extends AbstractService implements IUserService {
 
-    public UserServiceImpl(@NotNull IServiceLocator bootstrap) {
+    public UserServiceImpl(@NotNull Bootstrap bootstrap) {
         super(bootstrap);
     }
 
-    public void createByLogin(
-            @Nullable final String login, @Nullable final String password, @Nullable final String role
-    ) {
-        if (login == null || login.isEmpty())
-            throw new UserLoginIsInvalidException();
-        if (password == null || password.isEmpty())
-            throw new UserPasswordIsInvalidException();
-        if (role == null || role.isEmpty())
-            throw new UserRoleIsInvalidException();
+    public void createByLogin(@Nullable final User user) {
+        if (user == null)
+            throw new UserNotExistsException();
         @Nullable Role currentRole = Role.getByRole(role);
         if (currentRole == null)
             throw new UserRoleIsInvalidException();

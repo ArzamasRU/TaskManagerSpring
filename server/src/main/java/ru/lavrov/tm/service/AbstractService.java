@@ -12,9 +12,9 @@ import java.sql.Connection;
 public abstract class AbstractService implements IService {
 
     @NotNull
-    protected IServiceLocator bootstrap;
+    protected Bootstrap bootstrap;
 
-    public AbstractService(@NotNull IServiceLocator bootstrap) {
+    public AbstractService(@NotNull Bootstrap bootstrap) {
         this.bootstrap = bootstrap;
     }
 
