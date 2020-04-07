@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.IUserRepository;
 import ru.lavrov.tm.api.IUserService;
 import ru.lavrov.tm.bootstrap.Bootstrap;
-import ru.lavrov.tm.dto.User;
+import ru.lavrov.tm.dto.UserDTO;
 import ru.lavrov.tm.enumerate.Role;
 import ru.lavrov.tm.exception.project.ProjectNotExistsException;
 import ru.lavrov.tm.exception.user.*;
@@ -34,11 +34,11 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
             throw new ConnectionPendingException();
         @NotNull final SqlSession sqlSession = Bootstrap.getSqlSessionFactory().openSession();
         @NotNull final IUserRepository userRepository = sqlSession.getMapper(IUserRepository.class);
-        @Nullable final User user = userRepository.findUserByLogin(login);
+        @Nullable final UserDTO user = userRepository.findUserByLogin(login);
         if (user != null)
             throw new UserLoginExistsException();
         try{
-            userRepository.persist(new User(login, password, currentRole));
+            userRepository.persist(new UserDTO(login, password, currentRole));
             sqlSession.commit();
         } catch (Exception e) {
             sqlSession.rollback();
@@ -77,7 +77,7 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
             throw new ConnectionPendingException();
         @NotNull final SqlSession sqlSession = Bootstrap.getSqlSessionFactory().openSession();
         @NotNull final IUserRepository userRepository = sqlSession.getMapper(IUserRepository.class);
-        @Nullable final User user = userRepository.findUserByLogin(newLogin);
+        @Nullable final UserDTO user = userRepository.findUserByLogin(newLogin);
         if (user != null)
             throw new UserLoginExistsException();
         try {
@@ -92,7 +92,7 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
 
     @Nullable
     @Override
-    public User findOne(@Nullable final String userId) {
+    public UserDTO findOne(@Nullable final String userId) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         @Nullable final Connection connection = getConnection();
@@ -105,7 +105,7 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
 
     @Nullable
     @Override
-    public User findUserByLogin(@NotNull final String login) {
+    public UserDTO findUserByLogin(@NotNull final String login) {
         if (login == null || login.isEmpty())
             throw new UserLoginIsInvalidException();
         @Nullable final Connection connection = getConnection();
@@ -136,7 +136,7 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
     }
 
     @Override
-    public void persist(@Nullable final User entity) {
+    public void persist(@Nullable final UserDTO entity) {
         if (entity == null)
             throw new ProjectNotExistsException();
         @Nullable final Connection connection = getConnection();
@@ -155,7 +155,7 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
     }
 
     @Override
-    public void merge(@Nullable final User entity) {
+    public void merge(@Nullable final UserDTO entity) {
         if (entity == null)
             throw new ProjectNotExistsException();
         @Nullable final Connection connection = getConnection();
@@ -175,7 +175,7 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
 
     @Nullable
     @Override
-    public Collection<User> findAll(@Nullable final String userId) {
+    public Collection<UserDTO> findAll(@Nullable final String userId) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         @Nullable final Connection connection = getConnection();

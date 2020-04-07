@@ -2,7 +2,7 @@ package ru.lavrov.tm.api;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.dto.Task;
+import ru.lavrov.tm.dto.TaskDTO;
 
 import java.util.Collection;
 import java.util.Comparator;
@@ -18,19 +18,19 @@ public interface ITaskService extends IService {
             @Nullable String userId, @Nullable String projectName, @Nullable String oldName, @Nullable String newName
     );
 
-    Collection<Task> findAll(@Nullable String userId, @Nullable Comparator<Task> comparator);
+    Collection<TaskDTO> findAll(@Nullable String userId, @Nullable Comparator<TaskDTO> comparator);
 
-    Collection<Task> findAllByNamePart(@Nullable String userId, @Nullable String name);
+    Collection<TaskDTO> findAllByNamePart(@Nullable String userId, @Nullable String name);
 
-    Collection<Task> findAllByDescPart(@Nullable String userId, @Nullable String description);
+    Collection<TaskDTO> findAllByDescPart(@Nullable String userId, @Nullable String description);
 
-    void persist(@Nullable Task entity);
+    void persist(@Nullable TaskDTO entity);
 
-    void merge(@Nullable Task entity);
+    void merge(@Nullable TaskDTO entity);
 
     void removeAll(@Nullable String userId);
 
-    Collection<Task> findAll(@Nullable String userId);
+    Collection<TaskDTO> findAll(@Nullable String userId);
 
-    Task findTaskByName(@Nullable String userId, @Nullable final String taskName);
+    TaskDTO findTaskByName(@Nullable String userId, @Nullable final String taskName);
 }

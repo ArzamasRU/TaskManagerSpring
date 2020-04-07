@@ -7,8 +7,9 @@ import ru.lavrov.tm.api.IProjectRepository;
 import ru.lavrov.tm.api.IProjectService;
 import ru.lavrov.tm.api.ITaskRepository;
 import ru.lavrov.tm.bootstrap.Bootstrap;
-import ru.lavrov.tm.dto.Project;
-import ru.lavrov.tm.dto.Task;
+import ru.lavrov.tm.dto.ProjectDTO;
+import ru.lavrov.tm.dto.TaskDTO;
+import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.exception.common.DescriptionIsInvalidException;
 import ru.lavrov.tm.exception.common.NameIsInvalidException;
 import ru.lavrov.tm.exception.project.ProjectNameExistsException;
@@ -38,7 +39,7 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
         if (projectRepository.findEntityByName(userId, projectName) != null)
             throw new ProjectNameExistsException();
         try {
-            projectRepository.persist(new Project(projectName, userId));
+            projectRepository.persist(new ProjectDTO(projectName, userId));
             sqlSession.commit();
         } catch (Exception e) {
             sqlSession.rollback();
@@ -48,7 +49,7 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
     }
 
     @Override
-    public Project findProjectByName(@Nullable final String userId, @Nullable final String projectName) {
+    public ProjectDTO findProjectByName(@Nullable final String userId, @Nullable final String projectName) {
         if (projectName == null || projectName.isEmpty())
             throw new ProjectNameIsInvalidException();
         if (userId == null || userId.isEmpty())
@@ -73,7 +74,7 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
         @NotNull final SqlSession sqlSession = Bootstrap.getSqlSessionFactory().openSession();
         @NotNull final IProjectRepository projectRepository = sqlSession.getMapper(IProjectRepository.class);
         @NotNull final ITaskRepository taskRepository = sqlSession.getMapper(ITaskRepository.class);
-        @Nullable final Project project = projectRepository.findEntityByName(userId, projectName);
+        @Nullable final ProjectDTO project = projectRepository.findEntityByName(userId, projectName);
         if (project == null)
             throw new ProjectNotExistsException();
         try {
@@ -112,7 +113,7 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
 
     @Nullable
     @Override
-    public Collection<Task> getProjectTasks(@Nullable final String userId, @Nullable final String projectName) {
+    public Collection<TaskDTO> getProjectTasks(@Nullable final String userId, @Nullable final String projectName) {
         if (projectName == null || projectName.isEmpty())
             throw new ProjectNameIsInvalidException();
         if (userId == null || userId.isEmpty())
@@ -123,12 +124,12 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
         @NotNull final SqlSession sqlSession = Bootstrap.getSqlSessionFactory().openSession();
         @NotNull final IProjectRepository projectRepository = sqlSession.getMapper(IProjectRepository.class);
         @NotNull final ITaskRepository taskRepository = sqlSession.getMapper(ITaskRepository.class);
-        @Nullable final Project project = projectRepository.findEntityByName(userId, projectName);
+        @Nullable final ProjectDTO project = projectRepository.findEntityByName(userId, projectName);
         if (project == null)
             throw new ProjectNotExistsException();
         if (!project.getUserId().equals(userId))
             throw new ProjectNotExistsException();
-        @Nullable final Collection<Task> collection = taskRepository.getProjectTasks(userId, project.getId());
+        @Nullable final Collection<TaskDTO> collection = taskRepository.getProjectTasks(userId, project.getId());
         return collection;
     }
 
@@ -158,7 +159,7 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
 
     @Nullable
     @Override
-    public Collection<Project> findAllByNamePart(@Nullable final String userId, @Nullable final String name) {
+    public Collection<ProjectDTO> findAllByNamePart(@Nullable final String userId, @Nullable final String name) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         if (name == null || name.isEmpty())
@@ -168,14 +169,14 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
             throw new ConnectionPendingException();
         @NotNull final SqlSession sqlSession = Bootstrap.getSqlSessionFactory().openSession();
         @NotNull final IProjectRepository projectRepository = sqlSession.getMapper(IProjectRepository.class);
-        @Nullable final Collection<Project> collection =
+        @Nullable final Collection<ProjectDTO> collection =
                 projectRepository.findAllByNamePart(userId, "%" + name + "%");
         return collection;
     }
 
     @Nullable
     @Override
-    public Collection<Project> findAllByDescPart(@Nullable final String userId, @Nullable final String description) {
+    public Collection<ProjectDTO> findAllByDescPart(@Nullable final String userId, @Nullable final String description) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         if (description == null || description.isEmpty())
@@ -185,17 +186,17 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
             throw new ConnectionPendingException();
         @NotNull final SqlSession sqlSession = Bootstrap.getSqlSessionFactory().openSession();
         @NotNull final IProjectRepository projectRepository = sqlSession.getMapper(IProjectRepository.class);
-        @Nullable final Collection<Project> collection =
+        @Nullable final Collection<ProjectDTO> collection =
                 projectRepository.findAllByDescPart(userId, "%" + description + "%");
         return collection;
     }
 
     @Nullable
     @Override
-    public Collection<Project> findAll(@Nullable final String userId, @Nullable final Comparator<Project> comparator) {
+    public Collection<ProjectDTO> findAll(@Nullable final String userId, @Nullable final Comparator<ProjectDTO> comparator) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        @Nullable Collection<Project> list;
+        @Nullable Collection<ProjectDTO> list;
         @Nullable final Connection connection = getConnection();
         if (connection == null)
             throw new ConnectionPendingException();
@@ -204,12 +205,12 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
         list = projectRepository.findAll(userId);
         if (comparator == null)
             return list;
-        ((ArrayList<Project>) list).sort(comparator);
+        ((ArrayList<ProjectDTO>) list).sort(comparator);
         return list;
     }
 
     @Override
-    public void persist(@Nullable final Project entity) {
+    public void persist(@Nullable final ProjectDTO entity) {
         if (entity == null)
             throw new ProjectNotExistsException();
         @Nullable final Connection connection = getConnection();
@@ -228,7 +229,7 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
     }
 
     @Override
-    public void merge(@Nullable final Project entity) {
+    public void merge(@Nullable final ProjectDTO entity) {
         if (entity == null)
             throw new ProjectNotExistsException();
         @Nullable final Connection connection = getConnection();
@@ -267,7 +268,7 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
 
     @Nullable
     @Override
-    public Collection<Project> findAll(@Nullable final String userId) {
+    public Collection<ProjectDTO> findAll(@Nullable final String userId) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         @Nullable final Connection connection = getConnection();
@@ -280,7 +281,7 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
 
     @Nullable
     @Override
-    public Project findOne(@Nullable final String userId, @Nullable String entityID) {
+    public ProjectDTO findOne(@Nullable final String userId, @Nullable String entityID) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         if (entityID == null || entityID.isEmpty())

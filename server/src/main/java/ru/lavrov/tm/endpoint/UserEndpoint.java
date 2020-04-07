@@ -4,10 +4,10 @@ import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.*;
-import ru.lavrov.tm.dto.Project;
-import ru.lavrov.tm.dto.Session;
-import ru.lavrov.tm.dto.Task;
-import ru.lavrov.tm.dto.User;
+import ru.lavrov.tm.dto.ProjectDTO;
+import ru.lavrov.tm.entity.Session;
+import ru.lavrov.tm.dto.TaskDTO;
+import ru.lavrov.tm.dto.UserDTO;
 import ru.lavrov.tm.enumerate.Role;
 
 import javax.jws.WebMethod;
@@ -64,7 +64,7 @@ public final class UserEndpoint extends AbstractEndpoint{
 
     @WebMethod
     @Nullable
-    public Collection<Project> getUserProjects(@Nullable final String token){
+    public Collection<ProjectDTO> getUserProjects(@Nullable final String token){
         @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
@@ -80,7 +80,7 @@ public final class UserEndpoint extends AbstractEndpoint{
 
     @WebMethod
     @Nullable
-    public Collection<Task> getUserTasks(@Nullable final String token){
+    public Collection<TaskDTO> getUserTasks(@Nullable final String token){
         @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
@@ -96,7 +96,7 @@ public final class UserEndpoint extends AbstractEndpoint{
 
     @WebMethod
     @Nullable
-    public User getUser(@Nullable final String token){
+    public UserDTO getUser(@Nullable final String token){
         @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);

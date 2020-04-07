@@ -9,8 +9,8 @@ import ru.lavrov.tm.api.ITokenService;
 import ru.lavrov.tm.comparator.FinishDateComparator;
 import ru.lavrov.tm.comparator.StartDateComparator;
 import ru.lavrov.tm.comparator.StatusComparator;
-import ru.lavrov.tm.dto.Session;
-import ru.lavrov.tm.dto.Task;
+import ru.lavrov.tm.entity.Session;
+import ru.lavrov.tm.dto.TaskDTO;
 import ru.lavrov.tm.enumerate.Role;
 
 import javax.jws.WebMethod;
@@ -95,7 +95,7 @@ public final class TaskEndpoint extends AbstractEndpoint{
 
     @WebMethod
     @Nullable
-    public Collection<Task> findAllTasksByNamePart(@Nullable final String token, @NotNull final String name) {
+    public Collection<TaskDTO> findAllTasksByNamePart(@Nullable final String token, @NotNull final String name) {
         @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         if (name == null || name.isEmpty())
             return null;
@@ -108,7 +108,7 @@ public final class TaskEndpoint extends AbstractEndpoint{
 
     @WebMethod
     @Nullable
-    public Task findTaskByName(@Nullable final String token, @NotNull final String name) {
+    public TaskDTO findTaskByName(@Nullable final String token, @NotNull final String name) {
         @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         if (name == null || name.isEmpty())
             return null;
@@ -121,7 +121,7 @@ public final class TaskEndpoint extends AbstractEndpoint{
 
     @WebMethod
     @Nullable
-    public Collection<Task> findAllTasksByDescPart(@Nullable final String token, @NotNull final String description) {
+    public Collection<TaskDTO> findAllTasksByDescPart(@Nullable final String token, @NotNull final String description) {
         @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         if (description == null || description.isEmpty())
             return null;
@@ -134,7 +134,7 @@ public final class TaskEndpoint extends AbstractEndpoint{
 
     @WebMethod
     @Nullable
-    public Collection<Task> findAllTasks(@Nullable final String token) {
+    public Collection<TaskDTO> findAllTasks(@Nullable final String token) {
         @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
@@ -145,7 +145,7 @@ public final class TaskEndpoint extends AbstractEndpoint{
 
     @WebMethod
     @Nullable
-    public Collection<Task> findAllTasksByStatus(@Nullable final String token) {
+    public Collection<TaskDTO> findAllTasksByStatus(@Nullable final String token) {
         @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
@@ -157,7 +157,7 @@ public final class TaskEndpoint extends AbstractEndpoint{
 
     @WebMethod
     @Nullable
-    public Collection<Task> findAllTasksByStartDate(@Nullable final String token) {
+    public Collection<TaskDTO> findAllTasksByStartDate(@Nullable final String token) {
         @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
@@ -169,7 +169,7 @@ public final class TaskEndpoint extends AbstractEndpoint{
 
     @WebMethod
     @Nullable
-    public Collection<Task> findAllTasksByFinishDate(@Nullable final String token) {
+    public Collection<TaskDTO> findAllTasksByFinishDate(@Nullable final String token) {
         @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);

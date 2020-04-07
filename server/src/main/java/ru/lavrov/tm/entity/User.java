@@ -1,4 +1,4 @@
-package ru.lavrov.tm.dto;
+package ru.lavrov.tm.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
@@ -9,17 +9,19 @@ import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.IEntity;
 import ru.lavrov.tm.enumerate.Role;
 
+import javax.persistence.CascadeType;
+import javax.persistence.OneToMany;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @XmlRootElement(name = "user")
-public final class User implements IEntity {
+public final class User extends AbstractEntity implements IEntity {
 
-    @NotNull
-    private String id = UUID.randomUUID().toString();
     @Nullable
     private String login;
     @Nullable
@@ -27,45 +29,24 @@ public final class User implements IEntity {
     @Nullable
     private Role role;
 
-    public User(@Nullable final String login, @Nullable final String password, @Nullable final Role role) {
-        this.login = login;
-        this.password = password;
-        this.role = role;
-    }
+    @NotNull
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Project> projects = new ArrayList<>();
 
-    @JsonIgnore
-    @Nullable
-    @Override
-    public String getUserId() {
-        return getId();
-    }
+    @NotNull
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Task> tasks = new ArrayList<>();
 
-    @JsonIgnore
-    @Override
-    public void setUserId(@Nullable final String id) {
-        setId(id);
-    }
-
-    @JsonIgnore
-    @Nullable
-    @Override
-    public String getName() {
-        return getLogin();
-    }
-
-    @JsonIgnore
-    @Override
-    public void setName(@Nullable final String login) {
-        setLogin(login);
-    }
-
-    @JsonIgnore
     public void setRole(@Nullable final String role) {
         @Nullable final Role curRole = Role.getByRole(role);
         if (curRole != null)
             this.role = curRole;
         else
-            this.role = Role.valueOf(role);
+            try {
+                this.role = Role.valueOf(role);
+            } catch (NullPointerException e) {
+                this.role = null;
+            }
     }
 
     @Nullable

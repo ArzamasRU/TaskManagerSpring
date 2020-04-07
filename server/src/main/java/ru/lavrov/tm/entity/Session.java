@@ -1,4 +1,4 @@
-package ru.lavrov.tm.dto;
+package ru.lavrov.tm.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.enumerate.Role;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -16,6 +17,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "session")
 public final class Session {
 
+    @NotNull
+    private String id = UUID.randomUUID().toString();
     @Nullable
     private String userId;
     @Nullable

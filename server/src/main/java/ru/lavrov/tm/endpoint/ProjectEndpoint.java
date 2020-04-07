@@ -9,9 +9,9 @@ import ru.lavrov.tm.api.ITokenService;
 import ru.lavrov.tm.comparator.FinishDateComparator;
 import ru.lavrov.tm.comparator.StartDateComparator;
 import ru.lavrov.tm.comparator.StatusComparator;
-import ru.lavrov.tm.dto.Project;
-import ru.lavrov.tm.dto.Session;
-import ru.lavrov.tm.dto.Task;
+import ru.lavrov.tm.dto.ProjectDTO;
+import ru.lavrov.tm.entity.Session;
+import ru.lavrov.tm.dto.TaskDTO;
 import ru.lavrov.tm.enumerate.Role;
 
 import javax.jws.WebMethod;
@@ -68,7 +68,7 @@ public final class ProjectEndpoint extends AbstractEndpoint{
 
     @WebMethod
     @Nullable
-    public Collection<Task> getProjectTasks(@Nullable final String token, @Nullable final String projectName) {
+    public Collection<TaskDTO> getProjectTasks(@Nullable final String token, @Nullable final String projectName) {
         @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
@@ -101,7 +101,7 @@ public final class ProjectEndpoint extends AbstractEndpoint{
 
     @WebMethod
     @Nullable
-    public Collection<Project> findAllByNamePart(@Nullable final String token, @Nullable final String name) {
+    public Collection<ProjectDTO> findAllByNamePart(@Nullable final String token, @Nullable final String name) {
         @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         if (name == null || name.isEmpty())
             return null;
@@ -114,7 +114,7 @@ public final class ProjectEndpoint extends AbstractEndpoint{
 
     @WebMethod
     @Nullable
-    public Project findProjectByName(@Nullable final String token, @Nullable final String name) {
+    public ProjectDTO findProjectByName(@Nullable final String token, @Nullable final String name) {
         @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         if (name == null || name.isEmpty())
             return null;
@@ -127,7 +127,7 @@ public final class ProjectEndpoint extends AbstractEndpoint{
 
     @WebMethod
     @Nullable
-    public Collection<Project> findAllByDescPart(@Nullable final String token, @Nullable final String description) {
+    public Collection<ProjectDTO> findAllByDescPart(@Nullable final String token, @Nullable final String description) {
         @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         if (description == null || description.isEmpty())
             return null;
@@ -140,7 +140,7 @@ public final class ProjectEndpoint extends AbstractEndpoint{
 
     @WebMethod
     @Nullable
-    public Collection<Project> findAll(@Nullable final String token) {
+    public Collection<ProjectDTO> findAll(@Nullable final String token) {
         @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
@@ -151,7 +151,7 @@ public final class ProjectEndpoint extends AbstractEndpoint{
 
     @WebMethod
     @Nullable
-    public Project findOne(@Nullable final String token, @Nullable final String entityId) {
+    public ProjectDTO findOne(@Nullable final String token, @Nullable final String entityId) {
         @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
@@ -162,7 +162,7 @@ public final class ProjectEndpoint extends AbstractEndpoint{
 
     @WebMethod
     @Nullable
-    public Collection<Project> findAllByStatus(@Nullable final String token) {
+    public Collection<ProjectDTO> findAllByStatus(@Nullable final String token) {
         @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
@@ -174,7 +174,7 @@ public final class ProjectEndpoint extends AbstractEndpoint{
 
     @WebMethod
     @Nullable
-    public Collection<Project> findAllByFinishDate(@Nullable final String token) {
+    public Collection<ProjectDTO> findAllByFinishDate(@Nullable final String token) {
         @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
@@ -186,7 +186,7 @@ public final class ProjectEndpoint extends AbstractEndpoint{
 
     @WebMethod
     @Nullable
-    public Collection<Project> findAllByStartDate(@Nullable final String token) {
+    public Collection<ProjectDTO> findAllByStartDate(@Nullable final String token) {
         @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);

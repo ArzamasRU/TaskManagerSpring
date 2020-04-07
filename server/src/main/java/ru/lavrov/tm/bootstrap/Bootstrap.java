@@ -12,7 +12,6 @@ import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.*;
-import ru.lavrov.tm.dto.Token;
 import ru.lavrov.tm.endpoint.*;
 import ru.lavrov.tm.enumerate.Role;
 import ru.lavrov.tm.service.*;
@@ -91,5 +90,28 @@ public final class Bootstrap implements IServiceLocator {
         return new SqlSessionFactoryBuilder().build(configuration);
     }
 
+//    private EntityManagerFactory factory() {
+//        final Map<String, String> settings = new HashMap<>();
+//        settings.put(Environment.DRIVER, appProperties.getProperty("driver"));
+//        settings.put(Environment.URL, appProperties.getProperty("url"));
+//        settings.put(Environment.USER, appProperties.getProperty("login"));
+//        settings.put(Environment.PASS, appProperties.getProperty("password"));
+//        settings.put(Environment.DIALECT,
+//                "org.hibernate.dialect.MySQL5InnoDBDialect");
+//        settings.put(Environment.HBM2DDL_AUTO, "update");
+//        settings.put(Environment.SHOW_SQL, "true");
+//        final StandardServiceRegistryBuilder registryBuilder
+//                = new StandardServiceRegistryBuilder();
+//        registryBuilder.applySettings(settings);
+//        final StandardServiceRegistry registry = registryBuilder.build();
+//        final MetadataSources sources = new MetadataSources(registry);
+//        sources.addAnnotatedClass(Task.class);
+//        sources.addAnnotatedClass(Project.class);
+//        sources.addAnnotatedClass(User.class);
+//        sources.addAnnotatedClass(Session.class);
+//        sources.addAnnotatedClass(Cat.class);
+//        final Metadata metadata = sources.getMetadataBuilder().build();
+//        return metadata.getSessionFactoryBuilder().build();
+//    }
 }
 

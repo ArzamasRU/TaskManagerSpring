@@ -2,7 +2,7 @@ package ru.lavrov.tm.api;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.dto.Token;
+import ru.lavrov.tm.dto.TokenDTO;
 import ru.lavrov.tm.enumerate.Role;
 
 import java.util.Collection;
@@ -13,7 +13,7 @@ public interface ITokenService {
 
     void validate(@Nullable final String token, @Nullable final Collection<Role> roles);
 
-    Token decryptToken(@Nullable final String token);
+    TokenDTO decryptToken(@Nullable final String token);
 
-    String encryptToken(@Nullable final Token token);
+    String encryptToken(@Nullable final TokenDTO token);
 }

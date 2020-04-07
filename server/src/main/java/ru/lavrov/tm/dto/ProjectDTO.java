@@ -16,8 +16,8 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-@XmlRootElement(name = "task")
-public final class Task implements IEntity, IComparableEntity {
+@XmlRootElement(name = "project")
+public final class ProjectDTO implements IEntity, IComparableEntity {
 
     @Nullable
     private String name;
@@ -26,21 +26,15 @@ public final class Task implements IEntity, IComparableEntity {
     @Nullable
     private String description;
     @Nullable
-    private Date startDate = new Date();
+    private Date creationDate = new Date();
+    @Nullable
+    private Date startDate = null;
     @Nullable
     private Date finishDate = null;
     @Nullable
     private String userId;
     @Nullable
-    private String projectId = null;
-    @Nullable
     private Status status = Status.PLANNED;
-
-    public Task(@Nullable final String name, @Nullable final String projectId, @Nullable final String userId) {
-        this.name = name;
-        this.projectId = projectId;
-        this.userId = userId;
-    }
 
     @Nullable
     @Override
@@ -49,7 +43,6 @@ public final class Task implements IEntity, IComparableEntity {
                 ", description=" + description +
                 ", startDate=" + startDate +
                 ", finishDate=" + finishDate +
-                ", projectId='" + projectId + '\'' +
                 ", userId='" + userId + '\'';
     }
 }

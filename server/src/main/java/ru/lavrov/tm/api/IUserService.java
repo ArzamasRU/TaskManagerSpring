@@ -1,7 +1,7 @@
 package ru.lavrov.tm.api;
 
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.dto.User;
+import ru.lavrov.tm.dto.UserDTO;
 
 import java.util.Collection;
 
@@ -12,15 +12,15 @@ public interface IUserService extends IService {
 
     void updateLogin(@Nullable String userId, @Nullable String newLogin);
 
-    User findOne(@Nullable String userId);
+    UserDTO findOne(@Nullable String userId);
 
-    User findUserByLogin(@Nullable String login);
+    UserDTO findUserByLogin(@Nullable String login);
 
     void removeUser(@Nullable final String userId);
 
-    void persist(@Nullable User entity);
+    void persist(@Nullable UserDTO entity);
 
-    void merge(@Nullable User entity);
+    void merge(@Nullable UserDTO entity);
 
-    Collection<User> findAll(@Nullable String userId);
+    Collection<UserDTO> findAll(@Nullable String userId);
 }
