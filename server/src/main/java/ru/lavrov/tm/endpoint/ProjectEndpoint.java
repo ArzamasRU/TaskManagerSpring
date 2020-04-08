@@ -29,23 +29,28 @@ public final class ProjectEndpoint extends AbstractEndpoint{
         super(bootstrap);
     }
 
-    @WebMethod
-    public boolean createByProjectName(@Nullable final String token, @Nullable final String projectName) {
-        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
-        if (projectName == null || projectName.isEmpty())
-            return false;
-        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token, roles);
-        @NotNull final IProjectService projectService = bootstrap.getProjectService();
-        @Nullable final Session session = tokenService.decryptToken(token).getSession();
-        try {
-            projectService.createByProjectName(session.getUserId(), projectName);
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    }
+//    @WebMethod
+//    public boolean createByProjectName(@Nullable final String token, @Nullable final String projectName) {
+//        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
+//        if (projectName == null || projectName.isEmpty())
+//            return false;
+//        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+//        tokenService.validate(token, roles);
+//        @NotNull final IProjectService projectService = bootstrap.getProjectService();
+//        @Nullable final Session session = tokenService.decryptToken(token).getSession();
+//        try {
+//            projectService.createByProjectName(session.getUserId(), projectName);
+//        } catch (RuntimeException e) {
+//            e.printStackTrace();
+//            return false;
+//        }
+//        return true;
+//    }
+
+
+
+
+
 
 //    @WebMethod
 //    public boolean removeProjectByName(@Nullable final String token, @NotNull final String projectName) {

@@ -28,187 +28,187 @@ public final class TaskEndpoint extends AbstractEndpoint{
         super(bootstrap);
     }
 
-    @WebMethod
-    public boolean createByTaskName(
-            @Nullable final String token, @NotNull final String taskName, @NotNull final String projectName
-    ) {
-        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
-        if (taskName == null || taskName.isEmpty())
-            return false;
-        if (projectName == null || projectName.isEmpty())
-            return false;
-        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token, roles);
-        @Nullable final Session session = tokenService.decryptToken(token).getSession();
-        @NotNull final ITaskService taskService = bootstrap.getTaskService();
-        try {
-            taskService.createByTaskName(session.getUserId(), taskName, projectName);
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    }
-
-    @WebMethod
-    public boolean removeTaskByName(@Nullable final String token, @NotNull final String taskName) {
-        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
-        if (taskName == null || taskName.isEmpty())
-            return false;
-        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token, roles);
-        @Nullable final Session session = tokenService.decryptToken(token).getSession();
-        @NotNull final ITaskService taskService = bootstrap.getTaskService();
-        try {
-            taskService.removeTaskByName(session.getUserId(), taskName);
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    }
-
-    @WebMethod
-    public boolean renameTask(@Nullable final String token,
-                              @NotNull final String projectName,
-                              @NotNull final String oldName,
-                              @NotNull final String newName
-    ) {
-        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
-        if (projectName == null || projectName.isEmpty())
-            return false;
-        if (newName == null || newName.isEmpty() || oldName == null || oldName.isEmpty())
-            return false;
-        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token, roles);
-        @Nullable final Session session = tokenService.decryptToken(token).getSession();
-        @NotNull final ITaskService taskService = bootstrap.getTaskService();
-        try {
-            taskService.renameTask(session.getUserId(), projectName, oldName, newName);
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    }
-
-    @WebMethod
-    @Nullable
-    public Collection<Task> findAllTasksByNamePart(@Nullable final String token, @NotNull final String name) {
-        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
-        if (name == null || name.isEmpty())
-            return null;
-        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token, roles);
-        @Nullable final Session session = tokenService.decryptToken(token).getSession();
-        @NotNull final ITaskService taskService = bootstrap.getTaskService();
-        return taskService.findAllByNamePart(session.getUserId(), name);
-    }
-
-    @WebMethod
-    @Nullable
-    public Task findTaskByName(@Nullable final String token, @NotNull final String name) {
-        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
-        if (name == null || name.isEmpty())
-            return null;
-        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token, roles);
-        @Nullable final Session session = tokenService.decryptToken(token).getSession();
-        @NotNull final ITaskService taskService = bootstrap.getTaskService();
-        return taskService.findTaskByName(session.getUserId(), name);
-    }
-
-    @WebMethod
-    @Nullable
-    public Collection<Task> findAllTasksByDescPart(@Nullable final String token, @NotNull final String description) {
-        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
-        if (description == null || description.isEmpty())
-            return null;
-        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token, roles);
-        @Nullable final Session session = tokenService.decryptToken(token).getSession();
-        @NotNull final ITaskService taskService = bootstrap.getTaskService();
-        return taskService.findAllByDescPart(session.getUserId(), description);
-    }
-
-    @WebMethod
-    @Nullable
-    public Collection<Task> findAllTasks(@Nullable final String token) {
-        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
-        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token, roles);
-        @Nullable final Session session = tokenService.decryptToken(token).getSession();
-        @NotNull final ITaskService taskService = bootstrap.getTaskService();
-        return taskService.findAll(session.getUserId());
-    }
-
-    @WebMethod
-    @Nullable
-    public Collection<Task> findAllTasksByStatus(@Nullable final String token) {
-        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
-        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token, roles);
-        @Nullable final Session session = tokenService.decryptToken(token).getSession();
-        @NotNull final ITaskService taskService = bootstrap.getTaskService();
-        @NotNull final Comparator comparator = new StatusComparator();
-        return taskService.findAll(session.getUserId(), comparator);
-    }
-
-    @WebMethod
-    @Nullable
-    public Collection<Task> findAllTasksByStartDate(@Nullable final String token) {
-        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
-        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token, roles);
-        @Nullable final Session session = tokenService.decryptToken(token).getSession();
-        @NotNull final ITaskService taskService = bootstrap.getTaskService();
-        @NotNull final Comparator comparator = new StartDateComparator();
-        return taskService.findAll(session.getUserId(), comparator);
-    }
-
-    @WebMethod
-    @Nullable
-    public Collection<Task> findAllTasksByFinishDate(@Nullable final String token) {
-        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
-        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token, roles);
-        @Nullable final Session session = tokenService.decryptToken(token).getSession();
-        @NotNull final ITaskService taskService = bootstrap.getTaskService();
-        @NotNull final Comparator comparator = new FinishDateComparator();
-        return taskService.findAll(session.getUserId(), comparator);
-    }
-
-    @WebMethod
-    public boolean removeAll(@Nullable final String token) {
-        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
-        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token, roles);
-        @Nullable final Session session = tokenService.decryptToken(token).getSession();
-        @NotNull final ITaskService taskService = bootstrap.getTaskService();
-        try {
-            taskService.removeAll(session.getUserId());
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    }
-
-    @WebMethod
-    public boolean remove(@Nullable final String token, @NotNull final String entityId) {
-        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
-        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token, roles);
-        if (entityId == null || entityId.isEmpty())
-            return false;
-        @NotNull final ITaskService taskService = bootstrap.getTaskService();
-        @Nullable final Session session = tokenService.decryptToken(token).getSession();
-        try {
-            taskService.removeTask(session.getUserId(), entityId);
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    }
+//    @WebMethod
+//    public boolean createByTaskName(
+//            @Nullable final String token, @NotNull final String taskName, @NotNull final String projectName
+//    ) {
+//        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
+//        if (taskName == null || taskName.isEmpty())
+//            return false;
+//        if (projectName == null || projectName.isEmpty())
+//            return false;
+//        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+//        tokenService.validate(token, roles);
+//        @Nullable final Session session = tokenService.decryptToken(token).getSession();
+//        @NotNull final ITaskService taskService = bootstrap.getTaskService();
+//        try {
+//            taskService.createByTaskName(session.getUserId(), taskName, projectName);
+//        } catch (RuntimeException e) {
+//            e.printStackTrace();
+//            return false;
+//        }
+//        return true;
+//    }
+//
+//    @WebMethod
+//    public boolean removeTaskByName(@Nullable final String token, @NotNull final String taskName) {
+//        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
+//        if (taskName == null || taskName.isEmpty())
+//            return false;
+//        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+//        tokenService.validate(token, roles);
+//        @Nullable final Session session = tokenService.decryptToken(token).getSession();
+//        @NotNull final ITaskService taskService = bootstrap.getTaskService();
+//        try {
+//            taskService.removeTaskByName(session.getUserId(), taskName);
+//        } catch (RuntimeException e) {
+//            e.printStackTrace();
+//            return false;
+//        }
+//        return true;
+//    }
+//
+//    @WebMethod
+//    public boolean renameTask(@Nullable final String token,
+//                              @NotNull final String projectName,
+//                              @NotNull final String oldName,
+//                              @NotNull final String newName
+//    ) {
+//        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
+//        if (projectName == null || projectName.isEmpty())
+//            return false;
+//        if (newName == null || newName.isEmpty() || oldName == null || oldName.isEmpty())
+//            return false;
+//        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+//        tokenService.validate(token, roles);
+//        @Nullable final Session session = tokenService.decryptToken(token).getSession();
+//        @NotNull final ITaskService taskService = bootstrap.getTaskService();
+//        try {
+//            taskService.renameTask(session.getUserId(), projectName, oldName, newName);
+//        } catch (RuntimeException e) {
+//            e.printStackTrace();
+//            return false;
+//        }
+//        return true;
+//    }
+//
+//    @WebMethod
+//    @Nullable
+//    public Collection<Task> findAllTasksByNamePart(@Nullable final String token, @NotNull final String name) {
+//        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
+//        if (name == null || name.isEmpty())
+//            return null;
+//        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+//        tokenService.validate(token, roles);
+//        @Nullable final Session session = tokenService.decryptToken(token).getSession();
+//        @NotNull final ITaskService taskService = bootstrap.getTaskService();
+//        return taskService.findAllByNamePart(session.getUserId(), name);
+//    }
+//
+//    @WebMethod
+//    @Nullable
+//    public Task findTaskByName(@Nullable final String token, @NotNull final String name) {
+//        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
+//        if (name == null || name.isEmpty())
+//            return null;
+//        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+//        tokenService.validate(token, roles);
+//        @Nullable final Session session = tokenService.decryptToken(token).getSession();
+//        @NotNull final ITaskService taskService = bootstrap.getTaskService();
+//        return taskService.findTaskByName(session.getUserId(), name);
+//    }
+//
+//    @WebMethod
+//    @Nullable
+//    public Collection<Task> findAllTasksByDescPart(@Nullable final String token, @NotNull final String description) {
+//        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
+//        if (description == null || description.isEmpty())
+//            return null;
+//        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+//        tokenService.validate(token, roles);
+//        @Nullable final Session session = tokenService.decryptToken(token).getSession();
+//        @NotNull final ITaskService taskService = bootstrap.getTaskService();
+//        return taskService.findAllByDescPart(session.getUserId(), description);
+//    }
+//
+//    @WebMethod
+//    @Nullable
+//    public Collection<Task> findAllTasks(@Nullable final String token) {
+//        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
+//        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+//        tokenService.validate(token, roles);
+//        @Nullable final Session session = tokenService.decryptToken(token).getSession();
+//        @NotNull final ITaskService taskService = bootstrap.getTaskService();
+//        return taskService.findAll(session.getUserId());
+//    }
+//
+//    @WebMethod
+//    @Nullable
+//    public Collection<Task> findAllTasksByStatus(@Nullable final String token) {
+//        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
+//        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+//        tokenService.validate(token, roles);
+//        @Nullable final Session session = tokenService.decryptToken(token).getSession();
+//        @NotNull final ITaskService taskService = bootstrap.getTaskService();
+//        @NotNull final Comparator comparator = new StatusComparator();
+//        return taskService.findAll(session.getUserId(), comparator);
+//    }
+//
+//    @WebMethod
+//    @Nullable
+//    public Collection<Task> findAllTasksByStartDate(@Nullable final String token) {
+//        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
+//        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+//        tokenService.validate(token, roles);
+//        @Nullable final Session session = tokenService.decryptToken(token).getSession();
+//        @NotNull final ITaskService taskService = bootstrap.getTaskService();
+//        @NotNull final Comparator comparator = new StartDateComparator();
+//        return taskService.findAll(session.getUserId(), comparator);
+//    }
+//
+//    @WebMethod
+//    @Nullable
+//    public Collection<Task> findAllTasksByFinishDate(@Nullable final String token) {
+//        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
+//        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+//        tokenService.validate(token, roles);
+//        @Nullable final Session session = tokenService.decryptToken(token).getSession();
+//        @NotNull final ITaskService taskService = bootstrap.getTaskService();
+//        @NotNull final Comparator comparator = new FinishDateComparator();
+//        return taskService.findAll(session.getUserId(), comparator);
+//    }
+//
+//    @WebMethod
+//    public boolean removeAll(@Nullable final String token) {
+//        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
+//        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+//        tokenService.validate(token, roles);
+//        @Nullable final Session session = tokenService.decryptToken(token).getSession();
+//        @NotNull final ITaskService taskService = bootstrap.getTaskService();
+//        try {
+//            taskService.removeAll(session.getUserId());
+//        } catch (RuntimeException e) {
+//            e.printStackTrace();
+//            return false;
+//        }
+//        return true;
+//    }
+//
+//    @WebMethod
+//    public boolean remove(@Nullable final String token, @NotNull final String entityId) {
+//        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
+//        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+//        tokenService.validate(token, roles);
+//        if (entityId == null || entityId.isEmpty())
+//            return false;
+//        @NotNull final ITaskService taskService = bootstrap.getTaskService();
+//        @Nullable final Session session = tokenService.decryptToken(token).getSession();
+//        try {
+//            taskService.removeTask(session.getUserId(), entityId);
+//        } catch (RuntimeException e) {
+//            e.printStackTrace();
+//            return false;
+//        }
+//        return true;
+//    }
 }

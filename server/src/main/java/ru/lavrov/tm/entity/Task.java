@@ -11,19 +11,19 @@ import ru.lavrov.tm.dto.TaskDTO;
 import ru.lavrov.tm.enumerate.Status;
 import ru.lavrov.tm.exception.task.TaskNotExistsException;
 
+import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
 
 @Getter
 @Setter
 @NoArgsConstructor
-@XmlRootElement(name = "task")
+@Entity
+@Table(name = "app_task")
 public final class Task extends AbstractEntity implements IEntity, IComparableEntity {
 
-    @ManyToOne
-    @NotNull
-    private User user;
     @Nullable
     private String name;
     @Nullable
@@ -38,6 +38,14 @@ public final class Task extends AbstractEntity implements IEntity, IComparableEn
     private String projectId = null;
     @Nullable
     private Status status = Status.PLANNED;
+
+    @ManyToOne
+    @Nullable
+    private Project project;
+
+    @ManyToOne
+    @NotNull
+    private User user;
 
     @NotNull
     public TaskDTO getTaskDTO(@NotNull final Task task) {

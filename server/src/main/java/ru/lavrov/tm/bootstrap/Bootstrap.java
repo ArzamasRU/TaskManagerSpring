@@ -17,10 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.*;
 import ru.lavrov.tm.endpoint.*;
-import ru.lavrov.tm.entity.Project;
-import ru.lavrov.tm.entity.Session;
-import ru.lavrov.tm.entity.Task;
-import ru.lavrov.tm.entity.User;
+import ru.lavrov.tm.entity.*;
 import ru.lavrov.tm.enumerate.Role;
 import ru.lavrov.tm.service.*;
 
@@ -38,13 +35,13 @@ import static ru.lavrov.tm.service.AppPropertyServiceImpl.appProperties;
 @NoArgsConstructor
 public final class Bootstrap implements IServiceLocator {
     @NotNull
-    private final IProjectService projectService = new ProjectServiceImpl();
+    private final IProjectService projectService = new ProjectServiceImpl(this);
     @NotNull
-    private final ITaskService taskService = new TaskServiceImpl();
+    private final ITaskService taskService = new TaskServiceImpl(this);
     @NotNull
-    private final IUserService userService = new UserServiceImpl();
+    private final IUserService userService = new UserServiceImpl(this);
     @NotNull
-    private final ISessionService sessionService = new SessionServiceImpl();
+    private final ISessionService sessionService = new SessionServiceImpl(this);
     @NotNull
     private final ITokenService tokenService = new TokenServiceImpl(this);
     @NotNull
@@ -70,18 +67,18 @@ public final class Bootstrap implements IServiceLocator {
     }
 
     private void initEndpoints() {
-        Endpoint.publish(UserEndpoint.URL, userEndpoint);
-        Endpoint.publish(TokenEndpoint.URL, tokenEndpoint);
-        Endpoint.publish(ProjectEndpoint.URL, projectEndpoint);
-        Endpoint.publish(TaskEndpoint.URL, taskEndpoint);
-        Endpoint.publish(GeneralCommandEndpoint.URL, generalCommandEndpoint);
+//        Endpoint.publish(UserEndpoint.URL, userEndpoint);
+//        Endpoint.publish(TokenEndpoint.URL, tokenEndpoint);
+//        Endpoint.publish(ProjectEndpoint.URL, projectEndpoint);
+//        Endpoint.publish(TaskEndpoint.URL, taskEndpoint);
+//        Endpoint.publish(GeneralCommandEndpoint.URL, generalCommandEndpoint);
     }
 
     private void initUsers() {
-        if (userService.findUserByLogin("user") == null)
-            userService.createByLogin("user", "user", Role.USER.getRole());
-        if (userService.findUserByLogin("admin") == null)
-            userService.createByLogin("admin", "admin", Role.ADMIN.getRole());
+//        if (userService.findUserByLogin("user") == null)
+//            userService.createByLogin(new User("user", "user", Role.USER));
+//        if (userService.findUserByLogin("admin") == null)
+//            userService.createByLogin(new User("admin", "admin", Role.ADMIN));
     }
 
     private void initProperties() {
@@ -126,6 +123,7 @@ public final class Bootstrap implements IServiceLocator {
         sources.addAnnotatedClass(Project.class);
         sources.addAnnotatedClass(User.class);
         sources.addAnnotatedClass(Session.class);
+        sources.addAnnotatedClass(Test.class);
         @NotNull final Metadata metadata = sources.getMetadataBuilder().build();
         return metadata.getSessionFactoryBuilder().build();
     }

@@ -11,6 +11,7 @@ import ru.lavrov.tm.entity.User;
 import ru.lavrov.tm.enumerate.Role;
 import ru.lavrov.tm.exception.project.ProjectNotExistsException;
 import ru.lavrov.tm.exception.user.*;
+import ru.lavrov.tm.repository.UserRepositoryImpl;
 
 import javax.persistence.EntityManager;
 import java.nio.channels.ConnectionPendingException;
@@ -26,30 +27,14 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
     public void createByLogin(@Nullable final User user) {
         if (user == null)
             throw new UserNotExistsException();
-        @Nullable Role currentRole = Role.getByRole(role);
-        if (currentRole == null)
-            throw new UserRoleIsInvalidException();
         @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
-        entityManager.getTransaction().begin();
-        new UserRepositoryImpl(entityManager).persist(user);
-        entityManager.getTransaction().commit();
-        entityManager.close();
-
-        @Nullable final Connection connection = getConnection();
-        if (connection == null)
-            throw new ConnectionPendingException();
-        @NotNull final SqlSession sqlSession = Bootstrap.getSqlSessionFactory().openSession();
-        @NotNull final IUserRepository userRepository = sqlSession.getMapper(IUserRepository.class);
-        @Nullable final User user = userRepository.findUserByLogin(login);
-        if (user != null)
-            throw new UserLoginExistsException();
-        try{
-            userRepository.persist(new User(login, password, currentRole));
-            sqlSession.commit();
-        } catch (Exception e) {
-            sqlSession.rollback();
+        @NotNull final IUserRepository userRepository = new UserRepositoryImpl(entityManager);
+        try {
+            entityManager.getTransaction().begin();
+            userRepository.persist(user);
+            entityManager.getTransaction().commit();
         } finally {
-            sqlSession.close();
+            entityManager.close();
         }
     }
 
@@ -109,18 +94,21 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
 //        return userRepository.findOne(userId);
 //    }
 //
-//    @Nullable
-//    @Override
-//    public User findUserByLogin(@NotNull final String login) {
-//        if (login == null || login.isEmpty())
-//            throw new UserLoginIsInvalidException();
-//        @Nullable final Connection connection = getConnection();
-//        if (connection == null)
-//            throw new ConnectionPendingException();
-//        @NotNull final SqlSession sqlSession = Bootstrap.getSqlSessionFactory().openSession();
-//        @NotNull final IUserRepository userRepository = sqlSession.getMapper(IUserRepository.class);
-//        return userRepository.findUserByLogin(login);
-//    }
+    @Nullable
+    @Override
+    public User findUserByLogin(@NotNull final String login) {
+        if (login == null || login.isEmpty())
+            throw new UserLoginIsInvalidException();
+        @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
+        @NotNull final IUserRepository userRepository = new UserRepositoryImpl(entityManager);
+        try {
+            entityManager.getTransaction().begin();
+            return userRepository.findUserByLogin(login);
+        } finally {
+            entityManager.getTransaction().commit();
+            entityManager.close();
+        }
+    }
 //
 //    @Override
 //    public void removeUser(@Nullable final String userId) {

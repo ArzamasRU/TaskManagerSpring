@@ -3,6 +3,9 @@ package ru.lavrov.tm.dto;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.Nullable;
+import ru.lavrov.tm.entity.Project;
+import ru.lavrov.tm.entity.Task;
+import ru.lavrov.tm.entity.User;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

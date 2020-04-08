@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
+import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import java.util.UUID;
 
@@ -13,6 +14,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @MappedSuperclass
 public class AbstractEntity {
+
+    @Id
     @NotNull
     private String id = UUID.randomUUID().toString();
 }

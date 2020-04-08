@@ -10,9 +10,9 @@ import ru.lavrov.tm.entity.Project;
 import javax.persistence.EntityManager;
 import java.util.Collection;
 
-public class ProjectRepository extends AbstractRepository implements IProjectRepository {
+public class ProjectRepositoryImpl extends AbstractRepository implements IProjectRepository {
 
-    public ProjectRepository(@NotNull final EntityManager entityManager) {
+    public ProjectRepositoryImpl(@NotNull final EntityManager entityManager) {
         super(entityManager);
     }
 

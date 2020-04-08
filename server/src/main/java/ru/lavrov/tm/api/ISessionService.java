@@ -9,9 +9,9 @@ import java.util.Collection;
 
 public interface ISessionService {
 
-    Session login(@NotNull String login, @NotNull String password);
-
-    void validatePermission(@Nullable Session session, @Nullable Collection<Role> listRoles);
-
-    void validate(@Nullable final Session session, @Nullable final Collection<Role> roles);
+//    Session login(@NotNull String login, @NotNull String password);
+//
+//    void validatePermission(@Nullable Session session, @Nullable Collection<Role> listRoles);
+//
+//    void validate(@Nullable final Session session, @Nullable final Collection<Role> roles);
 }

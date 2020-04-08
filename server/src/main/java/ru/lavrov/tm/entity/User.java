@@ -11,7 +11,9 @@ import ru.lavrov.tm.enumerate.Role;
 import ru.lavrov.tm.exception.user.UserNotExistsException;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +21,8 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@XmlRootElement(name = "user")
+@Entity
+@Table(name = "app_user")
 public final class User extends AbstractEntity implements IEntity {
 
     @Nullable
@@ -36,6 +39,12 @@ public final class User extends AbstractEntity implements IEntity {
     @NotNull
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Task> tasks = new ArrayList<>();
+
+    public User(@Nullable String login, @Nullable String password, @Nullable Role role) {
+        this.login = login;
+        this.password = password;
+        this.role = role;
+    }
 
     public void setRole(@Nullable final String role) {
         @Nullable final Role curRole = Role.getByRole(role);
