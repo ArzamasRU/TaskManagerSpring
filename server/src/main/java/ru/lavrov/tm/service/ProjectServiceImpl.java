@@ -7,14 +7,21 @@ import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.IProjectRepository;
 import ru.lavrov.tm.api.IProjectService;
 import ru.lavrov.tm.api.ITaskRepository;
+import ru.lavrov.tm.api.IUserRepository;
 import ru.lavrov.tm.bootstrap.Bootstrap;
+import ru.lavrov.tm.entity.Project;
+import ru.lavrov.tm.entity.User;
 import ru.lavrov.tm.exception.common.DescriptionIsInvalidException;
 import ru.lavrov.tm.exception.common.NameIsInvalidException;
 import ru.lavrov.tm.exception.project.ProjectNameExistsException;
 import ru.lavrov.tm.exception.project.ProjectNameIsInvalidException;
 import ru.lavrov.tm.exception.project.ProjectNotExistsException;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
+import ru.lavrov.tm.repository.ProjectRepositoryImpl;
+import ru.lavrov.tm.repository.TaskRepositoryImpl;
+import ru.lavrov.tm.repository.UserRepositoryImpl;
 
+import javax.persistence.EntityManager;
 import java.nio.channels.ConnectionPendingException;
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -27,68 +34,64 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
         super(bootstrap);
     }
 
-//    @Override
-//    public void createByProjectName(@Nullable final String userId, @Nullable final String projectName) {
-//        if (projectName == null || projectName.isEmpty())
-//            throw new ProjectNameIsInvalidException();
-//        if (userId == null || userId.isEmpty())
-//            throw new UserIsNotAuthorizedException();
-//        @Nullable final Connection connection = getConnection();
-//        if (connection == null)
-//            throw new ConnectionPendingException();
-//        @NotNull final SqlSession sqlSession = Bootstrap.getSqlSessionFactory().openSession();
-//        @NotNull final IProjectRepository projectRepository = sqlSession.getMapper(IProjectRepository.class);
-//        if (projectRepository.findEntityByName(userId, projectName) != null)
-//            throw new ProjectNameExistsException();
-//        try {
-//            projectRepository.persist(new Project(projectName, userId));
-//            sqlSession.commit();
-//        } catch (Exception e) {
-//            sqlSession.rollback();
-//        } finally {
-//            sqlSession.close();
-//        }
-//    }
-//
-//    @Override
-//    public Project findProjectByName(@Nullable final String userId, @Nullable final String projectName) {
-//        if (projectName == null || projectName.isEmpty())
-//            throw new ProjectNameIsInvalidException();
-//        if (userId == null || userId.isEmpty())
-//            throw new UserIsNotAuthorizedException();
-//        @Nullable final Connection connection = getConnection();
-//        if (connection == null)
-//            throw new ConnectionPendingException();
-//        @NotNull final SqlSession sqlSession = Bootstrap.getSqlSessionFactory().openSession();
-//        @NotNull final IProjectRepository projectRepository = sqlSession.getMapper(IProjectRepository.class);
-//        return projectRepository.findEntityByName(userId, projectName);
-//    }
-//
-//    @Override
-//    public void removeProjectByName(@Nullable final String userId, @Nullable final String projectName) {
-//        if (projectName == null || projectName.isEmpty())
-//            throw new ProjectNameIsInvalidException();
-//        if (userId == null || userId.isEmpty())
-//            throw new UserIsNotAuthorizedException();
-//        @Nullable final Connection connection = getConnection();
-//        if (connection == null)
-//            throw new ConnectionPendingException();
-//        @NotNull final SqlSession sqlSession = Bootstrap.getSqlSessionFactory().openSession();
-//        @NotNull final IProjectRepository projectRepository = sqlSession.getMapper(IProjectRepository.class);
-//        @NotNull final ITaskRepository taskRepository = sqlSession.getMapper(ITaskRepository.class);
-//        @Nullable final Project project = projectRepository.findEntityByName(userId, projectName);
-//        if (project == null)
-//            throw new ProjectNotExistsException();
-//        try {
-//            projectRepository.removeProject(userId, project.getId());
-//            taskRepository.removeProjectTasks(userId, project.getId());
-//            sqlSession.commit();
-//        } catch (Exception e) {
-//            sqlSession.rollback();
-//        } finally {
-//            sqlSession.close();
-//        }
-//    }
+    @Override
+    public void createByProjectName(@NotNull final Project project) {
+        if (project == null)
+            throw new ProjectNotExistsException();
+        @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
+        @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(entityManager);
+        try {
+            entityManager.getTransaction().begin();
+            projectRepository.persist(project);
+            entityManager.getTransaction().commit();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public @Nullable Project findProjectByName(@Nullable final String userId, @Nullable final String projectName) {
+        if (projectName == null || projectName.isEmpty())
+            throw new ProjectNameIsInvalidException();
+        if (userId == null || userId.isEmpty())
+            throw new UserIsNotAuthorizedException();
+        @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
+        @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(entityManager);
+        try {
+            return projectRepository.findEntityByName(userId, projectName);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public void removeProjectByName(@Nullable final String userId, @Nullable final String projectName) {
+        if (projectName == null || projectName.isEmpty())
+            throw new ProjectNameIsInvalidException();
+        if (userId == null || userId.isEmpty())
+            throw new UserIsNotAuthorizedException();
+        @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
+        @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(entityManager);
+        @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(entityManager);
+        try {
+            entityManager.getTransaction().begin();
+            @Nullable final Project project = projectRepository.findEntityByName(userId, projectName);
+            if (project == null)
+                throw new ProjectNotExistsException();
+            projectRepository.removeProject(userId, project.getId());
+            taskRepository.removeProjectTasks(userId, project.getId());
+            entityManager.getTransaction().commit();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        } finally {
+            entityManager.close();
+        }
+    }
 //
 //    @Override
 //    public void removeProject(@Nullable final String userId, @Nullable final String projectId) {

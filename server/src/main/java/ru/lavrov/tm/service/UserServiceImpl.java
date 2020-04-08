@@ -98,13 +98,11 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
         @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
         @NotNull final IUserRepository userRepository = new UserRepositoryImpl(entityManager);
         try {
-            entityManager.getTransaction().begin();
             return userRepository.findUserByLogin(login);
         } catch (RuntimeException e) {
             e.printStackTrace();
             return null;
         } finally {
-            entityManager.getTransaction().commit();
             entityManager.close();
         }
     }
@@ -118,10 +116,10 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
         try {
             entityManager.getTransaction().begin();
             userRepository.removeUser(userId);
+            entityManager.getTransaction().commit();
         } catch (RuntimeException e) {
             e.printStackTrace();
         } finally {
-            entityManager.getTransaction().commit();
             entityManager.close();
         }
     }
@@ -164,13 +162,11 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
         @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
         @NotNull final IUserRepository userRepository = new UserRepositoryImpl(entityManager);
         try {
-            entityManager.getTransaction().begin();
             return userRepository.findAll(userId);
         } catch (RuntimeException e) {
             e.printStackTrace();
             return null;
         } finally {
-            entityManager.getTransaction().commit();
             entityManager.close();
         }
     }
