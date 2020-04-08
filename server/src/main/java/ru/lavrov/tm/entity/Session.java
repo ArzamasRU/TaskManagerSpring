@@ -8,6 +8,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.enumerate.Role;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.UUID;
 
@@ -19,11 +21,15 @@ public final class Session {
 
     @NotNull
     private String id = UUID.randomUUID().toString();
+
     @Nullable
     private String userId;
+
     @Nullable
     private Role role;
+
     private long timeStamp;
+
     @Nullable
     private String sign;
 

@@ -11,9 +11,7 @@ import ru.lavrov.tm.dto.TaskDTO;
 import ru.lavrov.tm.enumerate.Status;
 import ru.lavrov.tm.exception.task.TaskNotExistsException;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
 
@@ -36,7 +34,9 @@ public final class Task extends AbstractEntity implements IEntity, IComparableEn
     private Date finishDate = null;
     @Nullable
     private String projectId = null;
+
     @Nullable
+    @Enumerated(EnumType.STRING)
     private Status status = Status.PLANNED;
 
     @ManyToOne

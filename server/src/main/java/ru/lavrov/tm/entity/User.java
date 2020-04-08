@@ -10,10 +10,7 @@ import ru.lavrov.tm.dto.UserDTO;
 import ru.lavrov.tm.enumerate.Role;
 import ru.lavrov.tm.exception.user.UserNotExistsException;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,17 +24,20 @@ public final class User extends AbstractEntity implements IEntity {
 
     @Nullable
     private String login;
+
     @Nullable
     private String password;
+
     @Nullable
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     @NotNull
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Project> projects = new ArrayList<>();
 
     @NotNull
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Task> tasks = new ArrayList<>();
 
     public User(@Nullable String login, @Nullable String password, @Nullable Role role) {
