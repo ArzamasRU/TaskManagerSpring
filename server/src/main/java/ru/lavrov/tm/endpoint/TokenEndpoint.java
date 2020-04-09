@@ -19,8 +19,7 @@ public final class TokenEndpoint extends AbstractEndpoint{
         super(bootstrap);
     }
 
-    @Nullable
-    public String login(@Nullable final String login, @Nullable final String password) {
+    public @NotNull String login(@Nullable final String login, @Nullable final String password) {
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         return tokenService.login(login, password);
     }

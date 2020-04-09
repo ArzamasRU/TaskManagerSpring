@@ -53,7 +53,6 @@ public final class SessionServiceImpl extends AbstractService implements ISessio
             throw new UserLoginIsInvalidException();
         if (password == null || password.isEmpty())
             throw new UserPasswordIsInvalidException();
-
         @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
         @NotNull final IUserRepository userRepository = new UserRepositoryImpl(entityManager);
         @Nullable final User user = userRepository.findUserByLogin(login);

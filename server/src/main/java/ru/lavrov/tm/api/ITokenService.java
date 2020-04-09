@@ -9,11 +9,11 @@ import java.util.Collection;
 
 public interface ITokenService {
 
-    @Nullable String login(@NotNull String login, @NotNull String password);
+    @NotNull String login(@NotNull String login, @NotNull String password);
 
-    void validate(@Nullable final String token, @Nullable final Collection<Role> roles);
+    void validate(@NotNull final String token, @Nullable final Collection<Role> roles);
 
-    @NotNull Token decryptToken(@Nullable final String token);
+    @NotNull Token decryptToken(@NotNull final String token);
 
-    @Nullable String encryptToken(@Nullable final Token token);
+    @NotNull String encryptToken(@NotNull final Token token);
 }

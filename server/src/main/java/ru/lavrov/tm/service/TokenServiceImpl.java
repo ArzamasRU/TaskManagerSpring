@@ -49,7 +49,7 @@ public final class TokenServiceImpl extends AbstractService implements ITokenSer
     }
 
     @Override
-    public @Nullable String login(@NotNull final String login, @NotNull final String password) {
+    public @NotNull String login(@NotNull final String login, @NotNull final String password) {
         if (login == null || login.isEmpty())
             throw new UserLoginIsInvalidException();
         if (password == null || password.isEmpty())
@@ -58,14 +58,14 @@ public final class TokenServiceImpl extends AbstractService implements ITokenSer
         @NotNull final Session session = sessionService.login(login, password);
         @NotNull final Token token = new Token(session);
         token.setSign(getSign(token, appProperties.getProperty("salt"),appProperties.getIntProperty("cycle")));
-        @Nullable final String encryptedToken = encryptToken(token);
+        @NotNull final String encryptedToken = encryptToken(token);
         return encryptedToken;
     }
 
 
     @Override
-    public @NotNull Token decryptToken(@Nullable final String token) {
-        if (token == null)
+    public @NotNull Token decryptToken(@NotNull final String token) {
+        if (token == null || token.isEmpty())
             throw new TokenIsInvalidException();
         @NotNull final String decryptedToken = AESUtil.decrypt(token, appProperties.getProperty("key"));
         @NotNull final ObjectMapper objectMapper = new ObjectMapper();
@@ -79,7 +79,9 @@ public final class TokenServiceImpl extends AbstractService implements ITokenSer
     }
 
     @Override
-    public @Nullable String encryptToken(@Nullable final Token token) {
+    public @NotNull String encryptToken(@NotNull final Token token) {
+        if (token == null)
+            throw new TokenIsInvalidException();
         @NotNull final ObjectMapper objectMapper = new ObjectMapper();
         @NotNull final String jsonToken;
         try {
