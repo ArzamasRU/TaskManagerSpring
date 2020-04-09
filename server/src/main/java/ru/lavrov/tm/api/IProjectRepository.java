@@ -18,7 +18,7 @@ public interface IProjectRepository {
     @Nullable Collection<Project> findAll(@Nullable String userId);
 
     @Nullable Collection<Project> findAllByNamePart(@Nullable String userId,
-                                          @Nullable String pattern);
+                                                    @Nullable String pattern);
 
     @Nullable Collection<Project> findAllByDescPart(@Nullable String userId,
                                                     @Nullable String pattern);

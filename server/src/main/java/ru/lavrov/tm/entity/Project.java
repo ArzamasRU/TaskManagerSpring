@@ -42,6 +42,11 @@ public final class Project extends AbstractEntity implements IEntity, IComparabl
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private Collection<Task> tasks = new ArrayList<>();
 
+    public Project(@Nullable String name, @NotNull User user) {
+        this.name = name;
+        this.user = user;
+    }
+
     @NotNull
     public static ProjectDTO getProductDTO(@NotNull final Project project) {
         if (project == null)

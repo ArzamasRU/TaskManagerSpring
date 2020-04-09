@@ -22,7 +22,7 @@ public final class Session {
     @NotNull
     private String id = UUID.randomUUID().toString();
 
-    @Nullable
+    @NotNull
     private String userId;
 
     @Nullable

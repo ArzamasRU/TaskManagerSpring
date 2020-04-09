@@ -1,5 +1,6 @@
 package ru.lavrov.tm.api;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Task;
@@ -8,31 +9,31 @@ import java.util.Collection;
 import java.util.Comparator;
 
 public interface IProjectService extends IService {
-    void createByProjectName(@Nullable Project project);
+    void createByProjectName(@NotNull final String userId, @NotNull final String name);
 
-    void removeProjectByName(@Nullable String userId, @Nullable String projectName);
+    void removeProjectByName(@NotNull String userId, @NotNull String projectName);
 
-    @Nullable Collection<Task> getProjectTasks(@Nullable String userId, @Nullable String projectName);
+    @Nullable Collection<Task> getProjectTasks(@NotNull String userId, @NotNull String projectName);
 
-    void renameProject(@Nullable String userId, @Nullable String oldName, @Nullable String newName);
+    void renameProject(@NotNull String userId, @NotNull String oldName, @NotNull String newName);
 
-    @Nullable Collection<Project> findAll(@Nullable String userId, @Nullable Comparator<Project> comparator);
+    @Nullable Collection<Project> findAll(@NotNull String userId, @NotNull Comparator<Project> comparator);
 
-    @Nullable Collection<Project> findAllByNamePart(@Nullable String userId, @Nullable String name);
+    @Nullable Collection<Project> findAllByNamePart(@NotNull String userId, @NotNull String name);
 
-    @Nullable Collection<Project> findAllByDescPart(@Nullable String userId, @Nullable String description);
+    @Nullable Collection<Project> findAllByDescPart(@NotNull String userId, @NotNull String description);
 
-    void removeProject(@Nullable final String userId, @Nullable final String entityId);
+    void removeProject(@NotNull final String userId, @NotNull final String entityId);
 
-    void persist(@Nullable Project entity);
+    void persist(@NotNull Project entity);
 
-    void merge(@Nullable Project entity);
+    void merge(@NotNull Project entity);
 
-    void removeAll(@Nullable String userId);
+    void removeAll(@NotNull String userId);
 
-    @Nullable Collection<Project> findAll(@Nullable String userId);
+    @Nullable Collection<Project> findAll(@NotNull String userId);
 
-    @Nullable Project findOne(@Nullable String userId, @Nullable String entityId);
+    @Nullable Project findOne(@NotNull String userId, @NotNull String entityId);
 
-    @Nullable Project findProjectByName(@Nullable final String userId, @Nullable final String projectName);
+    @Nullable Project findProjectByName(@NotNull final String userId, @NotNull final String projectName);
 }

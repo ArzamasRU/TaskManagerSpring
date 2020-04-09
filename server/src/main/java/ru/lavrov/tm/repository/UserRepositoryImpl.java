@@ -1,15 +1,11 @@
 package ru.lavrov.tm.repository;
 
-import org.apache.ibatis.annotations.Param;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.api.IProjectRepository;
 import ru.lavrov.tm.api.IUserRepository;
-import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.User;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import java.util.Collection;
 
 public class UserRepositoryImpl extends AbstractRepository implements IUserRepository {

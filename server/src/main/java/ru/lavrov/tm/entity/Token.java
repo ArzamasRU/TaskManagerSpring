@@ -1,4 +1,4 @@
-package ru.lavrov.tm.dto;
+package ru.lavrov.tm.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,13 +11,16 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@NoArgsConstructor
-public final class TokenDTO {
+public final class Token {
 
     @NotNull
     protected String id = UUID.randomUUID().toString();
-    @Nullable
+    @NotNull
     private Session session;
     @Nullable
     private String sign;
+
+    public Token(@NotNull Session session) {
+        this.session = session;
+    }
 }

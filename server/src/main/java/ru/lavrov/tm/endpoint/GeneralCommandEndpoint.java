@@ -35,7 +35,7 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
 
 //    @WebMethod
 //    public boolean serialize(@Nullable final String token) {
-//        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
+//        @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
 //        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
 //        tokenService.validate(token, roles);
 //        @Nullable final Session session = tokenService.decryptToken(token).getSession();
@@ -85,7 +85,7 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
 //
 //    @WebMethod
 //    public boolean dataToXMLByJAXB(@Nullable final String token) {
-//        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
+//        @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
 //        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
 //        tokenService.validate(token, roles);
 //        @Nullable final Session session = tokenService.decryptToken(token).getSession();
@@ -109,7 +109,7 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
 //
 //    @WebMethod
 //    public boolean dataToXMLByFasterXML(@Nullable final String token) {
-//        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
+//        @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
 //        @NotNull final XmlMapper mapper = new XmlMapper();
 //        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
 //        tokenService.validate(token, roles);
@@ -141,7 +141,7 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
 //
 //    @WebMethod
 //    public boolean dataToJSONByJAXB(@Nullable final String token) {
-//        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
+//        @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
 //        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
 //        tokenService.validate(token, roles);
 //        @Nullable final Session session = tokenService.decryptToken(token).getSession();
@@ -170,7 +170,7 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
 //
 //    @WebMethod
 //    public boolean dataToJSONByFasterXML(@Nullable final String token) {
-//        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
+//        @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
 //        @NotNull final ObjectMapper objectMapper = new ObjectMapper();
 //        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
 //        tokenService.validate(token, roles);
@@ -202,7 +202,7 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
 //
 //    @WebMethod
 //    public boolean dataFromXMLByJAXB(@Nullable final String token) {
-//        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
+//        @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
 //        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
 //        tokenService.validate(token, roles);
 //        @Nullable final Collection<Project> projectList =
@@ -234,7 +234,7 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
 //
 //    @WebMethod
 //    public boolean dataFromXMLByFasterXML(@Nullable final String token) {
-//        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
+//        @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
 //        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
 //        tokenService.validate(token, roles);
 //        @Nullable final XmlMapper xmlMapper = new XmlMapper();
@@ -271,7 +271,7 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
 //
 //    @WebMethod
 //    public boolean dataFromJSONByJAXB(@Nullable final String token) {
-//        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
+//        @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
 //        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
 //        tokenService.validate(token, roles);
 //        @NotNull final String filePath =
@@ -306,7 +306,7 @@ public final class GeneralCommandEndpoint extends AbstractEndpoint{
 //
 //    @WebMethod
 //    public boolean dataFromJSONByFasterXML(@Nullable final String token) {
-//        @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
+//        @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
 //        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
 //        tokenService.validate(token, roles);
 //        @Nullable final ObjectMapper objectMapper = new ObjectMapper();

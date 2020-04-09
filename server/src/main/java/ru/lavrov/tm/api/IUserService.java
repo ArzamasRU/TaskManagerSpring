@@ -7,21 +7,21 @@ import ru.lavrov.tm.entity.User;
 import java.util.Collection;
 
 public interface IUserService extends IService {
-    void createByLogin(@Nullable final User user);
+    void createByLogin(@NotNull String login, @NotNull String password, @NotNull String role);
 
-//    void updatePassword(@Nullable String userId, @Nullable String newPassword);
-//
-//    void updateLogin(@Nullable String userId, @Nullable String newLogin);
-//
-//    User findOne(@Nullable String userId);
-//
-    @Nullable User findUserByLogin(@Nullable String login);
+    void updatePassword(@NotNull String userId, @NotNull String newPassword);
 
-    void removeUser(@Nullable final String userId);
-//
-//    void persist(@Nullable User entity);
-//
-//    void merge(@Nullable User entity);
-//
-//    Collection<User> findAll(@Nullable String userId);
+    void updateLogin(@NotNull String userId, @NotNull String newLogin);
+
+    @Nullable  User findOne(@NotNull String userId);
+
+    @Nullable User findUserByLogin(@NotNull String login);
+
+    void removeUser(@NotNull final String userId);
+
+    void persist(@NotNull User entity);
+
+    void merge(@NotNull User entity);
+
+    @Nullable Collection<User> findAll(@NotNull String userId);
 }

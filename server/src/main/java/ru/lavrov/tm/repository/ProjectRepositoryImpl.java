@@ -1,22 +1,20 @@
 package ru.lavrov.tm.repository;
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.IProjectRepository;
 import ru.lavrov.tm.entity.Project;
-import ru.lavrov.tm.entity.User;
 
 import javax.persistence.EntityManager;
 import java.util.Collection;
 
 public class ProjectRepositoryImpl extends AbstractRepository implements IProjectRepository {
 
-    public ProjectRepositoryImpl(@Nullable final EntityManager entityManager) {
+    public ProjectRepositoryImpl(@NotNull EntityManager entityManager) {
         super(entityManager);
     }
 
+    @Override
     public void renameProject(@Nullable final String userId,
                               @Nullable final String oldName,
                               @Nullable final String newName) {
@@ -29,6 +27,7 @@ public class ProjectRepositoryImpl extends AbstractRepository implements IProjec
                 .getResultList();
     }
 
+    @Override
     public @Nullable Project findEntityByName(@Nullable final String userId,
                                               @Nullable final String name){
         return entityManager
@@ -38,14 +37,17 @@ public class ProjectRepositoryImpl extends AbstractRepository implements IProjec
                 .getSingleResult();
     }
 
+    @Override
     public void persist(@Nullable final Project project){
         entityManager.persist(project);
     }
 
+    @Override
     public void merge(@Nullable final Project project){
         entityManager.merge(project);
     }
 
+    @Override
     public void removeAll(@Nullable final String userId) {
         entityManager
                 .createQuery("DELETE FROM Project WHERE user_id = :userId")
@@ -53,6 +55,7 @@ public class ProjectRepositoryImpl extends AbstractRepository implements IProjec
                 .executeUpdate();
     }
 
+    @Override
     public void removeProject(@Nullable final String userId,
                               @Nullable final String id) {
         entityManager
@@ -62,6 +65,7 @@ public class ProjectRepositoryImpl extends AbstractRepository implements IProjec
                 .executeUpdate();
     }
 
+    @Override
     public @Nullable Project findOne(@Nullable final String userId,
                                      @Nullable final String id) {
         return entityManager
@@ -71,6 +75,7 @@ public class ProjectRepositoryImpl extends AbstractRepository implements IProjec
                 .getSingleResult();
     }
 
+    @Override
     public @Nullable Collection<Project> findAllByDescPart(@Nullable final String userId,
                                                            @Nullable final String pattern) {
         return entityManager
@@ -81,6 +86,7 @@ public class ProjectRepositoryImpl extends AbstractRepository implements IProjec
                 .getResultList();
     }
 
+    @Override
     public @Nullable Collection<Project> findAllByNamePart(@Nullable final String userId,
                                                            @Nullable final String pattern) {
         return entityManager
@@ -90,6 +96,7 @@ public class ProjectRepositoryImpl extends AbstractRepository implements IProjec
                 .getResultList();
     }
 
+    @Override
     public @Nullable Collection<Project> findAll(@Nullable final String userId) {
         return entityManager
                 .createQuery("FROM Project WHERE user_id = :userId", Project.class)
