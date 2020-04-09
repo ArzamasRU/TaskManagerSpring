@@ -224,7 +224,7 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
 
     @Override
     public @Nullable Collection<Project> findAllByDescPart(
-            @Nullable final String userId, @Nullable final String description
+            @NotNull final String userId, @NotNull final String description
     ) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
@@ -244,7 +244,7 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
 
     @Override
     public @Nullable Collection<Project> findAll(
-            @Nullable final String userId, @Nullable final Comparator<Project> comparator
+            @NotNull final String userId, @Nullable final Comparator<Project> comparator
     ) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();

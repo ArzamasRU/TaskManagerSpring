@@ -80,9 +80,9 @@ public final class Bootstrap implements IServiceLocator {
             userService.removeUser(user.getId());
 
         if (userService.findUserByLogin("user") == null)
-            userService.createByLogin(new User("user", "user", Role.USER));
+            userService.createByLogin("user", "user", Role.USER.name());
         if (userService.findUserByLogin("admin") == null)
-            userService.createByLogin(new User("admin", "admin", Role.ADMIN));
+            userService.createByLogin("admin", "admin", Role.USER.name());
     }
 
     private void initProperties() {

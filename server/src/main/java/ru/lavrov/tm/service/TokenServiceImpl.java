@@ -10,6 +10,7 @@ import ru.lavrov.tm.bootstrap.Bootstrap;
 import ru.lavrov.tm.entity.Session;
 import ru.lavrov.tm.entity.Token;
 import ru.lavrov.tm.enumerate.Role;
+import ru.lavrov.tm.exception.security.SessionSignIsInvalidException;
 import ru.lavrov.tm.exception.security.TokenIsInvalidException;
 import ru.lavrov.tm.exception.security.TokenSignIsInvalidException;
 import ru.lavrov.tm.exception.user.UserLoginIsInvalidException;
@@ -30,12 +31,16 @@ public final class TokenServiceImpl extends AbstractService implements ITokenSer
     }
 
     @Override
-    public void validate(@Nullable final String token, @Nullable final Collection<Role> roles) {
-        @Nullable final Token curToken = decryptToken(token);
+    public void validate(@NotNull final String token, @Nullable final Collection<Role> roles) {
+        if (token == null)
+            throw new TokenIsInvalidException();
+        @NotNull final Token curToken = decryptToken(token);
         @Nullable final String currSign = curToken.getSign();
         curToken.setSign(null);
-        @NotNull final String resultSign = getSign(curToken,  appProperties.getProperty("salt"),
+        @Nullable final String resultSign = getSign(curToken,  appProperties.getProperty("salt"),
                 appProperties.getIntProperty("cycle"));
+        if (resultSign == null || resultSign.isEmpty())
+            throw new TokenSignIsInvalidException();
         if (!resultSign.equals(currSign))
             throw new TokenSignIsInvalidException();
         curToken.setSign(currSign);
@@ -43,9 +48,8 @@ public final class TokenServiceImpl extends AbstractService implements ITokenSer
         sessionService.validate(curToken.getSession(), roles);
     }
 
-    @Nullable
     @Override
-    public String login(@NotNull final String login, @NotNull final String password) {
+    public @Nullable String login(@NotNull final String login, @NotNull final String password) {
         if (login == null || login.isEmpty())
             throw new UserLoginIsInvalidException();
         if (password == null || password.isEmpty())
@@ -53,8 +57,7 @@ public final class TokenServiceImpl extends AbstractService implements ITokenSer
         @NotNull final ISessionService sessionService = bootstrap.getSessionService();
         @NotNull final Session session = sessionService.login(login, password);
         @NotNull final Token token = new Token(session);
-        token.setSign(getSign(token, appProperties.getProperty("salt"),
-                appProperties.getIntProperty("cycle")));
+        token.setSign(getSign(token, appProperties.getProperty("salt"),appProperties.getIntProperty("cycle")));
         @Nullable final String encryptedToken = encryptToken(token);
         return encryptedToken;
     }
@@ -75,9 +78,8 @@ public final class TokenServiceImpl extends AbstractService implements ITokenSer
         return curToken;
     }
 
-    @Nullable
     @Override
-    public String encryptToken(@Nullable final Token token) {
+    public @Nullable String encryptToken(@Nullable final Token token) {
         @NotNull final ObjectMapper objectMapper = new ObjectMapper();
         @NotNull final String jsonToken;
         try {

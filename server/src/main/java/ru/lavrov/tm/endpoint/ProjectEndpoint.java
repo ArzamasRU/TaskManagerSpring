@@ -41,7 +41,7 @@ public final class ProjectEndpoint extends AbstractEndpoint{
     }
 
     @WebMethod
-    public void removeProjectByName(@Nullable final String token, @NotNull final String projectName) {
+    public void removeProjectByName(@Nullable final String token, @Nullable final String projectName) {
         @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);

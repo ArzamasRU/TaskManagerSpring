@@ -47,6 +47,12 @@ public final class Task extends AbstractEntity implements IEntity, IComparableEn
     @NotNull
     private User user;
 
+    public Task(@NotNull User user, @Nullable String name, @Nullable String projectId) {
+        this.name = name;
+        this.projectId = projectId;
+        this.user = user;
+    }
+
     @NotNull
     public TaskDTO getTaskDTO(@NotNull final Task task) {
         if (task == null)
