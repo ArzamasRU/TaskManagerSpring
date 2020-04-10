@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element name="return" type="{http://endpoint.tm.lavrov.ru/}user" minOccurs="0"/&gt;
+ *         &lt;element name="return" type="{http://endpoint.tm.lavrov.ru/}userDTO" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -33,17 +33,17 @@ import javax.xml.bind.annotation.XmlType;
 public class GetUserResponse {
 
     @XmlElement(name = "return")
-    protected User _return;
+    protected UserDTO _return;
 
     /**
      * Gets the value of the return property.
      * 
      * @return
      *     possible object is
-     *     {@link User }
+     *     {@link UserDTO }
      *     
      */
-    public User getReturn() {
+    public UserDTO getReturn() {
         return _return;
     }
 
@@ -52,10 +52,10 @@ public class GetUserResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link User }
+     *     {@link UserDTO }
      *     
      */
-    public void setReturn(User value) {
+    public void setReturn(UserDTO value) {
         this._return = value;
     }
 

@@ -170,4 +170,17 @@ public class ProjectEndpointTest extends Assert {
         @Nullable ProjectDTO project = projectEndpoint.findProjectByName(token, TEST_PROJECT_NAME);
         assertNull(project);
     }
+
+    @Test
+    void findProjectByNameBadTest() {
+//                @NotNull final Executable doLogin = new Executable() {
+//            @Override
+//            public void execute() throws Throwable {
+//                token = tokenEndpoint.login(LOGIN, hashedPassword);
+//            }
+//        };
+//        assertThrows(ClientTransportException.class, doLogin);
+        @Nullable final ProjectDTO projectList =
+                projectEndpoint.findProjectByName(token, TEST_PROJECT_NAME.substring(2));
+    }
 }

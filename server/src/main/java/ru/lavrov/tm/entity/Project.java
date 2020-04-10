@@ -47,10 +47,9 @@ public final class Project extends AbstractEntity implements IEntity, IComparabl
         this.user = user;
     }
 
-    @NotNull
-    public static ProjectDTO getProjectDTO(@NotNull final Project project) {
+    public static @Nullable ProjectDTO getProjectDTO(@Nullable final Project project) {
         if (project == null)
-            throw new ProjectNotExistsException();
+            return null;
         @NotNull final ProjectDTO projectDTO = new ProjectDTO();
         projectDTO.setId(project.getId());
         projectDTO.setUserId(project.getUser().getId());
@@ -62,10 +61,9 @@ public final class Project extends AbstractEntity implements IEntity, IComparabl
         return projectDTO;
     }
 
-    @NotNull
-    public static Collection<ProjectDTO> getProjectDTO(@NotNull final Collection<Project> projectList) {
+    public static @Nullable Collection<ProjectDTO> getProjectDTO(@Nullable final Collection<Project> projectList) {
         if (projectList == null)
-            throw new ProjectNotExistsException();
+            return null;
         @NotNull final Collection<ProjectDTO> projectDTOList = new ArrayList<>();
         for (Project project : projectList) {
             projectDTOList.add(getProjectDTO(project));

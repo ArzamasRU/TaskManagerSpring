@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.*;
 import ru.lavrov.tm.dto.ProjectDTO;
 import ru.lavrov.tm.dto.TaskDTO;
+import ru.lavrov.tm.dto.UserDTO;
 import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Session;
 import ru.lavrov.tm.entity.Task;
@@ -67,12 +68,12 @@ public final class UserEndpoint extends AbstractEndpoint{
     }
 
     @WebMethod
-    public @Nullable User getUser(@Nullable final String token){
+    public @Nullable UserDTO getUser(@Nullable final String token){
         @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
         @NotNull final IUserService userService = bootstrap.getUserService();
         @NotNull final Session session = tokenService.decryptToken(token).getSession();
-        return userService.findOne(session.getUserId());
+        return User.getUserDTO(userService.findOne(session.getUserId()));
     }
 }

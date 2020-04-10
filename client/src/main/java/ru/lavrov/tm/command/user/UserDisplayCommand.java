@@ -33,7 +33,7 @@ public final class UserDisplayCommand extends AbstractCommand {
     public void execute() {
         @NotNull final UserEndpointService userEndpointService = bootstrap.getUserEndpointService();
         @NotNull final String token = bootstrap.getCurrentToken();
-        @Nullable final User user = userEndpointService.getUserEndpointPort().getUser(token);
+        @Nullable final UserDTO user = userEndpointService.getUserEndpointPort().getUser(token);
         @NotNull final Collection<ProjectDTO> projectList =
                 userEndpointService.getUserEndpointPort().getUserProjects(token);
         @NotNull final Collection<TaskDTO> taskList =

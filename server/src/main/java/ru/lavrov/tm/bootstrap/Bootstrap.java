@@ -80,6 +80,8 @@ public final class Bootstrap implements IServiceLocator {
             userService.createByLogin("user", md5Hard("user"), Role.USER.name());
         if (userService.findUserByLogin("admin") == null)
             userService.createByLogin("admin", md5Hard("admin"), Role.ADMIN.name());
+        Project prj = null;
+        Project.getProjectDTO(prj);
     }
 
     private void initProperties() {

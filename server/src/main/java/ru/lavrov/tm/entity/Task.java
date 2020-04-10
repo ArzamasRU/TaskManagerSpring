@@ -57,9 +57,9 @@ public final class Task extends AbstractEntity implements IEntity, IComparableEn
         this.user = user;
     }
 
-    public static @NotNull TaskDTO getTaskDTO(@NotNull final Task task) {
+    public static @Nullable TaskDTO getTaskDTO(@NotNull final Task task) {
         if (task == null)
-            throw new TaskNotExistsException();
+            return null;
         @NotNull final TaskDTO taskDTO = new TaskDTO();
         taskDTO.setId(task.getId());
         taskDTO.setProjectId(task.getProjectId());
@@ -73,9 +73,9 @@ public final class Task extends AbstractEntity implements IEntity, IComparableEn
         return taskDTO;
     }
 
-    public static @NotNull Collection<TaskDTO> getTaskDTO(@NotNull final Collection<Task> taskList) {
+    public static @Nullable Collection<TaskDTO> getTaskDTO(@NotNull final Collection<Task> taskList) {
         if (taskList == null)
-            throw new TaskNotExistsException();
+            return null;
         @NotNull final Collection<TaskDTO> taskDTOList = new ArrayList<>();
         for (Task task : taskList) {
             taskDTOList.add(getTaskDTO(task));
