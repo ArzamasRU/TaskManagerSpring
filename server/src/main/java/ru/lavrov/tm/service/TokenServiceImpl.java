@@ -10,14 +10,12 @@ import ru.lavrov.tm.bootstrap.Bootstrap;
 import ru.lavrov.tm.entity.Session;
 import ru.lavrov.tm.entity.Token;
 import ru.lavrov.tm.enumerate.Role;
-import ru.lavrov.tm.exception.security.SessionSignIsInvalidException;
 import ru.lavrov.tm.exception.security.TokenIsInvalidException;
 import ru.lavrov.tm.exception.security.TokenSignIsInvalidException;
 import ru.lavrov.tm.exception.user.UserLoginIsInvalidException;
 import ru.lavrov.tm.exception.user.UserPasswordIsInvalidException;
 import ru.lavrov.tm.util.AESUtil;
 
-import javax.json.JsonException;
 import java.io.IOException;
 import java.util.Collection;
 
@@ -34,6 +32,8 @@ public final class TokenServiceImpl extends AbstractService implements ITokenSer
     public void validate(@NotNull final String token, @Nullable final Collection<Role> roles) {
         if (token == null)
             throw new TokenIsInvalidException();
+        System.out.println("validate");
+        System.out.println(token);
         @NotNull final Token curToken = decryptToken(token);
         @Nullable final String currSign = curToken.getSign();
         curToken.setSign(null);
@@ -49,13 +49,15 @@ public final class TokenServiceImpl extends AbstractService implements ITokenSer
     }
 
     @Override
-    public @NotNull String login(@NotNull final String login, @NotNull final String password) {
+    public @Nullable String login(@NotNull final String login, @NotNull final String password) {
         if (login == null || login.isEmpty())
             throw new UserLoginIsInvalidException();
         if (password == null || password.isEmpty())
             throw new UserPasswordIsInvalidException();
         @NotNull final ISessionService sessionService = bootstrap.getSessionService();
-        @NotNull final Session session = sessionService.login(login, password);
+        @Nullable final Session session = sessionService.login(login, password);
+        if (session == null)
+            return null;
         @NotNull final Token token = new Token(session);
         token.setSign(getSign(token, appProperties.getProperty("salt"),appProperties.getIntProperty("cycle")));
         @NotNull final String encryptedToken = encryptToken(token);
@@ -73,6 +75,7 @@ public final class TokenServiceImpl extends AbstractService implements ITokenSer
         try {
             curToken = objectMapper.readValue(decryptedToken, Token.class);
         } catch (IOException e) {
+            e.printStackTrace();
             throw new TokenIsInvalidException();
         }
         return curToken;

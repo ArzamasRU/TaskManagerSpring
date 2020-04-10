@@ -45,7 +45,8 @@ public final class UserLoginCommand extends AbstractCommand {
             bootstrap.setCurrentToken(token);
             System.out.println("[You are logged in]");
         }
-
+        System.out.println("UserLoginCommand");
+        System.out.println(token);
         System.out.println();
     }
 

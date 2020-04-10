@@ -9,7 +9,7 @@ import java.util.Collection;
 
 public interface ITokenService {
 
-    @NotNull String login(@NotNull String login, @NotNull String password);
+    @Nullable String login(@NotNull String login, @NotNull String password);
 
     void validate(@NotNull final String token, @Nullable final Collection<Role> roles);
 

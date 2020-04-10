@@ -15,6 +15,8 @@ import ru.lavrov.tm.repository.UserRepositoryImpl;
 import javax.persistence.EntityManager;
 import java.util.Collection;
 
+import static ru.lavrov.tm.util.HashUtil.md5Hard;
+
 public final class UserServiceImpl extends AbstractService implements IUserService {
 
     public UserServiceImpl(@NotNull Bootstrap bootstrap) {

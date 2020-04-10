@@ -9,7 +9,7 @@ import java.util.Collection;
 
 public interface ISessionService {
 
-    @NotNull Session login(@NotNull String login, @NotNull String password);
+    @Nullable Session login(@NotNull String login, @NotNull String password);
 
     void validatePermission(@NotNull Session session, @Nullable Collection<Role> listRoles);
 

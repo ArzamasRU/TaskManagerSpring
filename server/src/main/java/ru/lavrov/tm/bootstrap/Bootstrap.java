@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static ru.lavrov.tm.service.AppPropertyServiceImpl.appProperties;
+import static ru.lavrov.tm.util.HashUtil.md5Hard;
 
 @Getter
 @NoArgsConstructor
@@ -76,9 +77,9 @@ public final class Bootstrap implements IServiceLocator {
 
     private void initUsers() {
         if (userService.findUserByLogin("user") == null)
-            userService.createByLogin("user", "user", Role.USER.name());
+            userService.createByLogin("user", md5Hard("user"), Role.USER.name());
         if (userService.findUserByLogin("admin") == null)
-            userService.createByLogin("admin", "admin", Role.USER.name());
+            userService.createByLogin("admin", md5Hard("admin"), Role.ADMIN.name());
     }
 
     private void initProperties() {

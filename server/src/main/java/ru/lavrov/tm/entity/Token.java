@@ -11,6 +11,7 @@ import java.util.UUID;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public final class Token {
 
     @NotNull

@@ -21,6 +21,7 @@ import java.sql.Connection;
 import java.util.Collection;
 
 import static ru.lavrov.tm.service.AppPropertyServiceImpl.appProperties;
+import static ru.lavrov.tm.util.HashUtil.md5Hard;
 import static ru.lavrov.tm.util.SignUtil.getSign;
 
 public final class SessionServiceImpl extends AbstractService implements ISessionService {
@@ -29,6 +30,7 @@ public final class SessionServiceImpl extends AbstractService implements ISessio
         super(bootstrap);
     }
 
+    @Override
     public void validate(@NotNull final Session session, @Nullable final Collection<Role> roles){
         if (session == null)
             throw new SessionIsInvalidException();
@@ -48,18 +50,23 @@ public final class SessionServiceImpl extends AbstractService implements ISessio
     }
 
     @Override
-    public @NotNull Session login(@NotNull final String login, @NotNull final String password) {
+    public @Nullable Session login(@NotNull final String login, @NotNull final String password) {
         if (login == null || login.isEmpty())
             throw new UserLoginIsInvalidException();
         if (password == null || password.isEmpty())
             throw new UserPasswordIsInvalidException();
         @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
         @NotNull final IUserRepository userRepository = new UserRepositoryImpl(entityManager);
-        @Nullable final User user = userRepository.findUserByLogin(login);
+        @Nullable User user = null;
+        try {
+            user = userRepository.findUserByLogin(login);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (user == null)
-            throw new UserLoginNotExistsException();
+            return null;
         if (!password.equals(user.getPassword()))
-            throw new UserLoginOrPasswordIsIncorrectException();
+            return null;
         @NotNull final Session session = new Session(user.getId(), user.getRole(), System.currentTimeMillis());
         session.setSign(getSign(session, appProperties.getProperty("salt"),
                 appProperties.getIntProperty("cycle")));
