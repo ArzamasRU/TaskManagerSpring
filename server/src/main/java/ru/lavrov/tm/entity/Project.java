@@ -48,7 +48,7 @@ public final class Project extends AbstractEntity implements IEntity, IComparabl
     }
 
     @NotNull
-    public static ProjectDTO getProductDTO(@NotNull final Project project) {
+    public static ProjectDTO getProjectDTO(@NotNull final Project project) {
         if (project == null)
             throw new ProjectNotExistsException();
         @NotNull final ProjectDTO projectDTO = new ProjectDTO();
@@ -60,6 +60,17 @@ public final class Project extends AbstractEntity implements IEntity, IComparabl
         projectDTO.setFinishDate(project.getFinishDate());
         projectDTO.setStatus(project.getStatus());
         return projectDTO;
+    }
+
+    @NotNull
+    public static Collection<ProjectDTO> getProjectDTO(@NotNull final Collection<Project> projectList) {
+        if (projectList == null)
+            throw new ProjectNotExistsException();
+        @NotNull final Collection<ProjectDTO> projectDTOList = new ArrayList<>();
+        for (Project project : projectList) {
+            projectDTOList.add(getProjectDTO(project));
+        }
+        return projectDTOList;
     }
 
     @Nullable

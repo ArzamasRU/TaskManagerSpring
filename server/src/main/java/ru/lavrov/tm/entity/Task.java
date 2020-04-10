@@ -7,12 +7,16 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.IComparableEntity;
 import ru.lavrov.tm.api.IEntity;
+import ru.lavrov.tm.dto.ProjectDTO;
 import ru.lavrov.tm.dto.TaskDTO;
 import ru.lavrov.tm.enumerate.Status;
+import ru.lavrov.tm.exception.project.ProjectNotExistsException;
 import ru.lavrov.tm.exception.task.TaskNotExistsException;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 
 @Getter
@@ -53,8 +57,7 @@ public final class Task extends AbstractEntity implements IEntity, IComparableEn
         this.user = user;
     }
 
-    @NotNull
-    public TaskDTO getTaskDTO(@NotNull final Task task) {
+    public static @NotNull TaskDTO getTaskDTO(@NotNull final Task task) {
         if (task == null)
             throw new TaskNotExistsException();
         @NotNull final TaskDTO taskDTO = new TaskDTO();
@@ -68,6 +71,16 @@ public final class Task extends AbstractEntity implements IEntity, IComparableEn
         taskDTO.setFinishDate(task.getFinishDate());
         taskDTO.setStatus(task.getStatus());
         return taskDTO;
+    }
+
+    public static @NotNull Collection<TaskDTO> getTaskDTO(@NotNull final Collection<Task> taskList) {
+        if (taskList == null)
+            throw new TaskNotExistsException();
+        @NotNull final Collection<TaskDTO> taskDTOList = new ArrayList<>();
+        for (Task task : taskList) {
+            taskDTOList.add(getTaskDTO(task));
+        }
+        return taskDTOList;
     }
 
     @Nullable

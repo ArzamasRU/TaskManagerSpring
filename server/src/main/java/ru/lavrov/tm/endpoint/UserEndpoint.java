@@ -4,6 +4,8 @@ import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.*;
+import ru.lavrov.tm.dto.ProjectDTO;
+import ru.lavrov.tm.dto.TaskDTO;
 import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Session;
 import ru.lavrov.tm.entity.Task;
@@ -45,23 +47,23 @@ public final class UserEndpoint extends AbstractEndpoint{
     }
 
     @WebMethod
-    public @Nullable Collection<Project> getUserProjects(@Nullable final String token){
+    public @Nullable Collection<ProjectDTO> getUserProjects(@Nullable final String token){
         @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
         @NotNull final Session session = tokenService.decryptToken(token).getSession();
-        return projectService.findAll(session.getUserId());
+        return Project.getProjectDTO(projectService.findAll(session.getUserId()));
     }
 
     @WebMethod
-    public @Nullable Collection<Task> getUserTasks(@Nullable final String token){
+    public @Nullable Collection<TaskDTO> getUserTasks(@Nullable final String token){
         @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
         @NotNull final ITaskService taskService = bootstrap.getTaskService();
         @NotNull final Session session = tokenService.decryptToken(token).getSession();
-        return taskService.findAll(session.getUserId());
+        return Task.getTaskDTO(taskService.findAll(session.getUserId()));
     }
 
     @WebMethod

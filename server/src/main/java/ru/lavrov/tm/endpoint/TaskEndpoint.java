@@ -9,6 +9,7 @@ import ru.lavrov.tm.api.ITokenService;
 import ru.lavrov.tm.comparator.FinishDateComparator;
 import ru.lavrov.tm.comparator.StartDateComparator;
 import ru.lavrov.tm.comparator.StatusComparator;
+import ru.lavrov.tm.dto.TaskDTO;
 import ru.lavrov.tm.entity.Session;
 import ru.lavrov.tm.entity.Task;
 import ru.lavrov.tm.enumerate.Role;
@@ -66,83 +67,6 @@ public final class TaskEndpoint extends AbstractEndpoint{
     }
 
     @WebMethod
-    public @Nullable Collection<Task> findAllTasksByNamePart(
-            @Nullable final String token, @Nullable final String name
-    ) {
-        @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
-        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token, roles);
-        @NotNull final Session session = tokenService.decryptToken(token).getSession();
-        @NotNull final ITaskService taskService = bootstrap.getTaskService();
-        return taskService.findAllByNamePart(session.getUserId(), name);
-    }
-
-    @WebMethod
-    public @Nullable Task findTaskByName(@Nullable final String token, @Nullable final String name) {
-        @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
-        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token, roles);
-        @NotNull final Session session = tokenService.decryptToken(token).getSession();
-        @NotNull final ITaskService taskService = bootstrap.getTaskService();
-        return taskService.findTaskByName(session.getUserId(), name);
-    }
-
-    @WebMethod
-    public @Nullable Collection<Task> findAllTasksByDescPart(
-            @Nullable final String token, @Nullable final String description
-    ) {
-        @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
-        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token, roles);
-        @NotNull final Session session = tokenService.decryptToken(token).getSession();
-        @NotNull final ITaskService taskService = bootstrap.getTaskService();
-        return taskService.findAllByDescPart(session.getUserId(), description);
-    }
-
-    @WebMethod
-    public @Nullable Collection<Task> findAllTasks(@Nullable final String token) {
-        @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
-        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token, roles);
-        @NotNull final Session session = tokenService.decryptToken(token).getSession();
-        @NotNull final ITaskService taskService = bootstrap.getTaskService();
-        return taskService.findAll(session.getUserId());
-    }
-
-    @WebMethod
-    public @Nullable Collection<Task> findAllTasksByStatus(@Nullable final String token) {
-        @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
-        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token, roles);
-        @NotNull final Session session = tokenService.decryptToken(token).getSession();
-        @NotNull final ITaskService taskService = bootstrap.getTaskService();
-        @NotNull final Comparator comparator = new StatusComparator();
-        return taskService.findAll(session.getUserId(), comparator);
-    }
-
-    @WebMethod
-    public @Nullable Collection<Task> findAllTasksByStartDate(@Nullable final String token) {
-        @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
-        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token, roles);
-        @NotNull final Session session = tokenService.decryptToken(token).getSession();
-        @NotNull final ITaskService taskService = bootstrap.getTaskService();
-        @NotNull final Comparator comparator = new StartDateComparator();
-        return taskService.findAll(session.getUserId(), comparator);
-    }
-
-    @WebMethod
-    public @Nullable Collection<Task> findAllTasksByFinishDate(@Nullable final String token) {
-        @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
-        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token, roles);
-        @NotNull final Session session = tokenService.decryptToken(token).getSession();
-        @NotNull final ITaskService taskService = bootstrap.getTaskService();
-        @NotNull final Comparator comparator = new FinishDateComparator();
-        return taskService.findAll(session.getUserId(), comparator);
-    }
-
-    @WebMethod
     public void removeAll(@Nullable final String token) {
         @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
@@ -160,5 +84,82 @@ public final class TaskEndpoint extends AbstractEndpoint{
         @NotNull final ITaskService taskService = bootstrap.getTaskService();
         @NotNull final Session session = tokenService.decryptToken(token).getSession();
         taskService.removeTask(session.getUserId(), entityId);
+    }
+
+    @WebMethod
+    public @Nullable Collection<TaskDTO> findAllTasksByNamePart(
+            @Nullable final String token, @Nullable final String name
+    ) {
+        @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token, roles);
+        @NotNull final Session session = tokenService.decryptToken(token).getSession();
+        @NotNull final ITaskService taskService = bootstrap.getTaskService();
+        return Task.getTaskDTO(taskService.findAllByNamePart(session.getUserId(), name));
+    }
+
+    @WebMethod
+    public @Nullable TaskDTO findTaskByName(@Nullable final String token, @Nullable final String name) {
+        @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token, roles);
+        @NotNull final Session session = tokenService.decryptToken(token).getSession();
+        @NotNull final ITaskService taskService = bootstrap.getTaskService();
+        return Task.getTaskDTO(taskService.findTaskByName(session.getUserId(), name));
+    }
+
+    @WebMethod
+    public @Nullable Collection<TaskDTO> findAllTasksByDescPart(
+            @Nullable final String token, @Nullable final String description
+    ) {
+        @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token, roles);
+        @NotNull final Session session = tokenService.decryptToken(token).getSession();
+        @NotNull final ITaskService taskService = bootstrap.getTaskService();
+        return Task.getTaskDTO(taskService.findAllByDescPart(session.getUserId(), description));
+    }
+
+    @WebMethod
+    public @Nullable Collection<TaskDTO> findAllTasks(@Nullable final String token) {
+        @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token, roles);
+        @NotNull final Session session = tokenService.decryptToken(token).getSession();
+        @NotNull final ITaskService taskService = bootstrap.getTaskService();
+        return Task.getTaskDTO(taskService.findAll(session.getUserId()));
+    }
+
+    @WebMethod
+    public @Nullable Collection<TaskDTO> findAllTasksByStatus(@Nullable final String token) {
+        @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token, roles);
+        @NotNull final Session session = tokenService.decryptToken(token).getSession();
+        @NotNull final ITaskService taskService = bootstrap.getTaskService();
+        @NotNull final Comparator comparator = new StatusComparator();
+        return Task.getTaskDTO(taskService.findAll(session.getUserId(), comparator));
+    }
+
+    @WebMethod
+    public @Nullable Collection<TaskDTO> findAllTasksByStartDate(@Nullable final String token) {
+        @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token, roles);
+        @NotNull final Session session = tokenService.decryptToken(token).getSession();
+        @NotNull final ITaskService taskService = bootstrap.getTaskService();
+        @NotNull final Comparator comparator = new StartDateComparator();
+        return Task.getTaskDTO(taskService.findAll(session.getUserId(), comparator));
+    }
+
+    @WebMethod
+    public @Nullable Collection<TaskDTO> findAllTasksByFinishDate(@Nullable final String token) {
+        @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token, roles);
+        @NotNull final Session session = tokenService.decryptToken(token).getSession();
+        @NotNull final ITaskService taskService = bootstrap.getTaskService();
+        @NotNull final Comparator comparator = new FinishDateComparator();
+        return Task.getTaskDTO(taskService.findAll(session.getUserId(), comparator));
     }
 }

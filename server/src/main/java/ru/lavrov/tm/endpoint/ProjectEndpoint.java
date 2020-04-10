@@ -9,6 +9,7 @@ import ru.lavrov.tm.api.ITokenService;
 import ru.lavrov.tm.comparator.FinishDateComparator;
 import ru.lavrov.tm.comparator.StartDateComparator;
 import ru.lavrov.tm.comparator.StatusComparator;
+import ru.lavrov.tm.dto.ProjectDTO;
 import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Session;
 import ru.lavrov.tm.entity.Task;
@@ -51,16 +52,6 @@ public final class ProjectEndpoint extends AbstractEndpoint{
     }
 
     @WebMethod
-    public @Nullable Collection<Task> getProjectTasks(@Nullable final String token, @Nullable final String projectName) {
-        @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
-        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token, roles);
-        @NotNull final Session session = tokenService.decryptToken(token).getSession();
-        @NotNull final IProjectService projectService = bootstrap.getProjectService();
-        return projectService.getProjectTasks(session.getUserId(), projectName);
-    }
-
-    @WebMethod
     public void renameProject(
             @Nullable final String token, @Nullable final String oldName, @Nullable final String newName
     ) {
@@ -70,89 +61,6 @@ public final class ProjectEndpoint extends AbstractEndpoint{
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
         @NotNull final Session session = tokenService.decryptToken(token).getSession();
         projectService.renameProject(session.getUserId(), oldName, newName);
-    }
-
-    @WebMethod
-    public @Nullable Collection<Project> findAllByNamePart(@Nullable final String token, @Nullable final String name) {
-        @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
-        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token, roles);
-        @NotNull final Session session = tokenService.decryptToken(token).getSession();
-        @NotNull final IProjectService projectService = bootstrap.getProjectService();
-        return projectService.findAllByNamePart(session.getUserId(), name);
-    }
-
-    @WebMethod
-    public @Nullable Project findProjectByName(@Nullable final String token, @Nullable final String name) {
-        @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
-        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token, roles);
-        @NotNull final Session session = tokenService.decryptToken(token).getSession();
-        @NotNull final IProjectService projectService = bootstrap.getProjectService();
-        return projectService.findProjectByName(session.getUserId(), name);
-    }
-
-    @WebMethod
-    public @Nullable Collection<Project> findAllByDescPart(@Nullable final String token, @Nullable final String description) {
-        @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
-        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token, roles);
-        @NotNull final Session session = tokenService.decryptToken(token).getSession();
-        @NotNull final IProjectService projectService = bootstrap.getProjectService();
-        return projectService.findAllByDescPart(session.getUserId(), description);
-    }
-
-    @WebMethod
-    public @Nullable Collection<Project> findAll(@Nullable final String token) {
-        @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
-        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token, roles);
-        @NotNull final Session session = tokenService.decryptToken(token).getSession();
-        @NotNull final IProjectService projectService = bootstrap.getProjectService();
-        return projectService.findAll(session.getUserId());
-    }
-
-    @WebMethod
-    public @Nullable Project findOne(@Nullable final String token, @Nullable final String entityId) {
-        @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
-        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token, roles);
-        @NotNull final Session session = tokenService.decryptToken(token).getSession();
-        @NotNull final IProjectService projectService = bootstrap.getProjectService();
-        return projectService.findOne(session.getUserId(), entityId);
-    }
-
-    @WebMethod
-    public @Nullable Collection<Project> findAllByStatus(@Nullable final String token) {
-        @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
-        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token, roles);
-        @NotNull final Session session = tokenService.decryptToken(token).getSession();
-        @NotNull final IProjectService projectService = bootstrap.getProjectService();
-        @NotNull final Comparator comparator = new StatusComparator();
-        return projectService.findAll(session.getUserId(), comparator);
-    }
-
-    @WebMethod
-    public @Nullable Collection<Project> findAllByFinishDate(@Nullable final String token) {
-        @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
-        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token, roles);
-        @NotNull final Session session = tokenService.decryptToken(token).getSession();
-        @NotNull final IProjectService projectService = bootstrap.getProjectService();
-        @NotNull final Comparator comparator = new FinishDateComparator();
-        return projectService.findAll(session.getUserId(), comparator);
-    }
-
-    @WebMethod
-    public @Nullable Collection<Project> findAllByStartDate(@Nullable final String token) {
-        @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
-        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
-        tokenService.validate(token, roles);
-        @NotNull final Session session = tokenService.decryptToken(token).getSession();
-        @NotNull final IProjectService projectService = bootstrap.getProjectService();
-        @NotNull final Comparator comparator = new StartDateComparator();
-        return projectService.findAll(session.getUserId(), comparator);
     }
 
     @WebMethod
@@ -173,5 +81,98 @@ public final class ProjectEndpoint extends AbstractEndpoint{
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
         @NotNull final Session session = tokenService.decryptToken(token).getSession();
         projectService.removeProject(session.getUserId(), entityId);
+    }
+
+    @WebMethod
+    public @Nullable Collection<Task> getProjectTasks(@Nullable final String token, @Nullable final String projectName) {
+        @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token, roles);
+        @NotNull final Session session = tokenService.decryptToken(token).getSession();
+        @NotNull final IProjectService projectService = bootstrap.getProjectService();
+        return projectService.getProjectTasks(session.getUserId(), projectName);
+    }
+
+    @WebMethod
+    public @Nullable Collection<ProjectDTO> findAllByNamePart(@Nullable final String token, @Nullable final String name) {
+        @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token, roles);
+        @NotNull final Session session = tokenService.decryptToken(token).getSession();
+        @NotNull final IProjectService projectService = bootstrap.getProjectService();
+        return Project.getProjectDTO(projectService.findAllByNamePart(session.getUserId(), name));
+    }
+
+    @WebMethod
+    public @Nullable ProjectDTO findProjectByName(@Nullable final String token, @Nullable final String name) {
+        @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token, roles);
+        @NotNull final Session session = tokenService.decryptToken(token).getSession();
+        @NotNull final IProjectService projectService = bootstrap.getProjectService();
+        return Project.getProjectDTO(projectService.findProjectByName(session.getUserId(), name));
+    }
+
+    @WebMethod
+    public @Nullable Collection<ProjectDTO> findAllByDescPart(@Nullable final String token, @Nullable final String description) {
+        @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token, roles);
+        @NotNull final Session session = tokenService.decryptToken(token).getSession();
+        @NotNull final IProjectService projectService = bootstrap.getProjectService();
+        return Project.getProjectDTO(projectService.findAllByDescPart(session.getUserId(), description));
+    }
+
+    @WebMethod
+    public @Nullable Collection<ProjectDTO> findAll(@Nullable final String token) {
+        @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token, roles);
+        @NotNull final Session session = tokenService.decryptToken(token).getSession();
+        @NotNull final IProjectService projectService = bootstrap.getProjectService();
+        return Project.getProjectDTO(projectService.findAll(session.getUserId()));
+    }
+
+    @WebMethod
+    public @Nullable ProjectDTO findOne(@Nullable final String token, @Nullable final String entityId) {
+        @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token, roles);
+        @NotNull final Session session = tokenService.decryptToken(token).getSession();
+        @NotNull final IProjectService projectService = bootstrap.getProjectService();
+        return Project.getProjectDTO(projectService.findOne(session.getUserId(), entityId));
+    }
+
+    @WebMethod
+    public @Nullable Collection<ProjectDTO> findAllByStatus(@Nullable final String token) {
+        @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token, roles);
+        @NotNull final Session session = tokenService.decryptToken(token).getSession();
+        @NotNull final IProjectService projectService = bootstrap.getProjectService();
+        @NotNull final Comparator comparator = new StatusComparator();
+        return Project.getProjectDTO(projectService.findAll(session.getUserId(), comparator));
+    }
+
+    @WebMethod
+    public @Nullable Collection<ProjectDTO> findAllByFinishDate(@Nullable final String token) {
+        @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token, roles);
+        @NotNull final Session session = tokenService.decryptToken(token).getSession();
+        @NotNull final IProjectService projectService = bootstrap.getProjectService();
+        @NotNull final Comparator comparator = new FinishDateComparator();
+        return Project.getProjectDTO(projectService.findAll(session.getUserId(), comparator));
+    }
+
+    @WebMethod
+    public @Nullable Collection<ProjectDTO> findAllByStartDate(@Nullable final String token) {
+        @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
+        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
+        tokenService.validate(token, roles);
+        @NotNull final Session session = tokenService.decryptToken(token).getSession();
+        @NotNull final IProjectService projectService = bootstrap.getProjectService();
+        @NotNull final Comparator comparator = new StartDateComparator();
+        return Project.getProjectDTO(projectService.findAll(session.getUserId(), comparator));
     }
 }
