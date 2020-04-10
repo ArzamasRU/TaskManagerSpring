@@ -3,6 +3,7 @@ package ru.lavrov.tm.util;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.IEntity;
+import ru.lavrov.tm.exception.util.SerializationException;
 
 import java.io.*;
 import java.util.Collection;
@@ -10,6 +11,8 @@ import java.util.Collection;
 public final class SerializationUtil {
 
     public static void write(@NotNull final Collection<? extends IEntity> list, @NotNull final String path) {
+        if (list == null)
+            throw new SerializationException();
         try {
             @NotNull final FileOutputStream fileOutputStream = new FileOutputStream(path);
             @NotNull final ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
