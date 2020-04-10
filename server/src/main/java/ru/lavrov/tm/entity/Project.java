@@ -39,7 +39,7 @@ public final class Project extends AbstractEntity implements IEntity, IComparabl
     private User user;
 
     @NotNull
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "project", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Collection<Task> tasks = new ArrayList<>();
 
     public Project(@Nullable String name, @NotNull User user) {
