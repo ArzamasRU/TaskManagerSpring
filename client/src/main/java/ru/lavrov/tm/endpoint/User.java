@@ -1,8 +1,11 @@
 
 package ru.lavrov.tm.endpoint;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -14,15 +17,14 @@ import javax.xml.bind.annotation.XmlType;
  * <pre>
  * &lt;complexType name="user"&gt;
  *   &lt;complexContent&gt;
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *     &lt;extension base="{http://endpoint.tm.lavrov.ru/}abstractEntity"&gt;
  *       &lt;sequence&gt;
- *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
  *         &lt;element name="login" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
- *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
  *         &lt;element name="password" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
- *         &lt;element name="userId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="projects" type="{http://endpoint.tm.lavrov.ru/}project" maxOccurs="unbounded" minOccurs="0"/&gt;
+ *         &lt;element name="tasks" type="{http://endpoint.tm.lavrov.ru/}task" maxOccurs="unbounded" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
- *     &lt;/restriction&gt;
+ *     &lt;/extension&gt;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
@@ -31,43 +33,21 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "user", propOrder = {
-    "id",
     "login",
-    "name",
     "password",
-    "userId"
+    "projects",
+    "tasks"
 })
-public class User {
+public class User
+    extends AbstractEntity
+{
 
-    protected String id;
     protected String login;
-    protected String name;
     protected String password;
-    protected String userId;
-
-    /**
-     * Gets the value of the id property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getId() {
-        return id;
-    }
-
-    /**
-     * Sets the value of the id property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setId(String value) {
-        this.id = value;
-    }
+    @XmlElement(nillable = true)
+    protected List<Project> projects;
+    @XmlElement(nillable = true)
+    protected List<Task> tasks;
 
     /**
      * Gets the value of the login property.
@@ -91,30 +71,6 @@ public class User {
      */
     public void setLogin(String value) {
         this.login = value;
-    }
-
-    /**
-     * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setName(String value) {
-        this.name = value;
     }
 
     /**
@@ -142,27 +98,61 @@ public class User {
     }
 
     /**
-     * Gets the value of the userId property.
+     * Gets the value of the projects property.
      * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the projects property.
+     * 
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getProjects().add(newItem);
+     * </pre>
+     * 
+     * 
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link Project }
+     * 
+     * 
      */
-    public String getUserId() {
-        return userId;
+    public List<Project> getProjects() {
+        if (projects == null) {
+            projects = new ArrayList<Project>();
+        }
+        return this.projects;
     }
 
     /**
-     * Sets the value of the userId property.
+     * Gets the value of the tasks property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the tasks property.
+     * 
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getTasks().add(newItem);
+     * </pre>
+     * 
+     * 
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link Task }
+     * 
+     * 
      */
-    public void setUserId(String value) {
-        this.userId = value;
+    public List<Task> getTasks() {
+        if (tasks == null) {
+            tasks = new ArrayList<Task>();
+        }
+        return this.tasks;
     }
 
 }

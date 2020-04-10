@@ -31,11 +31,7 @@ public final class ProjectClearCommand extends AbstractCommand {
     public void execute() {
         @Nullable final String token = bootstrap.getCurrentToken();
         @NotNull final ProjectEndpointService projectEndpointService = bootstrap.getProjectEndpointService();
-        if (projectEndpointService.getProjectEndpointPort().removeAll(token))
-            System.out.println("[ok]");
-        else
-            System.out.println("[error]");
-        System.out.println("[ok]");
+        projectEndpointService.getProjectEndpointPort().removeAll(token);
         System.out.println();
     }
 

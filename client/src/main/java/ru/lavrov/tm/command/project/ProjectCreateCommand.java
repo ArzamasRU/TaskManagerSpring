@@ -34,10 +34,7 @@ public final class ProjectCreateCommand extends AbstractCommand {
         System.out.println("enter name:");
         @NotNull final String projectName = InputUtil.INPUT.nextLine();
         @NotNull final ProjectEndpointService projectEndpointService = bootstrap.getProjectEndpointService();
-        if (projectEndpointService.getProjectEndpointPort().createByProjectName(token, projectName))
-            System.out.println("[ok]");
-        else
-            System.out.println("[error]");
+        projectEndpointService.getProjectEndpointPort().createByProjectName(token, projectName);
         System.out.println();
     }
 

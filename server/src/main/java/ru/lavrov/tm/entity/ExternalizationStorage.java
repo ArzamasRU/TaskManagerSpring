@@ -1,4 +1,4 @@
-package ru.lavrov.tm.dto;
+package ru.lavrov.tm.entity;
 
 import lombok.Getter;
 import lombok.Setter;

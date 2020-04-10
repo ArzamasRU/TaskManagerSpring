@@ -9,26 +9,26 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
- * <p>Java class for task complex type.
+ * <p>Java class for taskDTO complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="task"&gt;
+ * &lt;complexType name="taskDTO"&gt;
  *   &lt;complexContent&gt;
- *     &lt;extension base="{http://endpoint.tm.lavrov.ru/}abstractEntity"&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
  *         &lt;element name="creationDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/&gt;
  *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
  *         &lt;element name="finishDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/&gt;
+ *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
  *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
- *         &lt;element name="project" type="{http://endpoint.tm.lavrov.ru/}project" minOccurs="0"/&gt;
  *         &lt;element name="projectId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
  *         &lt;element name="startDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/&gt;
  *         &lt;element name="status" type="{http://endpoint.tm.lavrov.ru/}status" minOccurs="0"/&gt;
- *         &lt;element name="user" type="{http://endpoint.tm.lavrov.ru/}user" minOccurs="0"/&gt;
+ *         &lt;element name="userId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
- *     &lt;/extension&gt;
+ *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
@@ -36,34 +36,32 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "task", propOrder = {
+@XmlType(name = "taskDTO", propOrder = {
     "creationDate",
     "description",
     "finishDate",
+    "id",
     "name",
-    "project",
     "projectId",
     "startDate",
     "status",
-    "user"
+    "userId"
 })
-public class Task
-    extends AbstractEntity
-{
+public class TaskDTO {
 
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar creationDate;
     protected String description;
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar finishDate;
+    protected String id;
     protected String name;
-    protected Project project;
     protected String projectId;
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar startDate;
     @XmlSchemaType(name = "string")
     protected Status status;
-    protected User user;
+    protected String userId;
 
     /**
      * Gets the value of the creationDate property.
@@ -138,6 +136,30 @@ public class Task
     }
 
     /**
+     * Gets the value of the id property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * Sets the value of the id property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setId(String value) {
+        this.id = value;
+    }
+
+    /**
      * Gets the value of the name property.
      * 
      * @return
@@ -159,30 +181,6 @@ public class Task
      */
     public void setName(String value) {
         this.name = value;
-    }
-
-    /**
-     * Gets the value of the project property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Project }
-     *     
-     */
-    public Project getProject() {
-        return project;
-    }
-
-    /**
-     * Sets the value of the project property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Project }
-     *     
-     */
-    public void setProject(Project value) {
-        this.project = value;
     }
 
     /**
@@ -258,27 +256,27 @@ public class Task
     }
 
     /**
-     * Gets the value of the user property.
+     * Gets the value of the userId property.
      * 
      * @return
      *     possible object is
-     *     {@link User }
+     *     {@link String }
      *     
      */
-    public User getUser() {
-        return user;
+    public String getUserId() {
+        return userId;
     }
 
     /**
-     * Sets the value of the user property.
+     * Sets the value of the userId property.
      * 
      * @param value
      *     allowed object is
-     *     {@link User }
+     *     {@link String }
      *     
      */
-    public void setUser(User value) {
-        this.user = value;
+    public void setUserId(String value) {
+        this.userId = value;
     }
 
 }

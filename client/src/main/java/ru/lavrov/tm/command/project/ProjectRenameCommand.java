@@ -36,10 +36,7 @@ public final class ProjectRenameCommand extends AbstractCommand {
         @Nullable final String newName = InputUtil.INPUT.nextLine();
         @Nullable final String token = bootstrap.getCurrentToken();
         @NotNull final ProjectEndpointService projectEndpointService = bootstrap.getProjectEndpointService();
-        if (projectEndpointService.getProjectEndpointPort().renameProject(token, oldName, newName))
-            System.out.println("[ok]");
-        else
-            System.out.println("[error]");
+        projectEndpointService.getProjectEndpointPort().renameProject(token, oldName, newName);
         System.out.println();
     }
 

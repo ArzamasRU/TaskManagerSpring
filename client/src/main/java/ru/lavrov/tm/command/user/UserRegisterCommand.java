@@ -40,10 +40,7 @@ public final class UserRegisterCommand extends AbstractCommand {
         System.out.println("enter your role ('admin', 'user'):");
         @Nullable final String role = InputUtil.INPUT.nextLine();
         @NotNull final UserEndpointService userEndpointService = bootstrap.getUserEndpointService();
-        if (userEndpointService.getUserEndpointPort().registerUser(login, hashedPassword, role))
-            System.out.println("[You successfully registered]");
-        else
-            System.out.println("[error]");
+        userEndpointService.getUserEndpointPort().registerUser(login, hashedPassword, role);
         System.out.println();
     }
 
@@ -51,6 +48,4 @@ public final class UserRegisterCommand extends AbstractCommand {
     public boolean isSafe() {
         return SAFE;
     }
-
-
 }

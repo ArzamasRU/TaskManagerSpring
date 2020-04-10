@@ -75,10 +75,6 @@ public final class Bootstrap implements IServiceLocator {
     }
 
     private void initUsers() {
-        User user = userService.findUserByLogin("user");
-        if (user != null)
-            userService.removeUser(user.getId());
-
         if (userService.findUserByLogin("user") == null)
             userService.createByLogin("user", "user", Role.USER.name());
         if (userService.findUserByLogin("admin") == null)
@@ -88,23 +84,6 @@ public final class Bootstrap implements IServiceLocator {
     private void initProperties() {
         System.setProperty("javax.xml.bind.context.factory", "org.eclipse.persistence.jaxb.JAXBContextFactory");
     }
-
-//    public static SqlSessionFactory getSqlSessionFactory() {
-//        @Nullable final String user = appProperties.getProperty("login");
-//        @Nullable final String password = appProperties.getProperty("password");
-//        @Nullable final String url = appProperties.getProperty("url");
-//        @Nullable final String driver = appProperties.getProperty("driver");
-//        final DataSource dataSource = new PooledDataSource(driver, url, user, password);
-//        final TransactionFactory transactionFactory =
-//                new JdbcTransactionFactory();
-//        final Environment environment =
-//                new Environment("development", transactionFactory, dataSource);
-//        final Configuration configuration = new Configuration(environment);
-//        configuration.addMapper(IUserRepository.class);
-//        configuration.addMapper(IProjectRepository.class);
-//        configuration.addMapper(ITaskRepository.class);
-//        return new SqlSessionFactoryBuilder().build(configuration);
-//    }
 
     public @NotNull EntityManager getEntityManager() {
         return entityManagerFactory.createEntityManager();

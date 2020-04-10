@@ -37,10 +37,7 @@ public final class TaskCreateCommand extends AbstractCommand {
         @Nullable final String projectName = InputUtil.INPUT.nextLine();
         @Nullable final String token = bootstrap.getCurrentToken();
         @NotNull final TaskEndpointService taskEndpointService = bootstrap.getTaskEndpointService();
-        if (taskEndpointService.getTaskEndpointPort().createByTaskName(token, taskName, projectName))
-            System.out.println("[ok]");
-        else
-            System.out.println("[error]");
+        taskEndpointService.getTaskEndpointPort().createByTaskName(token, taskName, projectName);
         System.out.println();
     }
 

@@ -10,6 +10,7 @@ import ru.lavrov.tm.comparator.FinishDateComparator;
 import ru.lavrov.tm.comparator.StartDateComparator;
 import ru.lavrov.tm.comparator.StatusComparator;
 import ru.lavrov.tm.dto.ProjectDTO;
+import ru.lavrov.tm.dto.TaskDTO;
 import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Session;
 import ru.lavrov.tm.entity.Task;
@@ -84,13 +85,13 @@ public final class ProjectEndpoint extends AbstractEndpoint{
     }
 
     @WebMethod
-    public @Nullable Collection<Task> getProjectTasks(@Nullable final String token, @Nullable final String projectName) {
+    public @Nullable Collection<TaskDTO> getProjectTasks(@Nullable final String token, @Nullable final String projectName) {
         @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
         @NotNull final Session session = tokenService.decryptToken(token).getSession();
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
-        return projectService.getProjectTasks(session.getUserId(), projectName);
+        return Task.getTaskDTO(projectService.getProjectTasks(session.getUserId(), projectName));
     }
 
     @WebMethod

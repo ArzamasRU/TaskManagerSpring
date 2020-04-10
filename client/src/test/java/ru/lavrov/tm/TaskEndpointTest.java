@@ -52,7 +52,7 @@ public class TaskEndpointTest {
 
     @BeforeEach
     void init() {
-        boolean success;
+        
         bootstrap.init();
         @NotNull final UserEndpointService userEndpointService = bootstrap.getUserEndpointService();
         assertNotNull(userEndpointService);
@@ -75,40 +75,34 @@ public class TaskEndpointTest {
 
         token = tokenEndpoint.login(LOGIN, hashedPassword);
         if (token != null) {
-            @Nullable final Collection<Task> taskList = taskEndpoint.findAllTasks(token);
+            @Nullable final Collection<TaskDTO> taskList = taskEndpoint.findAllTasks(token);
             if (taskList != null || !taskList.isEmpty()) {
-                success = taskEndpoint.removeAll(token);
-                assertTrue(success);
+                taskEndpoint.removeAll(token);
             }
-            @Nullable final Collection<Project> projectList = projectEndpoint.findAll(token);
+            @Nullable final Collection<ProjectDTO> projectList = projectEndpoint.findAll(token);
             if (projectList != null || !projectList.isEmpty()) {
-                success = projectEndpoint.removeAll(token);
-                assertTrue(success);
+                projectEndpoint.removeAll(token);
             }
-            success = userEndpoint.deleteUser(token);
-            assertTrue(success);
+            userEndpoint.deleteUser(token);
         }
 
-        success = userEndpoint.registerUser(LOGIN, hashedPassword, ROLE);
-        assertTrue(success);
+        userEndpoint.registerUser(LOGIN, hashedPassword, ROLE);
         token = tokenEndpoint.login(LOGIN, hashedPassword);
         assertNotNull(token);
 
-        @Nullable final Project project = projectEndpoint.findProjectByName(token, TEST_PROJECT_NAME);
+        @Nullable final ProjectDTO project = projectEndpoint.findProjectByName(token, TEST_PROJECT_NAME);
         if (project == null) {
-            success = projectEndpoint.createByProjectName(token, TEST_PROJECT_NAME);
-            assertTrue(success);
+            projectEndpoint.createByProjectName(token, TEST_PROJECT_NAME);
         }
-        @Nullable final Collection<Project> projectList = userEndpoint.getUserProjects(token);
+        @Nullable final Collection<ProjectDTO> projectList = userEndpoint.getUserProjects(token);
         assertNotNull(projectList);
         assertFalse(projectList.isEmpty());
-        for (@Nullable final Project currProject : projectList)
+        for (@Nullable final ProjectDTO currProject : projectList)
             assertNotNull(currProject);
 
-        @Nullable Task task = taskEndpoint.findTaskByName(token, TEST_TASK_NAME);
+        @Nullable TaskDTO task = taskEndpoint.findTaskByName(token, TEST_TASK_NAME);
         if (task == null) {
-            success = taskEndpoint.createByTaskName(token, TEST_TASK_NAME, TEST_PROJECT_NAME);
-            assertTrue(success);
+            taskEndpoint.createByTaskName(token, TEST_TASK_NAME, TEST_PROJECT_NAME);
         }
         task = taskEndpoint.findTaskByName(token, TEST_TASK_NAME);
         assertNotNull(task);
@@ -116,29 +110,24 @@ public class TaskEndpointTest {
 
     @AfterEach
     void close() {
-        boolean success;
-        @Nullable final Task task = taskEndpoint.findTaskByName(token, TEST_TASK_NAME);
+        
+        @Nullable final TaskDTO task = taskEndpoint.findTaskByName(token, TEST_TASK_NAME);
         if (task != null) {
-            success = taskEndpoint.removeTaskByName(token, TEST_TASK_NAME);
-            assertTrue(success);
+            taskEndpoint.removeTaskByName(token, TEST_TASK_NAME);
         }
-        @Nullable final Project project = projectEndpoint.findProjectByName(token, TEST_PROJECT_NAME);
+        @Nullable final ProjectDTO project = projectEndpoint.findProjectByName(token, TEST_PROJECT_NAME);
         if (project != null) {
-            success = projectEndpoint.removeProjectByName(token, TEST_PROJECT_NAME);
-            assertTrue(success);
+            projectEndpoint.removeProjectByName(token, TEST_PROJECT_NAME);
         }
-        success = userEndpoint.deleteUser(token);
-        assertTrue(success);
+        userEndpoint.deleteUser(token);
     }
 
     @Test
     @Category(TaskTestCategory.class)
     void removeTest() {
-        boolean success;
-        @Nullable Task task = taskEndpoint.findTaskByName(token, TEST_TASK_NAME);
+        @Nullable TaskDTO task = taskEndpoint.findTaskByName(token, TEST_TASK_NAME);
         assertNotNull(task);
-        success = taskEndpoint.remove(token, task.getId());
-        assertTrue(success);
+        taskEndpoint.remove(token, task.getId());
         task = taskEndpoint.findTaskByName(token, TEST_TASK_NAME);
         assertNull(task);
     }
@@ -146,11 +135,9 @@ public class TaskEndpointTest {
 
     @Test
     void renameTaskTest() {
-        boolean success;
         @NotNull final String newName = "newName";
-        success = taskEndpoint.renameTask(token, TEST_PROJECT_NAME, TEST_TASK_NAME, newName);
-        assertTrue(success);
-        @Nullable Task task = taskEndpoint.findTaskByName(token, newName);
+        taskEndpoint.renameTask(token, TEST_PROJECT_NAME, TEST_TASK_NAME, newName);
+        @Nullable TaskDTO task = taskEndpoint.findTaskByName(token, newName);
         assertNotNull(task);
         assertNotEquals(task.getName(), TEST_TASK_NAME);
         task = taskEndpoint.findTaskByName(token, TEST_TASK_NAME);
@@ -160,30 +147,28 @@ public class TaskEndpointTest {
     @Test
     void findAllByNamePartTest() {
         @NotNull final String croppedTaskName = TEST_TASK_NAME.substring(2);
-        @Nullable final Collection<Task> taskList = taskEndpoint.findAllTasksByNamePart(token, croppedTaskName);
+        @Nullable final Collection<TaskDTO> taskList = taskEndpoint.findAllTasksByNamePart(token, croppedTaskName);
         assertNotNull(taskList);
         assertFalse(taskList.isEmpty());
-        for (@Nullable final Task task : taskList) {
+        for (@Nullable final TaskDTO task : taskList) {
             assertNotNull(task);
         }
     }
 
     @Test
     void findAllByStatusTest() {
-        @Nullable final Collection<Task> taskList = taskEndpoint.findAllTasksByStatus(token);
+        @Nullable final Collection<TaskDTO> taskList = taskEndpoint.findAllTasksByStatus(token);
         assertNotNull(taskList);
         assertFalse(taskList.isEmpty());
-        for (@Nullable final Task task : taskList) {
+        for (@Nullable final TaskDTO task : taskList) {
             assertNotNull(task);
         }
     }
 
     @Test
     void removeAllTest() {
-        boolean success;
-        success = taskEndpoint.removeAll(token);
-        assertTrue(success);
-        @Nullable Task task = taskEndpoint.findTaskByName(token, TEST_TASK_NAME);
+        taskEndpoint.removeAll(token);
+        @Nullable TaskDTO task = taskEndpoint.findTaskByName(token, TEST_TASK_NAME);
         assertNull(task);
     }
 }

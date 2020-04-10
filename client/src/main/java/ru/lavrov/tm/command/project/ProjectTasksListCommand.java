@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.endpoint.ProjectEndpointService;
 import ru.lavrov.tm.endpoint.Task;
+import ru.lavrov.tm.endpoint.TaskDTO;
 import ru.lavrov.tm.util.InputUtil;
 
 import java.util.Collection;
@@ -37,11 +38,11 @@ public final class ProjectTasksListCommand extends AbstractCommand {
         @Nullable final String projectName = InputUtil.INPUT.nextLine();
         @Nullable final String token = bootstrap.getCurrentToken();
         @NotNull final ProjectEndpointService projectEndpointService = bootstrap.getProjectEndpointService();
-        @Nullable final Collection<Task> taskList =
+        @Nullable final Collection<TaskDTO> taskList =
                 projectEndpointService.getProjectEndpointPort().getProjectTasks(token, projectName);
         if (taskList == null)
             return;
-        for (@Nullable final Task task : taskList) {
+        for (@Nullable final TaskDTO task : taskList) {
             if (task == null)
                 continue;
             System.out.println(task);

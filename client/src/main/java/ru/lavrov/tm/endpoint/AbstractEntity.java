@@ -3,21 +3,21 @@ package ru.lavrov.tm.endpoint;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for findProjectByNameResponse complex type.
+ * <p>Java class for abstractEntity complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="findProjectByNameResponse"&gt;
+ * &lt;complexType name="abstractEntity"&gt;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element name="return" type="{http://endpoint.tm.lavrov.ru/}projectDTO" minOccurs="0"/&gt;
+ *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -27,36 +27,40 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "findProjectByNameResponse", propOrder = {
-    "_return"
+@XmlType(name = "abstractEntity", propOrder = {
+    "id"
 })
-public class FindProjectByNameResponse {
+@XmlSeeAlso({
+    User.class,
+    Project.class,
+    Task.class
+})
+public class AbstractEntity {
 
-    @XmlElement(name = "return")
-    protected ProjectDTO _return;
+    protected String id;
 
     /**
-     * Gets the value of the return property.
+     * Gets the value of the id property.
      * 
      * @return
      *     possible object is
-     *     {@link ProjectDTO }
+     *     {@link String }
      *     
      */
-    public ProjectDTO getReturn() {
-        return _return;
+    public String getId() {
+        return id;
     }
 
     /**
-     * Sets the value of the return property.
+     * Sets the value of the id property.
      * 
      * @param value
      *     allowed object is
-     *     {@link ProjectDTO }
+     *     {@link String }
      *     
      */
-    public void setReturn(ProjectDTO value) {
-        this._return = value;
+    public void setId(String value) {
+        this.id = value;
     }
 
 }

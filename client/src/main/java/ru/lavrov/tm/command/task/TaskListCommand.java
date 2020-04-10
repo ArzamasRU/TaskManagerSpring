@@ -34,12 +34,12 @@ public final class TaskListCommand extends AbstractCommand {
         System.out.println("[TASK LIST]");
         @Nullable final String token = bootstrap.getCurrentToken();
         @NotNull final TaskEndpointService taskEndpointService = bootstrap.getTaskEndpointService();
-        @Nullable final Collection<Task> taskList =
+        @Nullable final Collection<TaskDTO> taskList =
                 taskEndpointService.getTaskEndpointPort().findAllTasks(token);
         if (taskList == null)
             return;
         int index = 1;
-        for (@Nullable final Task task : taskList) {
+        for (@Nullable final TaskDTO task : taskList) {
             if (task == null)
                 continue;
             System.out.println(index++ + ". " + task);

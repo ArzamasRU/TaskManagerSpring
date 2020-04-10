@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.endpoint.Project;
+import ru.lavrov.tm.endpoint.ProjectDTO;
 import ru.lavrov.tm.endpoint.ProjectEndpointService;
 
 import java.util.Collection;
@@ -35,12 +36,12 @@ public final class ProjectListByFinishDateCommand extends AbstractCommand {
         System.out.println("[PROJECT LIST]");
         @Nullable final String token = bootstrap.getCurrentToken();
         @NotNull final ProjectEndpointService projectEndpointService = bootstrap.getProjectEndpointService();
-        @Nullable final Collection<Project> projectList =
+        @Nullable final Collection<ProjectDTO> projectList =
                 projectEndpointService.getProjectEndpointPort().findAllByFinishDate(token);
         if (projectList == null)
             return;
         int index = 1;
-        for (@Nullable final Project project : projectList) {
+        for (@Nullable final ProjectDTO project : projectList) {
             if (project == null)
                 continue;
             System.out.println(index++ + ". " + project);

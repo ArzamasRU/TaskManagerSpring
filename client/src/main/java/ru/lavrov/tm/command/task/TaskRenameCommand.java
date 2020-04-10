@@ -39,10 +39,7 @@ public final class TaskRenameCommand extends AbstractCommand {
         @Nullable final String newName = InputUtil.INPUT.nextLine();
         @Nullable final String token = bootstrap.getCurrentToken();
         @NotNull final TaskEndpointService taskEndpointService = bootstrap.getTaskEndpointService();
-        if (taskEndpointService.getTaskEndpointPort().renameTask(token, projectName, oldName, newName))
-            System.out.println("[ok]");
-        else
-            System.out.println("[error]");
+        taskEndpointService.getTaskEndpointPort().renameTask(token, projectName, oldName, newName);
         System.out.println();
     }
 

@@ -4,7 +4,7 @@ import org.eclipse.persistence.jaxb.MarshallerProperties;
 import org.eclipse.persistence.jaxb.UnmarshallerProperties;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.dto.ExternalizationStorage;
+import ru.lavrov.tm.entity.ExternalizationStorage;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;

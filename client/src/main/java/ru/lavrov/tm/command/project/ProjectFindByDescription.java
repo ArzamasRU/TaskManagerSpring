@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.command.AbstractCommand;
 import ru.lavrov.tm.endpoint.Project;
+import ru.lavrov.tm.endpoint.ProjectDTO;
 import ru.lavrov.tm.endpoint.ProjectEndpointService;
 import ru.lavrov.tm.util.InputUtil;
 
@@ -36,12 +37,12 @@ public final class ProjectFindByDescription extends AbstractCommand {
         @NotNull final ProjectEndpointService projectEndpointService = bootstrap.getProjectEndpointService();
         System.out.println("enter name:");
         @Nullable final String desc = InputUtil.INPUT.nextLine();
-        @Nullable final Collection<Project> projectList =
+        @Nullable final Collection<ProjectDTO> projectList =
                 projectEndpointService.getProjectEndpointPort().findAllByDescPart(token, desc);
         if (projectList == null)
             return;
         int index = 1;
-        for (@Nullable final Project project : projectList) {
+        for (@Nullable final ProjectDTO project : projectList) {
             if (project == null)
                 continue;
             System.out.println(index++ + ". " + project);

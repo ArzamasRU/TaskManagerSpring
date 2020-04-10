@@ -34,10 +34,7 @@ public final class ProjectRemoveCommand extends AbstractCommand {
         @Nullable final String projectName = InputUtil.INPUT.nextLine();
         @Nullable final String token = bootstrap.getCurrentToken();
         @NotNull final ProjectEndpointService projectEndpointService = bootstrap.getProjectEndpointService();
-        if (projectEndpointService.getProjectEndpointPort().removeProjectByName(token, projectName))
-            System.out.println("[ok]");
-        else
-            System.out.println("[error]");
+        projectEndpointService.getProjectEndpointPort().removeProjectByName(token, projectName);
         System.out.println();
     }
 

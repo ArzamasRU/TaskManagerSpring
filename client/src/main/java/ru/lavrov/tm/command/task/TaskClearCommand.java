@@ -31,10 +31,7 @@ public final class TaskClearCommand extends AbstractCommand {
     public void execute() {
         @Nullable final String token = bootstrap.getCurrentToken();
         @NotNull final TaskEndpointService taskEndpointService = bootstrap.getTaskEndpointService();
-        if (taskEndpointService.getTaskEndpointPort().removeAll(token))
-            System.out.println("[ok]");
-        else
-            System.out.println("[error]");
+        taskEndpointService.getTaskEndpointPort().removeAll(token);
         System.out.println();
     }
 
