@@ -28,7 +28,7 @@ public class UserRepositoryImpl extends AbstractRepository implements IUserRepos
     @Override
     public void updateLogin(@Nullable final String userId,
                             @Nullable final String newLogin){
-        entityManager.createQuery("UPDATE User SET login = :newLogin WHERE user_id = :userId", User.class)
+        entityManager.createQuery("UPDATE User SET login = :newLogin WHERE id = :userId", User.class)
                 .setParameter("userId", userId)
                 .setParameter("newLogin", newLogin)
                 .getSingleResult();
@@ -38,7 +38,7 @@ public class UserRepositoryImpl extends AbstractRepository implements IUserRepos
     public void updatePassword(@Nullable final String userId,
                                @Nullable final String newPassword){
         entityManager
-                .createQuery("UPDATE User SET password = :newPassword WHERE user_id = :userId", User.class)
+                .createQuery("UPDATE User SET password = :newPassword WHERE id = :userId", User.class)
                 .setParameter("newPassword", newPassword)
                 .setParameter("userId", userId)
                 .getSingleResult();
@@ -46,14 +46,14 @@ public class UserRepositoryImpl extends AbstractRepository implements IUserRepos
 
     @Override
     public @Nullable User findOne(@Nullable final String userId){
-        return entityManager.createQuery("FROM User WHERE user_id = :userId", User.class)
+        return entityManager.createQuery("FROM User WHERE id = :userId", User.class)
                 .setParameter("userId", userId).getSingleResult();
     }
 
     @Override
     public void removeUser(@Nullable final String userId) {
         entityManager
-                .createQuery("DELETE FROM User WHERE user_id = :userId")
+                .createQuery("DELETE FROM User WHERE id = :userId")
                 .setParameter("userId", userId)
                 .executeUpdate();
     }
@@ -65,7 +65,7 @@ public class UserRepositoryImpl extends AbstractRepository implements IUserRepos
 
     @Override
     public @Nullable Collection<User> findAll(@Nullable final String userId) {
-        return entityManager.createQuery("FROM Project WHERE user_id = :userId", User.class)
+        return entityManager.createQuery("FROM Project WHERE id = :userId", User.class)
                 .setParameter("userId", userId)
                 .getResultList();
     }

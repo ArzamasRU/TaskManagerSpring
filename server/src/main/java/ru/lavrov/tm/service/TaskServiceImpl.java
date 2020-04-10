@@ -1,6 +1,5 @@
 package ru.lavrov.tm.service;
 
-import org.apache.ibatis.session.SqlSession;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.IProjectRepository;
@@ -18,7 +17,6 @@ import ru.lavrov.tm.exception.project.ProjectNameIsInvalidException;
 import ru.lavrov.tm.exception.project.ProjectNotExistsException;
 import ru.lavrov.tm.exception.task.TaskNameExistsException;
 import ru.lavrov.tm.exception.task.TaskNameIsInvalidException;
-import ru.lavrov.tm.exception.task.TaskNotExistsException;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 import ru.lavrov.tm.exception.user.UserNotExistsException;
 import ru.lavrov.tm.repository.ProjectRepositoryImpl;
@@ -26,8 +24,6 @@ import ru.lavrov.tm.repository.TaskRepositoryImpl;
 import ru.lavrov.tm.repository.UserRepositoryImpl;
 
 import javax.persistence.EntityManager;
-import java.nio.channels.ConnectionPendingException;
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -51,11 +47,16 @@ public final class TaskServiceImpl extends AbstractService implements ITaskServi
         @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
         @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(entityManager);
         @NotNull final IUserRepository userRepository = new UserRepositoryImpl(entityManager);
+        @Nullable User user = null;
         try {
-            entityManager.getTransaction().begin();
-            @Nullable final User user = userRepository.findOne(userId);
+            user = userRepository.findOne(userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
             if (user == null)
                 throw new UserNotExistsException();
+            entityManager.getTransaction().begin();
             taskRepository.persist(new Task(user, taskName, projectName));
             entityManager.getTransaction().commit();
         } catch (RuntimeException e) {
@@ -139,12 +140,18 @@ public final class TaskServiceImpl extends AbstractService implements ITaskServi
         @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
         @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(entityManager);
         @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(entityManager);
+        @Nullable Project project = null;
+        @Nullable Task task = null;
+        try {
+            project = projectRepository.findEntityByName(userId, projectName);
+            task = taskRepository.findEntityByName(userId, newName);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         try {
             entityManager.getTransaction().begin();
-            @Nullable final Project project = projectRepository.findEntityByName(userId, projectName);
             if (project == null)
                 throw new ProjectNotExistsException();
-            @Nullable final Task task = taskRepository.findEntityByName(userId, newName);
             if (task != null)
                 throw new TaskNameExistsException();
             taskRepository.renameTask(userId, project.getId(), oldName, newName);
@@ -205,10 +212,10 @@ public final class TaskServiceImpl extends AbstractService implements ITaskServi
             return taskRepository.findAllByNamePart(userId, "%" + name + "%");
         } catch (RuntimeException e) {
             e.printStackTrace();
-            throw new RequestIsFailedException();
         } finally {
             entityManager.close();
         }
+        return null;
     }
 
     @Override
@@ -225,28 +232,27 @@ public final class TaskServiceImpl extends AbstractService implements ITaskServi
             return taskRepository.findAllByDescPart(userId, "%" + description + "%");
         } catch (RuntimeException e) {
             e.printStackTrace();
-            throw new RequestIsFailedException();
         } finally {
             entityManager.close();
         }
+        return null;
     }
 
     @Override
     public @Nullable Collection<Task> findAll(@NotNull String userId, @Nullable Comparator<Task> comparator) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        @Nullable Collection<Task> list;
+        @Nullable Collection<Task> list = null;
         @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
         @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(entityManager);
         try {
             list = taskRepository.findAll(userId);
         } catch (RuntimeException e) {
             e.printStackTrace();
-            throw new RequestIsFailedException();
         } finally {
             entityManager.close();
         }
-        if (comparator != null)
+        if (list != null && comparator != null)
             ((ArrayList<Task>) list).sort(comparator);
         return list;
     }
@@ -263,10 +269,10 @@ public final class TaskServiceImpl extends AbstractService implements ITaskServi
             return taskRepository.findEntityByName(userId, taskName);
         } catch (RuntimeException e) {
             e.printStackTrace();
-            throw new RequestIsFailedException();
         } finally {
             entityManager.close();
         }
+        return null;
     }
 
     @Override
@@ -279,9 +285,9 @@ public final class TaskServiceImpl extends AbstractService implements ITaskServi
             return taskRepository.findAll(userId);
         } catch (RuntimeException e) {
             e.printStackTrace();
-            throw new RequestIsFailedException();
         } finally {
             entityManager.close();
         }
+        return null;
     }
 }

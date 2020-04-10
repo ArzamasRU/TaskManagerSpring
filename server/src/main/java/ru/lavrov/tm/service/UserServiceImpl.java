@@ -36,8 +36,13 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
             throw new UserRoleIsInvalidException();
         @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
         @NotNull final IUserRepository userRepository = new UserRepositoryImpl(entityManager);
+        @Nullable User user = null;
         try {
-            @Nullable final User user = userRepository.findUserByLogin(login);
+            user = userRepository.findUserByLogin(login);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        }
+        try {
             if (user != null)
                 throw new UserLoginExistsException();
             entityManager.getTransaction().begin();
@@ -83,38 +88,6 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
             entityManager.getTransaction().begin();
             userRepository.updateLogin(userId, newLogin);
             entityManager.getTransaction().commit();
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            throw new RequestIsFailedException();
-        } finally {
-            entityManager.close();
-        }
-    }
-
-    @Override
-    public @Nullable User findOne(@NotNull final String userId) {
-        if (userId == null || userId.isEmpty())
-            throw new UserIsNotAuthorizedException();
-        @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
-        @NotNull final IUserRepository userRepository = new UserRepositoryImpl(entityManager);
-        try {
-            return userRepository.findOne(userId);
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            throw new RequestIsFailedException();
-        } finally {
-            entityManager.close();
-        }
-    }
-
-    @Override
-    public @Nullable User findUserByLogin(@NotNull final String login) {
-        if (login == null || login.isEmpty())
-            throw new UserLoginIsInvalidException();
-        @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
-        @NotNull final IUserRepository userRepository = new UserRepositoryImpl(entityManager);
-        try {
-            return userRepository.findUserByLogin(login);
         } catch (RuntimeException e) {
             e.printStackTrace();
             throw new RequestIsFailedException();
@@ -178,6 +151,38 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
     }
 
     @Override
+    public @Nullable User findOne(@NotNull final String userId) {
+        if (userId == null || userId.isEmpty())
+            throw new UserIsNotAuthorizedException();
+        @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
+        @NotNull final IUserRepository userRepository = new UserRepositoryImpl(entityManager);
+        try {
+            return userRepository.findOne(userId);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        } finally {
+            entityManager.close();
+        }
+        return null;
+    }
+
+    @Override
+    public @Nullable User findUserByLogin(@NotNull final String login) {
+        if (login == null || login.isEmpty())
+            throw new UserLoginIsInvalidException();
+        @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
+        @NotNull final IUserRepository userRepository = new UserRepositoryImpl(entityManager);
+        try {
+            return userRepository.findUserByLogin(login);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        } finally {
+            entityManager.close();
+        }
+        return null;
+    }
+
+    @Override
     public @Nullable Collection<User> findAll(@NotNull final String userId) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
@@ -187,9 +192,9 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
             return userRepository.findAll(userId);
         } catch (RuntimeException e) {
             e.printStackTrace();
-            throw new RequestIsFailedException();
         } finally {
             entityManager.close();
         }
+        return null;
     }
 }

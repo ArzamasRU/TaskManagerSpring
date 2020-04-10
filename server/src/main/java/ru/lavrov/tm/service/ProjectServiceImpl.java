@@ -1,6 +1,5 @@
 package ru.lavrov.tm.service;
 
-import org.apache.ibatis.session.SqlSession;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.api.IProjectRepository;
@@ -23,8 +22,6 @@ import ru.lavrov.tm.repository.TaskRepositoryImpl;
 import ru.lavrov.tm.repository.UserRepositoryImpl;
 
 import javax.persistence.EntityManager;
-import java.nio.channels.ConnectionPendingException;
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -44,11 +41,16 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
         @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
         @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(entityManager);
         @NotNull final IUserRepository userRepository = new UserRepositoryImpl(entityManager);
+        @Nullable User user = null;
         try {
-            entityManager.getTransaction().begin();
-            @Nullable final User user = userRepository.findOne(userId);
+            user = userRepository.findOne(userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
             if (user == null)
                 throw new UserNotExistsException();
+            entityManager.getTransaction().begin();
             projectRepository.persist(new Project(projectName, user));
             entityManager.getTransaction().commit();
         } catch (RuntimeException e) {
@@ -68,11 +70,16 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
         @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
         @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(entityManager);
         @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(entityManager);
+        @Nullable Project project = null;
         try {
-            entityManager.getTransaction().begin();
-            @Nullable final Project project = projectRepository.findEntityByName(userId, projectName);
+            project = projectRepository.findEntityByName(userId, projectName);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
             if (project == null)
                 throw new ProjectNotExistsException();
+            entityManager.getTransaction().begin();
             projectRepository.removeProject(userId, project.getId());
             taskRepository.removeProjectTasks(userId, project.getId());
             entityManager.getTransaction().commit();
@@ -193,15 +200,13 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
         @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(entityManager);
         try {
             @Nullable final Project project = projectRepository.findEntityByName(userId, projectName);
-            if (project == null)
-                throw new ProjectNotExistsException();
             return taskRepository.getProjectTasks(userId, project.getId());
         } catch (RuntimeException e) {
             e.printStackTrace();
-            throw new RequestIsFailedException();
         } finally {
             entityManager.close();
         }
+        return null;
     }
 
     @Override
@@ -216,10 +221,10 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
             return projectRepository.findAllByNamePart(userId, "%" + name + "%");
         } catch (RuntimeException e) {
             e.printStackTrace();
-            throw new RequestIsFailedException();
         } finally {
             entityManager.close();
         }
+        return null;
     }
 
     @Override
@@ -236,10 +241,10 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
             return projectRepository.findAllByDescPart(userId, "%" + description + "%");
         } catch (RuntimeException e) {
             e.printStackTrace();
-            throw new RequestIsFailedException();
         } finally {
             entityManager.close();
         }
+        return null;
     }
 
     @Override
@@ -248,18 +253,17 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
     ) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        @Nullable Collection<Project> list;
+        @Nullable Collection<Project> list = null;
         @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
         @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(entityManager);
         try {
              list = projectRepository.findAll(userId);
         } catch (RuntimeException e) {
             e.printStackTrace();
-            throw new RequestIsFailedException();
         } finally {
             entityManager.close();
         }
-        if (comparator != null)
+        if (list != null && comparator != null)
             ((ArrayList<Project>) list).sort(comparator);
         return list;
     }
@@ -276,10 +280,10 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
             return projectRepository.findEntityByName(userId, projectName);
         } catch (RuntimeException e) {
             e.printStackTrace();
-            throw new RequestIsFailedException();
         } finally {
             entityManager.close();
         }
+        return null;
     }
 
     @Override
@@ -292,10 +296,10 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
             return projectRepository.findAll(userId);
         } catch (RuntimeException e) {
             e.printStackTrace();
-            throw new RequestIsFailedException();
         } finally {
             entityManager.close();
         }
+        return null;
     }
 
     @Override
@@ -310,10 +314,10 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
             return projectRepository.findOne(userId, entityId);
         } catch (RuntimeException e) {
             e.printStackTrace();
-            throw new RequestIsFailedException();
         } finally {
             entityManager.close();
         }
+        return null;
     }
 }
 

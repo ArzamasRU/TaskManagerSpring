@@ -15,7 +15,7 @@ public final class TokenEndpoint extends AbstractEndpoint{
 
     @NotNull public static final String URL = "http://localhost:8090/TokenEndpoint?wsdl";
 
-    public TokenEndpoint(final IServiceLocator bootstrap) {
+    public TokenEndpoint(@NotNull IServiceLocator bootstrap) {
         super(bootstrap);
     }
 

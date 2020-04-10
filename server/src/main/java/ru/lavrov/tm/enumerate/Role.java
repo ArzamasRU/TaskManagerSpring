@@ -33,6 +33,10 @@ public enum Role {
             if (role.equals(currentRole.getRole()))
                 return currentRole;
         }
-        return null;
+        try {
+            return Role.valueOf(role);
+        } catch(IllegalArgumentException e) {
+            return null;
+        }
     }
 }

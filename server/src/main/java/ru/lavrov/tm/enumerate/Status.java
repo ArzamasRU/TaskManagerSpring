@@ -34,6 +34,10 @@ public enum Status {
             if (status.equals(currentStatus.getStatus()))
                 return currentStatus;
         }
-        return null;
+        try {
+            return Status.valueOf(status);
+        } catch(IllegalArgumentException e) {
+            return null;
+        }
     }
 }
