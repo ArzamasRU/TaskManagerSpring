@@ -36,24 +36,22 @@ public final class Task extends AbstractEntity implements IEntity, IComparableEn
     private Date startDate = null;
     @Nullable
     private Date finishDate = null;
-    @Nullable
-    private String projectId = null;
 
     @Nullable
     @Enumerated(EnumType.STRING)
     private Status status = Status.PLANNED;
 
     @ManyToOne
-    @Nullable
+    @NotNull
     private Project project;
 
     @ManyToOne
     @NotNull
     private User user;
 
-    public Task(@NotNull User user, @Nullable String name, @Nullable String projectId) {
+    public Task(@NotNull User user, @Nullable String name, @NotNull Project project) {
         this.name = name;
-        this.projectId = projectId;
+        this.project = project;
         this.user = user;
     }
 
@@ -62,7 +60,7 @@ public final class Task extends AbstractEntity implements IEntity, IComparableEn
             return null;
         @NotNull final TaskDTO taskDTO = new TaskDTO();
         taskDTO.setId(task.getId());
-        taskDTO.setProjectId(task.getProjectId());
+        taskDTO.setProjectId(task.getProject().getId());
         taskDTO.setUserId(task.getUser().getId());
         taskDTO.setName(task.getName());
         taskDTO.setDescription(task.getDescription());
@@ -90,7 +88,7 @@ public final class Task extends AbstractEntity implements IEntity, IComparableEn
                 ", description=" + description +
                 ", startDate=" + startDate +
                 ", finishDate=" + finishDate +
-                ", projectId='" + projectId + '\'' +
+                ", projectId='" + getProject().getId() + '\'' +
                 ", userId='" + getUser().getId() + '\'';
     }
 }

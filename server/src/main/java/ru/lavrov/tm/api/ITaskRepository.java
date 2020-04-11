@@ -9,14 +9,9 @@ import java.util.Collection;
 
 public interface ITaskRepository {
 
-    void removeTaskByName(@Nullable String userId,
-                          @Nullable String name);
+    void removeTask(@Nullable Task task);
 
-    void removeTask(@Nullable String userId,
-                    @Nullable String id);
-
-    void removeProjectTasks(@Nullable String userId,
-                            @Nullable String projectId);
+    void removeAll(@Nullable Collection<Task> taskList);
 
     @Nullable Collection<Task> getProjectTasks(@Nullable String userId,
                                                @Nullable String projectId);
@@ -44,8 +39,6 @@ public interface ITaskRepository {
     void persist(@Nullable Task entity);
 
     void merge(@Nullable Task entity);
-
-    void removeAll(@Nullable String userId);
 
     @Nullable Task findEntityByName(@Nullable String userId,
                                     @Nullable String name);

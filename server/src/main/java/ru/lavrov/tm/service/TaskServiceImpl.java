@@ -46,18 +46,23 @@ public final class TaskServiceImpl extends AbstractService implements ITaskServi
             throw new UserIsNotAuthorizedException();
         @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
         @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(entityManager);
+        @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(entityManager);
         @NotNull final IUserRepository userRepository = new UserRepositoryImpl(entityManager);
         @Nullable User user = null;
+        @Nullable Project project = null;
         try {
             user = userRepository.findOne(userId);
+            project = projectRepository.findEntityByName(userId, projectName);
         } catch (Exception e) {
             e.printStackTrace();
         }
         try {
             if (user == null)
                 throw new UserNotExistsException();
+            if (project == null)
+                throw new ProjectNotExistsException();
             entityManager.getTransaction().begin();
-            taskRepository.persist(new Task(user, taskName, projectName));
+            taskRepository.persist(new Task(user, taskName, project));
             entityManager.getTransaction().commit();
         } catch (RuntimeException e) {
             e.printStackTrace();
@@ -77,7 +82,8 @@ public final class TaskServiceImpl extends AbstractService implements ITaskServi
         @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(entityManager);
         try {
             entityManager.getTransaction().begin();
-            taskRepository.removeTaskByName(userId, taskName);
+            @Nullable final Task task = taskRepository.findEntityByName(userId, taskName);
+            taskRepository.removeTask(task);
             entityManager.getTransaction().commit();
         } catch (RuntimeException e) {
             e.printStackTrace();
@@ -97,7 +103,8 @@ public final class TaskServiceImpl extends AbstractService implements ITaskServi
         @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(entityManager);
         try {
             entityManager.getTransaction().begin();
-            taskRepository.removeTask(userId, taskId);
+            @Nullable final Task task = taskRepository.findOne(userId, taskId);
+            taskRepository.removeTask(task);
             entityManager.getTransaction().commit();
         } catch (RuntimeException e) {
             e.printStackTrace();
@@ -115,7 +122,8 @@ public final class TaskServiceImpl extends AbstractService implements ITaskServi
         @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(entityManager);
         try {
             entityManager.getTransaction().begin();
-            taskRepository.removeAll(userId);
+            @Nullable final Collection<Task> taskList = taskRepository.findAll(userId);
+            taskRepository.removeAll(taskList);
             entityManager.getTransaction().commit();
         } catch (RuntimeException e) {
             e.printStackTrace();

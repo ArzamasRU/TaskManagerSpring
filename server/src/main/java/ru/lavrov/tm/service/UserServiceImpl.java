@@ -106,7 +106,8 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
         @NotNull final IUserRepository userRepository = new UserRepositoryImpl(entityManager);
         try {
             entityManager.getTransaction().begin();
-            userRepository.removeUser(userId);
+            @Nullable final User user = userRepository.findOne(userId);
+            userRepository.removeUser(user);
             entityManager.getTransaction().commit();
         } catch (RuntimeException e) {
             e.printStackTrace();

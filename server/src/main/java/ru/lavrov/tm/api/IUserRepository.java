@@ -17,7 +17,7 @@ public interface IUserRepository {
 
     @Nullable User findOne(@Nullable String userId);
 
-    void removeUser(@Nullable String userId);
+    void removeUser(@Nullable final User user);
 
     void persist(@Nullable User user);
 

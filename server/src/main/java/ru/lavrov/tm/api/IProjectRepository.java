@@ -26,12 +26,11 @@ public interface IProjectRepository {
     @Nullable Project findOne(@NotNull String userId,
                               @NotNull String id);
 
-    void removeProject(@Nullable String userId,
-                       @Nullable String id);
+    void removeProject(@Nullable Project project);
+
+    void removeAll(@Nullable Collection<Project> projectList);
 
     void persist(@Nullable Project project);
 
     void merge(@Nullable Project entity);
-
-    void removeAll(@Nullable String userId);
 }

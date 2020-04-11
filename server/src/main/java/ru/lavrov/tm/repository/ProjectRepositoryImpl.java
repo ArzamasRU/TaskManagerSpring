@@ -6,6 +6,7 @@ import ru.lavrov.tm.api.IProjectRepository;
 import ru.lavrov.tm.entity.Project;
 
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class ProjectRepositoryImpl extends AbstractRepository implements IProjectRepository {
@@ -19,22 +20,11 @@ public class ProjectRepositoryImpl extends AbstractRepository implements IProjec
                               @Nullable final String oldName,
                               @Nullable final String newName) {
         entityManager
-                .createQuery("UPDATE Project SET name = :newName " +
-                        "WHERE name = :oldName AND user_id = :userId", Project.class)
+                .createQuery("UPDATE Project SET name = :newName WHERE name = :oldName AND user_id = :userId")
                 .setParameter("userId", userId)
                 .setParameter("oldName", oldName)
                 .setParameter("newName", newName)
-                .getResultList();
-    }
-
-    @Override
-    public @Nullable Project findEntityByName(@Nullable final String userId,
-                                              @Nullable final String name){
-        return entityManager
-                .createQuery("FROM Project WHERE user_id = :userId AND name = :name", Project.class)
-                .setParameter("userId", userId)
-                .setParameter("name", name)
-                .getSingleResult();
+                .executeUpdate();
     }
 
     @Override
@@ -48,21 +38,17 @@ public class ProjectRepositoryImpl extends AbstractRepository implements IProjec
     }
 
     @Override
-    public void removeAll(@Nullable final String userId) {
-        entityManager
-                .createQuery("DELETE FROM Project WHERE user_id = :userId")
-                .setParameter("userId", userId)
-                .executeUpdate();
+    public void removeProject(@Nullable final Project project) {
+        entityManager.remove(project);
     }
 
     @Override
-    public void removeProject(@Nullable final String userId,
-                              @Nullable final String id) {
-        entityManager
-                .createQuery("DELETE FROM Project WHERE user_id = :userId AND id = :id")
-                .setParameter("userId", userId)
-                .setParameter("id", id)
-                .executeUpdate();
+    public void removeAll(@Nullable final Collection<Project> projectList) {
+        if (projectList == null)
+            return;
+        for (@Nullable final Project project : projectList) {
+            entityManager.remove(project);
+        }
     }
 
     @Override
@@ -102,5 +88,15 @@ public class ProjectRepositoryImpl extends AbstractRepository implements IProjec
                 .createQuery("FROM Project WHERE user_id = :userId", Project.class)
                 .setParameter("userId", userId)
                 .getResultList();
+    }
+
+    @Override
+    public @Nullable Project findEntityByName(@Nullable final String userId,
+                                              @Nullable final String name){
+        return entityManager
+                .createQuery("FROM Project WHERE user_id = :userId AND name = :name", Project.class)
+                .setParameter("userId", userId)
+                .setParameter("name", name)
+                .getSingleResult();
     }
 }

@@ -1,14 +1,8 @@
 package ru.lavrov.tm.repository;
 
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Param;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.api.IProjectRepository;
 import ru.lavrov.tm.api.ITaskRepository;
-import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Task;
-import ru.lavrov.tm.entity.User;
 
 import javax.persistence.EntityManager;
 import java.util.Collection;
@@ -20,23 +14,17 @@ public class TaskRepositoryImpl extends AbstractRepository implements ITaskRepos
     }
 
     @Override
-    public void removeTaskByName(@Nullable final String userId,
-                                 @Nullable final String name) {
-        entityManager
-                .createQuery("DELETE FROM Task WHERE user_id = :userId AND name = :name")
-                .setParameter("userId", userId)
-                .setParameter("name", name)
-                .executeUpdate();
+    public void removeTask(@Nullable final Task task) {
+        entityManager.remove(task);
     }
 
     @Override
-    public void removeTask(@Nullable final String userId,
-                           @Nullable final String id) {
-        entityManager
-                .createQuery("DELETE FROM Task WHERE user_id = :userId AND id = :id")
-                .setParameter("userId", userId)
-                .setParameter("id", id)
-                .executeUpdate();
+    public void removeAll(@Nullable final Collection<Task> taskList) {
+        if (taskList == null)
+            return;
+        for (@Nullable final Task task : taskList) {
+            entityManager.remove(task);
+        }
     }
 
     @Override
@@ -47,16 +35,6 @@ public class TaskRepositoryImpl extends AbstractRepository implements ITaskRepos
                 .setParameter("userId", userId)
                 .setParameter("projectId", projectId)
                 .getResultList();
-    }
-
-    @Override
-    public void removeProjectTasks(@Nullable final String userId,
-                                   @Nullable final String projectId) {
-        entityManager
-                .createQuery("DELETE FROM Task WHERE user_id = :userId AND project_id = :projectId")
-                .setParameter("userId", userId)
-                .setParameter("projectId", projectId)
-                .executeUpdate();
     }
 
     @Override
@@ -79,7 +57,7 @@ public class TaskRepositoryImpl extends AbstractRepository implements ITaskRepos
                            @Nullable final String newName) {
         entityManager
                 .createQuery("UPDATE Task SET name = :newName " +
-                        "WHERE name = :oldName AND user_id = :userId AND project_id = :projectId", Task.class)
+                        "WHERE name = :oldName AND user_id = :userId AND project_id = :projectId")
                 .setParameter("userId", userId)
                 .setParameter("projectId", projectId)
                 .setParameter("oldName", oldName)
@@ -133,14 +111,6 @@ public class TaskRepositoryImpl extends AbstractRepository implements ITaskRepos
     @Override
     public void merge(@Nullable final Task task) {
         entityManager.merge(task);
-    }
-
-    @Override
-    public void removeAll(@Nullable final String userId) {
-        entityManager
-                .createQuery("DELETE FROM Task WHERE user_id = :userId")
-                .setParameter("userId", userId)
-                .executeUpdate();
     }
 
     @Override

@@ -33,11 +33,11 @@ public final class User extends AbstractEntity implements IEntity {
     private Role role;
 
     @NotNull
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Project> projects = new ArrayList<>();
 
     @NotNull
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Task> tasks = new ArrayList<>();
 
     public User(@Nullable String login, @Nullable String password, @Nullable Role role) {

@@ -69,19 +69,10 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
             throw new UserIsNotAuthorizedException();
         @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
         @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(entityManager);
-        @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(entityManager);
-        @Nullable Project project = null;
         try {
-            project = projectRepository.findEntityByName(userId, projectName);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            if (project == null)
-                throw new ProjectNotExistsException();
             entityManager.getTransaction().begin();
-            projectRepository.removeProject(userId, project.getId());
-            taskRepository.removeProjectTasks(userId, project.getId());
+            @Nullable final Project project = projectRepository.findEntityByName(userId, projectName);
+            projectRepository.removeProject(project);
             entityManager.getTransaction().commit();
         } catch (RuntimeException e) {
             e.printStackTrace();
@@ -99,11 +90,29 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
             throw new UserIsNotAuthorizedException();
         @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
         @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(entityManager);
-        @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(entityManager);
         try {
             entityManager.getTransaction().begin();
-            projectRepository.removeProject(userId, projectId);
-            taskRepository.removeProjectTasks(userId, projectId);
+            @Nullable final Project project = projectRepository.findOne(userId, projectId);
+            projectRepository.removeProject(project);
+            entityManager.getTransaction().commit();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            throw new RequestIsFailedException();
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public void removeAll(@NotNull final String userId) {
+        if (userId == null || userId.isEmpty())
+            throw new UserIsNotAuthorizedException();
+        @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
+        @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(entityManager);
+        try {
+            entityManager.getTransaction().begin();
+            @Nullable final Collection<Project> projectList = projectRepository.findAll(userId);
+            projectRepository.removeAll(projectList);
             entityManager.getTransaction().commit();
         } catch (RuntimeException e) {
             e.printStackTrace();
@@ -126,24 +135,6 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
         try {
             entityManager.getTransaction().begin();
             projectRepository.renameProject(userId, oldName, newName);
-            entityManager.getTransaction().commit();
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            throw new RequestIsFailedException();
-        } finally {
-            entityManager.close();
-        }
-    }
-
-    @Override
-    public void removeAll(@NotNull final String userId) {
-        if (userId == null || userId.isEmpty())
-            throw new UserIsNotAuthorizedException();
-        @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
-        @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(entityManager);
-        try {
-            entityManager.getTransaction().begin();
-            projectRepository.removeAll(userId);
             entityManager.getTransaction().commit();
         } catch (RuntimeException e) {
             e.printStackTrace();
