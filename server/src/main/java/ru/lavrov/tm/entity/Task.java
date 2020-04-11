@@ -57,7 +57,7 @@ public final class Task extends AbstractEntity implements IEntity, IComparableEn
         this.user = user;
     }
 
-    public static @Nullable TaskDTO getTaskDTO(@Nullable final Task task) {
+    public static @Nullable TaskDTO getTaskDTO(@NotNull final Task task) {
         if (task == null)
             return null;
         @NotNull final TaskDTO taskDTO = new TaskDTO();
@@ -73,7 +73,7 @@ public final class Task extends AbstractEntity implements IEntity, IComparableEn
         return taskDTO;
     }
 
-    public static @Nullable Collection<TaskDTO> getTaskDTO(@Nullable final Collection<Task> taskList) {
+    public static @Nullable Collection<TaskDTO> getTaskDTO(@NotNull final Collection<Task> taskList) {
         if (taskList == null)
             return null;
         @NotNull final Collection<TaskDTO> taskDTOList = new ArrayList<>();

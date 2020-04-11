@@ -111,14 +111,14 @@ public class ProjectEndpointTest extends Assert {
         userEndpoint.deleteUser(token);
     }
 
-    @Test
-    void removeTest() {
-        @Nullable ProjectDTO project = projectEndpoint.findProjectByName(token, TEST_PROJECT_NAME);
-        assertNotNull(project);
-        projectEndpoint.remove(token, project.getId());
-        project = projectEndpoint.findProjectByName(token, TEST_PROJECT_NAME);
-        assertNull(project);
-    }
+//    @Test
+//    void removeTest() {
+//        @Nullable ProjectDTO project = projectEndpoint.findProjectByName(token, TEST_PROJECT_NAME);
+//        assertNotNull(project);
+//        projectEndpoint.remove(token, project.getId());
+//        project = projectEndpoint.findProjectByName(token, TEST_PROJECT_NAME);
+//        assertNull(project);
+//    }
 
     @Test
     void getProjectTasksTest() {
@@ -132,55 +132,55 @@ public class ProjectEndpointTest extends Assert {
         taskEndpoint.removeTaskByName(token, TEST_TASK_NAME);
     }
 
-    @Test
-    void renameProjectTest() {
-        @NotNull final String newName = "newName";
-        projectEndpoint.renameProject(token, TEST_PROJECT_NAME, newName);
-        @Nullable ProjectDTO project = projectEndpoint.findProjectByName(token, newName);
-        assertNotNull(project);
-        assertNotEquals(project.getName(), TEST_PROJECT_NAME);
-        project = projectEndpoint.findProjectByName(token, TEST_PROJECT_NAME);
-        assertNull(project);
-    }
-
-    @Test
-    void findAllByNamePartTest() {
-        @NotNull final String croppedProjectName = TEST_PROJECT_NAME.substring(2);
-        @Nullable final Collection<ProjectDTO> projectList = projectEndpoint.findAllByNamePart(token, croppedProjectName);
-        assertNotNull(projectList);
-        assertFalse(projectList.isEmpty());
-        for (@Nullable final ProjectDTO project : projectList) {
-            assertNotNull(project);
-        }
-    }
-
-    @Test
-    void findAllByStatusTest() {
-        @Nullable final Collection<ProjectDTO> projectList = projectEndpoint.findAllByStatus(token);
-        assertNotNull(projectList);
-        assertFalse(projectList.isEmpty());
-        for (@Nullable final ProjectDTO project : projectList) {
-            assertNotNull(project);
-        }
-    }
-
-    @Test
-    void removeAllTest() {
-        projectEndpoint.removeAll(token);
-        @Nullable ProjectDTO project = projectEndpoint.findProjectByName(token, TEST_PROJECT_NAME);
-        assertNull(project);
-    }
-
-    @Test
-    void findProjectByNameBadTest() {
-//                @NotNull final Executable doLogin = new Executable() {
-//            @Override
-//            public void execute() throws Throwable {
-//                token = tokenEndpoint.login(LOGIN, hashedPassword);
-//            }
-//        };
-//        assertThrows(ClientTransportException.class, doLogin);
-        @Nullable final ProjectDTO projectList =
-                projectEndpoint.findProjectByName(token, TEST_PROJECT_NAME.substring(2));
-    }
+//    @Test
+//    void renameProjectTest() {
+//        @NotNull final String newName = "newName";
+//        projectEndpoint.renameProject(token, TEST_PROJECT_NAME, newName);
+//        @Nullable ProjectDTO project = projectEndpoint.findProjectByName(token, newName);
+//        assertNotNull(project);
+//        assertNotEquals(project.getName(), TEST_PROJECT_NAME);
+//        project = projectEndpoint.findProjectByName(token, TEST_PROJECT_NAME);
+//        assertNull(project);
+//    }
+//
+//    @Test
+//    void findAllByNamePartTest() {
+//        @NotNull final String croppedProjectName = TEST_PROJECT_NAME.substring(2);
+//        @Nullable final Collection<ProjectDTO> projectList = projectEndpoint.findAllByNamePart(token, croppedProjectName);
+//        assertNotNull(projectList);
+//        assertFalse(projectList.isEmpty());
+//        for (@Nullable final ProjectDTO project : projectList) {
+//            assertNotNull(project);
+//        }
+//    }
+//
+//    @Test
+//    void findAllByStatusTest() {
+//        @Nullable final Collection<ProjectDTO> projectList = projectEndpoint.findAllByStatus(token);
+//        assertNotNull(projectList);
+//        assertFalse(projectList.isEmpty());
+//        for (@Nullable final ProjectDTO project : projectList) {
+//            assertNotNull(project);
+//        }
+//    }
+//
+//    @Test
+//    void removeAllTest() {
+//        projectEndpoint.removeAll(token);
+//        @Nullable ProjectDTO project = projectEndpoint.findProjectByName(token, TEST_PROJECT_NAME);
+//        assertNull(project);
+//    }
+//
+//    @Test
+//    void findProjectByNameBadTest() {
+////                @NotNull final Executable doLogin = new Executable() {
+////            @Override
+////            public void execute() throws Throwable {
+////                token = tokenEndpoint.login(LOGIN, hashedPassword);
+////            }
+////        };
+////        assertThrows(ClientTransportException.class, doLogin);
+//        @Nullable final ProjectDTO projectList =
+//                projectEndpoint.findProjectByName(token, TEST_PROJECT_NAME.substring(2));
+//    }
 }
