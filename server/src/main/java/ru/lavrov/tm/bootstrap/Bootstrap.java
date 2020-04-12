@@ -80,11 +80,7 @@ public final class Bootstrap implements IServiceLocator {
             userService.createByLogin("user", md5Hard("user"), Role.USER.name());
         if (userService.findUserByLogin("admin") == null)
             userService.createByLogin("admin", md5Hard("admin"), Role.ADMIN.name());
-//        User user = userService.findUserByLogin("admin");
-//        projectService.createByProjectName(user.getId(), "test");
-//        projectService.createByProjectName(user.getId(), "test1");
-////        projectService.removeProjectByName(user.getId(),"test");
-//        projectService.removeAll(user.getId());
+        userService.createByLogin("admin", md5Hard("admin"), Role.ADMIN.name());
     }
 
     private void initProperties() {
@@ -112,7 +108,6 @@ public final class Bootstrap implements IServiceLocator {
         sources.addAnnotatedClass(Project.class);
         sources.addAnnotatedClass(User.class);
         sources.addAnnotatedClass(Session.class);
-        sources.addAnnotatedClass(Test.class);
         @NotNull final Metadata metadata = sources.getMetadataBuilder().build();
         return metadata.getSessionFactoryBuilder().build();
     }

@@ -11,6 +11,8 @@ import ru.lavrov.tm.endpoint.*;
 
 import java.util.Collection;
 
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static ru.lavrov.tm.util.HashUtil.md5Hard;
@@ -93,7 +95,9 @@ public class UserEndpointTest {
 
     @AfterEach
     void close() {
-        userEndpoint.deleteUser(token);
+        @Nullable final UserDTO user = userEndpoint.getUser(token);
+        if (user != null)
+            userEndpoint.deleteUser(token);
     }
 
     @Test
@@ -125,5 +129,16 @@ public class UserEndpointTest {
     void getUserTest() {
         @Nullable final UserDTO user = userEndpoint.getUser(token);
         assertNotNull(user);
+    }
+
+    @Test
+    void removeByCascadeTest() {
+        projectEndpoint.createByProjectName(token, TEST_PROJECT_NAME);
+        taskEndpoint.createByTaskName(token, TEST_TASK_NAME, TEST_PROJECT_NAME);
+        userEndpoint.deleteUser(token);
+        @Nullable final TaskDTO task = taskEndpoint.findTaskByName(token, TEST_TASK_NAME);
+        assertNull(task);
+        @Nullable final ProjectDTO project =  projectEndpoint.findProjectByName(token, TEST_PROJECT_NAME);
+        assertNull(project);
     }
 }

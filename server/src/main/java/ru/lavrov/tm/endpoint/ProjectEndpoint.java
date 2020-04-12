@@ -111,8 +111,6 @@ public final class ProjectEndpoint extends AbstractEndpoint{
         tokenService.validate(token, roles);
         @NotNull final Session session = tokenService.decryptToken(token).getSession();
         @NotNull final IProjectService projectService = bootstrap.getProjectService();
-        System.out.println(projectService.findProjectByName(session.getUserId(), name));
-        System.out.println(Project.getProjectDTO(projectService.findProjectByName(session.getUserId(), name)));
         return Project.getProjectDTO(projectService.findProjectByName(session.getUserId(), name));
     }
 

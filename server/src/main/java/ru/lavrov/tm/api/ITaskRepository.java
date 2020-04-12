@@ -1,7 +1,5 @@
 package ru.lavrov.tm.api;
 
-import org.apache.ibatis.annotations.*;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.entity.Task;
 
@@ -33,8 +31,8 @@ public interface ITaskRepository {
     @Nullable Collection<Task> findAllByDescPart(@Nullable String userId,
                                                  @Nullable String pattern);
 
-    @Nullable Task findOne(@NotNull String userId,
-                           @NotNull String id);
+    @Nullable Task findOne(@Nullable String userId,
+                           @Nullable String id);
 
     void persist(@Nullable Task entity);
 

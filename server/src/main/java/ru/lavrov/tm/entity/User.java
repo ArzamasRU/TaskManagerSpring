@@ -22,6 +22,7 @@ import java.util.List;
 @Table(name = "app_user")
 public final class User extends AbstractEntity implements IEntity {
 
+    @Column(unique = true)
     @Nullable
     private String login;
 
@@ -61,7 +62,7 @@ public final class User extends AbstractEntity implements IEntity {
     @NotNull
     public static UserDTO getUserDTO(@NotNull final User user) {
         if (user == null)
-            throw new UserNotExistsException();
+            return null;
         @NotNull final UserDTO userDTO = new UserDTO();
         userDTO.setId(user.getId());
         userDTO.setLogin(user.getLogin());

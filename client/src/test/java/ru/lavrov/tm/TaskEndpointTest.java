@@ -1,13 +1,16 @@
 package ru.lavrov.tm;
 
+import com.sun.xml.internal.ws.client.ClientTransportException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.experimental.categories.Category;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import ru.lavrov.tm.bootstrap.Bootstrap;
 import ru.lavrov.tm.endpoint.*;
+
 
 import java.util.Collection;
 
@@ -170,5 +173,16 @@ public class TaskEndpointTest {
         taskEndpoint.removeAll(token);
         @Nullable TaskDTO task = taskEndpoint.findTaskByName(token, TEST_TASK_NAME);
         assertNull(task);
+    }
+
+    @Test
+    void findTaskByNameBadTest() {
+        @NotNull final Executable doFindTaskByName = new Executable() {
+            @Override
+            public void execute() {
+                taskEndpoint.findTaskByName(token, null);
+            }
+        };
+        assertThrows(ClientTransportException.class, doFindTaskByName);
     }
 }

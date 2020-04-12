@@ -32,8 +32,6 @@ public final class TokenServiceImpl extends AbstractService implements ITokenSer
     public void validate(@NotNull final String token, @Nullable final Collection<Role> roles) {
         if (token == null)
             throw new TokenIsInvalidException();
-        System.out.println("validate");
-        System.out.println(token);
         @NotNull final Token curToken = decryptToken(token);
         @Nullable final String currSign = curToken.getSign();
         curToken.setSign(null);

@@ -31,7 +31,9 @@ public final class Project extends AbstractEntity implements IEntity, IComparabl
     private Date startDate = null;
     @Nullable
     private Date finishDate = null;
+
     @Nullable
+    @Enumerated(EnumType.STRING)
     private Status status = Status.PLANNED;
 
     @ManyToOne

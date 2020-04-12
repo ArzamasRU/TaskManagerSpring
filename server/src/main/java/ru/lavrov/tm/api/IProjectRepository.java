@@ -1,7 +1,5 @@
 package ru.lavrov.tm.api;
 
-import org.apache.ibatis.annotations.*;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.entity.Project;
 
@@ -23,8 +21,8 @@ public interface IProjectRepository {
     @Nullable Collection<Project> findAllByDescPart(@Nullable String userId,
                                                     @Nullable String pattern);
 
-    @Nullable Project findOne(@NotNull String userId,
-                              @NotNull String id);
+    @Nullable Project findOne(@Nullable String userId,
+                              @Nullable String id);
 
     void removeProject(@Nullable Project project);
 
