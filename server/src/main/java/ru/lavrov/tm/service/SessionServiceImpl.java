@@ -55,7 +55,7 @@ public final class SessionServiceImpl extends AbstractService implements ISessio
         @NotNull final IUserRepository userRepository = new UserRepositoryImpl(entityManager);
         @Nullable User user = null;
         try {
-            user = userRepository.findUserByLogin(login);
+            user = userRepository.findByLogin(login);
         } catch (Exception e) {
             e.printStackTrace();
         }

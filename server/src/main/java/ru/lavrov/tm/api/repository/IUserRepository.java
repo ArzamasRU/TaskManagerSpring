@@ -2,20 +2,25 @@ package ru.lavrov.tm.api.repository;
 
 import org.apache.ibatis.annotations.*;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 import ru.lavrov.tm.entity.User;
 
 import java.util.Collection;
 
-public interface IUserRepository {
-    void updatePassword(@Nullable String userId,
-                        @Nullable String newPassword);
+@Repository
+public interface IUserRepository extends JpaRepository<User, String> {
+    @Query("UPDATE User SET password = :newPassword WHERE id = :userId")
+    void updatePassword(@Param("userId") @Nullable String userId,
+                        @Param("newPassword") @Nullable String newPassword);
 
-    void updateLogin(@Nullable String userId,
-                     @Nullable String newLogin);
+    @Query("UPDATE User SET login = :newLogin WHERE id = :userId")
+    void updateLogin(@Param("userId") @Nullable String userId,
+                     @Param("newLogin") @Nullable String newLogin);
 
-    @Nullable User findUserByLogin(@Nullable String login);
-
-    @Nullable User findOne(@Nullable String userId);
+    @Nullable User findByLogin(@Nullable String login);
 
     void removeUser(@Nullable final User user);
 

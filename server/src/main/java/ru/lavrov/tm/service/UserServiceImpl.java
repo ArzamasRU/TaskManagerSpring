@@ -2,6 +2,7 @@ package ru.lavrov.tm.service;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.lavrov.tm.api.repository.IUserRepository;
 import ru.lavrov.tm.api.service.IUserService;
 import ru.lavrov.tm.bootstrap.Bootstrap;
@@ -17,10 +18,9 @@ import java.util.Collection;
 
 public final class UserServiceImpl extends AbstractService implements IUserService {
 
-    public UserServiceImpl(@NotNull Bootstrap bootstrap) {
-        super(bootstrap);
-    }
-
+    @Autowired
+    private IUserRepository userRepository;
+    
     @Override
     public void createByLogin(
             @NotNull final String login, @NotNull final String password, @NotNull final String role
@@ -34,26 +34,20 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
         @Nullable Role currentRole = Role.getByRole(role);
         if (currentRole == null)
             throw new UserRoleIsInvalidException();
-        @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
-        @NotNull final IUserRepository userRepository = new UserRepositoryImpl(entityManager);
         @Nullable User user = null;
         try {
-            user = userRepository.findUserByLogin(login);
+            user = userRepository.findByLogin(login);
         } catch (RuntimeException e) {
             e.printStackTrace();
         }
         try {
             if (user != null)
                 throw new UserLoginExistsException();
-            entityManager.getTransaction().begin();
             userRepository.persist(new User(login, password, currentRole));
-            entityManager.getTransaction().commit();
         } catch (RuntimeException e) {
             e.printStackTrace();
             throw new RequestIsFailedException();
-        } finally {
-            entityManager.close();
-        }
+        } 
     }
 
     @Override
@@ -62,17 +56,11 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
             throw new UserIsNotAuthorizedException();
         if (newPassword == null || newPassword.isEmpty())
             throw new UserPasswordIsInvalidException();
-        @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
-        @NotNull final IUserRepository userRepository = new UserRepositoryImpl(entityManager);
         try {
-            entityManager.getTransaction().begin();
             userRepository.updatePassword(userId, newPassword);
-            entityManager.getTransaction().commit();
         } catch (RuntimeException e) {
             e.printStackTrace();
             throw new RequestIsFailedException();
-        } finally {
-            entityManager.close();
         }
     }
 
@@ -82,17 +70,11 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
             throw new UserIsNotAuthorizedException();
         if (newLogin == null || newLogin.isEmpty())
             throw new UserLoginIsInvalidException();
-        @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
-        @NotNull final IUserRepository userRepository = new UserRepositoryImpl(entityManager);
         try {
-            entityManager.getTransaction().begin();
             userRepository.updateLogin(userId, newLogin);
-            entityManager.getTransaction().commit();
         } catch (RuntimeException e) {
             e.printStackTrace();
             throw new RequestIsFailedException();
-        } finally {
-            entityManager.close();
         }
     }
 
@@ -100,36 +82,24 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
     public void removeUser(@NotNull final String userId) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
-        @NotNull final IUserRepository userRepository = new UserRepositoryImpl(entityManager);
         try {
-            entityManager.getTransaction().begin();
-            @Nullable final User user = userRepository.findOne(userId);
+            @Nullable final User user = userRepository.getOne(userId);
             userRepository.removeUser(user);
-            entityManager.getTransaction().commit();
         } catch (RuntimeException e) {
             e.printStackTrace();
             throw new RequestIsFailedException();
-        } finally {
-            entityManager.close();
-        }
+        } 
     }
 
     @Override
     public void persist(@NotNull final User entity) {
         if (entity == null)
             throw new ProjectNotExistsException();
-        @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
-        @NotNull final IUserRepository userRepository = new UserRepositoryImpl(entityManager);
         try {
-            entityManager.getTransaction().begin();
             userRepository.persist(entity);
-            entityManager.getTransaction().commit();
         } catch (RuntimeException e) {
             e.printStackTrace();
             throw new RequestIsFailedException();
-        } finally {
-            entityManager.close();
         }
     }
 
@@ -137,17 +107,11 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
     public void merge(@NotNull final User entity) {
         if (entity == null)
             throw new ProjectNotExistsException();
-        @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
-        @NotNull final IUserRepository userRepository = new UserRepositoryImpl(entityManager);
         try {
-            entityManager.getTransaction().begin();
             userRepository.merge(entity);
-            entityManager.getTransaction().commit();
         } catch (RuntimeException e) {
             e.printStackTrace();
             throw new RequestIsFailedException();
-        } finally {
-            entityManager.close();
         }
     }
 
@@ -155,14 +119,10 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
     public @Nullable User findOne(@NotNull final String userId) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
-        @NotNull final IUserRepository userRepository = new UserRepositoryImpl(entityManager);
         try {
-            return userRepository.findOne(userId);
+            return userRepository.getOne(userId);
         } catch (RuntimeException e) {
             e.printStackTrace();
-        } finally {
-            entityManager.close();
         }
         return null;
     }
@@ -171,14 +131,10 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
     public @Nullable User findUserByLogin(@NotNull final String login) {
         if (login == null || login.isEmpty())
             throw new UserLoginIsInvalidException();
-        @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
-        @NotNull final IUserRepository userRepository = new UserRepositoryImpl(entityManager);
         try {
-            return userRepository.findUserByLogin(login);
+            return userRepository.findByLogin(login);
         } catch (RuntimeException e) {
             e.printStackTrace();
-        } finally {
-            entityManager.close();
         }
         return null;
     }
@@ -187,14 +143,10 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
     public @Nullable Collection<User> findAll(@NotNull final String userId) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
-        @NotNull final IUserRepository userRepository = new UserRepositoryImpl(entityManager);
         try {
             return userRepository.findAll(userId);
         } catch (RuntimeException e) {
             e.printStackTrace();
-        } finally {
-            entityManager.close();
         }
         return null;
     }

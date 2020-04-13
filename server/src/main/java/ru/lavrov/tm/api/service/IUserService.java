@@ -6,7 +6,7 @@ import ru.lavrov.tm.entity.User;
 
 import java.util.Collection;
 
-public interface IUserService extends IService {
+public interface IUserService {
     void createByLogin(@NotNull String login, @NotNull String password, @NotNull String role);
 
     void updatePassword(@NotNull String userId, @NotNull String newPassword);

@@ -8,7 +8,7 @@ import ru.lavrov.tm.entity.Task;
 import java.util.Collection;
 import java.util.Comparator;
 
-public interface IProjectService extends IService {
+public interface IProjectService {
     void createByProjectName(@NotNull final String userId, @NotNull final String name);
 
     void removeProjectByName(@NotNull String userId, @NotNull String projectName);

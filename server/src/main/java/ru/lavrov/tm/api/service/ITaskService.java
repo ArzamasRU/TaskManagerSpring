@@ -7,7 +7,7 @@ import ru.lavrov.tm.entity.Task;
 import java.util.Collection;
 import java.util.Comparator;
 
-public interface ITaskService extends IService {
+public interface ITaskService {
     void createByTaskName(@NotNull String userId, @NotNull String taskName, @NotNull String projectName);
 
     void removeTaskByName(@NotNull String userId, @NotNull String taskName);

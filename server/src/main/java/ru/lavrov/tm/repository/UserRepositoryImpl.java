@@ -20,7 +20,7 @@ public class UserRepositoryImpl extends AbstractRepository implements IUserRepos
     }
 
     @Override
-    public @Nullable User findUserByLogin(@Nullable final String login) {
+    public @Nullable User findByLogin(@Nullable final String login) {
         return entityManager.createQuery("FROM User WHERE login = :login", User.class)
                 .setParameter("login", login).getSingleResult();
     }
