@@ -1,4 +1,4 @@
-package ru.lavrov.tm.api;
+package ru.lavrov.tm.api.service;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

@@ -2,20 +2,14 @@ package ru.lavrov.tm.bootstrap;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.apache.ibatis.datasource.pooled.PooledDataSource;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Environment;
-import org.apache.ibatis.session.Configuration;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import org.apache.ibatis.transaction.TransactionFactory;
-import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.api.*;
+import org.springframework.stereotype.Component;
+import ru.lavrov.tm.api.service.*;
 import ru.lavrov.tm.endpoint.*;
 import ru.lavrov.tm.entity.*;
 import ru.lavrov.tm.enumerate.Role;
@@ -23,7 +17,6 @@ import ru.lavrov.tm.service.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.sql.DataSource;
 import javax.xml.ws.Endpoint;
 
 import java.util.HashMap;
@@ -34,6 +27,7 @@ import static ru.lavrov.tm.util.HashUtil.md5Hard;
 
 @Getter
 @NoArgsConstructor
+@Component
 public final class Bootstrap implements IServiceLocator {
     @NotNull
     private final IProjectService projectService = new ProjectServiceImpl(this);

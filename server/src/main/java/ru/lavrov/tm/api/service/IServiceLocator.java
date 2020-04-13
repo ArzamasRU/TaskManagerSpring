@@ -1,4 +1,6 @@
-package ru.lavrov.tm.api;
+package ru.lavrov.tm.api.service;
+
+import ru.lavrov.tm.api.service.*;
 
 public interface IServiceLocator {
     IProjectService getProjectService();

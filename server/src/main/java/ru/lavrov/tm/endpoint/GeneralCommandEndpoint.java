@@ -5,7 +5,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.api.*;
+import ru.lavrov.tm.api.service.*;
 import ru.lavrov.tm.entity.ExternalizationStorage;
 import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Session;

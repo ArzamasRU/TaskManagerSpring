@@ -2,11 +2,10 @@ package ru.lavrov.tm.repository;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.api.IProjectRepository;
+import ru.lavrov.tm.api.repository.IProjectRepository;
 import ru.lavrov.tm.entity.Project;
 
 import javax.persistence.EntityManager;
-import java.util.ArrayList;
 import java.util.Collection;
 
 public class ProjectRepositoryImpl extends AbstractRepository implements IProjectRepository {

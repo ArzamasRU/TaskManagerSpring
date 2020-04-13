@@ -1,10 +1,9 @@
 package ru.lavrov.tm.service;
 
-import org.apache.ibatis.session.SqlSession;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.api.ISessionService;
-import ru.lavrov.tm.api.IUserRepository;
+import ru.lavrov.tm.api.service.ISessionService;
+import ru.lavrov.tm.api.repository.IUserRepository;
 import ru.lavrov.tm.bootstrap.Bootstrap;
 import ru.lavrov.tm.entity.Session;
 import ru.lavrov.tm.entity.User;
@@ -16,12 +15,9 @@ import ru.lavrov.tm.exception.user.*;
 import ru.lavrov.tm.repository.UserRepositoryImpl;
 
 import javax.persistence.EntityManager;
-import java.nio.channels.ConnectionPendingException;
-import java.sql.Connection;
 import java.util.Collection;
 
 import static ru.lavrov.tm.service.AppPropertyServiceImpl.appProperties;
-import static ru.lavrov.tm.util.HashUtil.md5Hard;
 import static ru.lavrov.tm.util.SignUtil.getSign;
 
 public final class SessionServiceImpl extends AbstractService implements ISessionService {

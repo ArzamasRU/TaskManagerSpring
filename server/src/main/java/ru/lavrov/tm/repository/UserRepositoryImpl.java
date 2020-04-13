@@ -2,7 +2,7 @@ package ru.lavrov.tm.repository;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.api.IUserRepository;
+import ru.lavrov.tm.api.repository.IUserRepository;
 import ru.lavrov.tm.entity.User;
 
 import javax.persistence.EntityManager;

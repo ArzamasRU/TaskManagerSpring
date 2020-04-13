@@ -2,10 +2,10 @@ package ru.lavrov.tm.service;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.api.IProjectRepository;
-import ru.lavrov.tm.api.IProjectService;
-import ru.lavrov.tm.api.ITaskRepository;
-import ru.lavrov.tm.api.IUserRepository;
+import ru.lavrov.tm.api.repository.IProjectRepository;
+import ru.lavrov.tm.api.service.IProjectService;
+import ru.lavrov.tm.api.repository.ITaskRepository;
+import ru.lavrov.tm.api.repository.IUserRepository;
 import ru.lavrov.tm.bootstrap.Bootstrap;
 import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Task;

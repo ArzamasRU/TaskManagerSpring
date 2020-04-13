@@ -1,4 +1,4 @@
-package ru.lavrov.tm.api;
+package ru.lavrov.tm.api.entity;
 
 import org.jetbrains.annotations.Nullable;
 import ru.lavrov.tm.enumerate.Status;

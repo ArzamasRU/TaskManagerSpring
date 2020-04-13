@@ -1,7 +1,7 @@
 package ru.lavrov.tm.repository;
 
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.api.ITaskRepository;
+import ru.lavrov.tm.api.repository.ITaskRepository;
 import ru.lavrov.tm.entity.Task;
 
 import javax.persistence.EntityManager;

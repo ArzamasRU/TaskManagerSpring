@@ -2,8 +2,8 @@ package ru.lavrov.tm.service;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.api.IUserRepository;
-import ru.lavrov.tm.api.IUserService;
+import ru.lavrov.tm.api.repository.IUserRepository;
+import ru.lavrov.tm.api.service.IUserService;
 import ru.lavrov.tm.bootstrap.Bootstrap;
 import ru.lavrov.tm.entity.User;
 import ru.lavrov.tm.enumerate.Role;
@@ -14,8 +14,6 @@ import ru.lavrov.tm.repository.UserRepositoryImpl;
 
 import javax.persistence.EntityManager;
 import java.util.Collection;
-
-import static ru.lavrov.tm.util.HashUtil.md5Hard;
 
 public final class UserServiceImpl extends AbstractService implements IUserService {
 

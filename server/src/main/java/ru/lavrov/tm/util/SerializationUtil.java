@@ -2,7 +2,7 @@ package ru.lavrov.tm.util;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.api.IEntity;
+import ru.lavrov.tm.api.entity.IEntity;
 import ru.lavrov.tm.exception.util.SerializationException;
 
 import java.io.*;

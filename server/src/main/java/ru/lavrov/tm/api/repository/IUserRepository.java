@@ -1,4 +1,4 @@
-package ru.lavrov.tm.api;
+package ru.lavrov.tm.api.repository;
 
 import org.apache.ibatis.annotations.*;
 import org.jetbrains.annotations.Nullable;

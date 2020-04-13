@@ -3,10 +3,9 @@ package ru.lavrov.tm.endpoint;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.api.IServiceLocator;
-import ru.lavrov.tm.api.ITokenService;
+import ru.lavrov.tm.api.service.IServiceLocator;
+import ru.lavrov.tm.api.service.ITokenService;
 
-import javax.jws.WebMethod;
 import javax.jws.WebService;
 
 @NoArgsConstructor

@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
-import ru.lavrov.tm.api.IServiceLocator;
+import ru.lavrov.tm.api.service.IServiceLocator;
 
 @Getter
 @Setter

@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.api.IEntity;
+import ru.lavrov.tm.api.entity.IEntity;
 import ru.lavrov.tm.enumerate.Role;
 
 import javax.xml.bind.annotation.XmlRootElement;

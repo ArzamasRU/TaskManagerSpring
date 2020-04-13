@@ -3,7 +3,7 @@ package ru.lavrov.tm.endpoint;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.api.*;
+import ru.lavrov.tm.api.service.*;
 import ru.lavrov.tm.dto.ProjectDTO;
 import ru.lavrov.tm.dto.TaskDTO;
 import ru.lavrov.tm.dto.UserDTO;

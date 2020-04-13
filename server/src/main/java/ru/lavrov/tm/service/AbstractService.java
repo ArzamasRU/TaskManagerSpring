@@ -2,8 +2,7 @@ package ru.lavrov.tm.service;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.api.IService;
-import ru.lavrov.tm.api.IServiceLocator;
+import ru.lavrov.tm.api.service.IService;
 import ru.lavrov.tm.bootstrap.Bootstrap;
 import ru.lavrov.tm.util.ConnectionUtil;
 

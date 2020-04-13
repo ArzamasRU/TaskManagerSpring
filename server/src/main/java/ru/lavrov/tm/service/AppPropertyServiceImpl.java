@@ -2,7 +2,7 @@ package ru.lavrov.tm.service;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.api.IAppPropertyService;
+import ru.lavrov.tm.api.service.IAppPropertyService;
 import ru.lavrov.tm.entity.AppProperties;
 import ru.lavrov.tm.exception.property.PropertyLoadingException;
 
