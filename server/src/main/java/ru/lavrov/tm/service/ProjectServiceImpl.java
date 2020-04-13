@@ -19,7 +19,6 @@ import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 import ru.lavrov.tm.exception.user.UserNotExistsException;
 import ru.lavrov.tm.repository.ProjectRepositoryImpl;
 import ru.lavrov.tm.repository.TaskRepositoryImpl;
-import ru.lavrov.tm.repository.UserRepositoryImpl;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
@@ -28,37 +27,33 @@ import java.util.Comparator;
 
 public final class ProjectServiceImpl extends AbstractService implements IProjectService {
 
-    public ProjectServiceImpl(@NotNull Bootstrap bootstrap) {
-        super(bootstrap);
-    }
-
     @Override
     public void createByProjectName(@NotNull final String userId, @NotNull final String projectName) {
-        if (projectName == null || projectName.isEmpty())
-            throw new ProjectNameIsInvalidException();
-        if (userId == null || userId.isEmpty())
-            throw new UserIsNotAuthorizedException();
-        @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
-        @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(entityManager);
-        @NotNull final IUserRepository userRepository = new UserRepositoryImpl(entityManager);
-        @Nullable User user = null;
-        try {
-            user = userRepository.findOne(userId);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            if (user == null)
-                throw new UserNotExistsException();
-            entityManager.getTransaction().begin();
-            projectRepository.persist(new Project(projectName, user));
-            entityManager.getTransaction().commit();
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            throw new RequestIsFailedException();
-        } finally {
-            entityManager.close();
-        }
+//        if (projectName == null || projectName.isEmpty())
+//            throw new ProjectNameIsInvalidException();
+//        if (userId == null || userId.isEmpty())
+//            throw new UserIsNotAuthorizedException();
+//        @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
+//        @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(entityManager);
+//        @NotNull final IUserRepository userRepository = new UserRepositoryImpl(entityManager);
+//        @Nullable User user = null;
+//        try {
+//            user = userRepository.findOne(userId);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        try {
+//            if (user == null)
+//                throw new UserNotExistsException();
+//            entityManager.getTransaction().begin();
+//            projectRepository.persist(new Project(projectName, user));
+//            entityManager.getTransaction().commit();
+//        } catch (RuntimeException e) {
+//            e.printStackTrace();
+//            throw new RequestIsFailedException();
+//        } finally {
+//            entityManager.close();
+//        }
     }
 
     @Override

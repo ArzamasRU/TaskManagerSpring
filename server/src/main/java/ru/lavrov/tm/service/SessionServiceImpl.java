@@ -2,6 +2,7 @@ package ru.lavrov.tm.service;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.lavrov.tm.api.service.ISessionService;
 import ru.lavrov.tm.api.repository.IUserRepository;
 import ru.lavrov.tm.bootstrap.Bootstrap;
@@ -12,7 +13,6 @@ import ru.lavrov.tm.exception.security.SessionIsInvalidException;
 import ru.lavrov.tm.exception.security.SessionSignIsInvalidException;
 import ru.lavrov.tm.exception.security.SessionTimeIsOverException;
 import ru.lavrov.tm.exception.user.*;
-import ru.lavrov.tm.repository.UserRepositoryImpl;
 
 import javax.persistence.EntityManager;
 import java.util.Collection;
@@ -21,10 +21,6 @@ import static ru.lavrov.tm.service.AppPropertyServiceImpl.appProperties;
 import static ru.lavrov.tm.util.SignUtil.getSign;
 
 public final class SessionServiceImpl extends AbstractService implements ISessionService {
-
-    public SessionServiceImpl(@NotNull Bootstrap bootstrap) {
-        super(bootstrap);
-    }
 
     @Override
     public void validate(@NotNull final Session session, @Nullable final Collection<Role> roles){
@@ -47,26 +43,27 @@ public final class SessionServiceImpl extends AbstractService implements ISessio
 
     @Override
     public @Nullable Session login(@NotNull final String login, @NotNull final String password) {
-        if (login == null || login.isEmpty())
-            throw new UserLoginIsInvalidException();
-        if (password == null || password.isEmpty())
-            throw new UserPasswordIsInvalidException();
-        @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
-        @NotNull final IUserRepository userRepository = new UserRepositoryImpl(entityManager);
-        @Nullable User user = null;
-        try {
-            user = userRepository.findByLogin(login);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if (user == null)
-            return null;
-        if (!password.equals(user.getPassword()))
-            return null;
-        @NotNull final Session session = new Session(user.getId(), user.getRole(), System.currentTimeMillis());
-        session.setSign(getSign(session, appProperties.getProperty("salt"),
-                appProperties.getIntProperty("cycle")));
-        return session;
+//        if (login == null || login.isEmpty())
+//            throw new UserLoginIsInvalidException();
+//        if (password == null || password.isEmpty())
+//            throw new UserPasswordIsInvalidException();
+//        @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
+//        @NotNull final IUserRepository userRepository = new UserRepositoryImpl(entityManager);
+//        @Nullable User user = null;
+//        try {
+//            user = userRepository.findByLogin(login);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        if (user == null)
+//            return null;
+//        if (!password.equals(user.getPassword()))
+//            return null;
+//        @NotNull final Session session = new Session(user.getId(), user.getRole(), System.currentTimeMillis());
+//        session.setSign(getSign(session, appProperties.getProperty("salt"),
+//                appProperties.getIntProperty("cycle")));
+//        return session;
+        return null;
     }
 
     @Override

@@ -24,10 +24,6 @@ import static ru.lavrov.tm.util.SignUtil.getSign;
 
 public final class TokenServiceImpl extends AbstractService implements ITokenService {
 
-    public TokenServiceImpl(@NotNull Bootstrap bootstrap) {
-        super(bootstrap);
-    }
-
     @Override
     public void validate(@NotNull final String token, @Nullable final Collection<Role> roles) {
         if (token == null)

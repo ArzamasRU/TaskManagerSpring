@@ -21,7 +21,6 @@ import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 import ru.lavrov.tm.exception.user.UserNotExistsException;
 import ru.lavrov.tm.repository.ProjectRepositoryImpl;
 import ru.lavrov.tm.repository.TaskRepositoryImpl;
-import ru.lavrov.tm.repository.UserRepositoryImpl;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
@@ -30,46 +29,42 @@ import java.util.Comparator;
 
 public final class TaskServiceImpl extends AbstractService implements ITaskService {
 
-    public TaskServiceImpl(@NotNull Bootstrap bootstrap) {
-        super(bootstrap);
-    }
-
     @Override
     public void createByTaskName(
             @NotNull final String userId, @NotNull final String taskName, @NotNull final String projectName
     ) {
-        if (taskName == null || taskName.isEmpty())
-            throw new TaskNameIsInvalidException();
-        if (projectName == null || projectName.isEmpty())
-            throw new ProjectNameIsInvalidException();
-        if (userId == null || userId.isEmpty())
-            throw new UserIsNotAuthorizedException();
-        @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
-        @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(entityManager);
-        @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(entityManager);
-        @NotNull final IUserRepository userRepository = new UserRepositoryImpl(entityManager);
-        @Nullable User user = null;
-        @Nullable Project project = null;
-        try {
-            user = userRepository.findOne(userId);
-            project = projectRepository.findEntityByName(userId, projectName);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            if (user == null)
-                throw new UserNotExistsException();
-            if (project == null)
-                throw new ProjectNotExistsException();
-            entityManager.getTransaction().begin();
-            taskRepository.persist(new Task(user, taskName, project));
-            entityManager.getTransaction().commit();
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            throw new RequestIsFailedException();
-        } finally {
-            entityManager.close();
-        }
+//        if (taskName == null || taskName.isEmpty())
+//            throw new TaskNameIsInvalidException();
+//        if (projectName == null || projectName.isEmpty())
+//            throw new ProjectNameIsInvalidException();
+//        if (userId == null || userId.isEmpty())
+//            throw new UserIsNotAuthorizedException();
+//        @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
+//        @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(entityManager);
+//        @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(entityManager);
+//        @NotNull final IUserRepository userRepository = new UserRepositoryImpl(entityManager);
+//        @Nullable User user = null;
+//        @Nullable Project project = null;
+//        try {
+//            user = userRepository.findOne(userId);
+//            project = projectRepository.findEntityByName(userId, projectName);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        try {
+//            if (user == null)
+//                throw new UserNotExistsException();
+//            if (project == null)
+//                throw new ProjectNotExistsException();
+//            entityManager.getTransaction().begin();
+//            taskRepository.persist(new Task(user, taskName, project));
+//            entityManager.getTransaction().commit();
+//        } catch (RuntimeException e) {
+//            e.printStackTrace();
+//            throw new RequestIsFailedException();
+//        } finally {
+//            entityManager.close();
+//        }
     }
 
     @Override

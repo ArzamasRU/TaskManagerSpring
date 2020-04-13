@@ -8,6 +8,7 @@ import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Environment;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.lavrov.tm.api.service.*;
 import ru.lavrov.tm.endpoint.*;
@@ -30,15 +31,17 @@ import static ru.lavrov.tm.util.HashUtil.md5Hard;
 @Component
 public final class Bootstrap implements IServiceLocator {
     @NotNull
-    private final IProjectService projectService = new ProjectServiceImpl(this);
+    private final IProjectService projectService = new ProjectServiceImpl();
     @NotNull
-    private final ITaskService taskService = new TaskServiceImpl(this);
+    private final ITaskService taskService = new TaskServiceImpl();
+//    @NotNull
+//    private final IUserService userService = new UserServiceImpl(this);
+    @Autowired
+    private IUserService userService;
     @NotNull
-    private final IUserService userService = new UserServiceImpl(this);
+    private final ISessionService sessionService = new SessionServiceImpl();
     @NotNull
-    private final ISessionService sessionService = new SessionServiceImpl(this);
-    @NotNull
-    private final ITokenService tokenService = new TokenServiceImpl(this);
+    private final ITokenService tokenService = new TokenServiceImpl();
     @NotNull
     private final IAppPropertyService propertyService = new AppPropertyServiceImpl();
     @NotNull
@@ -74,7 +77,6 @@ public final class Bootstrap implements IServiceLocator {
             userService.createByLogin("user", md5Hard("user"), Role.USER.name());
         if (userService.findUserByLogin("admin") == null)
             userService.createByLogin("admin", md5Hard("admin"), Role.ADMIN.name());
-        userService.createByLogin("admin", md5Hard("admin"), Role.ADMIN.name());
     }
 
     private void initProperties() {

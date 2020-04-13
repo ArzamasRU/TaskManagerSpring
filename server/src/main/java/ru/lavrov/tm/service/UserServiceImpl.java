@@ -5,15 +5,12 @@ import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.lavrov.tm.api.repository.IUserRepository;
 import ru.lavrov.tm.api.service.IUserService;
-import ru.lavrov.tm.bootstrap.Bootstrap;
 import ru.lavrov.tm.entity.User;
 import ru.lavrov.tm.enumerate.Role;
 import ru.lavrov.tm.exception.db.RequestIsFailedException;
 import ru.lavrov.tm.exception.project.ProjectNotExistsException;
 import ru.lavrov.tm.exception.user.*;
-import ru.lavrov.tm.repository.UserRepositoryImpl;
 
-import javax.persistence.EntityManager;
 import java.util.Collection;
 
 public final class UserServiceImpl extends AbstractService implements IUserService {
