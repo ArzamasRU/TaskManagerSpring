@@ -3,6 +3,7 @@ package ru.lavrov.tm.service;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.lavrov.tm.api.repository.IUserRepository;
 import ru.lavrov.tm.api.service.IUserService;
 import ru.lavrov.tm.entity.User;
@@ -13,7 +14,8 @@ import ru.lavrov.tm.exception.user.*;
 
 import java.util.Collection;
 
-public final class UserServiceImpl extends AbstractService implements IUserService {
+@Service
+public final class UserServiceImpl implements IUserService {
 
     @Autowired
     private IUserRepository userRepository;
@@ -40,7 +42,7 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
         try {
             if (user != null)
                 throw new UserLoginExistsException();
-            userRepository.persist(new User(login, password, currentRole));
+            userRepository.save(new User(login, password, currentRole));
         } catch (RuntimeException e) {
             e.printStackTrace();
             throw new RequestIsFailedException();
@@ -81,11 +83,11 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
             throw new UserIsNotAuthorizedException();
         try {
             @Nullable final User user = userRepository.getOne(userId);
-            userRepository.removeUser(user);
+            userRepository.delete(user);
         } catch (RuntimeException e) {
             e.printStackTrace();
             throw new RequestIsFailedException();
-        } 
+        }
     }
 
     @Override
@@ -93,7 +95,7 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
         if (entity == null)
             throw new ProjectNotExistsException();
         try {
-            userRepository.persist(entity);
+            userRepository.save(entity);
         } catch (RuntimeException e) {
             e.printStackTrace();
             throw new RequestIsFailedException();
@@ -105,7 +107,7 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
         if (entity == null)
             throw new ProjectNotExistsException();
         try {
-            userRepository.merge(entity);
+            userRepository.save(entity);
         } catch (RuntimeException e) {
             e.printStackTrace();
             throw new RequestIsFailedException();
@@ -130,18 +132,6 @@ public final class UserServiceImpl extends AbstractService implements IUserServi
             throw new UserLoginIsInvalidException();
         try {
             return userRepository.findByLogin(login);
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @Override
-    public @Nullable Collection<User> findAll(@NotNull final String userId) {
-        if (userId == null || userId.isEmpty())
-            throw new UserIsNotAuthorizedException();
-        try {
-            return userRepository.findAll(userId);
         } catch (RuntimeException e) {
             e.printStackTrace();
         }

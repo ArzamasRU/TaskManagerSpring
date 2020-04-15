@@ -2,6 +2,7 @@ package ru.lavrov.tm.api.service;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.stereotype.Service;
 import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Task;
 

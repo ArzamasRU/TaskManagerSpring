@@ -22,7 +22,7 @@ import java.util.Properties;
 @PropertySource("application.properties")
 @EnableTransactionManagement
 @EnableJpaRepositories("ru.lavrov.tm.api.repository")
-@ComponentScan({"ru.lavrov.tm.api.repository", "ru.lavrov.tm.bootstrap"})
+@ComponentScan("ru.lavrov.tm")
 public class AppContext {
 
     @Autowired
@@ -39,12 +39,12 @@ public class AppContext {
     }
 
     @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory(final DataSource dataSource) {
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(@NotNull final DataSource dataSource) {
         @NotNull final LocalContainerEntityManagerFactoryBean factoryBean;
         factoryBean = new LocalContainerEntityManagerFactoryBean();
         factoryBean.setDataSource(dataSource);
         factoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-        factoryBean.setPackagesToScan("ru.lavrov.ru");
+        factoryBean.setPackagesToScan("ru.lavrov.tm");
         @NotNull final Properties properties = new Properties();
         properties.put("hibernate.show_sql", environment.getProperty("SHOW_SQL"));
         properties.put("hibernate.hbm2ddl.auto", environment.getProperty("HBM2DDL_AUTO"));
@@ -54,7 +54,7 @@ public class AppContext {
     }
 
     @Bean
-    public PlatformTransactionManager transactionManager(final LocalContainerEntityManagerFactoryBean emf) {
+    public PlatformTransactionManager transactionManager(@NotNull final LocalContainerEntityManagerFactoryBean emf) {
         @NotNull final JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(emf.getObject());
         return transactionManager;

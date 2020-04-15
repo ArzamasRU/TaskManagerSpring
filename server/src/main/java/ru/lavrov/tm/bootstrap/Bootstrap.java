@@ -2,60 +2,47 @@ package ru.lavrov.tm.bootstrap;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.boot.Metadata;
-import org.hibernate.boot.MetadataSources;
-import org.hibernate.boot.registry.StandardServiceRegistry;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Environment;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.lavrov.tm.api.service.*;
+import ru.lavrov.tm.api.service.IProjectService;
+import ru.lavrov.tm.api.service.ITaskService;
+import ru.lavrov.tm.api.service.IUserService;
 import ru.lavrov.tm.endpoint.*;
-import ru.lavrov.tm.entity.*;
 import ru.lavrov.tm.enumerate.Role;
-import ru.lavrov.tm.service.*;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.xml.ws.Endpoint;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static ru.lavrov.tm.service.AppPropertyServiceImpl.appProperties;
 import static ru.lavrov.tm.util.HashUtil.md5Hard;
 
 @Getter
 @NoArgsConstructor
 @Component
-public final class Bootstrap implements IServiceLocator {
-    @NotNull
-    private final IProjectService projectService = new ProjectServiceImpl();
-    @NotNull
-    private final ITaskService taskService = new TaskServiceImpl();
-//    @NotNull
-//    private final IUserService userService = new UserServiceImpl(this);
+public final class Bootstrap {
+
     @Autowired
+    @NotNull
     private IUserService userService;
+
+    @Autowired
     @NotNull
-    private final ISessionService sessionService = new SessionServiceImpl();
+    private UserEndpoint userEndpoint;
+
+    @Autowired
     @NotNull
-    private final ITokenService tokenService = new TokenServiceImpl();
+    private TokenEndpoint tokenEndpoint;
+
+    @Autowired
     @NotNull
-    private final IAppPropertyService propertyService = new AppPropertyServiceImpl();
+    private ProjectEndpoint projectEndpoint;
+
+    @Autowired
     @NotNull
-    private final UserEndpoint userEndpoint = new UserEndpoint(this);
+    private TaskEndpoint taskEndpoint;
+
+    @Autowired
     @NotNull
-    private final TokenEndpoint tokenEndpoint = new TokenEndpoint(this);
-    @NotNull
-    private final ProjectEndpoint projectEndpoint = new ProjectEndpoint(this);
-    @NotNull
-    private final TaskEndpoint taskEndpoint = new TaskEndpoint(this);
-    @NotNull
-    private final GeneralCommandEndpoint generalCommandEndpoint = new GeneralCommandEndpoint(this);
-    @NotNull
-    private final EntityManagerFactory entityManagerFactory = getEntityManagerFactory();
+    private GeneralCommandEndpoint generalCommandEndpoint;
 
     public void init() {
         initProperties();
@@ -81,31 +68,6 @@ public final class Bootstrap implements IServiceLocator {
 
     private void initProperties() {
         System.setProperty("javax.xml.bind.context.factory", "org.eclipse.persistence.jaxb.JAXBContextFactory");
-    }
-
-    public @NotNull EntityManager getEntityManager() {
-        return entityManagerFactory.createEntityManager();
-    }
-
-    private static EntityManagerFactory getEntityManagerFactory() {
-        @NotNull final Map<String, String> settings = new HashMap<>();
-        settings.put(Environment.DRIVER, appProperties.getProperty("driver"));
-        settings.put(Environment.URL, appProperties.getProperty("url"));
-        settings.put(Environment.USER, appProperties.getProperty("login"));
-        settings.put(Environment.PASS, appProperties.getProperty("password"));
-        settings.put(Environment.DIALECT, appProperties.getProperty("dialect"));
-        settings.put(Environment.HBM2DDL_AUTO, appProperties.getProperty("HBM2DDL_AUTO"));
-        settings.put(Environment.SHOW_SQL, appProperties.getProperty("SHOW_SQL"));
-        @NotNull final StandardServiceRegistryBuilder registryBuilder = new StandardServiceRegistryBuilder();
-        registryBuilder.applySettings(settings);
-        @NotNull final StandardServiceRegistry registry = registryBuilder.build();
-        @NotNull final MetadataSources sources = new MetadataSources(registry);
-        sources.addAnnotatedClass(Task.class);
-        sources.addAnnotatedClass(Project.class);
-        sources.addAnnotatedClass(User.class);
-        sources.addAnnotatedClass(Session.class);
-        @NotNull final Metadata metadata = sources.getMetadataBuilder().build();
-        return metadata.getSessionFactoryBuilder().build();
     }
 }
 

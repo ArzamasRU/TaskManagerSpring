@@ -1,6 +1,5 @@
 package ru.lavrov.tm;
 
-import com.sun.xml.internal.ws.client.ClientTransportException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.Assert;
@@ -11,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 import ru.lavrov.tm.bootstrap.Bootstrap;
 import ru.lavrov.tm.endpoint.*;
+import com.sun.xml.ws.client.ClientTransportException;
 
 import java.util.Collection;
 

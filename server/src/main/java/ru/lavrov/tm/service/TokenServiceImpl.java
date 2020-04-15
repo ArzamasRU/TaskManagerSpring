@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.lavrov.tm.api.service.ISessionService;
 import ru.lavrov.tm.api.service.ITokenService;
 import ru.lavrov.tm.bootstrap.Bootstrap;
@@ -22,7 +24,11 @@ import java.util.Collection;
 import static ru.lavrov.tm.service.AppPropertyServiceImpl.appProperties;
 import static ru.lavrov.tm.util.SignUtil.getSign;
 
-public final class TokenServiceImpl extends AbstractService implements ITokenService {
+@Service
+public final class TokenServiceImpl implements ITokenService {
+
+    @Autowired
+    private ISessionService sessionService;
 
     @Override
     public void validate(@NotNull final String token, @Nullable final Collection<Role> roles) {
@@ -38,7 +44,6 @@ public final class TokenServiceImpl extends AbstractService implements ITokenSer
         if (!resultSign.equals(currSign))
             throw new TokenSignIsInvalidException();
         curToken.setSign(currSign);
-        @NotNull final ISessionService sessionService = bootstrap.getSessionService();
         sessionService.validate(curToken.getSession(), roles);
     }
 
@@ -48,7 +53,6 @@ public final class TokenServiceImpl extends AbstractService implements ITokenSer
             throw new UserLoginIsInvalidException();
         if (password == null || password.isEmpty())
             throw new UserPasswordIsInvalidException();
-        @NotNull final ISessionService sessionService = bootstrap.getSessionService();
         @Nullable final Session session = sessionService.login(login, password);
         if (session == null)
             return null;

@@ -3,9 +3,12 @@ package ru.lavrov.tm.endpoint;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.api.service.IServiceLocator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import ru.lavrov.tm.api.service.IProjectService;
 import ru.lavrov.tm.api.service.ITaskService;
 import ru.lavrov.tm.api.service.ITokenService;
+import ru.lavrov.tm.api.service.IUserService;
 import ru.lavrov.tm.comparator.FinishDateComparator;
 import ru.lavrov.tm.comparator.StartDateComparator;
 import ru.lavrov.tm.comparator.StatusComparator;
@@ -21,67 +24,60 @@ import java.util.Collection;
 import java.util.Comparator;
 
 @NoArgsConstructor
+@Component
 @WebService(endpointInterface = "ru.lavrov.tm.endpoint.TaskEndpoint")
-public final class TaskEndpoint extends AbstractEndpoint{
+public final class TaskEndpoint {
 
     @NotNull public static final String URL = "http://localhost:8090/TaskEndpoint?wsdl";
 
-    public TaskEndpoint(@NotNull IServiceLocator bootstrap) {
-        super(bootstrap);
-    }
+    @Autowired
+    private ITokenService tokenService;
+
+    @Autowired
+    private ITaskService taskService;
 
     @WebMethod
     public void createByTaskName(
             @Nullable final String token, @Nullable final String taskName, @Nullable final String projectName
     ) {
         @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
-        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
         @NotNull final Session session = tokenService.decryptToken(token).getSession();
-        @NotNull final ITaskService taskService = bootstrap.getTaskService();
         taskService.createByTaskName(session.getUserId(), taskName, projectName);
     }
 
     @WebMethod
     public void removeTaskByName(@Nullable final String token, @Nullable final String taskName) {
         @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
-        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
         @NotNull final Session session = tokenService.decryptToken(token).getSession();
-        @NotNull final ITaskService taskService = bootstrap.getTaskService();
         taskService.removeTaskByName(session.getUserId(), taskName);
     }
 
     @WebMethod
-    public void renameTask(@Nullable final String token, 
+    public void renameTask(@Nullable final String token,
                            @Nullable final String projectName,
                            @Nullable final String oldName,
                            @Nullable final String newName
     ) {
         @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
-        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
         @NotNull final Session session = tokenService.decryptToken(token).getSession();
-        @NotNull final ITaskService taskService = bootstrap.getTaskService();
         taskService.renameTask(session.getUserId(), projectName, oldName, newName);
     }
 
     @WebMethod
     public void removeAll(@Nullable final String token) {
         @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
-        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
         @NotNull final Session session = tokenService.decryptToken(token).getSession();
-        @NotNull final ITaskService taskService = bootstrap.getTaskService();
         taskService.removeAll(session.getUserId());
     }
 
     @WebMethod
     public void remove(@Nullable final String token, @Nullable final String entityId) {
         @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
-        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
-        @NotNull final ITaskService taskService = bootstrap.getTaskService();
         @NotNull final Session session = tokenService.decryptToken(token).getSession();
         taskService.removeTask(session.getUserId(), entityId);
     }
@@ -91,20 +87,16 @@ public final class TaskEndpoint extends AbstractEndpoint{
             @Nullable final String token, @Nullable final String name
     ) {
         @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
-        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
         @NotNull final Session session = tokenService.decryptToken(token).getSession();
-        @NotNull final ITaskService taskService = bootstrap.getTaskService();
         return Task.getTaskDTO(taskService.findAllByNamePart(session.getUserId(), name));
     }
 
     @WebMethod
     public @Nullable TaskDTO findTaskByName(@Nullable final String token, @Nullable final String name) {
         @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
-        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
         @NotNull final Session session = tokenService.decryptToken(token).getSession();
-        @NotNull final ITaskService taskService = bootstrap.getTaskService();
         return Task.getTaskDTO(taskService.findTaskByName(session.getUserId(), name));
     }
 
@@ -113,30 +105,24 @@ public final class TaskEndpoint extends AbstractEndpoint{
             @Nullable final String token, @Nullable final String description
     ) {
         @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
-        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
         @NotNull final Session session = tokenService.decryptToken(token).getSession();
-        @NotNull final ITaskService taskService = bootstrap.getTaskService();
         return Task.getTaskDTO(taskService.findAllByDescPart(session.getUserId(), description));
     }
 
     @WebMethod
     public @Nullable Collection<TaskDTO> findAllTasks(@Nullable final String token) {
         @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
-        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
         @NotNull final Session session = tokenService.decryptToken(token).getSession();
-        @NotNull final ITaskService taskService = bootstrap.getTaskService();
         return Task.getTaskDTO(taskService.findAll(session.getUserId()));
     }
 
     @WebMethod
     public @Nullable Collection<TaskDTO> findAllTasksByStatus(@Nullable final String token) {
         @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
-        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
         @NotNull final Session session = tokenService.decryptToken(token).getSession();
-        @NotNull final ITaskService taskService = bootstrap.getTaskService();
         @NotNull final Comparator comparator = new StatusComparator();
         return Task.getTaskDTO(taskService.findAll(session.getUserId(), comparator));
     }
@@ -144,10 +130,8 @@ public final class TaskEndpoint extends AbstractEndpoint{
     @WebMethod
     public @Nullable Collection<TaskDTO> findAllTasksByStartDate(@Nullable final String token) {
         @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
-        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
         @NotNull final Session session = tokenService.decryptToken(token).getSession();
-        @NotNull final ITaskService taskService = bootstrap.getTaskService();
         @NotNull final Comparator comparator = new StartDateComparator();
         return Task.getTaskDTO(taskService.findAll(session.getUserId(), comparator));
     }
@@ -155,11 +139,10 @@ public final class TaskEndpoint extends AbstractEndpoint{
     @WebMethod
     public @Nullable Collection<TaskDTO> findAllTasksByFinishDate(@Nullable final String token) {
         @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
-        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         tokenService.validate(token, roles);
         @NotNull final Session session = tokenService.decryptToken(token).getSession();
-        @NotNull final ITaskService taskService = bootstrap.getTaskService();
         @NotNull final Comparator comparator = new FinishDateComparator();
         return Task.getTaskDTO(taskService.findAll(session.getUserId(), comparator));
     }
+
 }

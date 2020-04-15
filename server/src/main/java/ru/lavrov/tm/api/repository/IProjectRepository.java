@@ -1,34 +1,38 @@
 package ru.lavrov.tm.api.repository;
 
 import org.jetbrains.annotations.Nullable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ru.lavrov.tm.entity.Project;
 
 import java.util.Collection;
 
-public interface IProjectRepository {
-    void renameProject(@Nullable String userId,
-                       @Nullable String oldName,
-                       @Nullable String newName);
+@Repository
+public interface IProjectRepository extends JpaRepository<Project, String> {
 
-    @Nullable Project findEntityByName(@Nullable String userId,
-                                       @Nullable String name);
+    @Transactional
+    @Modifying
+    @Query("UPDATE Project SET name = :newName WHERE name = :oldName AND user_id = :userId")
+    void renameProject(@Param("userId") @Nullable String userId,
+                       @Param("oldName") @Nullable String oldName,
+                       @Param("newName") @Nullable String newName);
 
-    @Nullable Collection<Project> findAll(@Nullable String userId);
+    @Nullable Project findByUserIdAndName(@Nullable String userId,
+                                          @Nullable String name);
 
-    @Nullable Collection<Project> findAllByNamePart(@Nullable String userId,
-                                                    @Nullable String pattern);
+    @Nullable Collection<Project> findByUserIdAndNameLike(@Nullable String userId,
+                                                          @Nullable String pattern);
 
-    @Nullable Collection<Project> findAllByDescPart(@Nullable String userId,
-                                                    @Nullable String pattern);
+    @Nullable Collection<Project> findByUserIdAndDescriptionLike(@Nullable String userId,
+                                                                 @Nullable String pattern);
 
-    @Nullable Project findOne(@Nullable String userId,
-                              @Nullable String id);
+    @Query("FROM Project WHERE user_id = :userId AND id = :id")
+    @Nullable Project findByUserIdAndId(@Param("userId") @Nullable String userId,
+                                        @Param("id") @Nullable String id);
 
-    void removeProject(@Nullable Project project);
-
-    void removeAll(@Nullable Collection<Project> projectList);
-
-    void persist(@Nullable Project project);
-
-    void merge(@Nullable Project entity);
+    @Nullable Collection<Project> findAllByUserId(@Nullable String userId);
 }

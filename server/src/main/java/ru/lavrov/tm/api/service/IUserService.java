@@ -2,6 +2,7 @@ package ru.lavrov.tm.api.service;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.stereotype.Service;
 import ru.lavrov.tm.entity.User;
 
 import java.util.Collection;
@@ -22,6 +23,4 @@ public interface IUserService {
     void persist(@NotNull User entity);
 
     void merge(@NotNull User entity);
-
-    @Nullable Collection<User> findAll(@NotNull String userId);
 }

@@ -2,11 +2,14 @@ package ru.lavrov.tm.service;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.lavrov.tm.api.repository.IProjectRepository;
-import ru.lavrov.tm.api.service.IProjectService;
 import ru.lavrov.tm.api.repository.ITaskRepository;
 import ru.lavrov.tm.api.repository.IUserRepository;
-import ru.lavrov.tm.bootstrap.Bootstrap;
+import ru.lavrov.tm.api.service.IProjectService;
 import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Task;
 import ru.lavrov.tm.entity.User;
@@ -17,104 +20,87 @@ import ru.lavrov.tm.exception.project.ProjectNameIsInvalidException;
 import ru.lavrov.tm.exception.project.ProjectNotExistsException;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 import ru.lavrov.tm.exception.user.UserNotExistsException;
-import ru.lavrov.tm.repository.ProjectRepositoryImpl;
-import ru.lavrov.tm.repository.TaskRepositoryImpl;
 
-import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 
-public final class ProjectServiceImpl extends AbstractService implements IProjectService {
+@Service
+public class ProjectServiceImpl implements IProjectService {
 
+    @Autowired
+    private ITaskRepository taskRepository;
+    @Autowired
+    private IProjectRepository projectRepository;
+    @Autowired
+    private IUserRepository userRepository;
+    
     @Override
     public void createByProjectName(@NotNull final String userId, @NotNull final String projectName) {
-//        if (projectName == null || projectName.isEmpty())
-//            throw new ProjectNameIsInvalidException();
-//        if (userId == null || userId.isEmpty())
-//            throw new UserIsNotAuthorizedException();
-//        @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
-//        @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(entityManager);
-//        @NotNull final IUserRepository userRepository = new UserRepositoryImpl(entityManager);
-//        @Nullable User user = null;
-//        try {
-//            user = userRepository.findOne(userId);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        try {
-//            if (user == null)
-//                throw new UserNotExistsException();
-//            entityManager.getTransaction().begin();
-//            projectRepository.persist(new Project(projectName, user));
-//            entityManager.getTransaction().commit();
-//        } catch (RuntimeException e) {
-//            e.printStackTrace();
-//            throw new RequestIsFailedException();
-//        } finally {
-//            entityManager.close();
-//        }
+        if (projectName == null || projectName.isEmpty())
+            throw new ProjectNameIsInvalidException();
+        if (userId == null || userId.isEmpty())
+            throw new UserIsNotAuthorizedException();
+        @Nullable User user = null;
+        try {
+            user = userRepository.getOne(userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            if (user == null)
+                throw new UserNotExistsException();
+            projectRepository.save(new Project(projectName, user));
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            throw new RequestIsFailedException();
+        } 
     }
 
+    @Transactional
     @Override
     public void removeProjectByName(@NotNull final String userId, @NotNull final String projectName) {
         if (projectName == null || projectName.isEmpty())
             throw new ProjectNameIsInvalidException();
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
-        @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(entityManager);
         try {
-            entityManager.getTransaction().begin();
-            @Nullable final Project project = projectRepository.findEntityByName(userId, projectName);
-            projectRepository.removeProject(project);
-            entityManager.getTransaction().commit();
+            @Nullable final Project project = projectRepository.findByUserIdAndName(userId, projectName);
+            projectRepository.delete(project);
         } catch (RuntimeException e) {
             e.printStackTrace();
             throw new RequestIsFailedException();
-        } finally {
-            entityManager.close();
-        }
+        } 
     }
 
+    @Transactional
     @Override
     public void removeProject(@NotNull final String userId, @NotNull final String projectId) {
         if (projectId == null || projectId.isEmpty())
             throw new ProjectNameIsInvalidException();
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
-        @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(entityManager);
         try {
-            entityManager.getTransaction().begin();
-            @Nullable final Project project = projectRepository.findOne(userId, projectId);
-            projectRepository.removeProject(project);
-            entityManager.getTransaction().commit();
+            @Nullable final Project project = projectRepository.findByUserIdAndId(userId, projectId);
+            projectRepository.delete(project);
         } catch (RuntimeException e) {
             e.printStackTrace();
             throw new RequestIsFailedException();
-        } finally {
-            entityManager.close();
-        }
+        } 
     }
 
+    @Transactional
     @Override
     public void removeAll(@NotNull final String userId) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
-        @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(entityManager);
         try {
-            entityManager.getTransaction().begin();
-            @Nullable final Collection<Project> projectList = projectRepository.findAll(userId);
-            projectRepository.removeAll(projectList);
-            entityManager.getTransaction().commit();
+            @Nullable final Collection<Project> projectList = projectRepository.findAllByUserId(userId);
+            projectRepository.deleteAll(projectList);
         } catch (RuntimeException e) {
             e.printStackTrace();
             throw new RequestIsFailedException();
-        } finally {
-            entityManager.close();
-        }
+        } 
     }
 
     @Override
@@ -125,54 +111,36 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
             throw new ProjectNameIsInvalidException();
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
-        @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(entityManager);
         try {
-            entityManager.getTransaction().begin();
             projectRepository.renameProject(userId, oldName, newName);
-            entityManager.getTransaction().commit();
         } catch (RuntimeException e) {
             e.printStackTrace();
             throw new RequestIsFailedException();
-        } finally {
-            entityManager.close();
-        }
+        } 
     }
 
     @Override
     public void persist(@NotNull final Project entity) {
         if (entity == null)
             throw new ProjectNotExistsException();
-        @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
-        @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(entityManager);
         try {
-            entityManager.getTransaction().begin();
-            projectRepository.persist(entity);
-            entityManager.getTransaction().commit();
+            projectRepository.save(entity);
         } catch (RuntimeException e) {
             e.printStackTrace();
             throw new RequestIsFailedException();
-        } finally {
-            entityManager.close();
-        }
+        } 
     }
 
     @Override
     public void merge(@NotNull final Project entity) {
         if (entity == null)
             throw new ProjectNotExistsException();
-        @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
-        @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(entityManager);
         try {
-            entityManager.getTransaction().begin();
-            projectRepository.merge(entity);
-            entityManager.getTransaction().commit();
+            projectRepository.save(entity);
         } catch (RuntimeException e) {
             e.printStackTrace();
             throw new RequestIsFailedException();
-        } finally {
-            entityManager.close();
-        }
+        } 
     }
 
     @Override
@@ -181,17 +149,12 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
             throw new ProjectNameIsInvalidException();
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
-        @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(entityManager);
-        @NotNull final ITaskRepository taskRepository = new TaskRepositoryImpl(entityManager);
         try {
-            @Nullable final Project project = projectRepository.findEntityByName(userId, projectName);
-            return taskRepository.getProjectTasks(userId, project.getId());
+            @Nullable final Project project = projectRepository.findByUserIdAndName(userId, projectName);
+            return taskRepository.findByUserIdAndProjectId(userId, project.getId());
         } catch (RuntimeException e) {
             e.printStackTrace();
-        } finally {
-            entityManager.close();
-        }
+        } 
         return null;
     }
 
@@ -201,15 +164,11 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
             throw new UserIsNotAuthorizedException();
         if (name == null || name.isEmpty())
             throw new NameIsInvalidException();
-        @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
-        @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(entityManager);
         try {
-            return projectRepository.findAllByNamePart(userId, "%" + name + "%");
+            return projectRepository.findByUserIdAndNameLike(userId, "%" + name + "%");
         } catch (RuntimeException e) {
             e.printStackTrace();
-        } finally {
-            entityManager.close();
-        }
+        } 
         return null;
     }
 
@@ -221,15 +180,11 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
             throw new UserIsNotAuthorizedException();
         if (description == null || description.isEmpty())
             throw new DescriptionIsInvalidException();
-        @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
-        @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(entityManager);
         try {
-            return projectRepository.findAllByDescPart(userId, "%" + description + "%");
+            return projectRepository.findByUserIdAndDescriptionLike(userId, "%" + description + "%");
         } catch (RuntimeException e) {
             e.printStackTrace();
-        } finally {
-            entityManager.close();
-        }
+        } 
         return null;
     }
 
@@ -240,15 +195,11 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
         @Nullable Collection<Project> list = null;
-        @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
-        @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(entityManager);
         try {
-             list = projectRepository.findAll(userId);
+             list = projectRepository.findAllByUserId(userId);
         } catch (RuntimeException e) {
             e.printStackTrace();
-        } finally {
-            entityManager.close();
-        }
+        } 
         if (list != null && comparator != null)
             ((ArrayList<Project>) list).sort(comparator);
         return list;
@@ -260,15 +211,11 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
             throw new ProjectNameIsInvalidException();
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
-        @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(entityManager);
         try {
-            return projectRepository.findEntityByName(userId, projectName);
+            return projectRepository.findByUserIdAndName(userId, projectName);
         } catch (RuntimeException e) {
             e.printStackTrace();
-        } finally {
-            entityManager.close();
-        }
+        } 
         return null;
     }
 
@@ -276,15 +223,11 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
     public @Nullable Collection<Project> findAll(@NotNull final String userId) {
         if (userId == null || userId.isEmpty())
             throw new UserIsNotAuthorizedException();
-        @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
-        @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(entityManager);
         try {
-            return projectRepository.findAll(userId);
+            return projectRepository.findAllByUserId(userId);
         } catch (RuntimeException e) {
             e.printStackTrace();
-        } finally {
-            entityManager.close();
-        }
+        } 
         return null;
     }
 
@@ -294,15 +237,11 @@ public final class ProjectServiceImpl extends AbstractService implements IProjec
             throw new UserIsNotAuthorizedException();
         if (entityId == null || entityId.isEmpty())
             throw new ProjectNotExistsException();
-        @NotNull final EntityManager entityManager = bootstrap.getEntityManager();
-        @NotNull final IProjectRepository projectRepository = new ProjectRepositoryImpl(entityManager);
         try {
-            return projectRepository.findOne(userId, entityId);
+            return projectRepository.findByUserIdAndId(userId, entityId);
         } catch (RuntimeException e) {
             e.printStackTrace();
-        } finally {
-            entityManager.close();
-        }
+        } 
         return null;
     }
 }

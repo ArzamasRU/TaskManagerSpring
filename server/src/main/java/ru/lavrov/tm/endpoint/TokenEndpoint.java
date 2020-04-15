@@ -3,23 +3,26 @@ package ru.lavrov.tm.endpoint;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.lavrov.tm.api.service.IServiceLocator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import ru.lavrov.tm.api.service.IProjectService;
+import ru.lavrov.tm.api.service.ITaskService;
 import ru.lavrov.tm.api.service.ITokenService;
+import ru.lavrov.tm.api.service.IUserService;
 
 import javax.jws.WebService;
 
 @NoArgsConstructor
+@Component
 @WebService(endpointInterface = "ru.lavrov.tm.endpoint.TokenEndpoint")
-public final class TokenEndpoint extends AbstractEndpoint{
+public final class TokenEndpoint {
 
     @NotNull public static final String URL = "http://localhost:8090/TokenEndpoint?wsdl";
 
-    public TokenEndpoint(@NotNull IServiceLocator bootstrap) {
-        super(bootstrap);
-    }
+    @Autowired
+    private ITokenService tokenService;
 
     public @Nullable String login(@Nullable final String login, @Nullable final String password) {
-        @NotNull final ITokenService tokenService = bootstrap.getTokenService();
         return tokenService.login(login, password);
     }
 }

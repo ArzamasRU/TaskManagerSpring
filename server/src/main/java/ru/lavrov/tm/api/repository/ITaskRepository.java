@@ -1,43 +1,43 @@
 package ru.lavrov.tm.api.repository;
 
 import org.jetbrains.annotations.Nullable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ru.lavrov.tm.entity.Task;
 
 import java.util.Collection;
+import java.util.List;
 
-public interface ITaskRepository {
+@Repository
+public interface ITaskRepository extends JpaRepository<Task, String> {
 
-    void removeTask(@Nullable Task task);
+    @Nullable Collection<Task> findByUserIdAndProjectId(@Nullable String userId,
+                                                        @Nullable String projectId);
 
-    void removeAll(@Nullable Collection<Task> taskList);
+    @Transactional
+    @Modifying
+    @Query("UPDATE Task SET name = :newName WHERE name = :oldName AND user_id = :userId AND project_id = :projectId")
+    void renameTask(@Param("userId") @Nullable String userId,
+                    @Param("projectId") @Nullable String projectId,
+                    @Param("oldName") @Nullable String oldName,
+                    @Param("newName") @Nullable String newName);
 
-    @Nullable Collection<Task> getProjectTasks(@Nullable String userId,
-                                               @Nullable String projectId);
+    @Nullable Collection<Task> findAllByUserId(@Nullable String userId);
 
-    @Nullable Task findProjectTaskByName(@Nullable String userId,
-                                         @Nullable String name,
-                                         @Nullable String projectId);
+    @Nullable Collection<Task> findByUserIdAndNameLike(@Nullable String userId,
+                                                       @Nullable String name);
 
-    void renameTask(@Nullable String userId,
-                    @Nullable String projectId,
-                    @Nullable String oldName,
-                    @Nullable String newName);
+    @Nullable Collection<Task> findByUserIdAndDescriptionLike(@Nullable String userId,
+                                                              @Nullable String description);
 
-    @Nullable Collection<Task> findAll(@Nullable String userId);
+    @Nullable Task findByUserIdAndName(@Nullable String userId,
+                                       @Nullable String name);
 
-    @Nullable Collection<Task> findAllByNamePart(@Nullable String userId,
-                                                 @Nullable String pattern);
-
-    @Nullable Collection<Task> findAllByDescPart(@Nullable String userId,
-                                                 @Nullable String pattern);
-
-    @Nullable Task findOne(@Nullable String userId,
-                           @Nullable String id);
-
-    void persist(@Nullable Task entity);
-
-    void merge(@Nullable Task entity);
-
-    @Nullable Task findEntityByName(@Nullable String userId,
-                                    @Nullable String name);
+    @Query("FROM Task WHERE user_id = :userId AND id = :id")
+    @Nullable Task findByUserIdAndId(@Param("userId") @Nullable String userId,
+                                     @Param("id") @Nullable String id);
 }
