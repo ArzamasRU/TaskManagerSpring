@@ -5,8 +5,6 @@ import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.lavrov.tm.api.service.IProjectService;
-import ru.lavrov.tm.api.service.ITaskService;
 import ru.lavrov.tm.api.service.IUserService;
 import ru.lavrov.tm.endpoint.*;
 import ru.lavrov.tm.enumerate.Role;

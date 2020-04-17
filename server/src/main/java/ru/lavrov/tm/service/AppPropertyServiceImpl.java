@@ -17,13 +17,13 @@ public final class AppPropertyServiceImpl implements IAppPropertyService {
     public static AppProperties appProperties = new AppProperties();
 
     public AppPropertyServiceImpl(){
-        try {
-            @Nullable final FileInputStream fis =
-                    new FileInputStream("server/src/main/resources/application.properties");
-            if (fis != null)
-                appProperties.load(fis);
-        } catch (IOException e) {
-            throw new PropertyLoadingException();
-        }
+//        try {
+//            @Nullable final FileInputStream fis =
+//                    new FileInputStream("server/src/main/resources/application.properties");
+//            if (fis != null)
+//                appProperties.load(fis);
+//        } catch (IOException e) {
+//            throw new PropertyLoadingException();
+//        }
     }
 }
