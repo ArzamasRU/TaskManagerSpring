@@ -6,13 +6,13 @@ import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
-import ru.lavrov.tm.api.service.*;
-import ru.lavrov.tm.entity.ExternalizationStorage;
-import ru.lavrov.tm.entity.Project;
-import ru.lavrov.tm.entity.Session;
-import ru.lavrov.tm.entity.Task;
-import ru.lavrov.tm.entity.User;
+import ru.lavrov.tm.api.service.IProjectService;
+import ru.lavrov.tm.api.service.ITaskService;
+import ru.lavrov.tm.api.service.ITokenService;
+import ru.lavrov.tm.api.service.IUserService;
+import ru.lavrov.tm.entity.*;
 import ru.lavrov.tm.enumerate.Role;
 import ru.lavrov.tm.util.JAXBUtil;
 import ru.lavrov.tm.util.SerializationUtil;
@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static ru.lavrov.tm.service.AppPropertyServiceImpl.appProperties;
 import static ru.lavrov.tm.util.JAXBUtil.readFromJSONByJAXB;
 import static ru.lavrov.tm.util.JAXBUtil.writeToJSONByJAXB;
 
@@ -47,17 +46,20 @@ public final class GeneralCommandEndpoint {
     @Autowired
     private ITaskService taskService;
 
+    @Autowired
+    private Environment environment;
+
     @WebMethod
     public boolean serialize(@Nullable final String token) {
         @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         tokenService.validate(token, roles);
         @Nullable final Session session = tokenService.decryptToken(token).getSession();
         @Nullable final User user = userService.findOne(session.getUserId());
-        SerializationUtil.write(Arrays.asList(user), appProperties.getProperty("users_file_path"));
+        SerializationUtil.write(Arrays.asList(user), environment.getProperty("users_file_path"));
         @Nullable final Collection<Project> projectList = projectService.findAll(session.getUserId());
-        SerializationUtil.write(projectList, appProperties.getProperty("projects_file_path"));
+        SerializationUtil.write(projectList, environment.getProperty("projects_file_path"));
         @Nullable final Collection<Task> taskList = taskService.findAll(session.getUserId());
-        SerializationUtil.write(taskList, appProperties.getProperty("tasks_file_path"));
+        SerializationUtil.write(taskList, environment.getProperty("tasks_file_path"));
         return true;
     }
 
@@ -66,21 +68,21 @@ public final class GeneralCommandEndpoint {
         @Nullable final Collection<Role> roles = Arrays.asList(Role.ADMIN);
         tokenService.validate(token, roles);
         @Nullable final Collection<Project> projectList =
-                SerializationUtil.read(appProperties.getProperty("projects_file_path"));
+                SerializationUtil.read(environment.getProperty("projects_file_path"));
         if (projectList != null)
             for (@Nullable final Project project : projectList) {
                 if (project != null)
                     projectService.persist(project);
             }
         @Nullable final Collection<Task> taskList =
-                SerializationUtil.read(appProperties.getProperty("tasks_file_path"));
+                SerializationUtil.read(environment.getProperty("tasks_file_path"));
         if (taskList != null)
             for (@Nullable final Task task : taskList) {
                 if (task != null)
                     taskService.persist(task);
             }
         @Nullable final Collection<User> userList =
-                SerializationUtil.read(appProperties.getProperty("users_file_path"));
+                SerializationUtil.read(environment.getProperty("users_file_path"));
         if (userList != null)
             for (@Nullable final User user : userList) {
                 if (user != null)
@@ -97,15 +99,15 @@ public final class GeneralCommandEndpoint {
         @Nullable final User user = userService.findOne(session.getUserId());
         if (user == null)
             return false;
-        JAXBUtil.writeToXMLByJAXB(Arrays.asList(user), appProperties.getProperty("externalization_dir_path"));
+        JAXBUtil.writeToXMLByJAXB(Arrays.asList(user), environment.getProperty("externalization_dir_path"));
         @Nullable final Collection<Project> projectList = projectService.findAll(session.getUserId());
         if (projectList == null)
             return false;
-        JAXBUtil.writeToXMLByJAXB(projectList, appProperties.getProperty("externalization_dir_path"));
+        JAXBUtil.writeToXMLByJAXB(projectList, environment.getProperty("externalization_dir_path"));
         @Nullable final Collection<Task> taskList = taskService.findAll(session.getUserId());
         if (taskList == null)
             return false;
-        JAXBUtil.writeToXMLByJAXB(taskList, appProperties.getProperty("externalization_dir_path"));
+        JAXBUtil.writeToXMLByJAXB(taskList, environment.getProperty("externalization_dir_path"));
         return true;
     }
 
@@ -126,11 +128,11 @@ public final class GeneralCommandEndpoint {
             return false;
         try{
             mapper.writerWithDefaultPrettyPrinter().writeValue(
-                    new File(appProperties.getProperty("users_file_path") + ".xml"), Arrays.asList(user));
+                    new File(environment.getProperty("users_file_path") + ".xml"), Arrays.asList(user));
             mapper.writerWithDefaultPrettyPrinter().writeValue(
-                    new File(appProperties.getProperty("projects_file_path") + ".xml"), projectList);
+                    new File(environment.getProperty("projects_file_path") + ".xml"), projectList);
             mapper.writerWithDefaultPrettyPrinter().writeValue(
-                    new File(appProperties.getProperty("tasks_file_path") + ".xml"), taskList);
+                    new File(environment.getProperty("tasks_file_path") + ".xml"), taskList);
         } catch (IOException e) {
             return false;
         }
@@ -156,7 +158,7 @@ public final class GeneralCommandEndpoint {
         storage.setTaskList(taskList);
         storage.setUserList(Arrays.asList(user));
         @NotNull final String filePath =
-                appProperties.getProperty("externalization_dir_path")
+                environment.getProperty("externalization_dir_path")
                         + ExternalizationStorage.class.getSimpleName() + ".json";
         writeToJSONByJAXB(storage, filePath);
         return true;
@@ -179,11 +181,11 @@ public final class GeneralCommandEndpoint {
             return false;
         try{
             objectMapper.writerWithDefaultPrettyPrinter().writeValue(
-                    new File(appProperties.getProperty("users_file_path") + ".json"), user);
+                    new File(environment.getProperty("users_file_path") + ".json"), user);
             objectMapper.writerWithDefaultPrettyPrinter().writeValue(
-                    new File(appProperties.getProperty("projects_file_path") + ".json"), projectList);
+                    new File(environment.getProperty("projects_file_path") + ".json"), projectList);
             objectMapper.writerWithDefaultPrettyPrinter().writeValue(
-                    new File(appProperties.getProperty("tasks_file_path") + ".json"), taskList);
+                    new File(environment.getProperty("tasks_file_path") + ".json"), taskList);
         } catch (IOException e) {
             return false;
         }
@@ -195,21 +197,21 @@ public final class GeneralCommandEndpoint {
         @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         tokenService.validate(token, roles);
         @Nullable final Collection<Project> projectList =
-                JAXBUtil.readFromXMLByJAXB(Project.class, appProperties.getProperty("externalization_dir_path"));
+                JAXBUtil.readFromXMLByJAXB(Project.class, environment.getProperty("externalization_dir_path"));
         if (projectList != null)
             for (@Nullable final Project project : projectList) {
                 if (project != null)
                     projectService.persist(project);
             }
         @Nullable final Collection<Task> taskList =
-                JAXBUtil.readFromXMLByJAXB(Task.class, appProperties.getProperty("externalization_dir_path"));
+                JAXBUtil.readFromXMLByJAXB(Task.class, environment.getProperty("externalization_dir_path"));
         if (taskList != null)
             for (@Nullable final Task task : taskList) {
                 if (task != null)
                     taskService.persist(task);
             }
         @Nullable final Collection<User> userList =
-                JAXBUtil.readFromXMLByJAXB(User.class, appProperties.getProperty("externalization_dir_path"));
+                JAXBUtil.readFromXMLByJAXB(User.class, environment.getProperty("externalization_dir_path"));
         if (userList != null)
             for (@Nullable final User user : userList) {
                 if (user != null)
@@ -228,11 +230,11 @@ public final class GeneralCommandEndpoint {
         @Nullable final Collection<User> userList;
         try {
             projectList = Arrays.asList(xmlMapper.readValue(
-                    new File(appProperties.getProperty("projects_file_path") + ".xml"), Project[].class));
+                    new File(environment.getProperty("projects_file_path") + ".xml"), Project[].class));
             taskList = Arrays.asList(xmlMapper.readValue(
-                    new File(appProperties.getProperty("tasks_file_path") + ".xml"), Task[].class));
+                    new File(environment.getProperty("tasks_file_path") + ".xml"), Task[].class));
             userList = Arrays.asList(xmlMapper.readValue(
-                    new File(appProperties.getProperty("users_file_path") + ".xml"), User[].class));
+                    new File(environment.getProperty("users_file_path") + ".xml"), User[].class));
         } catch (IOException e) {
             return false;
         }
@@ -256,7 +258,7 @@ public final class GeneralCommandEndpoint {
         @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         tokenService.validate(token, roles);
         @NotNull final String filePath =
-                appProperties.getProperty("externalization_dir_path")
+                environment.getProperty("externalization_dir_path")
                         + ExternalizationStorage.class.getSimpleName() + ".json";
         @Nullable final ExternalizationStorage storage = readFromJSONByJAXB(ExternalizationStorage.class , filePath);
         if (storage == null)
@@ -292,11 +294,11 @@ public final class GeneralCommandEndpoint {
         @Nullable final Collection<User> userList;
         try {
             projectList = Arrays.asList(objectMapper.readValue(
-                    new File(appProperties.getProperty("projects_file_path") + ".json"), Project[].class));
+                    new File(environment.getProperty("projects_file_path") + ".json"), Project[].class));
             taskList = Arrays.asList(objectMapper.readValue(
-                    new File(appProperties.getProperty("tasks_file_path") + ".json"), Task[].class));
+                    new File(environment.getProperty("tasks_file_path") + ".json"), Task[].class));
             userList = Arrays.asList(objectMapper.readValue(
-                    new File(appProperties.getProperty("users_file_path") + ".json"), User[].class));
+                    new File(environment.getProperty("users_file_path") + ".json"), User[].class));
         } catch (IOException e) {
             return false;
         }

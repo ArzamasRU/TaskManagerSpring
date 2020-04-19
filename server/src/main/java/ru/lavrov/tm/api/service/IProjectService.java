@@ -12,6 +12,8 @@ import java.util.Comparator;
 public interface IProjectService {
     void createByProjectName(@NotNull final String userId, @NotNull final String name);
 
+    void createProject(@NotNull final String userId, @NotNull final Project project);
+
     void removeProjectByName(@NotNull String userId, @NotNull String projectName);
 
     @Nullable Collection<Task> getProjectTasks(@NotNull String userId, @NotNull String projectName);

@@ -57,6 +57,29 @@ public class ProjectServiceImpl implements IProjectService {
         } 
     }
 
+    @Override
+    public void createProject(@NotNull final String userId, @NotNull final Project project) {
+        if (project == null)
+            throw new ProjectNotExistsException();
+        if (userId == null || userId.isEmpty())
+            throw new UserIsNotAuthorizedException();
+        @Nullable User user = null;
+        try {
+            user = userRepository.getOne(userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            if (user == null)
+                throw new UserNotExistsException();
+            project.setUser(user);
+            projectRepository.save(project);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            throw new RequestIsFailedException();
+        }
+    }
+
     @Transactional
     @Override
     public void removeProjectByName(@NotNull final String userId, @NotNull final String projectName) {

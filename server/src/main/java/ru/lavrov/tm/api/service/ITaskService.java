@@ -10,6 +10,8 @@ import java.util.Comparator;
 public interface ITaskService {
     void createByTaskName(@NotNull String userId, @NotNull String taskName, @NotNull String projectName);
 
+    void createTask(@NotNull String userId, @NotNull Task task, @NotNull String projectName);
+
     void removeTaskByName(@NotNull String userId, @NotNull String taskName);
 
     void removeTask(@NotNull String userId, @NotNull String taskId);

@@ -3,6 +3,7 @@ package ru.lavrov.tm.service;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import ru.lavrov.tm.api.repository.IUserRepository;
 import ru.lavrov.tm.api.service.ISessionService;
@@ -18,7 +19,6 @@ import ru.lavrov.tm.exception.user.UserRoleIsInvalidException;
 
 import java.util.Collection;
 
-import static ru.lavrov.tm.service.AppPropertyServiceImpl.appProperties;
 import static ru.lavrov.tm.util.SignUtil.getSign;
 
 @Service
@@ -26,6 +26,9 @@ public final class SessionServiceImpl implements ISessionService {
 
     @Autowired
     private IUserRepository userRepository;
+
+    @Autowired
+    private Environment environment;
 
     @Override
     public void validate(@NotNull final Session session, @Nullable final Collection<Role> roles){
@@ -37,8 +40,8 @@ public final class SessionServiceImpl implements ISessionService {
         validatePermission(session, roles);
         @Nullable final String currSign = session.getSign();
         session.setSign(null);
-        @Nullable final String resultSign = getSign(session, appProperties.getProperty("salt"),
-                appProperties.getIntProperty("cycle"));
+        @Nullable final String resultSign = getSign(session, environment.getProperty("salt"),
+                Integer.parseInt(environment.getProperty("cycle")));
         if (resultSign == null || resultSign.isEmpty())
             throw new SessionSignIsInvalidException();
         if (!resultSign.equals(currSign))
@@ -63,8 +66,8 @@ public final class SessionServiceImpl implements ISessionService {
         if (!password.equals(user.getPassword()))
             return null;
         @NotNull final Session session = new Session(user.getId(), user.getRole(), System.currentTimeMillis());
-        session.setSign(getSign(session, appProperties.getProperty("salt"),
-                appProperties.getIntProperty("cycle")));
+        session.setSign(getSign(session, environment.getProperty("salt"),
+                Integer.parseInt(environment.getProperty("cycle"))));
         return session;
     }
 

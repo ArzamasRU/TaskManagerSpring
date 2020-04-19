@@ -131,7 +131,6 @@ public final class UserServiceImpl implements IUserService {
         if (login == null || login.isEmpty())
             throw new UserLoginIsInvalidException();
         try {
-            System.out.println(userRepository);
             return userRepository.findByLogin(login);
         } catch (RuntimeException e) {
             e.printStackTrace();

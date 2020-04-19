@@ -47,6 +47,16 @@ public final class TaskEndpoint {
     }
 
     @WebMethod
+    public void createTask(@Nullable final String token,
+                           @Nullable final Task task,
+                           @Nullable final String projectName) {
+        @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
+        tokenService.validate(token, roles);
+        @NotNull final Session session = tokenService.decryptToken(token).getSession();
+        taskService.createTask(session.getUserId(), task, projectName);
+    }
+
+    @WebMethod
     public void removeTaskByName(@Nullable final String token, @Nullable final String taskName) {
         @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
         tokenService.validate(token, roles);

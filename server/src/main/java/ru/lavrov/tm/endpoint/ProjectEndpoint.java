@@ -18,6 +18,7 @@ import ru.lavrov.tm.entity.Project;
 import ru.lavrov.tm.entity.Session;
 import ru.lavrov.tm.entity.Task;
 import ru.lavrov.tm.enumerate.Role;
+import ru.lavrov.tm.exception.project.ProjectNotExistsException;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
@@ -44,6 +45,14 @@ public final class ProjectEndpoint {
         tokenService.validate(token, roles);
         @NotNull final Session session = tokenService.decryptToken(token).getSession();
         projectService.createByProjectName(session.getUserId(), projectName);
+    }
+
+    @WebMethod
+    public void createProject(@Nullable final String token, @Nullable final Project project) {
+        @NotNull final Collection<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
+        tokenService.validate(token, roles);
+        @NotNull final Session session = tokenService.decryptToken(token).getSession();
+        projectService.createProject(session.getUserId(), project);
     }
 
     @WebMethod

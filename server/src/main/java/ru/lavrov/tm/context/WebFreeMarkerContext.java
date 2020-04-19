@@ -16,7 +16,7 @@ public class WebFreeMarkerContext implements WebMvcConfigurer {
     @Bean
     public FreeMarkerViewResolver resolver() {
         final FreeMarkerViewResolver resolver = new FreeMarkerViewResolver();
-        resolver.setCache(true);
+//        resolver.setCache(true);
         resolver.setPrefix("");
         resolver.setSuffix(".ftl");
         return resolver;
@@ -25,7 +25,7 @@ public class WebFreeMarkerContext implements WebMvcConfigurer {
     @Bean
     public FreeMarkerConfigurer FreeMarkerConfigurer() {
         FreeMarkerConfigurer freeMarkerConfigurer = new FreeMarkerConfigurer();
-        freeMarkerConfigurer.setTemplateLoaderPath("/WEB-INF/templates/");
+        freeMarkerConfigurer.setTemplateLoaderPath("/WEB-INF/views/");
         return freeMarkerConfigurer;
     }
 }

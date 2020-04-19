@@ -48,6 +48,20 @@ public final class Project extends AbstractEntity implements IEntity, IComparabl
         this.user = user;
     }
 
+    public Project(@Nullable String name,
+                   @Nullable String description,
+                   @Nullable Date creationDate,
+                   @Nullable Date startDate,
+                   @Nullable Date finishDate,
+                   @Nullable Status status) {
+        this.name = name;
+        this.description = description;
+        this.creationDate = creationDate;
+        this.startDate = startDate;
+        this.finishDate = finishDate;
+        this.status = status;
+    }
+
     public static @Nullable ProjectDTO getProjectDTO(@NotNull final Project project) {
         if (project == null)
             return null;

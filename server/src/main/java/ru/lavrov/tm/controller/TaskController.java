@@ -10,11 +10,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.lavrov.tm.api.service.IUserService;
-import ru.lavrov.tm.dto.ProjectDTO;
-import ru.lavrov.tm.endpoint.ProjectEndpoint;
-import ru.lavrov.tm.entity.Project;
+import ru.lavrov.tm.dto.TaskDTO;
+import ru.lavrov.tm.endpoint.TaskEndpoint;
+import ru.lavrov.tm.entity.Task;
 import ru.lavrov.tm.enumerate.Status;
-import ru.lavrov.tm.service.UserServiceImpl;
 
 import java.text.ParseException;
 import java.util.Collection;
@@ -22,69 +21,69 @@ import java.util.Collection;
 import static ru.lavrov.tm.util.DateUtil.convertStrToDate;
 
 @Controller
-public class ProjectController {
-
+public class TaskController {
     @Autowired
-    ProjectEndpoint projectEndpoint;
+    TaskEndpoint taskEndpoint;
 
-    @PostMapping("/projectCreation")
-    public String createProject(@RequestParam @Nullable final String token,
+    @PostMapping("/taskCreation")
+    public String createTask(@RequestParam @Nullable final String token,
                                 @RequestParam @Nullable final String name,
                                 @RequestParam @Nullable final String description,
                                 @RequestParam @Nullable final String creationDate,
                                 @RequestParam @Nullable final String startDate,
                                 @RequestParam @Nullable final String finishDate,
                                 @RequestParam(defaultValue = "PLANNED") @Nullable final String status,
+                                @RequestParam @Nullable final String projectName,
                                 @Nullable final Model model) throws ParseException {
-        projectEndpoint.createProject(token, new Project(name, description, convertStrToDate(creationDate),
-                convertStrToDate(startDate), convertStrToDate(finishDate), Status.valueOf(status)));
-        return "/projects";
+        taskEndpoint.createTask(token, new Task(name, description, convertStrToDate(creationDate),
+                convertStrToDate(startDate), convertStrToDate(finishDate), Status.valueOf(status)), projectName);
+        return "/tasks";
     }
 
-    @GetMapping("/projectCreation")
-    public String createProject2(@Nullable final Model model) {
-        return "projectCreation";
+    @GetMapping("/taskCreation")
+    public String createTask2(@Nullable final Model model) {
+        return "taskCreation";
     }
 
-    @PostMapping("/removeAllProjects")
-    public String createProject(@RequestParam @Nullable final String token,
+    @PostMapping("/removeAllTasks")
+    public String createTask(@RequestParam @Nullable final String token,
                                 @Nullable final Model model) {
-        projectEndpoint.removeAll(token);
-        return "/projects";
+        taskEndpoint.removeAll(token);
+        return "/tasks";
     }
 
-    @PostMapping("/projects")
-    public String projects(@RequestParam @Nullable final String token,
+    @PostMapping("/tasks")
+    public String tasks(@RequestParam @Nullable final String token,
                            @RequestParam(required = false, defaultValue = "") @NotNull final String sortKey,
                            @RequestParam(required = false, defaultValue = "") @NotNull final String searchKey,
                            @RequestParam(required = false, defaultValue = "") @NotNull final String searchKeyValue,
-                           @Nullable final Model model) throws ParseException {
-        @Nullable Collection<ProjectDTO> projectList = null;
+                           @Nullable final Model model) {
+        @Nullable Collection<TaskDTO> taskList = null;
         if (!sortKey.isEmpty()) {
             switch (sortKey) {
                 case "startDate":
-                    projectList = projectEndpoint.findAllByStartDate(token);
+                    taskList = taskEndpoint.findAllTasksByStartDate(token);
                     break;
                 case "finishDate":
-                    projectList = projectEndpoint.findAllByFinishDate(token);
+                    taskList = taskEndpoint.findAllTasksByFinishDate(token);
                     break;
                 case "status":
-                    projectList = projectEndpoint.findAllByStatus(token);
+                    taskList = taskEndpoint.findAllTasksByStatus(token);
                     break;
             }
         } else if (!searchKey.isEmpty()) {
             switch (searchKey) {
                 case "name":
-                    projectList = projectEndpoint.findAllByNamePart(token, searchKeyValue);
+                    taskList = taskEndpoint.findAllTasksByNamePart(token, searchKeyValue);
                     break;
                 case "description":
-                    projectList = projectEndpoint.findAllByDescPart(token, searchKeyValue);
+                    taskList = taskEndpoint.findAllTasksByDescPart(token, searchKeyValue);
                     break;
             }
         } else {
-            projectList = projectEndpoint.findAll(token);
+            taskList = taskEndpoint.findAllTasks(token);
         }
-        model.addAttribute("projects", projectList);
-        return "projects";
+        model.addAttribute("tasks", taskList);
+        return "tasks";
     }
 }

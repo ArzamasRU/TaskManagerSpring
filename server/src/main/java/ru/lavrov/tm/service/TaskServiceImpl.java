@@ -19,6 +19,7 @@ import ru.lavrov.tm.exception.project.ProjectNameIsInvalidException;
 import ru.lavrov.tm.exception.project.ProjectNotExistsException;
 import ru.lavrov.tm.exception.task.TaskNameExistsException;
 import ru.lavrov.tm.exception.task.TaskNameIsInvalidException;
+import ru.lavrov.tm.exception.task.TaskNotExistsException;
 import ru.lavrov.tm.exception.user.UserIsNotAuthorizedException;
 import ru.lavrov.tm.exception.user.UserNotExistsException;
 
@@ -64,6 +65,36 @@ public class TaskServiceImpl implements ITaskService {
             e.printStackTrace();
             throw new RequestIsFailedException();
         } 
+    }
+
+    @Override
+    public void createTask(@NotNull final String userId, @NotNull final Task task, @NotNull final String projectName) {
+        if (task == null)
+            throw new TaskNotExistsException();
+        if (projectName == null || projectName.isEmpty())
+            throw new ProjectNameIsInvalidException();
+        if (userId == null || userId.isEmpty())
+            throw new UserIsNotAuthorizedException();
+        @Nullable User user = null;
+        @Nullable Project project = null;
+        try {
+            user = userRepository.getOne(userId);
+            project = projectRepository.findByUserIdAndName(userId, projectName);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            if (user == null)
+                throw new UserNotExistsException();
+            if (project == null)
+                throw new ProjectNotExistsException();
+            task.setProject(project);
+            task.setUser(user);
+            taskRepository.save(task);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            throw new RequestIsFailedException();
+        }
     }
 
     @Transactional

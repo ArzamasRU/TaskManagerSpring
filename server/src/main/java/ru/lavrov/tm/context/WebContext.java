@@ -12,10 +12,8 @@ public class WebContext implements WebMvcConfigurer {
     @Bean
     public InternalResourceViewResolver resolver() {
         final InternalResourceViewResolver resolver = new InternalResourceViewResolver();
-//        resolver.setPrefix("/WEB-INF/views/");
-//        resolver.setSuffix(".jsp");
-        resolver.setPrefix("/WEB-INF/templates/");
-        resolver.setSuffix(".ftl");
+        resolver.setPrefix("/WEB-INF/views/");
+        resolver.setSuffix(".jsp");
         return resolver;
     }
 }
