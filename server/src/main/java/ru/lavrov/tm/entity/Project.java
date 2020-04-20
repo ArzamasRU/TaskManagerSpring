@@ -70,6 +70,7 @@ public final class Project extends AbstractEntity implements IEntity, IComparabl
         projectDTO.setUserId(project.getUser().getId());
         projectDTO.setName(project.getName());
         projectDTO.setDescription(project.getDescription());
+        projectDTO.setCreationDate(project.getCreationDate());
         projectDTO.setStartDate(project.getStartDate());
         projectDTO.setFinishDate(project.getFinishDate());
         projectDTO.setStatus(project.getStatus());

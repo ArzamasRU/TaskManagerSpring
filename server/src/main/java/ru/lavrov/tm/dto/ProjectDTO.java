@@ -26,11 +26,11 @@ public final class ProjectDTO implements IEntity, IComparableEntity {
     @Nullable
     private String description;
     @Nullable
-    private Date creationDate = new Date();
+    private Date creationDate;
     @Nullable
-    private Date startDate = null;
+    private Date startDate;
     @Nullable
-    private Date finishDate = null;
+    private Date finishDate;
     @Nullable
     private String userId;
     @Nullable

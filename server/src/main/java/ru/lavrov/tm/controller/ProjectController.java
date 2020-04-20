@@ -17,6 +17,7 @@ import ru.lavrov.tm.enumerate.Status;
 import ru.lavrov.tm.service.UserServiceImpl;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import static ru.lavrov.tm.util.DateUtil.convertStrToDate;
@@ -84,6 +85,9 @@ public class ProjectController {
         } else {
             projectList = projectEndpoint.findAll(token);
         }
+        ProjectDTO project = ((ArrayList<ProjectDTO>) projectList).get(0);
+        System.out.println(project.getCreationDate());
+        System.out.println(project.getStartDate());
         model.addAttribute("projects", projectList);
         return "projects";
     }
