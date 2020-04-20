@@ -22,59 +22,63 @@ public class UserController {
     @Autowired
     TokenEndpoint tokenEndpoint;
 
-	@Autowired
-	UserEndpoint userEndpoint;
+    @Autowired
+    UserEndpoint userEndpoint;
 
-	@PostMapping("/login")
-	public String greeting(@RequestParam @Nullable final String login,
+    @PostMapping("/login/signIn")
+    public String greeting(@RequestParam @Nullable final String token,
+                           @RequestParam @Nullable final String login,
                            @RequestParam @Nullable final String password,
                            @Nullable final Model model) {
         @Nullable final String hashedPassword = md5Hard(password);
-	    @Nullable final String token = tokenEndpoint.login(login, hashedPassword);
-	    if (token == null  || token.isEmpty())
-			model.addAttribute("message", "Login or password is incorrect!");
-		else {
-			model.addAttribute("token", token);
-			model.addAttribute("login", login);
-			model.addAttribute("message", "You are logged in!");
-		}
+        @Nullable final String newToken = tokenEndpoint.login(login, hashedPassword);
+        if (newToken == null || newToken.isEmpty()) {
+            model.addAttribute("message", "Login or password is incorrect!");
+            model.addAttribute("token", token);
+        } else {
+            model.addAttribute("token", newToken);
+            model.addAttribute("message", "You are logged in!");
+        }
         return "greeting";
-	}
+    }
 
-	@PostMapping("/registration")
-	public String signIn(@RequestParam @Nullable final String login,
+    @PostMapping("/registration/register")
+    public String signIn(@RequestParam @Nullable final String token,
+                         @RequestParam @Nullable final String login,
                          @RequestParam @Nullable final String password,
-						 @RequestParam @Nullable final String role,
+                         @RequestParam @Nullable final String role,
                          @Nullable final Model model) {
-		try {
-			userEndpoint.registerUser(login, password, role);
-			model.addAttribute("message", "Registration is successful!");
-		} catch (Exception e) {
-			e.printStackTrace();
-			model.addAttribute("message", "Registration is failed!");
-		}
-		return "greeting";
-	}
+        try {
+            userEndpoint.registerUser(login, password, role);
+            model.addAttribute("message", "Registration is successful!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("message", "Registration is failed!");
+        }
+        model.addAttribute("token", token);
+        return "greeting";
+    }
 
-	@PostMapping("/logout")
-	public String logout(@Nullable final Model model) {
-		model.addAttribute("token", null);
-		model.addAttribute("login", null);
-		return "greeting";
-	}
+    @GetMapping("/logout")
+    public String logout(@Nullable final Model model) {
+        model.addAttribute("token", "");
+        model.addAttribute("login", "");
+        return "greeting";
+    }
 
-	@PostMapping("/deleteUser")
-	public String deleteUser(@RequestParam @Nullable final String token,
-							 @Nullable final Model model) {
-		userEndpoint.deleteUser(token);
-		model.addAttribute("token", "");
-		model.addAttribute("login", "");
-		return "greeting";
-	}
+    @PostMapping("/deleteUser")
+    public String deleteUser(@RequestParam @Nullable final String token,
+                             @Nullable final Model model) {
+        userEndpoint.deleteUser(token);
+        model.addAttribute("token", "");
+        model.addAttribute("login", "");
+        return "greeting";
+    }
 
-	@PostMapping("/account")
-	public String account(@RequestParam @Nullable final String token,
-						  @Nullable final Model model) {
-		return "account";
-	}
+    @PostMapping("/account")
+    public String account(@RequestParam @Nullable final String token,
+                          @Nullable final Model model) {
+        model.addAttribute("token", token);
+        return "account";
+    }
 }

@@ -14,10 +14,8 @@
         <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div
-            class="collapse navbar-collapse"
-            id="navbarSupportedContent">
-
+    <div class="collapse navbar-collapse"
+         id="navbarSupportedContent">
         <#if token?has_content>
             <form action="/account"
                   method="post">
@@ -63,12 +61,9 @@
             </form>
 
             <div class="col-sm mr-auto"></div>
-            <div class="navbar-text mr-5">
-                ${login!}
-            </div>
             <form
                     action="/logout"
-                    method="post">
+                    method="get">
                 <button
                         class="btn btn-primary"
                         type="submit">
@@ -79,7 +74,11 @@
             <div class="col-sm mr-auto"></div>
             <form
                     action="/login"
-                    method="get">
+                    method="post">
+                <input
+                        type="hidden"
+                        name="token"
+                        value="${token}"/>
                 <div class="col-sm mr-auto">
                     <button
                             class="btn btn-primary"
@@ -90,7 +89,11 @@
             </form>
             <form
                     action="/registration"
-                    method="get">
+                    method="post">
+                <input
+                        type="hidden"
+                        name="token"
+                        value="${token}"/>
                 <div class="col-sm">
                     <button
                             class="btn btn-primary"

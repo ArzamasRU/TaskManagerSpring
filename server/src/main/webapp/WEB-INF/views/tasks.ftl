@@ -4,8 +4,12 @@
 <@macros.environment>
     <nav class="navbar navbar-light bg-light mb-5">
         <form
-              method="get"
-              action="/taskCreation">
+              method="post"
+              action="/taskCreation/createTask">
+            <input
+                    type="hidden"
+                    name="token"
+                    value="${token}"/>
             <button class="btn btn-sm btn-outline-secondary"
                     type="submit">
                 Create new task
@@ -28,9 +32,13 @@
 
     <div class="form-group row">
         <form
-                method="get"
+                method="post"
                 action="/tasks"
                 class="form-inline">
+            <input
+                    type="hidden"
+                    name="token"
+                    value="${token}"/>
             <div class="form-group row">
                 <select class="custom-select" name="sortKey">
                     <option value="">Choose sort key...</option>
@@ -47,7 +55,7 @@
         </form>
         <div class="col-sm mr-auto"></div>
         <form
-                method="get"
+                method="post"
                 action="/tasks"
                 class="form-inline">
             <div class="form-group row-md-6 ">
@@ -56,6 +64,10 @@
                     <option value="name">Name</option>
                     <option value="description">Description</option>
                 </select>
+                <input
+                        type="hidden"
+                        name="token"
+                        value="${token}"/>
                 <input
                         type="text"
                         name="searchKeyValue"

@@ -4,7 +4,7 @@
 <@macros.environment>
     <form
             method="post"
-            action="/projectCreation">
+            action="/projectCreation/createProject">
         <input
                 type="hidden"
                 name="token"
@@ -56,7 +56,6 @@
                 </select>
             </div>
         </div>
-
 
         <button
                 type="submit"

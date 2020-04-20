@@ -28,7 +28,7 @@ public class ProjectController {
     @Autowired
     ProjectEndpoint projectEndpoint;
 
-    @PostMapping("/projectCreation")
+    @PostMapping("/projectCreation/createProject")
     public String createProject(@RequestParam @Nullable final String token,
                                 @RequestParam @Nullable final String name,
                                 @RequestParam @Nullable final String description,
@@ -39,11 +39,14 @@ public class ProjectController {
                                 @Nullable final Model model) throws ParseException {
         projectEndpoint.createProject(token, new Project(name, description, convertStrToDate(creationDate),
                 convertStrToDate(startDate), convertStrToDate(finishDate), Status.valueOf(status)));
+        model.addAttribute("token", token);
         return "/projects";
     }
 
-    @GetMapping("/projectCreation")
-    public String createProject2(@Nullable final Model model) {
+    @PostMapping("/projectCreation")
+    public String createProject2(@RequestParam @Nullable final String token,
+                                 @Nullable final Model model) {
+        model.addAttribute("token", token);
         return "projectCreation";
     }
 
@@ -51,6 +54,7 @@ public class ProjectController {
     public String createProject(@RequestParam @Nullable final String token,
                                 @Nullable final Model model) {
         projectEndpoint.removeAll(token);
+        model.addAttribute("token", token);
         return "/projects";
     }
 
@@ -85,10 +89,8 @@ public class ProjectController {
         } else {
             projectList = projectEndpoint.findAll(token);
         }
-        ProjectDTO project = ((ArrayList<ProjectDTO>) projectList).get(0);
-        System.out.println(project.getCreationDate());
-        System.out.println(project.getStartDate());
         model.addAttribute("projects", projectList);
+        model.addAttribute("token", token);
         return "projects";
     }
 }

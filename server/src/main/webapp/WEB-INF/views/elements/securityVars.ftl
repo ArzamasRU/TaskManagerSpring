@@ -1,3 +1,2 @@
 <#assign
-    token = "${token!}"
-    login = "${login!}">
+    token = "${token!}">

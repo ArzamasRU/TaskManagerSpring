@@ -1,13 +1,12 @@
 <#import "elements/environment.ftl" as macros>
-<#include "elements/securityVars.ftl"> 
+<#include "elements/securityVars.ftl">
 <#import "elements/notice.ftl" as macrosN>
 
 <@macros.environment>
-<#if !token?has_content>
-	<@macrosN.notice str="Please, sign in"/>
-</#if>
-<h5>Hello ${login!} !</h5>
-<div>This is a simple task manager</div>
-<div>${login!}</div>
-<div>${token!}</div>
+    <#if !token?has_content>
+        <@macrosN.notice str="Please, sign in"/>
+    </#if>
+    <h5>Hello!</h5>
+    <div>This is a simple task manager</div>
+    <div>${token!}</div>
 </@macros.environment>
