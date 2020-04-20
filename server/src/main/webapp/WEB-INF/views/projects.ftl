@@ -3,70 +3,65 @@
 
 <@macros.environment>
     <nav class="navbar navbar-light bg-light mb-5">
-        <form
-              method="get"
-              action="/projectCreation">
-            <button class="btn btn-sm btn-outline-secondary"
-                    type="submit">
-                Create new project
-            </button>
-        </form>
-        <form
-              method="post"
-              action="/removeAllProjects">
-            <input
-                    type="hidden"
-                    name="token"
-                    value="${token}"/>
-            <button
-                    class="btn btn-sm btn-outline-secondary"
-                    type="submit">
-                Delete all projects
-            </button>
-        </form>
+        <div class="row">
+            <form class="form-inline ml-3"
+                  method="get"
+                  action="/projectCreation">
+                <button class="btn btn-sm btn-outline-secondary"
+                        type="submit">
+                    Create new project
+                </button>
+            </form>
+            <form class="form-inline ml-3"
+                  method="post"
+                  action="/removeAllProjects">
+                <input
+                        type="hidden"
+                        name="token"
+                        value="${token}"/>
+                <button
+                        class="btn btn-sm btn-outline-secondary"
+                        type="submit">
+                    Delete all projects
+                </button>
+            </form>
+        </div>
     </nav>
 
-    <div class="form-group row">
-        <form
-                method="get"
-                action="/projects"
-                class="form-inline">
-            <div class="form-group row">
-                <select class="custom-select" name="sortKey">
-                    <option value="">Choose sort key...</option>
-                    <option value="startDate">Start date</option>
-                    <option value="finishDate">Finish date</option>
-                    <option value="status">Status</option>
-                </select>
-                <button
-                        type="submit"
-                        class="btn btn-primary ml-2">
-                    Sort
-                </button>
-            </div>
+    <div class="row justify-content-between mb-3">
+        <form class="form-inline ml-3"
+              method="get"
+              action="/projects">
+            <select class="custom-select" name="sortKey">
+                <option value="">Choose sort key...</option>
+                <option value="startDate">Start date</option>
+                <option value="finishDate">Finish date</option>
+                <option value="status">Status</option>
+            </select>
+            <button
+                    type="submit"
+                    class="btn btn-primary ml-2">
+                Sort
+            </button>
         </form>
-        <div class="col-sm mr-auto"></div>
-        <form
-                method="get"
-                action="/projects"
-                class="form-inline">
-            <div class="form-group row-md-6 ">
-                <select class="custom-select" name="searchKey">
-                    <option value="">Choose search key...</option>
-                    <option value="name">Name</option>
-                    <option value="description">Description</option>
-                </select>
-                <input
-                        type="text"
-                        name="searchKeyValue"
-                        class="form-control ml-2"
-                        placeholder="${searchKeyValue!}"/>
-                <button
-                        type="submit"
-                        class="btn btn-primary ml-2">
-                    Find
-                </button>
-            </div>
+        <form class="form-inline mr-3"
+              method="get"
+              action="/projects">
+            <select class="custom-select" name="searchKey">
+                <option value="">Choose search key...</option>
+                <option value="name">Name</option>
+                <option value="description">Description</option>
+            </select>
+            <input
+                    type="text"
+                    name="searchKeyValue"
+                    class="form-control ml-2"
+                    placeholder="${searchKeyValue!}"/>
+            <button
+                    type="submit"
+                    class="btn btn-primary ml-2">
+                Find
+            </button>
         </form>
     </div>
 
