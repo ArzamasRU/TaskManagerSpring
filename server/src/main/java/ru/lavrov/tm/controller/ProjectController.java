@@ -37,10 +37,18 @@ public class ProjectController {
                                 @RequestParam @Nullable final String finishDate,
                                 @RequestParam(defaultValue = "PLANNED") @Nullable final String status,
                                 @Nullable final Model model) throws ParseException {
+        System.out.println("@PostMapping(/projectCreation/createProject)");
+        System.out.println(name);
+        System.out.println(description);
+        System.out.println(creationDate);
+        System.out.println(startDate);
+        System.out.println(finishDate);
+        System.out.println(status);
         projectEndpoint.createProject(token, new Project(name, description, convertStrToDate(creationDate),
                 convertStrToDate(startDate), convertStrToDate(finishDate), Status.valueOf(status)));
         model.addAttribute("token", token);
-        return "/projects";
+        model.addAttribute("message", "Project is created!");
+        return "/projectCreation";
     }
 
     @PostMapping("/projectCreation")

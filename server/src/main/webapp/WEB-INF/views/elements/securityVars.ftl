@@ -1,2 +1,3 @@
 <#assign
-    token = "${token!}">
+    token = "${token!}"
+    today = .now?date>

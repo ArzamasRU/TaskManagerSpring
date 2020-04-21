@@ -30,19 +30,19 @@
         <div class="form-group row">
             <label class="col-sm-2 col-form-label">Creation date:</label>
             <div class="col-sm-6">
-                <input class="form-control" type="date" value="2020-01-01" name="creationDate"/>
+                <input class="form-control" type="date"  name="creationDate"/>
             </div>
         </div>
         <div class="form-group row">
             <label class="col-sm-2 col-form-label">Start date:</label>
             <div class="col-sm-6">
-                <input class="form-control" type="date" value="2020-01-01" name="startDate"/>
+                <input class="form-control" type="date"  name="startDate"/>
             </div>
         </div>
         <div class="form-group row">
             <label class="col-sm-2 col-form-label">Finish date:</label>
             <div class="col-sm-6">
-                <input class="form-control" type="date" value="2020-01-01" name="finishDate"/>
+                <input class="form-control" type="date"  name="finishDate"/>
             </div>
         </div>
         <div class="form-group row">

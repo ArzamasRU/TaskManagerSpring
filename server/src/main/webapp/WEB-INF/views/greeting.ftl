@@ -7,6 +7,7 @@
         <@macrosN.notice str="Please, sign in"/>
     </#if>
     <h5>Hello!</h5>
+    <div>Today is ${today!}</div>
     <div>This is a simple task manager</div>
     <div>${token!}</div>
 </@macros.environment>

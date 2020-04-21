@@ -101,14 +101,14 @@
         <#list tasks as task>
             <tr id="taskRow" data-id="${task?counter}">
                 <th scope="row">${task?counter}</th>
-                <td><#if task.name?has_content>${task.name}<#else>null</#if></td>
-                <td><#if task.description?has_content>${task.description}<#else>null</#if></td>
-                <td><#if task.creationDate?has_content>${task.creationDate}<#else>null</#if></td>
-                <td><#if task.startDate?has_content>${task.startDate}<#else>null</#if></td>
-                <td><#if task.finishDate?has_content>${task.finishDate}<#else>null</#if></td>
-                <td><#if task.status?has_content>${task.status}<#else>null</#if></td>
-                <td><#if task.userId?has_content>${task.userId}<#else>null</#if></td>
-                <td><#if task.projectId?has_content>${task.projectId}<#else>null</#if></td>
+                <td><#if task.name?has_content>${task.name}</#if></td>
+                <td><#if task.description?has_content>${task.description}</#if></td>
+                <td><#if task.creationDate?has_content>${task.creationDate}</#if></td>
+                <td><#if task.startDate?has_content>${task.startDate}</#if></td>
+                <td><#if task.finishDate?has_content>${task.finishDate}</#if></td>
+                <td><#if task.status?has_content>${task.status}</#if></td>
+                <td><#if task.userId?has_content>${task.userId}</#if></td>
+                <td><#if task.projectId?has_content>${task.projectId}</#if></td>
             </tr>
         </#list>
         </tbody>

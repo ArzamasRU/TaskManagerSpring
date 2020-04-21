@@ -95,13 +95,13 @@
         <#list projects as project>
             <tr id="projectRow" data-id="${project?counter}">
                 <th scope="row">${project?counter}</th>
-                <td><#if project.name?has_content>${project.name}<#else>null</#if></td>
-                <td><#if project.description?has_content>${project.description}<#else>null</#if></td>
-                <td><#if project.creationDate?has_content>${project.creationDate}<#else>null</#if></td>
-                <td><#if project.startDate?has_content>${project.startDate}<#else>null</#if></td>
-                <td><#if project.finishDate?has_content>${project.finishDate}<#else>null</#if></td>
-                <td><#if project.status?has_content>${project.status}<#else>null</#if></td>
-                <td><#if project.userId?has_content>${project.userId}<#else>null</#if></td>
+                <td><#if project.name?has_content>${project.name}</#if></td>
+                <td><#if project.description?has_content>${project.description}</#if></td>
+                <td><#if project.creationDate?has_content>${project.creationDate}</#if></td>
+                <td><#if project.startDate?has_content>${project.startDate}</#if></td>
+                <td><#if project.finishDate?has_content>${project.finishDate}</#if></td>
+                <td><#if project.status?has_content>${project.status}</#if></td>
+                <td><#if project.userId?has_content>${project.userId}</#if></td>
             </tr>
         </#list>
         </tbody>

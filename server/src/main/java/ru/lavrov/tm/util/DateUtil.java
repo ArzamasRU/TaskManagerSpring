@@ -9,10 +9,12 @@ import java.util.Date;
 
 public final class DateUtil {
     @NotNull
-    private static final SimpleDateFormat FORMATTER = new SimpleDateFormat("dd.MM.yyyy");
+    private static final SimpleDateFormat FORMATTER = new SimpleDateFormat("yyyy-MM-dd");
 
     @Nullable
     public static Date convertStrToDate(@NotNull String source) throws ParseException {
+        if (source.isEmpty())
+            return new Date();
         return FORMATTER.parse(source);
     }
 
