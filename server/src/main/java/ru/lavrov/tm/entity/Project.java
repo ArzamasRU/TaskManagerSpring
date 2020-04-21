@@ -5,13 +5,17 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.lavrov.tm.api.entity.IComparableEntity;
 import ru.lavrov.tm.api.entity.IEntity;
+import ru.lavrov.tm.api.service.IUserService;
 import ru.lavrov.tm.dto.ProjectDTO;
 import ru.lavrov.tm.enumerate.Status;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -42,6 +46,9 @@ public final class Project extends AbstractEntity implements IEntity, IComparabl
     @NotNull
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private Collection<Task> tasks = new ArrayList<>();
+
+    @Autowired
+    static IUserService userService;
 
     public Project(@Nullable String name, @NotNull User user) {
         this.name = name;
@@ -85,6 +92,31 @@ public final class Project extends AbstractEntity implements IEntity, IComparabl
             projectDTOList.add(getProjectDTO(project));
         }
         return projectDTOList;
+    }
+
+    public static @Nullable Project getProjectFromDTO(@NotNull final ProjectDTO projectDTO) {
+        if (projectDTO == null)
+            return null;
+        @NotNull final Project project = new Project();
+        project.setId(project.getId());
+        project.setUser(userService.findOne(projectDTO.getUserId()));
+        project.setName(projectDTO.getName());
+        project.setDescription(projectDTO.getDescription());
+        project.setCreationDate(projectDTO.getCreationDate());
+        project.setStartDate(projectDTO.getStartDate());
+        project.setFinishDate(projectDTO.getFinishDate());
+        project.setStatus(projectDTO.getStatus());
+        return project;
+    }
+
+    public static @Nullable Collection<Project> getProjectFromDTO(@NotNull final Collection<ProjectDTO> projectDTOList) {
+        if (projectDTOList == null)
+            return null;
+        @NotNull final Collection<Project> projectList = new ArrayList<>();
+        for (ProjectDTO projectDTO : projectDTOList) {
+            projectList.add(getProjectFromDTO(projectDTO));
+        }
+        return projectList;
     }
 
     @Nullable

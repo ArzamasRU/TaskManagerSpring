@@ -57,6 +57,10 @@ public final class User extends AbstractEntity implements IEntity {
             }
     }
 
+    public void setRole(@Nullable final Role role) {
+        this.role = role;
+    }
+
     @NotNull
     public static UserDTO getUserDTO(@NotNull final User user) {
         if (user == null)
@@ -67,6 +71,18 @@ public final class User extends AbstractEntity implements IEntity {
         userDTO.setPassword(user.getPassword());
         userDTO.setRole(user.getRole());
         return userDTO;
+    }
+
+    @NotNull
+    public static User getUserFromDTO(@NotNull final UserDTO userDTO) {
+        if (userDTO == null)
+            return null;
+        @NotNull final User user = new User();
+        user.setId(userDTO.getId());
+        user.setLogin(userDTO.getLogin());
+        user.setPassword(userDTO.getPassword());
+        user.setRole(userDTO.getRole());
+        return user;
     }
 
     @Nullable

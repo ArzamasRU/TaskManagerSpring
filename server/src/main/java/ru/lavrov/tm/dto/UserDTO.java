@@ -47,6 +47,10 @@ public final class UserDTO implements IEntity {
         this.role = role;
     }
 
+    public Role getRole() {
+        return role;
+    }
+
     @Nullable
     @Override
     public String toString() {

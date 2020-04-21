@@ -63,6 +63,7 @@ public class ProjectController {
                                 @Nullable final Model model) {
         projectEndpoint.removeAll(token);
         model.addAttribute("token", token);
+        model.addAttribute("projects", new ArrayList());
         return "/projects";
     }
 
