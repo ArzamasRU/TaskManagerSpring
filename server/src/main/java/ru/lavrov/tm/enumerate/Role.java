@@ -39,4 +39,9 @@ public enum Role {
             return null;
         }
     }
+
+    @NotNull
+    public String toString() {
+        return role;
+    }
 }
