@@ -1,12 +1,16 @@
 package ru.lavrov.tm.controller;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import ru.lavrov.tm.api.repository.IUserRepository;
 import ru.lavrov.tm.api.service.IUserService;
 import ru.lavrov.tm.endpoint.ProjectEndpoint;
 import ru.lavrov.tm.endpoint.TokenEndpoint;
@@ -20,65 +24,34 @@ import static ru.lavrov.tm.util.HashUtil.md5Hard;
 public class UserController {
 
     @Autowired
-    TokenEndpoint tokenEndpoint;
+    private IUserService userService;
 
     @Autowired
-    UserEndpoint userEndpoint;
+    private PasswordEncoder passwordEncoder;
 
-    @PostMapping("/login/signIn")
-    public String greeting(@RequestParam @Nullable final String token,
-                           @RequestParam @Nullable final String login,
-                           @RequestParam @Nullable final String password,
-                           @Nullable final Model model) {
-        @Nullable final String hashedPassword = md5Hard(password);
-        @Nullable final String newToken = tokenEndpoint.login(login, hashedPassword);
-        if (newToken == null || newToken.isEmpty()) {
-            model.addAttribute("message", "Login or password is incorrect!");
-            model.addAttribute("token", token);
-        } else {
-            model.addAttribute("token", newToken);
-            model.addAttribute("message", "You are logged in!");
-        }
-        return "greeting";
-    }
-
-    @PostMapping("/registration/register")
-    public String signIn(@RequestParam @Nullable final String token,
-                         @RequestParam @Nullable final String login,
-                         @RequestParam @Nullable final String password,
-                         @RequestParam @Nullable final String role,
-                         @Nullable final Model model) {
+    @PostMapping("/registration")
+    public @NotNull String signIn(@Nullable final User user, @Nullable final Model model) {
         try {
-            userEndpoint.registerUser(login, password, role);
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            userService.create(user);
             model.addAttribute("message", "Registration is successful!");
         } catch (Exception e) {
             e.printStackTrace();
             model.addAttribute("message", "Registration is failed!");
         }
-        model.addAttribute("token", token);
-        return "greeting";
-    }
-
-    @GetMapping("/logout")
-    public String logout(@Nullable final Model model) {
-        model.addAttribute("token", "");
-        model.addAttribute("login", "");
-        return "greeting";
+        return "redirect:/login";
     }
 
     @PostMapping("/deleteUser")
-    public String deleteUser(@RequestParam @Nullable final String token,
-                             @Nullable final Model model) {
-        userEndpoint.deleteUser(token);
-        model.addAttribute("token", "");
-        model.addAttribute("login", "");
+    public @Nullable String deleteUser(@AuthenticationPrincipal @NotNull final User user) {
+        if (user == null)
+            return null;
+        userService.removeUser(userService.findUserByLogin(user.getLogin()).getId());
         return "greeting";
     }
 
-    @PostMapping("/account")
-    public String account(@RequestParam @Nullable final String token,
-                          @Nullable final Model model) {
-        model.addAttribute("token", token);
+    @GetMapping("/account")
+    public @NotNull String account() {
         return "account";
     }
 }

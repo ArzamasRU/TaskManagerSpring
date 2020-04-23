@@ -4,12 +4,8 @@
 <@macros.environment>
     <nav class="navbar navbar-light bg-light mb-5">
         <form
-              method="post"
-              action="/taskCreation/createTask">
-            <input
-                    type="hidden"
-                    name="token"
-                    value="${token}"/>
+              method="get"
+              action="/taskCreation">
             <button class="btn btn-sm btn-outline-secondary"
                     type="submit">
                 Create new task
@@ -18,10 +14,6 @@
         <form
               method="post"
               action="/removeAllTasks">
-            <input
-                    type="hidden"
-                    name="token"
-                    value="${token}"/>
             <button
                     class="btn btn-sm btn-outline-secondary"
                     type="submit">
@@ -32,13 +24,9 @@
 
     <div class="form-group row">
         <form
-                method="post"
+                method="get"
                 action="/tasks"
                 class="form-inline">
-            <input
-                    type="hidden"
-                    name="token"
-                    value="${token}"/>
             <div class="form-group row">
                 <select class="custom-select" name="sortKey">
                     <option value="">Choose sort key...</option>
@@ -55,7 +43,7 @@
         </form>
         <div class="col-sm mr-auto"></div>
         <form
-                method="post"
+                method="get"
                 action="/tasks"
                 class="form-inline">
             <div class="form-group row-md-6 ">
@@ -64,10 +52,7 @@
                     <option value="name">Name</option>
                     <option value="description">Description</option>
                 </select>
-                <input
-                        type="hidden"
-                        name="token"
-                        value="${token}"/>
+
                 <input
                         type="text"
                         name="searchKeyValue"

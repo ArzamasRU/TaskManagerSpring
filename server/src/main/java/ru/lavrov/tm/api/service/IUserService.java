@@ -2,12 +2,15 @@ package ru.lavrov.tm.api.service;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import ru.lavrov.tm.entity.User;
 
 import java.util.Collection;
 
-public interface IUserService {
+public interface IUserService extends UserDetailsService {
+    void create(@NotNull final User user);
+
     void createByLogin(@NotNull String login, @NotNull String password, @NotNull String role);
 
     void updatePassword(@NotNull String userId, @NotNull String newPassword);

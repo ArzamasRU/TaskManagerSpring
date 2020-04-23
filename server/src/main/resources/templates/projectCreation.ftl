@@ -5,10 +5,6 @@
     <form
             method="post"
             action="/projectCreation">
-        <input
-                type="hidden"
-                name="token"
-                value="${token}"/>
         <div class="form-group row">
             <label class="col-sm-2 col-form-label">Name:</label>
             <div class="col-sm-6">
@@ -28,30 +24,21 @@
             </div>
         </div>
         <div class="form-group row">
-            <label class="col-sm-2 col-form-label">Project name:</label>
-            <div class="col-sm-6">
-                <input
-                        type="text"
-                        name="projectName"
-                        class="form-control"/>
-            </div>
-        </div>
-        <div class="form-group row">
             <label class="col-sm-2 col-form-label">Creation date:</label>
             <div class="col-sm-6">
-                <input class="form-control" type="date"  name="creationDate"/>
+                <input class="form-control" type="date" name="creationDate"/>
             </div>
         </div>
         <div class="form-group row">
             <label class="col-sm-2 col-form-label">Start date:</label>
             <div class="col-sm-6">
-                <input class="form-control" type="date"  name="startDate"/>
+                <input class="form-control" type="date" name="startDate"/>
             </div>
         </div>
         <div class="form-group row">
             <label class="col-sm-2 col-form-label">Finish date:</label>
             <div class="col-sm-6">
-                <input class="form-control" type="date"  name="finishDate"/>
+                <input class="form-control" type="date" name="finishDate"/>
             </div>
         </div>
         <div class="form-group row">
@@ -66,9 +53,9 @@
             </div>
         </div>
 
-
         <button
                 type="submit"
-                class="btn btn-primary">Create new project</button>
+                class="btn btn-primary">Create new project
+        </button>
     </form>
 </@macros.environment>

@@ -4,11 +4,7 @@
 <@macros.environment>
     <form
             method="post"
-            action="/projectCreation/createProject">
-        <input
-                type="hidden"
-                name="token"
-                value="${token}"/>
+            action="/taskCreation">
         <div class="form-group row">
             <label class="col-sm-2 col-form-label">Name:</label>
             <div class="col-sm-6">
@@ -24,6 +20,15 @@
                 <input
                         type="text"
                         name="description"
+                        class="form-control"/>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Project name:</label>
+            <div class="col-sm-6">
+                <input
+                        type="text"
+                        name="projectName"
                         class="form-control"/>
             </div>
         </div>
@@ -56,6 +61,7 @@
                 </select>
             </div>
         </div>
+
 
         <button
                 type="submit"

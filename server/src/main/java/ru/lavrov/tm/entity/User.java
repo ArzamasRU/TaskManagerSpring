@@ -5,20 +5,21 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import ru.lavrov.tm.api.entity.IEntity;
 import ru.lavrov.tm.dto.UserDTO;
 import ru.lavrov.tm.enumerate.Role;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "app_user")
-public final class User extends AbstractEntity implements IEntity {
+public final class User extends AbstractEntity implements IEntity, UserDetails {
 
     @Column(unique = true)
     @Nullable
@@ -90,5 +91,35 @@ public final class User extends AbstractEntity implements IEntity {
     public String toString() {
         return "login='" + login + '\'' +
                 ", role=" + role;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Arrays.asList(role);
+    }
+
+    @Override
+    public String getUsername() {
+        return login;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

@@ -2,8 +2,9 @@ package ru.lavrov.tm.enumerate;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.security.core.GrantedAuthority;
 
-public enum Role {
+public enum Role implements GrantedAuthority {
     ADMIN("admin"),
     USER("user");
 
@@ -43,5 +44,10 @@ public enum Role {
     @NotNull
     public String toString() {
         return role;
+    }
+
+    @Override
+    public String getAuthority() {
+        return name();
     }
 }

@@ -7,20 +7,18 @@
 
     <form
             <#if isRegisterForm>
-                action="/registration/register"
+                action="/registration"
             <#else>
-                action="/login/signIn"
+                action="/login"
             </#if>
             method="post">
-        <input
-                type="hidden"
-                name="token"
-                value="${token}"/>
+
         <div class="form-group row">
             <label class="col-sm-2 col-form-label">Login:</label>
             <div class="col-sm-6">
                 <input
                         type="text"
+<#--                        name="username"-->
                         name="login"
                         class="form-control"
                         placeholder="User name"/>

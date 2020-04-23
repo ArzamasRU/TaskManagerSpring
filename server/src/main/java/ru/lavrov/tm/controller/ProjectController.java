@@ -3,22 +3,27 @@ package ru.lavrov.tm.controller;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import ru.lavrov.tm.api.service.IProjectService;
 import ru.lavrov.tm.api.service.IUserService;
+import ru.lavrov.tm.comparator.FinishDateComparator;
+import ru.lavrov.tm.comparator.StartDateComparator;
+import ru.lavrov.tm.comparator.StatusComparator;
 import ru.lavrov.tm.dto.ProjectDTO;
 import ru.lavrov.tm.endpoint.ProjectEndpoint;
 import ru.lavrov.tm.entity.Project;
+import ru.lavrov.tm.entity.User;
 import ru.lavrov.tm.enumerate.Status;
-import ru.lavrov.tm.service.UserServiceImpl;
 
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 
 import static ru.lavrov.tm.util.DateUtil.convertStrToDate;
 
@@ -26,10 +31,13 @@ import static ru.lavrov.tm.util.DateUtil.convertStrToDate;
 public class ProjectController {
 
     @Autowired
-    ProjectEndpoint projectEndpoint;
+    private IUserService userService;
 
-    @PostMapping("/projectCreation/createProject")
-    public String createProject(@RequestParam @Nullable final String token,
+    @Autowired
+    private IProjectService projectService;
+
+    @PostMapping("/projectCreation")
+    public String createProject(@AuthenticationPrincipal @NotNull final User user,
                                 @RequestParam @Nullable final String name,
                                 @RequestParam @Nullable final String description,
                                 @RequestParam @Nullable final String creationDate,
@@ -37,62 +45,67 @@ public class ProjectController {
                                 @RequestParam @Nullable final String finishDate,
                                 @RequestParam(defaultValue = "PLANNED") @Nullable final String status,
                                 @Nullable final Model model) throws ParseException {
-        projectEndpoint.createProject(token, new Project(name, description, convertStrToDate(creationDate),
+        @NotNull final String realUserId = userService.findUserByLogin(user.getLogin()).getId();
+        projectService.createProject(realUserId, new Project(name, description, convertStrToDate(creationDate),
                 convertStrToDate(startDate), convertStrToDate(finishDate), Status.valueOf(status)));
-        model.addAttribute("token", token);
         model.addAttribute("message", "Project is created!");
         return "/projectCreation";
     }
 
-    @PostMapping("/projectCreation")
-    public String createProject2(@RequestParam @Nullable final String token,
-                                 @Nullable final Model model) {
-        model.addAttribute("token", token);
+    @GetMapping("/projectCreation")
+    public String projectCreation() {
         return "projectCreation";
     }
 
     @PostMapping("/removeAllProjects")
-    public String createProject(@RequestParam @Nullable final String token,
-                                @Nullable final Model model) {
-        projectEndpoint.removeAll(token);
-        model.addAttribute("token", token);
+    public String createProject(@AuthenticationPrincipal @NotNull final User user, @Nullable final Model model) {
+        @NotNull final String realUserId = userService.findUserByLogin(user.getLogin()).getId();
+        projectService.removeAll(realUserId);
         model.addAttribute("projects", new ArrayList());
         return "/projects";
     }
 
-    @PostMapping("/projects")
-    public String projects(@RequestParam @Nullable final String token,
-                           @RequestParam(required = false, defaultValue = "") @NotNull final String sortKey,
-                           @RequestParam(required = false, defaultValue = "") @NotNull final String searchKey,
-                           @RequestParam(required = false, defaultValue = "") @NotNull final String searchKeyValue,
-                           @Nullable final Model model) throws ParseException {
+    @GetMapping("/projects")
+    public @Nullable String projects(@AuthenticationPrincipal @NotNull final User user,
+                                     @RequestParam(required = false, defaultValue = "") @NotNull final String sortKey,
+                                     @RequestParam(required = false, defaultValue = "") @NotNull final String searchKey,
+                                     @RequestParam(required = false, defaultValue = "") @NotNull final String searchKeyValue,
+                                     @Nullable final Model model) throws ParseException {
+        if (user == null)
+            return null;
+        @NotNull final String realUserId = userService.findUserByLogin(user.getLogin()).getId();
+        @NotNull final Comparator comparator;
         @Nullable Collection<ProjectDTO> projectList = null;
         if (!sortKey.isEmpty()) {
             switch (sortKey) {
                 case "startDate":
-                    projectList = projectEndpoint.findAllByStartDate(token);
+                    comparator = new StartDateComparator();
+                    projectList = Project.getProjectDTO(projectService.findAll(realUserId, comparator));
                     break;
                 case "finishDate":
-                    projectList = projectEndpoint.findAllByFinishDate(token);
+                    comparator = new FinishDateComparator();
+                    projectList = Project.getProjectDTO(projectService.findAll(realUserId, comparator));
                     break;
                 case "status":
-                    projectList = projectEndpoint.findAllByStatus(token);
+                    comparator = new StatusComparator();
+                    projectList = Project.getProjectDTO(projectService.findAll(realUserId, comparator));
                     break;
             }
         } else if (!searchKey.isEmpty()) {
             switch (searchKey) {
                 case "name":
-                    projectList = projectEndpoint.findAllByNamePart(token, searchKeyValue);
+                    projectList = Project.getProjectDTO(
+                            projectService.findAllByNamePart(realUserId, searchKeyValue));
                     break;
                 case "description":
-                    projectList = projectEndpoint.findAllByDescPart(token, searchKeyValue);
+                    projectList = Project.getProjectDTO(
+                            projectService.findAllByDescPart(realUserId, searchKeyValue));
                     break;
             }
         } else {
-            projectList = projectEndpoint.findAll(token);
+            projectList = Project.getProjectDTO(projectService.findAll(realUserId));
         }
         model.addAttribute("projects", projectList);
-        model.addAttribute("token", token);
         return "projects";
     }
 }

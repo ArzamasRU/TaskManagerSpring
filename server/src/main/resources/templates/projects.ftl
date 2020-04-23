@@ -6,12 +6,8 @@
     <nav class="navbar navbar-light bg-light mb-5">
         <div class="row">
             <form class="form-inline ml-3"
-                  method="post"
+                  method="get"
                   action="/projectCreation">
-                <input
-                        type="hidden"
-                        name="token"
-                        value="${token}"/>
                 <button class="btn btn-sm btn-outline-secondary"
                         type="submit">
                     Create new project
@@ -20,10 +16,7 @@
             <form class="form-inline ml-3"
                   method="post"
                   action="/removeAllProjects">
-                <input
-                        type="hidden"
-                        name="token"
-                        value="${token}"/>
+
                 <button
                         class="btn btn-sm btn-outline-secondary"
                         type="submit">
@@ -35,12 +28,8 @@
 
     <div class="row justify-content-between mb-3">
         <form class="form-inline ml-3"
-              method="post"
+              method="get"
               action="/projects">
-            <input
-                    type="hidden"
-                    name="token"
-                    value="${token}"/>
             <select class="custom-select" name="sortKey">
                 <option value="">Choose sort key...</option>
                 <option value="startDate">Start date</option>
@@ -54,17 +43,14 @@
             </button>
         </form>
         <form class="form-inline mr-3"
-              method="post"
+              method="get"
               action="/projects">
             <select class="custom-select" name="searchKey">
                 <option value="">Choose search key...</option>
                 <option value="name">Name</option>
                 <option value="description">Description</option>
             </select>
-            <input
-                    type="hidden"
-                    name="token"
-                    value="${token}"/>
+
             <input
                     type="text"
                     name="searchKeyValue"

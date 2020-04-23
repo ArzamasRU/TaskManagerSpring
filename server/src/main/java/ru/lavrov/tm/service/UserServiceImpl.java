@@ -3,6 +3,7 @@ package ru.lavrov.tm.service;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import ru.lavrov.tm.api.repository.IUserRepository;
 import ru.lavrov.tm.api.service.IUserService;
@@ -11,8 +12,6 @@ import ru.lavrov.tm.enumerate.Role;
 import ru.lavrov.tm.exception.db.RequestIsFailedException;
 import ru.lavrov.tm.exception.project.ProjectNotExistsException;
 import ru.lavrov.tm.exception.user.*;
-
-import java.util.Collection;
 
 @Service
 public final class UserServiceImpl implements IUserService {
@@ -47,6 +46,13 @@ public final class UserServiceImpl implements IUserService {
             e.printStackTrace();
             throw new RequestIsFailedException();
         } 
+    }
+
+    @Override
+    public void create(@NotNull final User user) {
+        if (user.getRole() == null)
+            user.setRole(Role.USER);
+        createByLogin(user.getLogin(), user.getPassword(), user.getRole().name());
     }
 
     @Override
@@ -136,5 +142,10 @@ public final class UserServiceImpl implements IUserService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(@Nullable final String username) {
+        return findUserByLogin(username);
     }
 }
