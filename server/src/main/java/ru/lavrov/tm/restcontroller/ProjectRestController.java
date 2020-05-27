@@ -1,6 +1,5 @@
-package ru.lavrov.tm.restController;
+package ru.lavrov.tm.restcontroller;
 
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
