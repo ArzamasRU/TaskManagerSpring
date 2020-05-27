@@ -11,18 +11,7 @@ name: Lavrov Kirill
 
 email: arzamasru@gmail.com
 
-url: https://gitlab.com/arzamasru
-
 organization: i-teco
 
 organizationUrl: http://www.i-teco.ru
 
-### Install ###
-```
-mvn install
-```
-
-### Run ###
-```
-java -jar target\TaskManager-1.0-SNAPSHOT.jar
-```
