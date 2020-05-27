@@ -4,7 +4,7 @@
 java 1.8
 
 ### Technology stack ###
-Spring Boot, Spring MVC, Spring Security, Spring Data JPA, Apache Maven, PostgreSQL, MySQL, Bootstrap, FreeMarker
+Spring Boot, Spring MVC, Spring Security, Spring Data JPA, Apache Maven, PostgreSQL, MySQL, Bootstrap, FreeMarker, REST
 
 ### Developer ###
 name: Lavrov Kirill
