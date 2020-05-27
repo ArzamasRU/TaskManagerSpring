@@ -4,7 +4,7 @@
 java 1.8
 
 ### Technology stack ###
-MAVEN, GITLAB, GIT-IGNORE, MANIFEST.MF, MAVEN-JAR-PLUGIN
+Spring Boot, Spring MVC, Spring Security, Spring Data JPA, Apache Maven, PostgreSQL, MySQL, Bootstrap, FreeMarker
 
 ### Developer ###
 name: Lavrov Kirill
